@@ -1547,8 +1547,8 @@
       }
     }
 
-    // Character counter for textareas
-    document.addEventListener('DOMContentLoaded', function() {
+    // Character counter for textareas — run immediately if DOM ready, else wait
+    function initFormListeners() {
       const interestTA = document.getElementById('interest');
       const careerTA = document.getElementById('careerGoals');
       const dobInput = document.getElementById('dob');
@@ -1655,7 +1655,14 @@
           showToast('Error submitting application. Please try again.', 'error');
         }
       });
-    });
+    } // end initFormListeners
+
+    // Run immediately if DOM is already loaded, otherwise wait for DOMContentLoaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFormListeners);
+    } else {
+      initFormListeners();
+    }
   </script>
 
   <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>

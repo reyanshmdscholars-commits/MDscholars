@@ -554,7 +554,7 @@
     var allFeedback     = [];
 
     /* ─── Login ─── */
-    document.addEventListener('DOMContentLoaded', function() {
+    function initAdminListeners() {
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         var u = document.getElementById('loginUser').value;
@@ -567,7 +567,17 @@
           showToast('Invalid credentials', 'error');
         }
       });
-    });
+      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.classList.remove('active');
+        });
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAdminListeners);
+    } else {
+      initAdminListeners();
+    }
 
     function handleLogout() {
       document.getElementById('dashboardWrapper').classList.remove('active');
@@ -1106,14 +1116,7 @@
     /* ─── Modal helpers ─── */
     function openModal(id)  { document.getElementById(id).classList.add('active');    }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    // Close modal on overlay click
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
-        overlay.addEventListener('click', function(e) {
-          if (e.target === overlay) overlay.classList.remove('active');
-        });
-      });
-    });
+    // Modal overlay close is handled in initAdminListeners()
 
     /* ─── Helpers ─── */
     function escHtml(s) {
