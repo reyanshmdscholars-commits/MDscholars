@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F;
+    --navy-mid: #002d5a;
+    --navy-light: #0a3a6e;
+    --teal: #134E4A;
+    --teal-mid: #1a6b65;
+    --teal-bright: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #c9a84c;
+    --gold-light: #e8c96d;
+    --cream: #f8f5ef;
+    --cream-dark: #ede8df;
+    --white: #ffffff;
+    --gray-100: #f4f6f8;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --text: #0f172a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0,31,63,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 72px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--white);
+  }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-text strong { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+  .nav-logo-text span { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-light); }
+  .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.02em;
+    padding: 0.5rem 0.9rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.15); }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown > a::after { content: ' ▾'; font-size: 0.7rem; }
+  .dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--white); border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    min-width: 220px; overflow: hidden;
+    border: 1px solid var(--gray-200);
+    animation: dropIn 0.2s ease;
+  }
+  @keyframes dropIn { from { opacity:0; transform:translateY(-8px);} to { opacity:1; transform:translateY(0);} }
+  .nav-dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-menu a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.85rem 1.25rem; color: var(--text) !important;
+    font-size: 0.9rem; border-radius: 0;
+    border-bottom: 1px solid var(--gray-100);
+    transition: all 0.15s;
+  }
+  .dropdown-menu a:hover { background: var(--gray-100) !important; color: var(--navy) !important; }
+  .dropdown-menu a span { font-size: 1rem; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright)) !important;
+    color: var(--white) !important; border-radius: 8px !important;
+    padding: 0.55rem 1.2rem !important; font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(13,148,136,0.35);
+    transition: all 0.2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.45) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 60vh;
+    background: var(--navy);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 72px;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(19,78,74,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 80% at 20% 80%, rgba(13,148,136,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, #001F3F 0%, #002040 40%, #001a35 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-inner {
+    max-width: 800px; margin: 0 auto; padding: 80px 2rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7);
+    font-weight: 300;
+  }
+
+  /* ── BASE ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 80px 0; }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 1rem;
+    padding: 0.3rem 0.9rem; background: rgba(19,78,74,0.08);
+    border-radius: 100px; border: 1px solid rgba(19,78,74,0.15);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2;
+    color: var(--navy); margin-bottom: 2rem;
+  }
+  .section-title em { font-style: italic; color: var(--teal); }
+
+  /* ── CONSULTING SECTION ── */
+  .consulting { background: var(--white); }
+  .consulting-intro { max-width: 700px; margin-bottom: 3rem; }
+  .consulting-intro p { font-size: 1.05rem; color: var(--gray-600); line-height: 1.75; }
+  .consulting-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+  .service-card {
+    border: 1px solid var(--gray-200); border-radius: 16px;
+    padding: 2.5rem; background: var(--white);
+    transition: all 0.3s;
+  }
+  .service-card:hover {
+    border-color: rgba(13,148,136,0.3);
+    box-shadow: 0 12px 40px rgba(0,31,63,0.08);
+    transform: translateY(-2px);
+  }
+  .service-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.75rem;
+  }
+  .service-card p {
+    font-size: 0.95rem; color: var(--gray-600); line-height: 1.65; margin-bottom: 1.5rem;
+  }
+  .service-card ul {
+    list-style: none; margin-bottom: 0;
+  }
+  .service-card li {
+    font-size: 0.9rem; color: var(--gray-600); padding: 0.4rem 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .service-card li::before { content: '→'; color: var(--teal-bright); font-weight: 700; }
+
+  /* ── CALENDAR SECTION ── */
+  .calendar-section {
+    background: var(--cream); border-radius: 16px;
+    padding: 3rem; text-align: center;
+  }
+  .calendar-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 1rem;
+  }
+  .calendar-placeholder {
+    background: var(--white); border: 2px dashed var(--gray-300);
+    border-radius: 12px; padding: 4rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .calendar-placeholder p {
+    font-size: 0.95rem; color: var(--gray-400); margin: 0;
+  }
+  .calendar-note {
+    font-size: 0.9rem; color: var(--gray-600); font-style: italic;
+  }
+
+  /* ── COURSES SECTION ── */
+  .courses { background: var(--white); }
+  .courses-intro { max-width: 700px; margin-bottom: 3rem; }
+  .courses-intro p { font-size: 1.05rem; color: var(--gray-600); line-height: 1.75; }
+  .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; }
+  .course-card {
+    border: 1px solid var(--gray-200); border-radius: 16px;
+    padding: 2.5rem; background: var(--white);
+    display: flex; flex-direction: column;
+    transition: all 0.3s;
+  }
+  .course-card:hover {
+    border-color: rgba(13,148,136,0.3);
+    box-shadow: 0 12px 40px rgba(0,31,63,0.08);
+    transform: translateY(-2px);
+  }
+  .course-icon {
+    font-size: 2rem; margin-bottom: 1rem; display: block;
+  }
+  .course-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.75rem;
+  }
+  .course-level {
+    font-size: 0.8rem; color: var(--teal); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+  .course-card p {
+    font-size: 0.95rem; color: var(--gray-600); line-height: 1.65;
+    margin-bottom: auto; padding-bottom: 1.5rem; border-bottom: 1px solid var(--gray-100);
+  }
+  .course-footer {
+    padding-top: 1.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    color: white; padding: 0.7rem 1.5rem; border-radius: 8px;
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 12px rgba(13,148,136,0.3);
+    transition: all 0.25s; border: none; cursor: pointer;
+    width: 100%; justify-content: center;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(13,148,136,0.4); }
+
+  /* ── ADDITIONAL PACKAGE ── */
+  .additional { background: var(--cream); }
+  .additional-card {
+    background: var(--white); border: 2px solid var(--teal-light);
+    border-radius: 16px; padding: 3rem;
+    text-align: center; max-width: 700px; margin: 0 auto;
+  }
+  .additional-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 1rem;
+  }
+  .additional-card p {
+    font-size: 1rem; color: var(--gray-600); line-height: 1.75; margin-bottom: 2rem;
+  }
+  .additional-card ul {
+    list-style: none; margin-bottom: 2rem; text-align: left; display: inline-block;
+  }
+  .additional-card li {
+    font-size: 0.95rem; color: var(--gray-600); padding: 0.5rem 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .additional-card li::before { content: '✓'; color: var(--teal-bright); font-weight: 700; font-size: 1.2rem; }
+
+  /* ── PRICING & CTA ── */
+  .pricing-payment { background: var(--white); }
+  .pricing-section {
+    text-align: center; margin-bottom: 3rem;
+  }
+  .pricing-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.75rem;
+  }
+  .pricing-section p {
+    font-size: 1.05rem; color: var(--gray-600); max-width: 600px; margin: 0 auto;
+  }
+  .cta-buttons {
+    display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+  }
+  .btn-secondary {
+    background: transparent; color: var(--navy);
+    padding: 0.85rem 2rem; border-radius: 8px; font-weight: 600; font-size: 1rem;
+    text-decoration: none; border: 2px solid var(--navy);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.25s; cursor: pointer;
+  }
+  .btn-secondary:hover { background: var(--navy); color: white; }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 600; font-size: 1rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 15px rgba(201,168,76,0.3);
+    transition: all 0.25s; border: none; cursor: pointer;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: white; padding: 60px 0 30px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { margin-bottom: 1rem; display: flex; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.45); max-width: 260px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1.1rem; }
+  .footer-col a { display: block; font-size: 0.88rem; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--teal-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 2rem;
+  }
+  .footer-bottom p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--teal-light); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-inner { padding: 0 1.5rem; }
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { min-height: 50vh; }
+    .hero-inner { padding: 60px 1.5rem; }
+    .hero h1 { font-size: 2rem; }
+    section { padding: 60px 0; }
+    .consulting-cards { grid-template-columns: 1fr; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .cta-buttons { flex-direction: column; }
+    .btn-secondary, .btn-gold { width: 100%; justify-content: center; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    .nav-cta { padding: 0.5rem 1rem !important; font-size: 0.8rem !important; }
+    .section-title { font-size: 1.6rem; }
+    .service-card, .course-card, .additional-card { padding: 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚕️</div>
+      <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown">
+        <a href="programs.html">Programs</a>
+        <div class="dropdown-menu">
+          <a href="high-school.html"><span>🎓</span> High School</a>
+          <a href="college.html"><span>📚</span> College / Pre-Med</a>
+          <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+          <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+        </div>
+      </div>
+      <a href="for-institutions.html">For Institutions</a>
+      <a href="about.html">About</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="additional-services.html" class="active">Services</a>
+      <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <h1>Beyond the Program — Additional Expert Services</h1>
+    <p class="hero-sub">Consulting, standalone courses, and specialized research support designed to fit your unique needs. Whether you need statistical guidance, biostatistics training, or help with a secondary project, we've got you covered.</p>
+  </div>
+</section>
+
+<!-- CONSULTING SERVICES -->
+<section class="consulting">
+  <div class="container">
+    <div class="section-label">Expert Consulting</div>
+    <h2 class="section-title">Data Analysis &amp; Research <em>Consulting</em></h2>
+    <div class="consulting-intro">
+      <p>Have your own research project or dataset? Our physician-scientists and biostatisticians offer expert guidance on study design, statistical analysis, and manuscript preparation.</p>
+    </div>
+    <div class="consulting-cards">
+      <div class="service-card">
+        <h3>Data Analysis Consulting</h3>
+        <p>Bring your own dataset and receive expert guidance on analytical approach, statistical methods, interpretation, and visualization.</p>
+        <ul>
+          <li>Dataset evaluation and quality assessment</li>
+          <li>Statistical methodology selection</li>
+          <li>Multivariate and advanced analysis</li>
+          <li>Results interpretation and reporting</li>
+          <li>Hourly or project-based rates</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <h3>Research Project Consulting</h3>
+        <p>From research question refinement to manuscript submission strategy — comprehensive support for independent projects at any stage.</p>
+        <ul>
+          <li>Study design and protocol review</li>
+          <li>IRB submission assistance</li>
+          <li>Literature review guidance</li>
+          <li>Manuscript feedback and editing</li>
+          <li>Journal selection and submission strategy</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CALENDAR BOOKING -->
+    <div class="calendar-section">
+      <h3>Schedule a Consultation</h3>
+      <div class="calendar-placeholder">
+        <p>📅 Calendar Booking Coming Soon</p>
+      </div>
+      <p class="calendar-note">Direct scheduling calendar will be available shortly. In the meantime, email <strong>contact@mdscholars.com</strong> to request a consultation time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STANDALONE COURSES -->
+<section class="courses">
+  <div class="container">
+    <div class="section-label">Professional Development</div>
+    <h2 class="section-title">Standalone <em>Courses</em></h2>
+    <div class="courses-intro">
+      <p>Build your research and writing skills with expert-led courses. Enroll anytime and learn at your own pace or join scheduled cohorts for structured instruction.</p>
+    </div>
+    <div class="courses-grid">
+
+      <!-- COURSE 1 -->
+      <div class="course-card">
+        <span class="course-icon">📊</span>
+        <h3>Introduction to Biostatistics</h3>
+        <p class="course-level">Fundamentals</p>
+        <p>Master the core statistical concepts used in medical research. From descriptive statistics to hypothesis testing, build confidence in interpreting and presenting data.</p>
+        <div class="course-footer">
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- COURSE 2 -->
+      <div class="course-card">
+        <span class="course-icon">📈</span>
+        <h3>Intermediate Biostatistics</h3>
+        <p class="course-level">Statistical Analysis &amp; Inferential Modelling</p>
+        <p>Move beyond basics to advanced analytical techniques. Learn regression, survival analysis, and multivariate methods with real datasets and clinical applications.</p>
+        <div class="course-footer">
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- COURSE 3 -->
+      <div class="course-card">
+        <span class="course-icon">🔍</span>
+        <h3>Survey Design &amp; Measurement</h3>
+        <p class="course-level">Research Methodology</p>
+        <p>Learn to design valid, reliable surveys and questionnaires. Understand psychometric properties, validation, and best practices for health and medical research.</p>
+        <div class="course-footer">
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- COURSE 4 -->
+      <div class="course-card">
+        <span class="course-icon">✍️</span>
+        <h3>Scientific Writing</h3>
+        <p class="course-level">Communication Skills</p>
+        <p>Write compelling research manuscripts, abstracts, and grant proposals. Learn structure, clarity, and persuasive communication for publication success.</p>
+        <div class="course-footer">
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- COURSE 5 -->
+      <div class="course-card">
+        <span class="course-icon">⚖️</span>
+        <h3>Ethics in Healthcare &amp; Research</h3>
+        <p class="course-level">Professional Standards</p>
+        <p>Explore ethical frameworks, IRB fundamentals, informed consent, and responsible conduct in research. Essential for all researchers and clinicians.</p>
+        <div class="course-footer">
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- COURSE 6 -->
+      <div class="course-card">
+        <span class="course-icon">🤖</span>
+        <h3>AI &amp; Data Analytics in Healthcare</h3>
+        <p class="course-level">Emerging Technology</p>
+        <p>Understand machine learning, AI applications, and modern data analytics in clinical practice and research. Practical hands-on experience with real datasets.</p>
+        <div class="course-footer">
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ADDITIONAL RESEARCH PACKAGE -->
+<section class="additional">
+  <div class="container">
+    <div class="section-label">For Repeat Scholars</div>
+    <h2 class="section-title">Additional Research <em>Package</em></h2>
+    <div class="additional-card">
+      <h3>Second Research Project</h3>
+      <p>Already completed one MD Scholars program? Enroll in an additional research project and expand your scholarly portfolio without starting from scratch.</p>
+      <ul>
+        <li>Same world-class mentorship and support</li>
+        <li>New dataset or research question</li>
+        <li>Customized timeline based on your needs</li>
+        <li>Preferential pricing for returning scholars</li>
+        <li>Access to existing research networks</li>
+      </ul>
+      <a href="enroll.html" class="btn-primary" style="width: auto; margin-top: 1.5rem;">Enroll in Additional Project →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING & CTA -->
+<section class="pricing-payment">
+  <div class="container">
+    <div class="pricing-section">
+      <h3>Services &amp; Payment</h3>
+      <p>Consulting services, standalone courses, and additional projects are available for enrollment year-round. Payment and pricing vary by service type. Click below to learn more or get started.</p>
+      <div class="cta-buttons">
+        <a href="enroll.html" class="btn-secondary">Apply Now</a>
+        <a href="for-institutions.html" class="btn-gold">Learn More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem">
+          <div class="nav-logo-icon" style="background:rgba(255,255,255,0.08)">⚕️</div>
+          <div class="nav-logo-text">
+            <strong>MD Scholars</strong>
+            <span>Research Mentorship</span>
+          </div>
+        </div>
+        <p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <a href="high-school.html">High School Track</a>
+        <a href="college.html">Pre-Med Track</a>
+        <a href="medical-student.html">Medical Student Track</a>
+        <a href="resident-fellow.html">Resident &amp; Fellow Track</a>
+      </div>
+      <div class="footer-col">
+        <h4>Organization</h4>
+        <a href="about.html">About the Founder</a>
+        <a href="for-institutions.html">For Institutions</a>
+        <a href="enroll.html">Apply Now</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Verify Certificate</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Authorship Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 MD Scholars LLC. All rights reserved. Physician-led • Small cohorts • Ethical authorship.</p>
+      <div class="footer-links">
+        <a href="#">Verify Certificate</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Policies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

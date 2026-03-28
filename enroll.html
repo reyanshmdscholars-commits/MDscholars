@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enroll in MD Scholars</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: #333;
+      background-color: #f8f5ef;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      color: #001F3F;
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #001F3F;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #f8f5ef;
+    }
+
+    .nav-logo-icon {
+      font-size: 1.75rem;
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.95rem;
+    }
+
+    .nav-logo-text strong {
+      font-size: 1.25rem;
+      color: #14b8a6;
+    }
+
+    .nav-logo-text span {
+      font-size: 0.75rem;
+      color: #c9a84c;
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links > a {
+      color: #f8f5ef;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links > a:hover {
+      color: #14b8a6;
+    }
+
+    .nav-cta {
+      background-color: #14b8a6 !important;
+      color: #001F3F !important;
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .nav-cta:hover {
+      background-color: #0d9488 !important;
+      color: #001F3F !important;
+    }
+
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .nav-dropdown > a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #f8f5ef;
+      border-radius: 4px;
+      min-width: 200px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .nav-dropdown:hover .dropdown-menu {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dropdown-menu a {
+      padding: 0.75rem 1.5rem;
+      color: #001F3F;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #14b8a6;
+      color: #001F3F;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      color: #f8f5ef;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: #f8f5ef;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: #f8f5ef;
+      opacity: 0.95;
+    }
+
+    /* Trust Badges */
+    .trust-badges {
+      background-color: #f8f5ef;
+      padding: 2rem;
+      border-top: 1px solid #e0dbd0;
+      border-bottom: 1px solid #e0dbd0;
+    }
+
+    .badges-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .badge-icon {
+      font-size: 2rem;
+    }
+
+    .badge h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #001F3F;
+    }
+
+    .badge p {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 0;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 2.25rem;
+      color: #001F3F;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    /* Program Cards Grid */
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .program-card {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .program-card:hover {
+      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.15);
+      transform: translateY(-4px);
+      border-color: #14b8a6;
+    }
+
+    .program-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .program-card h3 {
+      font-size: 1.35rem;
+      color: #001F3F;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .program-card-duration {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .program-card-price {
+      font-size: 1.5rem;
+      color: #c9a84c;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .program-card-features {
+      flex: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .program-card-features li {
+      list-style: none;
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .program-card-features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #14b8a6;
+      font-weight: bold;
+    }
+
+    .program-card-plan {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0dbd0;
+    }
+
+    .program-card-button {
+      background-color: #14b8a6;
+      color: white;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .program-card-button:hover {
+      background-color: #0d9488;
+    }
+
+    /* Payment Methods Section */
+    .payment-section {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .payment-section h2 {
+      font-size: 1.75rem;
+      color: #001F3F;
+      margin-bottom: 2rem;
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .payment-method {
+      padding: 1.5rem;
+      background-color: #f8f5ef;
+      border-radius: 6px;
+      border-left: 4px solid #14b8a6;
+    }
+
+    .payment-method h3 {
+      font-size: 1.1rem;
+      color: #001F3F;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .payment-method ul {
+      list-style: none;
+    }
+
+    .payment-method li {
+      padding: 0.4rem 0;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .payment-note {
+      background-color: #f0f9f8;
+      border-left: 4px solid #c9a84c;
+      padding: 1.5rem;
+      border-radius: 4px;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .payment-note strong {
+      color: #001F3F;
+    }
+
+    /* Installment Plans */
+    .installment-section {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .installment-section h2 {
+      font-size: 1.75rem;
+      color: #001F3F;
+      margin-bottom: 1.5rem;
+    }
+
+    .installment-plan {
+      background-color: #f8f5ef;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+      border-left: 4px solid #0d9488;
+    }
+
+    .installment-plan h3 {
+      color: #001F3F;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .installment-plan p {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    /* Institutional Section */
+    .institutional-section {
+      background: linear-gradient(135deg, #f8f5ef 0%, #f0f9f8 100%);
+      border: 1px solid #0d9488;
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .institutional-section h2 {
+      font-size: 1.75rem;
+      color: #001F3F;
+      margin-bottom: 1rem;
+    }
+
+    .institutional-section p {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .institutional-section strong {
+      color: #001F3F;
+    }
+
+    /* Security Note */
+    .security-note {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      border-left: 4px solid #14b8a6;
+    }
+
+    .security-note h3 {
+      color: #001F3F;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .security-note p {
+      color: #555;
+      font-size: 0.95rem;
+      margin: 0.5rem 0;
+    }
+
+    .security-note strong {
+      color: #001F3F;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .faq-section h2 {
+      font-size: 1.75rem;
+      color: #001F3F;
+      margin-bottom: 2rem;
+    }
+
+    .faq-item {
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.75rem;
+      border-bottom: 1px solid #e0dbd0;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .faq-item h4 {
+      color: #001F3F;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .faq-item p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      color: #f8f5ef;
+      padding: 3rem 2rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+
+    .bottom-cta p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .bottom-cta a {
+      color: #c9a84c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .bottom-cta a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #001F3F;
+      color: #f8f5ef;
+      padding: 2.5rem 2rem;
+      margin-top: 3rem;
+      border-top: 4px solid #14b8a6;
+    }
+
+    .footer-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h4 {
+      color: #14b8a6;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: #f8f5ef;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: #14b8a6;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(148, 163, 184, 0.3);
+      padding-top: 2rem;
+      text-align: center;
+      color: #999;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">⚕️</div>
+        <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <div class="nav-dropdown"><a href="programs.html">Programs</a>
+          <div class="dropdown-menu">
+            <a href="high-school.html"><span>🎓</span> High School</a>
+            <a href="college.html"><span>📚</span> College / Pre-Med</a>
+            <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+            <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+          </div>
+        </div>
+        <a href="for-institutions.html">For Institutions</a>
+        <a href="about.html">About</a>
+        <a href="testimonials.html">Testimonials</a>
+        <a href="additional-services.html">Services</a>
+        <a href="enroll.html" class="nav-cta active">Enroll Now →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Enroll in MD Scholars</h1>
+      <p>Choose your program and secure your seat in the next cohort.</p>
+    </div>
+  </section>
+
+  <!-- Trust Badges -->
+  <section class="trust-badges">
+    <div class="badges-inner">
+      <div class="badge">
+        <div class="badge-icon">🔒</div>
+        <div>
+          <h3>Secure Enrollment</h3>
+          <p>Protected transactions</p>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="badge-icon">✓</div>
+        <div>
+          <h3>Physician-Led</h3>
+          <p>Expert-guided programs</p>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="badge-icon">👥</div>
+        <div>
+          <h3>Small Cohorts</h3>
+          <p>Personalized attention</p>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="badge-icon">🏅</div>
+        <div>
+          <h3>Certified Completion</h3>
+          <p>Recognized credentials</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Program Cards -->
+    <h2 class="section-title">Choose Your Program</h2>
+
+    <div class="programs-grid">
+      <!-- Card 1 -->
+      <div class="program-card">
+        <div class="program-card-icon">🎓</div>
+        <h3>Future Physician Scholars</h3>
+        <p class="program-card-duration">High School | 12 Weeks</p>
+        <p class="program-card-price">Contact for Pricing</p>
+        <ul class="program-card-features">
+          <li>6 curriculum modules</li>
+          <li>Abstract submission</li>
+          <li>Poster/report</li>
+          <li>Research certificate</li>
+        </ul>
+        <div class="program-card-plan">Pay in Full | 2-Payment Plan</div>
+        <button class="program-card-button">Select Program →</button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="program-card">
+        <div class="program-card-icon">📚</div>
+        <h3>Pre-Med Research Scholars</h3>
+        <p class="program-card-duration">College | 12 Weeks</p>
+        <p class="program-card-price">Contact for Pricing</p>
+        <ul class="program-card-features">
+          <li>Dataset research project</li>
+          <li>Conference abstract</li>
+          <li>AMCAS documentation</li>
+          <li>Certificate</li>
+        </ul>
+        <div class="program-card-plan">Pay in Full | 2-Payment Plan</div>
+        <button class="program-card-button">Select Program →</button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="program-card">
+        <div class="program-card-icon">🩺</div>
+        <h3>Medical Student Accelerator</h3>
+        <p class="program-card-duration">Medical Student | 12 Weeks</p>
+        <p class="program-card-price">Contact for Pricing</p>
+        <ul class="program-card-features">
+          <li>ERAS documentation</li>
+          <li>National conference submission</li>
+          <li>Manuscript support</li>
+          <li>Letter of support</li>
+        </ul>
+        <div class="program-card-plan">Pay in Full | 2-Payment Plan</div>
+        <button class="program-card-button">Select Program →</button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="program-card">
+        <div class="program-card-icon">🧑‍⚕️</div>
+        <h3>Resident & Fellow Accelerator</h3>
+        <p class="program-card-duration">Resident / Fellow | 16 Weeks</p>
+        <p class="program-card-price">Contact for Pricing</p>
+        <ul class="program-card-features">
+          <li>ACGME documentation</li>
+          <li>Manuscript pipeline</li>
+          <li>Fellowship portfolio</li>
+          <li>Ongoing mentorship</li>
+        </ul>
+        <div class="program-card-plan">Pay in Full | 2-Payment Plan</div>
+        <button class="program-card-button">Select Program →</button>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="program-card">
+        <div class="program-card-icon">🔬</div>
+        <h3>12-Month Research Track</h3>
+        <p class="program-card-duration">Extended Program | 12 Months</p>
+        <p class="program-card-price">Contact for Pricing</p>
+        <ul class="program-card-features">
+          <li>Full research course</li>
+          <li>Manuscript submission</li>
+          <li>Extended mentorship</li>
+          <li>Career guidance</li>
+        </ul>
+        <div class="program-card-plan">Pay in Full | 3-Payment Plan</div>
+        <button class="program-card-button">Select Program →</button>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="program-card">
+        <div class="program-card-icon">🏥</div>
+        <h3>Institutional Program</h3>
+        <p class="program-card-duration">For Schools / Organizations | Custom</p>
+        <p class="program-card-price">Custom Quote</p>
+        <ul class="program-card-features">
+          <li>Group rates available</li>
+          <li>KPI dashboard</li>
+          <li>Annual subscription</li>
+          <li>Invoice + ACH billing</li>
+        </ul>
+        <div class="program-card-plan">Bulk Enrollment Pricing</div>
+        <button class="program-card-button">Request Quote →</button>
+      </div>
+    </div>
+
+    <!-- Payment Methods Section -->
+    <section class="payment-section">
+      <h2>Payment Methods</h2>
+      <div class="payment-methods">
+        <div class="payment-method">
+          <h3>Preferred (No Fee)</h3>
+          <ul>
+            <li>ACH Bank Transfer</li>
+            <li>Zelle</li>
+            <li>eCheck / Paper Check</li>
+          </ul>
+        </div>
+        <div class="payment-method">
+          <h3>Convenience Fee Applies (3%)</h3>
+          <ul>
+            <li>Credit Card</li>
+            <li>Apple Pay / Google Pay</li>
+            <li>Wire Transfer (International)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="payment-note">
+        <strong>Transparent Pricing:</strong> A 3% processing fee applies to card payments. This fee is disclosed upfront — no hidden charges.
+      </div>
+    </section>
+
+    <!-- Installment Plans Section -->
+    <section class="installment-section">
+      <h2>Flexible Payment Plans</h2>
+
+      <div class="installment-plan">
+        <h3>2-Payment Plan</h3>
+        <p>Available for most 12-week programs. Split enrollment cost into two equal payments: 50% upon enrollment, 50% at program start.</p>
+      </div>
+
+      <div class="installment-plan">
+        <h3>3-Payment Plan</h3>
+        <p>Available for 12-month and extended programs. Spread payments over three installments to fit your budget and cash flow.</p>
+      </div>
+    </section>
+
+    <!-- Institutional Section -->
+    <section class="institutional-section">
+      <h2>Institutions & Group Discounts</h2>
+      <p><strong>Enrolling 20+ students?</strong> Institutions and organizations qualify for special group pricing. Our institutional programs include:</p>
+      <ul style="list-style-position: inside; color: #555;">
+        <li>Customized curriculum alignment</li>
+        <li>Dedicated account manager</li>
+        <li>KPI dashboard for program tracking</li>
+        <li>Annual subscription pricing</li>
+        <li>Invoice + ACH billing for easy processing</li>
+      </ul>
+      <p style="margin-top: 1.5rem;"><strong>Contact us for a custom quote.</strong></p>
+    </section>
+
+    <!-- Security Note -->
+    <section class="security-note">
+      <h3>🔒 Your Data is Secure</h3>
+      <p><strong>MD Scholars does not store card data.</strong> All credit card transactions are processed securely through <strong>Stripe</strong>, a PCI-DSS Level 1 compliant payment processor.</p>
+      <p>Your enrollment information is encrypted and handled with the highest level of security. We never see or store your full payment details.</p>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <h4>When do I pay?</h4>
+        <p>Payment is due upon enrollment confirmation. If you select a payment plan, you'll receive an invoice for the first installment immediately, with subsequent payments due on agreed dates. You'll have 48 hours to complete payment before your spot is released.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>What if I need to cancel?</h4>
+        <p>We offer a 7-day full refund policy from the date of enrollment. After that, please contact us to discuss deferment to a future cohort or a partial refund, depending on timing and circumstances.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>Do you offer scholarships?</h4>
+        <p>Yes! MD Scholars offers need-based scholarships and payment plans for qualified applicants. During the application process, you can request financial assistance. Our team will work with you to make the program accessible.</p>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+      <p><strong>Have questions? Contact us directly.</strong></p>
+      <p>Email: <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></p>
+      <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.95;">Or apply first — pricing details are sent upon acceptance.</p>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>MD Scholars</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="for-institutions.html">For Institutions</a></li>
+          <li><a href="additional-services.html">Services</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></li>
+          <li><a href="tel:+1234567890">+1 (234) 567-8900</a></li>
+          <li>Research Mentorship Program</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MD Scholars. All rights reserved. Physician-led research mentorship programs.</p>
+    </div>
+  </footer>
+</body>
+</html>

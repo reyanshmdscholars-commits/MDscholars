@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - MD Scholars</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f5ef;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #001F3F;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #f8f5ef;
+        }
+
+        .nav-logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+        }
+
+        .nav-logo-text strong {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .nav-logo-text span {
+            font-size: 0.7rem;
+            color: #14b8a6;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #f8f5ef;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #14b8a6;
+        }
+
+        .nav-links a.active {
+            color: #14b8a6;
+            border-bottom: 2px solid #14b8a6;
+            padding-bottom: 0.25rem;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #134E4A;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            min-width: 200px;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-dropdown:hover .dropdown-menu {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-menu a {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #f8f5ef;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #0d9488;
+        }
+
+        .nav-cta {
+            background-color: #c9a84c;
+            color: #001F3F;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+        }
+
+        .nav-cta:hover {
+            background-color: #e6c85a;
+            color: #001F3F;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #001F3F 0%, #134E4A 100%);
+            color: #f8f5ef;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #14b8a6;
+        }
+
+        /* Contact Layout */
+        .contact-wrapper {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Contact Info Column */
+        .contact-info-col {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #001F3F;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .info-card .office-hours {
+            color: #14b8a6;
+            font-weight: 500;
+        }
+
+        /* Social Links Section */
+        .social-links-section {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .social-links-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #001F3F;
+            margin-bottom: 1rem;
+        }
+
+        .social-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .social-badge {
+            background-color: #134E4A;
+            color: #f8f5ef;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.4rem;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-badge:hover {
+            background-color: #0d9488;
+        }
+
+        /* Contact Form Column */
+        .contact-form-col {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-form-col h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #001F3F;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #001F3F;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.4rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .optional-text {
+            font-size: 0.8rem;
+            color: #999;
+            margin-left: 0.25rem;
+        }
+
+        .submit-btn {
+            background-color: #c9a84c;
+            color: #001F3F;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.4rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #e6c85a;
+        }
+
+        .form-footer {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .form-footer a {
+            color: #14b8a6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .faq-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-align: center;
+            color: #001F3F;
+            margin-bottom: 2rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .faq-item {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #c9a84c;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: #001F3F;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-item p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #001F3F;
+            color: #f8f5ef;
+            padding: 3rem 1.5rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #c9a84c;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #14b8a6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #f8f5ef;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(20, 184, 166, 0.2);
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-badges {
+                flex-direction: column;
+            }
+
+            .social-badge {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-icon">⚕️</div>
+                <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <div class="nav-dropdown"><a href="programs.html">Programs</a>
+                    <div class="dropdown-menu">
+                        <a href="high-school.html"><span>🎓</span> High School</a>
+                        <a href="college.html"><span>📚</span> College / Pre-Med</a>
+                        <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+                        <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+                    </div>
+                </div>
+                <a href="for-institutions.html">For Institutions</a>
+                <a href="about.html">About</a>
+                <a href="testimonials.html">Testimonials</a>
+                <a href="additional-services.html">Services</a>
+                <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Get in Touch</h1>
+            <p>We'd love to hear from you</p>
+        </div>
+    </section>
+
+    <div class="contact-wrapper">
+        <!-- Contact Info Column -->
+        <div class="contact-info-col">
+            <div class="info-card">
+                <div class="info-icon">✉️</div>
+                <h3>Email</h3>
+                <p><a href="mailto:contact@mdscholars.com" style="color: #14b8a6; text-decoration: none;">contact@mdscholars.com</a></p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📞</div>
+                <h3>Phone</h3>
+                <p>Coming soon</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📍</div>
+                <h3>Location</h3>
+                <p>Coming soon</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">⏰</div>
+                <h3>Office Hours</h3>
+                <p class="office-hours">By appointment</p>
+                <p style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">Schedule a time that works best for you</p>
+            </div>
+
+            <div class="social-links-section">
+                <h3>Connect With Us</h3>
+                <div class="social-badges">
+                    <a href="#" class="social-badge">📷 Instagram</a>
+                    <a href="#" class="social-badge">👍 Facebook</a>
+                    <a href="#" class="social-badge">💼 LinkedIn</a>
+                    <a href="#" class="social-badge">📺 YouTube</a>
+                    <a href="#" class="social-badge">🎵 TikTok</a>
+                    <a href="#" class="social-badge">🤖 Reddit</a>
+                    <a href="#" class="social-badge">💬 WhatsApp</a>
+                    <a href="#" class="social-badge">🔬 ResearchGate</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form Column -->
+        <div class="contact-form-col">
+            <h2>Send us a Message</h2>
+            <form>
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="full-name" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone <span class="optional-text">(optional)</span></label>
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject...</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="program">Program Information</option>
+                        <option value="partnership">Institutional Partnership</option>
+                        <option value="application">Application Question</option>
+                        <option value="technical">Technical Support</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Tell us how we can help..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+
+                <div class="form-footer">
+                    Prefer to apply directly? <a href="enroll.html">Start your application →</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3>How long is each program?</h3>
+                <p>Our programs range from 6 weeks to 12 months depending on the track. High school and pre-med programs are typically shorter, while medical student and resident programs offer longer engagement options.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do I need prior research experience?</h3>
+                <p>No! We welcome scholars at all levels. Whether you're just starting your research journey or looking to deepen existing skills, we have a program designed for you.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is this program online?</h3>
+                <p>Yes, all our programs are delivered online, making them accessible to students worldwide. Our flexible scheduling accommodates busy academic and clinical calendars.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I know if I qualify?</h3>
+                <p>We accept scholars from diverse backgrounds and experience levels. Visit our Programs page to review specific eligibility criteria for your track, or contact us with questions.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Programs</h3>
+                    <a href="high-school.html">High School</a>
+                    <a href="college.html">College / Pre-Med</a>
+                    <a href="medical-student.html">Medical Student</a>
+                    <a href="resident-fellow.html">Resident & Fellow</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Organization</h3>
+                    <a href="about.html">About</a>
+                    <a href="for-institutions.html">For Institutions</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <a href="verify.html">Verify Certificate</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Authorship</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 MD Scholars LLC. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MD Scholars Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #f8f5ef;
+      color: #333;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      color: #001F3F;
+    }
+
+    /* LOGIN SCREEN STYLES */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      padding: 2rem;
+    }
+
+    .login-card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 3rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .login-card-logo {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .login-card h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-card-subtitle {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      color: #001F3F;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 2px solid #e0dbd0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.3s ease;
+      background-color: #f8f5ef;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #14b8a6;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+    }
+
+    .login-button {
+      background-color: #14b8a6;
+      color: white;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+      margin-top: 0.5rem;
+    }
+
+    .login-button:hover {
+      background-color: #0d9488;
+    }
+
+    .login-card-notice {
+      color: #999;
+      font-size: 0.8rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e0dbd0;
+    }
+
+    /* DASHBOARD STYLES */
+    .dashboard-wrapper {
+      display: none;
+      min-height: 100vh;
+      background-color: #f1f5f9;
+    }
+
+    .dashboard-wrapper.active {
+      display: flex;
+    }
+
+    /* Top Bar */
+    .dashboard-topbar {
+      background-color: #001F3F;
+      color: #f8f5ef;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #f8f5ef;
+    }
+
+    .topbar-logo-icon {
+      font-size: 1.5rem;
+    }
+
+    .topbar-logo-text strong {
+      font-size: 1.1rem;
+      color: #14b8a6;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 30px;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .topbar-label {
+      font-size: 0.95rem;
+      color: #f8f5ef;
+    }
+
+    .logout-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #f8f5ef;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .logout-button:hover {
+      background-color: #14b8a6;
+      color: #001F3F;
+      border-color: #14b8a6;
+    }
+
+    /* Main Layout */
+    .dashboard-main {
+      display: flex;
+      flex: 1;
+    }
+
+    /* Sidebar */
+    .dashboard-sidebar {
+      width: 260px;
+      background-color: #f8f5ef;
+      border-right: 1px solid #e0dbd0;
+      padding: 2rem 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .sidebar-nav a {
+      padding: 1rem 1.5rem;
+      color: #333;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .sidebar-nav a:hover {
+      background-color: #f0f0f0;
+      border-left-color: #14b8a6;
+      color: #14b8a6;
+    }
+
+    .sidebar-nav a.active {
+      background-color: white;
+      border-left-color: #14b8a6;
+      color: #14b8a6;
+      font-weight: 600;
+    }
+
+    /* Content Area */
+    .dashboard-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid #e0dbd0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #001F3F;
+    }
+
+    /* Tabs */
+    .tabs-header {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e0dbd0;
+    }
+
+    .tab-button {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: none;
+      color: #666;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .tab-button:hover {
+      color: #14b8a6;
+    }
+
+    .tab-button.active {
+      color: #14b8a6;
+      border-bottom-color: #14b8a6;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .action-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid #e0dbd0;
+      text-decoration: none;
+      color: #001F3F;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .action-card:hover {
+      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.15);
+      border-color: #14b8a6;
+      transform: translateY(-2px);
+    }
+
+    .action-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-card p {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* Tables */
+    .table-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 0.6rem 1rem;
+      border: 1px solid #e0dbd0;
+      border-radius: 4px;
+      background-color: white;
+      font-family: 'DM Sans', sans-serif;
+      color: #333;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .search-input {
+      padding: 0.6rem 1rem;
+      border: 1px solid #e0dbd0;
+      border-radius: 4px;
+      background-color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      width: 250px;
+    }
+
+    .search-input::placeholder {
+      color: #999;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-secondary {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid #e0dbd0;
+      background-color: white;
+      color: #333;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: #14b8a6;
+      color: #14b8a6;
+    }
+
+    .btn-primary {
+      padding: 0.6rem 1.2rem;
+      background-color: #14b8a6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #0d9488;
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%;
+      background-color: white;
+      border-collapse: collapse;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e0dbd0;
+    }
+
+    .data-table thead {
+      background-color: #f8f5ef;
+    }
+
+    .data-table th {
+      padding: 1rem;
+      text-align: left;
+      color: #001F3F;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #e0dbd0;
+    }
+
+    .data-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e0dbd0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .data-table tbody tr:hover {
+      background-color: #f8f5ef;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background-color: #fef3c7;
+      color: #b45309;
+    }
+
+    .status-accepted {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-waitlisted {
+      background-color: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    .status-rejected {
+      background-color: #f3e8ff;
+      color: #6b21a8;
+    }
+
+    .status-enrolled {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-due {
+      background-color: #fef3c7;
+      color: #b45309;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background-color: #e0dbd0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: #14b8a6;
+      transition: width 0.3s ease;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.75rem;
+      background-color: transparent;
+      color: #14b8a6;
+      border: 1px solid #14b8a6;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-sm:hover {
+      background-color: #14b8a6;
+      color: white;
+    }
+
+    .btn-sm.danger {
+      color: #dc2626;
+      border-color: #dc2626;
+    }
+
+    .btn-sm.danger:hover {
+      background-color: #dc2626;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .dashboard-main {
+        flex-direction: column;
+      }
+
+      .dashboard-sidebar {
+        width: 100%;
+        display: flex;
+        padding: 0;
+        border-right: none;
+        border-bottom: 1px solid #e0dbd0;
+      }
+
+      .sidebar-nav {
+        flex-direction: row;
+        width: 100%;
+      }
+
+      .sidebar-nav a {
+        flex: 1;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        text-align: center;
+      }
+
+      .sidebar-nav a.active {
+        border-left: none;
+        border-bottom-color: #14b8a6;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN SCREEN -->
+  <div class="login-container" id="loginContainer">
+    <div class="login-card">
+      <div class="login-card-logo">⚕️</div>
+      <h1>Admin Access</h1>
+      <p class="login-card-subtitle">This area is restricted to authorized MD Scholars staff only.</p>
+
+      <form class="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="admin@mdscholars.com">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required placeholder="Enter your password">
+        </div>
+
+        <button type="submit" class="login-button">Login to Admin Panel</button>
+      </form>
+
+      <div class="login-card-notice">
+        For security reasons, this access is limited to authorized personnel.
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard-wrapper" id="dashboardWrapper">
+    <!-- Top Bar -->
+    <div style="width: 100%; display: flex; flex-direction: column;">
+      <div class="dashboard-topbar">
+        <div class="topbar-left">
+          <a href="index.html" class="topbar-logo">
+            <div class="topbar-logo-icon">⚕️</div>
+            <div class="topbar-logo-text"><strong>MD Scholars</strong></div>
+          </a>
+          <div class="topbar-divider"></div>
+          <div class="topbar-label">Admin Panel</div>
+        </div>
+        <button class="logout-button" onclick="handleLogout()">Logout</button>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="dashboard-main">
+        <!-- Sidebar -->
+        <div class="dashboard-sidebar">
+          <div class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="switchTab(event, 'dashboard')">📊 Dashboard</a>
+            <a href="#" class="nav-item" onclick="switchTab(event, 'applications')">📋 Applications</a>
+            <a href="#" class="nav-item" onclick="switchTab(event, 'students')">👥 Students</a>
+            <a href="#" class="nav-item" onclick="switchTab(event, 'email')">✉️ Email</a>
+            <a href="#" class="nav-item" onclick="switchTab(event, 'payments')">💰 Payments</a>
+            <a href="#" class="nav-item" onclick="switchTab(event, 'settings')">⚙️ Settings</a>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="dashboard-content">
+          <!-- DASHBOARD TAB -->
+          <div id="dashboard" class="content-section active">
+            <h2 style="margin-bottom: 2rem;">Dashboard Overview</h2>
+
+            <!-- Stats -->
+            <div class="stats-row">
+              <div class="stat-card">
+                <div class="stat-label">Total Applications</div>
+                <div class="stat-value">47</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Pending Review</div>
+                <div class="stat-value">12</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Accepted</div>
+                <div class="stat-value">28</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Enrolled</div>
+                <div class="stat-value">22</div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h3 style="margin-bottom: 1.5rem; color: #001F3F;">Quick Actions</h3>
+            <div class="quick-actions">
+              <div class="action-card">
+                <h3>Review New Applications</h3>
+                <p>Review 12 pending applications</p>
+              </div>
+              <div class="action-card">
+                <h3>Send Acceptance Emails</h3>
+                <p>Notify 5 accepted applicants</p>
+              </div>
+              <div class="action-card">
+                <h3>Export Data</h3>
+                <p>Download application reports</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- APPLICATIONS TAB -->
+          <div id="applications" class="content-section">
+            <h2 style="margin-bottom: 2rem;">Applications</h2>
+
+            <!-- Controls -->
+            <div class="table-controls">
+              <div class="filters">
+                <select class="filter-select">
+                  <option value="">Filter by Track</option>
+                  <option value="">All Tracks</option>
+                  <option value="">High School</option>
+                  <option value="">College / Pre-Med</option>
+                  <option value="">Medical Student</option>
+                  <option value="">Resident & Fellow</option>
+                </select>
+
+                <select class="filter-select">
+                  <option value="">Filter by Status</option>
+                  <option value="">All Statuses</option>
+                  <option value="">Pending</option>
+                  <option value="">Accepted</option>
+                  <option value="">Waitlisted</option>
+                  <option value="">Rejected</option>
+                </select>
+
+                <input type="text" class="search-input" placeholder="Search by applicant name...">
+              </div>
+
+              <div class="button-group">
+                <button class="btn-secondary">Export to CSV</button>
+                <button class="btn-primary">Manual Entry</button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Track</th>
+                  <th>Date Applied</th>
+                  <th>Education Level</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Sarah Chen</strong></td>
+                  <td>College / Pre-Med</td>
+                  <td>Mar 24, 2026</td>
+                  <td>Junior</td>
+                  <td><span class="status-badge status-pending">Pending</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-sm">View</button>
+                      <button class="btn-sm">Accept</button>
+                      <button class="btn-sm">Waitlist</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Marcus Johnson</strong></td>
+                  <td>Medical Student</td>
+                  <td>Mar 22, 2026</td>
+                  <td>M2</td>
+                  <td><span class="status-badge status-accepted">Accepted</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-sm">View</button>
+                      <button class="btn-sm danger">Reject</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Alex Rivera</strong></td>
+                  <td>High School</td>
+                  <td>Mar 20, 2026</td>
+                  <td>Senior</td>
+                  <td><span class="status-badge status-waitlisted">Waitlisted</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-sm">View</button>
+                      <button class="btn-sm">Accept</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- STUDENTS TAB -->
+          <div id="students" class="content-section">
+            <h2 style="margin-bottom: 2rem;">Enrolled Students</h2>
+
+            <!-- Controls -->
+            <div class="table-controls">
+              <div class="filters">
+                <input type="text" class="search-input" placeholder="Search by student name...">
+              </div>
+              <div class="button-group">
+                <button class="btn-secondary">Export to CSV</button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Track</th>
+                  <th>Start Date</th>
+                  <th>Progress</th>
+                  <th>Payment Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Emma Thompson</strong></td>
+                  <td>College / Pre-Med</td>
+                  <td>Mar 10, 2026</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 25%;"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: #999;">25%</span>
+                  </td>
+                  <td><span class="status-badge status-enrolled">Paid</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-sm">View</button>
+                      <button class="btn-sm">Contact</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>James Park</strong></td>
+                  <td>Medical Student</td>
+                  <td>Mar 3, 2026</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 42%;"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: #999;">42%</span>
+                  </td>
+                  <td><span class="status-badge status-due">Pending</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-sm">View</button>
+                      <button class="btn-sm">Contact</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Priya Patel</strong></td>
+                  <td>College / Pre-Med</td>
+                  <td>Feb 24, 2026</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 58%;"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; color: #999;">58%</span>
+                  </td>
+                  <td><span class="status-badge status-enrolled">Paid</span></td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-sm">View</button>
+                      <button class="btn-sm">Contact</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- EMAIL TAB -->
+          <div id="email" class="content-section">
+            <h2 style="margin-bottom: 2rem;">Email Communications</h2>
+            <div class="action-card" style="max-width: 500px;">
+              <h3>Coming Soon</h3>
+              <p>Email management features are being developed. You'll be able to send templated emails to applicants and students here.</p>
+            </div>
+          </div>
+
+          <!-- PAYMENTS TAB -->
+          <div id="payments" class="content-section">
+            <h2 style="margin-bottom: 2rem;">Payment Tracking</h2>
+            <div class="action-card" style="max-width: 500px;">
+              <h3>Coming Soon</h3>
+              <p>Payment management and billing dashboard will be available soon. Track all enrollment payments and plan statuses.</p>
+            </div>
+          </div>
+
+          <!-- SETTINGS TAB -->
+          <div id="settings" class="content-section">
+            <h2 style="margin-bottom: 2rem;">Settings</h2>
+            <div class="action-card" style="max-width: 500px;">
+              <h3>Coming Soon</h3>
+              <p>Admin settings, user management, and system configuration options will be available here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleLogin(event) {
+      event.preventDefault();
+      // Demo: Hide login and show dashboard
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('dashboardWrapper').classList.add('active');
+    }
+
+    function handleLogout() {
+      // Demo: Hide dashboard and show login
+      document.getElementById('dashboardWrapper').classList.remove('active');
+      document.getElementById('loginContainer').style.display = 'flex';
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function switchTab(event, tabName) {
+      event.preventDefault();
+
+      // Hide all sections
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach(section => section.classList.remove('active'));
+
+      // Remove active class from all nav items
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => item.classList.remove('active'));
+
+      // Show selected section
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

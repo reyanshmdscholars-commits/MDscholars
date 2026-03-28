@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>High School Track — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F;
+    --navy-mid: #002d5a;
+    --teal: #134E4A;
+    --teal-bright: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #c9a84c;
+    --cream: #f8f5ef;
+    --cream-dark: #ede8df;
+    --white: #ffffff;
+    --gray-100: #f4f6f8;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --text: #0f172a;
+    --track-color: #7c3aed;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0,31,63,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 72px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--white); }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-text strong { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+  .nav-logo-text span { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-light); }
+  .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; padding: 0.5rem 0.9rem; border-radius: 6px; transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown > a::after { content: ' ▾'; font-size: 0.7rem; }
+  .dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--white); border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    min-width: 220px; overflow: hidden; border: 1px solid var(--gray-200);
+  }
+  .nav-dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-menu a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.85rem 1.25rem; color: var(--text) !important;
+    font-size: 0.9rem; border-bottom: 1px solid var(--gray-100); transition: all 0.15s;
+  }
+  .dropdown-menu a:hover { background: var(--gray-100) !important; }
+  .dropdown-menu a.active-track { background: rgba(124,58,237,0.06) !important; color: var(--track-color) !important; font-weight: 600; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright)) !important;
+    color: var(--white) !important; border-radius: 8px !important;
+    padding: 0.55rem 1.2rem !important; font-weight: 600 !important;
+  }
+
+  /* ── HERO ── */
+  .detail-hero {
+    background: var(--navy); padding: 140px 0 80px;
+    position: relative; overflow: hidden;
+  }
+  .detail-hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(124,58,237,0.18), transparent 60%),
+                radial-gradient(ellipse 40% 60% at 10% 80%, rgba(19,78,74,0.2), transparent 60%);
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  .detail-hero-inner { position: relative; z-index: 1; }
+  .detail-breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem;
+  }
+  .detail-breadcrumb a { color: var(--teal-light); text-decoration: none; }
+  .detail-breadcrumb a:hover { text-decoration: underline; }
+  .detail-breadcrumb span { color: rgba(255,255,255,0.4); }
+  .track-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
+    color: #a78bfa; padding: 0.4rem 1rem; border-radius: 100px;
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 1.25rem; display: inline-block;
+  }
+  .detail-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.15;
+    color: white; max-width: 700px; margin-bottom: 1rem;
+  }
+  .detail-hero p { color: rgba(255,255,255,0.65); font-size: 1.1rem; max-width: 580px; line-height: 1.65; margin-bottom: 2rem; }
+  .detail-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: rgba(255,255,255,0.6); }
+
+  /* ── BODY LAYOUT ── */
+  .detail-body { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; padding: 70px 0; }
+  .detail-main h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 1rem; margin-top: 2.5rem;
+  }
+  .detail-main h2:first-child { margin-top: 0; }
+  .detail-main p { font-size: 0.95rem; color: var(--gray-600); line-height: 1.75; margin-bottom: 1rem; }
+
+  /* ── CURRICULUM ── */
+  .curriculum-list { list-style: none; }
+  .curriculum-item {
+    display: flex; gap: 1rem; padding: 1rem; border-radius: 12px;
+    border: 1px solid var(--gray-200); margin-bottom: 0.75rem; align-items: flex-start;
+    transition: all 0.2s;
+  }
+  .curriculum-item:hover { border-color: rgba(13,148,136,0.3); background: rgba(13,148,136,0.02); }
+  .curriculum-num {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--navy), var(--teal));
+    color: white; font-size: 0.75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .curriculum-item h4 { font-weight: 600; color: var(--navy); font-size: 0.92rem; margin-bottom: 0.2rem; }
+  .curriculum-item p { font-size: 0.85rem; color: var(--gray-600); line-height: 1.45; margin: 0; }
+
+  /* ── COURSES SECTION ── */
+  .courses-section { background: var(--gray-100); padding: 80px 0; }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal);
+    padding: 0.3rem 0.9rem; background: rgba(19,78,74,0.08);
+    border-radius: 100px; border: 1px solid rgba(19,78,74,0.15); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700;
+    color: var(--navy); margin-bottom: 0.75rem; line-height: 1.2;
+  }
+  .section-sub { font-size: 1rem; color: var(--gray-600); line-height: 1.7; max-width: 560px; margin-bottom: 3rem; }
+  .courses-placeholder {
+    border: 2px dashed var(--gray-200); border-radius: 20px;
+    padding: 4rem 2rem; text-align: center; background: white;
+  }
+  .courses-placeholder .placeholder-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+  .courses-placeholder h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem;
+    color: var(--navy); margin-bottom: 0.5rem;
+  }
+  .courses-placeholder p { font-size: 0.9rem; color: var(--gray-400); line-height: 1.6; max-width: 400px; margin: 0 auto; }
+
+  /* ── SIDEBAR ── */
+  .detail-sidebar-card {
+    background: var(--cream); border-radius: 16px; padding: 1.75rem;
+    border: 1px solid var(--cream-dark); position: sticky; top: 90px;
+  }
+  .detail-sidebar-card h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--navy); margin-bottom: 1rem; }
+  .sidebar-feature { display: flex; gap: 10px; margin-bottom: 0.9rem; align-items: flex-start; }
+  .sidebar-feature-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+  .sidebar-feature p { font-size: 0.85rem; color: var(--gray-600); line-height: 1.4; margin: 0; }
+  .sidebar-feature p strong { color: var(--navy); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    color: white; padding: 0.9rem 2rem; border-radius: 10px;
+    font-weight: 600; font-size: 1rem; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 8px 30px rgba(13,148,136,0.4); transition: all 0.25s; width: 100%; margin-top: 1.25rem;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(13,148,136,0.5); }
+
+  /* ── CTA STRIP ── */
+  .cta-strip {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+    padding: 80px 0; text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-strip::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(124,58,237,0.12), transparent 65%);
+  }
+  .cta-strip .container { position: relative; z-index: 1; }
+  .cta-strip h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3vw,2.5rem); color: white; margin-bottom: 0.75rem; }
+  .cta-strip p { color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+  .btn-cta {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    color: white; padding: 1rem 2.5rem; border-radius: 10px;
+    font-weight: 600; font-size: 1rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 8px 30px rgba(13,148,136,0.4); transition: all 0.25s;
+  }
+  .btn-cta:hover { transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer { background: #00111f; color: rgba(255,255,255,0.6); padding: 70px 0 30px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.45); max-width: 260px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1.1rem; }
+  .footer-col a { display: block; font-size: 0.88rem; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--teal-light); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--teal-light); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .detail-body { grid-template-columns: 1fr; }
+    .detail-sidebar-card { position: static; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .detail-meta { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚕️</div>
+      <div class="nav-logo-text">
+        <strong>MD Scholars</strong>
+        <span>Research Mentorship</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown">
+        <a href="#">Programs</a>
+        <div class="dropdown-menu">
+          <a href="high-school.html" class="active-track"><span>🎓</span> High School</a>
+          <a href="college.html"><span>📚</span> College / Pre-Med</a>
+          <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+          <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+        </div>
+      </div>
+      <a href="index.html#institutions">For Institutions</a>
+      <a href="index.html#founder">About</a>
+      <a href="index.html#apply" class="nav-cta">Apply Now →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="detail-hero">
+  <div class="detail-hero-bg"></div>
+  <div class="container detail-hero-inner">
+    <div class="detail-breadcrumb">
+      <a href="index.html">Home</a>
+      <span>›</span>
+      <span>Programs</span>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,0.7)">High School Track</span>
+    </div>
+    <div class="track-badge">🎓 High School Track</div>
+    <h1>Future Physician Scholars Program</h1>
+    <p>Early exposure to biomedical research for high school students serious about medicine. Build the foundation that separates competitive pre-med applicants before you even get to college.</p>
+    <div class="detail-meta">
+      <div class="meta-item"><span>🕐</span> 12-week cohort</div>
+      <div class="meta-item"><span>👥</span> Small cohort (6–10 scholars)</div>
+      <div class="meta-item"><span>📍</span> Remote-first, flexible scheduling</div>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="container">
+  <div class="detail-body">
+    <div class="detail-main">
+      <h2>Program Overview</h2>
+      <p>The Future Physician Scholars program introduces high school students to the world of biomedical research through structured mentorship with physician-scientists. Students develop scientific literacy, critical appraisal skills, and produce tangible scholarly deliverables — setting themselves apart from the moment they submit college and pre-med applications.</p>
+
+      <h2>Curriculum Modules</h2>
+      <ul class="curriculum-list">
+        <li class="curriculum-item">
+          <div class="curriculum-num">1</div>
+          <div>
+            <h4>Introduction to Biomedical Research</h4>
+            <p>Understanding the research cycle, formulating research questions, and navigating medical literature (PubMed, MEDLINE).</p>
+          </div>
+        </li>
+        <li class="curriculum-item">
+          <div class="curriculum-num">2</div>
+          <div>
+            <h4>Research Methodology Fundamentals</h4>
+            <p>Study design basics — observational vs. experimental, retrospective vs. prospective, bias identification.</p>
+          </div>
+        </li>
+        <li class="curriculum-item">
+          <div class="curriculum-num">3</div>
+          <div>
+            <h4>Data Literacy &amp; Critical Appraisal</h4>
+            <p>Reading and evaluating published studies. Understanding statistics in clinical research context.</p>
+          </div>
+        </li>
+        <li class="curriculum-item">
+          <div class="curriculum-num">4</div>
+          <div>
+            <h4>Abstract Writing Workshop</h4>
+            <p>Structured guidance on writing a scientific abstract — introduction, methods, results, conclusion.</p>
+          </div>
+        </li>
+        <li class="curriculum-item">
+          <div class="curriculum-num">5</div>
+          <div>
+            <h4>Poster Development &amp; Presentation</h4>
+            <p>Design, layout, and presentation coaching for science fair and regional academic competition.</p>
+          </div>
+        </li>
+        <li class="curriculum-item">
+          <div class="curriculum-num">6</div>
+          <div>
+            <h4>Research Completion &amp; Certificate</h4>
+            <p>Final project review, mentor evaluation, and issuance of verifiable MD Scholars Research Completion Certificate.</p>
+          </div>
+        </li>
+      </ul>
+
+      <h2>Deliverables &amp; Outcomes</h2>
+      <p>Graduates of the Future Physician Scholars program receive a verifiable Research Completion Certificate, a completed scientific poster, and an abstract suitable for regional and school-level submission. Mentees also gain physician mentor letters of evaluation and documentation for college application research activities.</p>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <div class="detail-sidebar-card">
+        <h3>Program Details</h3>
+        <div class="sidebar-feature">
+          <span class="sidebar-feature-icon">📅</span>
+          <p><strong>Duration:</strong> 12-week cohort</p>
+        </div>
+        <div class="sidebar-feature">
+          <span class="sidebar-feature-icon">🗓</span>
+          <p><strong>Enrollment:</strong> Rolling, cohort-based</p>
+        </div>
+        <div class="sidebar-feature">
+          <span class="sidebar-feature-icon">👩‍💻</span>
+          <p><strong>Format:</strong> Virtual 1:1 + group sessions</p>
+        </div>
+        <div class="sidebar-feature">
+          <span class="sidebar-feature-icon">📝</span>
+          <p><strong>Authorship:</strong> ICMJE-compliant, earned not gifted</p>
+        </div>
+        <div class="sidebar-feature">
+          <span class="sidebar-feature-icon">🏅</span>
+          <p><strong>Certificate:</strong> Verifiable Research Completion Certificate upon program completion</p>
+        </div>
+        <a href="index.html#apply" class="btn-primary">Apply to This Track →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COURSES SECTION -->
+<section class="courses-section">
+  <div class="container">
+    <div class="section-label">Courses</div>
+    <h2 class="section-title">Program Courses</h2>
+    <p class="section-sub">Structured course content for the High School Track — coming soon.</p>
+
+    <!-- =============================================
+         ADD COURSE CARDS HERE
+         ============================================= -->
+    <div class="courses-placeholder">
+      <span class="placeholder-icon">📖</span>
+      <h3>Courses Coming Soon</h3>
+      <p>Individual course modules for this track will be listed here. Check back soon or apply now to get early access.</p>
+    </div>
+    <!-- ============================================= -->
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip">
+  <div class="container">
+    <h2>Ready to Start Your Research Journey?</h2>
+    <p>Join a cohort of driven high school students building the scholarly foundation that separates competitive medical school applicants.</p>
+    <a href="index.html#apply" class="btn-cta">Apply Now →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+          <div class="nav-logo-icon" style="width:42px;height:42px;background:rgba(255,255,255,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">⚕️</div>
+          <div class="nav-logo-text">
+            <strong style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;">MD Scholars</strong>
+            <span style="font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal-light);">Research Mentorship</span>
+          </div>
+        </div>
+        <p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <a href="high-school.html">High School Track</a>
+        <a href="college.html">Pre-Med Track</a>
+        <a href="medical-student.html">Medical Student Track</a>
+        <a href="resident-fellow.html">Resident &amp; Fellow Track</a>
+      </div>
+      <div class="footer-col">
+        <h4>Organization</h4>
+        <a href="index.html#founder">About the Founder</a>
+        <a href="index.html#institutions">For Institutions</a>
+        <a href="index.html#apply">Apply Now</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Verify Certificate</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Authorship Policy</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 MD Scholars. All rights reserved. Physician-led • Small cohorts • Ethical authorship.</p>
+      <div class="footer-links">
+        <a href="#">Verify Certificate</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Policies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

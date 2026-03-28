@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MD Scholars Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #f1f5f9;
+      color: #333;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      color: #001F3F;
+    }
+
+    /* PAYWALL/ACCESS SCREEN */
+    .access-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      padding: 2rem;
+    }
+
+    .access-card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 3rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .access-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .access-card h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #001F3F;
+    }
+
+    .access-card-subtitle {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .access-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e0dbd0;
+    }
+
+    .access-tab-button {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: none;
+      color: #666;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .access-tab-button:hover {
+      color: #14b8a6;
+    }
+
+    .access-tab-button.active {
+      color: #14b8a6;
+      border-bottom-color: #14b8a6;
+    }
+
+    .access-tab-content {
+      display: none;
+    }
+
+    .access-tab-content.active {
+      display: block;
+    }
+
+    .access-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: left;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      color: #001F3F;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group input {
+      padding: 0.85rem 1rem;
+      border: 2px solid #e0dbd0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+      background-color: #f8f5ef;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #14b8a6;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+    }
+
+    .login-button {
+      background-color: #14b8a6;
+      color: white;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+      margin-top: 0.5rem;
+    }
+
+    .login-button:hover {
+      background-color: #0d9488;
+    }
+
+    .access-message {
+      background-color: #f0f9f8;
+      border-left: 4px solid #14b8a6;
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: #333;
+      text-align: left;
+      line-height: 1.6;
+    }
+
+    .access-message strong {
+      color: #001F3F;
+    }
+
+    .access-link {
+      color: #14b8a6;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .access-link:hover {
+      text-decoration: underline;
+    }
+
+    /* DASHBOARD STYLES */
+    .dashboard-wrapper {
+      display: none;
+      min-height: 100vh;
+      background-color: #f1f5f9;
+    }
+
+    .dashboard-wrapper.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    .dashboard-topbar {
+      background-color: #001F3F;
+      color: #f8f5ef;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #f8f5ef;
+    }
+
+    .topbar-logo-icon {
+      font-size: 1.5rem;
+    }
+
+    .topbar-logo-text strong {
+      font-size: 1.1rem;
+      color: #14b8a6;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .welcome-text {
+      font-size: 0.95rem;
+    }
+
+    .track-badge {
+      display: inline-block;
+      background-color: rgba(20, 184, 166, 0.2);
+      color: #f8f5ef;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .logout-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #f8f5ef;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .logout-button:hover {
+      background-color: #14b8a6;
+      color: #001F3F;
+      border-color: #14b8a6;
+    }
+
+    /* Main Layout */
+    .dashboard-main {
+      display: flex;
+      flex: 1;
+    }
+
+    /* Sidebar */
+    .dashboard-sidebar {
+      width: 260px;
+      background-color: #f8f5ef;
+      border-right: 1px solid #e0dbd0;
+      padding: 2rem 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .sidebar-nav a {
+      padding: 1rem 1.5rem;
+      color: #333;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .sidebar-nav a:hover {
+      background-color: #f0f0f0;
+      border-left-color: #14b8a6;
+      color: #14b8a6;
+    }
+
+    .sidebar-nav a.active {
+      background-color: white;
+      border-left-color: #14b8a6;
+      color: #14b8a6;
+      font-weight: 600;
+    }
+
+    /* Content Area */
+    .dashboard-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      color: #001F3F;
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+
+    /* Welcome Card */
+    .welcome-card {
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      color: #f8f5ef;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .welcome-card h2 {
+      color: #f8f5ef;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .welcome-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .welcome-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .welcome-label {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .welcome-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #c9a84c;
+    }
+
+    /* Progress Card */
+    .progress-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e0dbd0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .progress-card h3 {
+      margin-bottom: 1.5rem;
+      color: #001F3F;
+    }
+
+    .progress-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 12px;
+      background-color: #e0dbd0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0d9488, #14b8a6);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-percent {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #001F3F;
+      min-width: 50px;
+    }
+
+    /* Modules Grid */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .module-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid #e0dbd0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .module-card:hover {
+      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.1);
+      border-color: #14b8a6;
+    }
+
+    .module-card.locked {
+      background-color: #f8f5ef;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .module-number {
+      font-size: 0.8rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      color: #001F3F;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .module-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #f0f9f8;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #0d9488;
+      font-weight: 600;
+    }
+
+    .module-status.locked {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+
+    .module-unlock-note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e0dbd0;
+      text-align: center;
+    }
+
+    /* Project Card */
+    .project-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e0dbd0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .project-card h3 {
+      color: #001F3F;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-label {
+      font-size: 0.85rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .project-value {
+      font-size: 1rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .project-value.placeholder {
+      color: #ccc;
+      font-style: italic;
+    }
+
+    /* Assignments Card */
+    .assignments-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e0dbd0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .assignments-card h3 {
+      color: #001F3F;
+      margin-bottom: 1.5rem;
+    }
+
+    .assignments-empty {
+      background-color: #f8f5ef;
+      padding: 2rem;
+      border-radius: 6px;
+      text-align: center;
+      color: #999;
+    }
+
+    /* Certificates Card */
+    .certificates-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid #e0dbd0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .certificates-card h3 {
+      color: #001F3F;
+      margin-bottom: 1.5rem;
+    }
+
+    .certificate-preview {
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      border-radius: 8px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: #f8f5ef;
+      opacity: 0.5;
+    }
+
+    .certificate-preview h4 {
+      color: #f8f5ef;
+      margin-bottom: 1rem;
+    }
+
+    .certificate-preview-text {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Modules List (for Modules tab) */
+    .modules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .module-list-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid #e0dbd0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .module-list-item.locked {
+      background-color: #f8f5ef;
+      opacity: 0.6;
+    }
+
+    .module-list-info h4 {
+      color: #001F3F;
+      margin-bottom: 0.5rem;
+    }
+
+    .module-list-desc {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .module-list-lock {
+      font-size: 1.5rem;
+      color: #dc2626;
+    }
+
+    .unlock-message {
+      background-color: #f0f9f8;
+      border-left: 4px solid #14b8a6;
+      padding: 1.5rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .unlock-message strong {
+      color: #0d9488;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .dashboard-main {
+        flex-direction: column;
+      }
+
+      .dashboard-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e0dbd0;
+        padding: 0;
+      }
+
+      .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .sidebar-nav a {
+        flex: 1;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        text-align: center;
+      }
+
+      .sidebar-nav a.active {
+        border-left: none;
+        border-bottom-color: #14b8a6;
+      }
+
+      .topbar-right {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .welcome-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- PAYWALL/ACCESS SCREEN -->
+  <div class="access-container" id="accessContainer">
+    <div class="access-card">
+      <div class="access-icon">🔒</div>
+      <h1>Student Dashboard</h1>
+      <p class="access-card-subtitle">This area is exclusively for enrolled MD Scholars students.</p>
+
+      <!-- Access Tabs -->
+      <div class="access-tabs">
+        <button class="access-tab-button active" onclick="switchAccessTab(event, 'login')">Log In</button>
+        <button class="access-tab-button" onclick="switchAccessTab(event, 'enroll')">Not Enrolled Yet?</button>
+      </div>
+
+      <!-- Login Tab -->
+      <div id="login" class="access-tab-content active">
+        <form class="access-form" onsubmit="handleDemoLogin(event)">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" name="email" required placeholder="student@email.com">
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required placeholder="Enter your password">
+          </div>
+
+          <button type="submit" class="login-button">Log In to Dashboard</button>
+        </form>
+
+        <div class="access-message" style="margin-top: 1.5rem;">
+          <strong>Demo Access:</strong> Enter any email and password to view the student dashboard interface.
+        </div>
+      </div>
+
+      <!-- Enroll Tab -->
+      <div id="enroll" class="access-tab-content">
+        <div class="access-message">
+          <strong>Ready to join MD Scholars?</strong><br><br>
+          Start your research mentorship journey with our comprehensive programs. Visit our enrollment page to choose your program and secure your seat in the next cohort.
+        </div>
+
+        <a href="enroll.html" style="display: inline-block; margin-top: 1.5rem; background-color: #14b8a6; color: white; padding: 0.95rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#0d9488'" onmouseout="this.style.backgroundColor='#14b8a6'">
+          View Enrollment Options →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard-wrapper" id="dashboardWrapper">
+    <!-- Top Bar -->
+    <div class="dashboard-topbar">
+      <div class="topbar-left">
+        <a href="index.html" class="topbar-logo">
+          <div class="topbar-logo-icon">⚕️</div>
+          <div class="topbar-logo-text"><strong>MD Scholars</strong></div>
+        </a>
+      </div>
+
+      <div class="topbar-right">
+        <div>
+          <div class="welcome-text" style="font-size: 0.9rem; color: rgba(248, 245, 239, 0.7);">Welcome back,</div>
+          <div class="welcome-text" style="font-size: 1.05rem; font-weight: 600;">Sarah Chen</div>
+        </div>
+        <span class="track-badge">📚 Pre-Med Scholars</span>
+        <button class="logout-button" onclick="handleDemoLogout()">Logout</button>
+      </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="dashboard-main">
+      <!-- Sidebar -->
+      <div class="dashboard-sidebar">
+        <div class="sidebar-nav">
+          <a onclick="switchDashboardTab(event, 'home')" class="active">🏠 Home</a>
+          <a onclick="switchDashboardTab(event, 'modules')">📖 Modules</a>
+          <a onclick="switchDashboardTab(event, 'assignments')">✓ Assignments</a>
+          <a onclick="switchDashboardTab(event, 'project')">🔬 Research Project</a>
+          <a onclick="switchDashboardTab(event, 'mentor')">👨‍🏫 Mentor Meetings</a>
+          <a onclick="switchDashboardTab(event, 'discussion')">💬 Discussion</a>
+          <a onclick="switchDashboardTab(event, 'certificates')">🏅 Certificates</a>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="dashboard-content">
+        <!-- HOME TAB -->
+        <div id="home" class="content-section active">
+          <!-- Welcome Card -->
+          <div class="welcome-card">
+            <h2>Welcome to MD Scholars, Sarah</h2>
+            <div class="welcome-info">
+              <div class="welcome-info-item">
+                <span class="welcome-label">Program</span>
+                <span class="welcome-value">Pre-Med Research Scholars</span>
+              </div>
+              <div class="welcome-info-item">
+                <span class="welcome-label">Cohort</span>
+                <span class="welcome-value">Spring 2026</span>
+              </div>
+              <div class="welcome-info-item">
+                <span class="welcome-label">Duration</span>
+                <span class="welcome-value">12 Weeks</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Program Progress -->
+          <div class="progress-card">
+            <h3>Program Progress</h3>
+            <div class="progress-bar-container">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%;"></div>
+              </div>
+              <span class="progress-percent">0%</span>
+            </div>
+          </div>
+
+          <!-- Modules -->
+          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Course Modules</h3>
+          <div class="module-unlock-note">
+            Modules unlock on a weekly schedule starting on your cohort start date.
+          </div>
+
+          <div class="modules-grid">
+            <div class="module-card locked">
+              <div class="module-number">Module 1</div>
+              <h4 class="module-title">Introduction to Biomedical Research</h4>
+              <span class="module-status locked">🔒 Locked</span>
+            </div>
+
+            <div class="module-card locked">
+              <div class="module-number">Module 2</div>
+              <h4 class="module-title">Literature Review Methods</h4>
+              <span class="module-status locked">🔒 Locked</span>
+            </div>
+
+            <div class="module-card locked">
+              <div class="module-number">Module 3</div>
+              <h4 class="module-title">Research Design & Methodology</h4>
+              <span class="module-status locked">🔒 Locked</span>
+            </div>
+
+            <div class="module-card locked">
+              <div class="module-number">Module 4</div>
+              <h4 class="module-title">Data Analysis & Statistics</h4>
+              <span class="module-status locked">🔒 Locked</span>
+            </div>
+
+            <div class="module-card locked">
+              <div class="module-number">Module 5</div>
+              <h4 class="module-title">Writing Research Abstracts</h4>
+              <span class="module-status locked">🔒 Locked</span>
+            </div>
+
+            <div class="module-card locked">
+              <div class="module-number">Module 6</div>
+              <h4 class="module-title">Presentation Skills & Conference Prep</h4>
+              <span class="module-status locked">🔒 Locked</span>
+            </div>
+          </div>
+
+          <!-- Research Project -->
+          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Your Research Project</h3>
+          <div class="project-card">
+            <div class="project-info">
+              <div class="project-info-item">
+                <span class="project-label">Project Title</span>
+                <span class="project-value placeholder">TBD</span>
+              </div>
+              <div class="project-info-item">
+                <span class="project-label">Assigned Mentor</span>
+                <span class="project-value placeholder">TBD</span>
+              </div>
+              <div class="project-info-item">
+                <span class="project-label">Project Deadline</span>
+                <span class="project-value placeholder">TBD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assignments -->
+          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Upcoming Assignments</h3>
+          <div class="assignments-card">
+            <div class="assignments-empty">
+              <p>No assignments due yet. Check back soon!</p>
+            </div>
+          </div>
+
+          <!-- Certificates -->
+          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Your Certificates</h3>
+          <div class="certificates-card">
+            <div class="certificate-preview">
+              <h4>Research Completion Certificate</h4>
+              <p class="certificate-preview-text">Complete all modules to earn your certificate</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODULES TAB -->
+        <div id="modules" class="content-section">
+          <h2 class="section-title">Course Modules</h2>
+
+          <div class="unlock-message">
+            <strong>Your cohort begins on March 17, 2026.</strong> Modules will unlock weekly on their scheduled release dates. All course content is locked until your cohort officially starts.
+          </div>
+
+          <div class="modules-list">
+            <div class="module-list-item locked">
+              <div class="module-list-info">
+                <h4>Module 1: Introduction to Biomedical Research</h4>
+                <p class="module-list-desc">Unlock: Week 1 | Estimated Duration: 5 hours</p>
+              </div>
+              <div class="module-list-lock">🔒</div>
+            </div>
+
+            <div class="module-list-item locked">
+              <div class="module-list-info">
+                <h4>Module 2: Literature Review Methods</h4>
+                <p class="module-list-desc">Unlock: Week 2 | Estimated Duration: 6 hours</p>
+              </div>
+              <div class="module-list-lock">🔒</div>
+            </div>
+
+            <div class="module-list-item locked">
+              <div class="module-list-info">
+                <h4>Module 3: Research Design & Methodology</h4>
+                <p class="module-list-desc">Unlock: Week 3 | Estimated Duration: 7 hours</p>
+              </div>
+              <div class="module-list-lock">🔒</div>
+            </div>
+
+            <div class="module-list-item locked">
+              <div class="module-list-info">
+                <h4>Module 4: Data Analysis & Statistics</h4>
+                <p class="module-list-desc">Unlock: Week 4 | Estimated Duration: 8 hours</p>
+              </div>
+              <div class="module-list-lock">🔒</div>
+            </div>
+
+            <div class="module-list-item locked">
+              <div class="module-list-info">
+                <h4>Module 5: Writing Research Abstracts</h4>
+                <p class="module-list-desc">Unlock: Week 5 | Estimated Duration: 6 hours</p>
+              </div>
+              <div class="module-list-lock">🔒</div>
+            </div>
+
+            <div class="module-list-item locked">
+              <div class="module-list-info">
+                <h4>Module 6: Presentation Skills & Conference Prep</h4>
+                <p class="module-list-desc">Unlock: Week 6 | Estimated Duration: 7 hours</p>
+              </div>
+              <div class="module-list-lock">🔒</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ASSIGNMENTS TAB -->
+        <div id="assignments" class="content-section">
+          <h2 class="section-title">Assignments</h2>
+          <div class="assignments-card">
+            <div class="assignments-empty">
+              <p>No assignments yet. They will appear here as your modules unlock.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECT TAB -->
+        <div id="project" class="content-section">
+          <h2 class="section-title">Research Project</h2>
+          <div class="project-card">
+            <h3>Your Research Project</h3>
+            <div class="project-info">
+              <div class="project-info-item">
+                <span class="project-label">Project Title</span>
+                <span class="project-value placeholder">TBD — Will be assigned by your mentor</span>
+              </div>
+              <div class="project-info-item">
+                <span class="project-label">Research Focus</span>
+                <span class="project-value placeholder">Will be determined after initial consultation</span>
+              </div>
+              <div class="project-info-item">
+                <span class="project-label">Assigned Mentor</span>
+                <span class="project-value placeholder">TBD</span>
+              </div>
+              <div class="project-info-item">
+                <span class="project-label">First Mentor Meeting</span>
+                <span class="project-value placeholder">TBD</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="unlock-message" style="margin-top: 2rem;">
+            Your research project details will be finalized after your cohort begins and you've had your initial consultation with your assigned mentor.
+          </div>
+        </div>
+
+        <!-- MENTOR MEETINGS TAB -->
+        <div id="mentor" class="content-section">
+          <h2 class="section-title">Mentor Meetings</h2>
+          <div class="assignments-card">
+            <div class="assignments-empty">
+              <p>Mentor meeting schedule will appear here once your cohort begins.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISCUSSION TAB -->
+        <div id="discussion" class="content-section">
+          <h2 class="section-title">Discussion Forum</h2>
+          <div class="assignments-card">
+            <div class="assignments-empty">
+              <p>The cohort discussion forum will be available once your program starts.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CERTIFICATES TAB -->
+        <div id="certificates" class="content-section">
+          <h2 class="section-title">Your Certificates</h2>
+          <div class="certificates-card">
+            <p style="margin-bottom: 2rem; color: #666;">No certificates earned yet. Complete all modules and your research project to earn your Research Completion Certificate.</p>
+            <div class="certificate-preview">
+              <h4>Research Completion Certificate</h4>
+              <p class="certificate-preview-text">Awarded upon successful completion of all program requirements</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchAccessTab(event, tabName) {
+      event.preventDefault();
+
+      // Hide all tabs
+      const tabs = document.querySelectorAll('.access-tab-content');
+      tabs.forEach(tab => tab.classList.remove('active'));
+
+      // Remove active from buttons
+      const buttons = document.querySelectorAll('.access-tab-button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function handleDemoLogin(event) {
+      event.preventDefault();
+      // Demo: Hide access and show dashboard
+      document.getElementById('accessContainer').style.display = 'none';
+      document.getElementById('dashboardWrapper').classList.add('active');
+    }
+
+    function handleDemoLogout() {
+      // Demo: Hide dashboard and show access
+      document.getElementById('dashboardWrapper').classList.remove('active');
+      document.getElementById('accessContainer').style.display = 'flex';
+      document.getElementById('login-email').value = '';
+      document.getElementById('login-password').value = '';
+    }
+
+    function switchDashboardTab(event, tabName) {
+      event.preventDefault();
+
+      // Hide all sections
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach(section => section.classList.remove('active'));
+
+      // Remove active from nav items
+      const navItems = document.querySelectorAll('.sidebar-nav a');
+      navItems.forEach(item => item.classList.remove('active'));
+
+      // Show selected section
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

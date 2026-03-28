@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply to MD Scholars</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: #333;
+      background-color: #f8f5ef;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      color: #001F3F;
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #001F3F;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #f8f5ef;
+    }
+
+    .nav-logo-icon {
+      font-size: 1.75rem;
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.95rem;
+    }
+
+    .nav-logo-text strong {
+      font-size: 1.25rem;
+      color: #14b8a6;
+    }
+
+    .nav-logo-text span {
+      font-size: 0.75rem;
+      color: #c9a84c;
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links > a {
+      color: #f8f5ef;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links > a:hover {
+      color: #14b8a6;
+    }
+
+    .nav-cta {
+      background-color: #14b8a6 !important;
+      color: #001F3F !important;
+      padding: 0.75rem 1.5rem !important;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .nav-cta:hover {
+      background-color: #0d9488 !important;
+      color: #001F3F !important;
+    }
+
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .nav-dropdown > a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #f8f5ef;
+      border-radius: 4px;
+      min-width: 200px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .nav-dropdown:hover .dropdown-menu {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dropdown-menu a {
+      padding: 0.75rem 1.5rem;
+      color: #001F3F;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #14b8a6;
+      color: #001F3F;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
+      color: #f8f5ef;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: #f8f5ef;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: #f8f5ef;
+      opacity: 0.95;
+    }
+
+    /* Trust Badges */
+    .trust-badges {
+      background-color: #f8f5ef;
+      padding: 2rem;
+      border-top: 1px solid #e0dbd0;
+      border-bottom: 1px solid #e0dbd0;
+    }
+
+    .badges-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .badge-icon {
+      font-size: 1.5rem;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* Layout: Form + Sidebar */
+    .apply-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .apply-layout {
+        grid-template-columns: 1fr;
+      }
+      .apply-sidebar {
+        display: none;
+      }
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-bottom: 2rem;
+    }
+
+    .progress-bar {
+      background-color: #e0dbd0;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0d9488 0%, #14b8a6 100%);
+      width: 20%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .step-indicators {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .step-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #999;
+      flex: 1;
+    }
+
+    .step-indicator.active {
+      color: #001F3F;
+      font-weight: 600;
+    }
+
+    .step-indicator.active .step-number {
+      background-color: #14b8a6;
+      color: white;
+    }
+
+    .step-indicator.completed .step-number {
+      background-color: #0d9488;
+      color: white;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #e0dbd0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .step-label {
+      text-align: center;
+      max-width: 70px;
+    }
+
+    /* Form Container */
+    .form-container {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 3rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-step {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .step-title {
+      font-size: 1.75rem;
+      color: #001F3F;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .step-description {
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #001F3F;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .required::after {
+      content: " *";
+      color: #c9a84c;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: #333;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+    }
+
+    input[type="text"].error,
+    input[type="email"].error,
+    input[type="tel"].error,
+    input[type="date"].error,
+    select.error,
+    textarea.error {
+      border-color: #ef4444;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Character Counter */
+    .char-counter {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 0.25rem;
+    }
+
+    .char-counter.low {
+      color: #c9a84c;
+    }
+
+    /* Conditional Section */
+    .conditional-section {
+      display: none;
+      background-color: #f0f9f8;
+      padding: 1.5rem;
+      border-radius: 6px;
+      border-left: 4px solid #14b8a6;
+      margin: 1.5rem 0;
+    }
+
+    .conditional-section.show {
+      display: block;
+    }
+
+    .conditional-section h4 {
+      color: #001F3F;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .conditional-section p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Toggle for Yes/No */
+    .toggle-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .toggle-btn {
+      padding: 0.5rem 1.25rem;
+      border: 2px solid #d0d0d0;
+      background-color: white;
+      color: #333;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .toggle-btn.active {
+      border-color: #14b8a6;
+      background-color: #14b8a6;
+      color: white;
+    }
+
+    /* Summary Card - Step 5 */
+    .summary-card {
+      background-color: #f0f9f8;
+      border: 1px solid #14b8a6;
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-card h4 {
+      color: #001F3F;
+      margin-bottom: 1.25rem;
+      font-size: 1.1rem;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(20, 184, 166, 0.2);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      color: #666;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .summary-value {
+      color: #001F3F;
+      font-weight: 600;
+    }
+
+    /* Checkboxes */
+    .checkbox-group {
+      margin: 1.5rem 0;
+    }
+
+    .checkbox-item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background-color: #f8f5ef;
+      border-radius: 4px;
+      align-items: flex-start;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+      margin-top: 0.25rem;
+      cursor: pointer;
+      accent-color: #14b8a6;
+    }
+
+    .checkbox-item label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 400;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    /* Form Buttons */
+    .form-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+    }
+
+    .btn {
+      padding: 0.85rem 1.75rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-primary {
+      background-color: #14b8a6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0d9488;
+    }
+
+    .btn-secondary {
+      background-color: white;
+      color: #001F3F;
+      border: 2px solid #001F3F;
+    }
+
+    .btn-secondary:hover {
+      background-color: #001F3F;
+      color: white;
+    }
+
+    .btn-submit {
+      background-color: #c9a84c;
+      color: #001F3F;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+
+    .btn-submit:hover {
+      background-color: #b89a40;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-message h2 {
+      font-size: 2rem;
+      color: #001F3F;
+      margin-bottom: 1rem;
+    }
+
+    .success-message p {
+      color: #666;
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    /* Sidebar */
+    .apply-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .sidebar-card {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .sidebar-card h4 {
+      color: #001F3F;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar-step {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #e0dbd0;
+    }
+
+    .sidebar-step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .sidebar-step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: #14b8a6;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+    }
+
+    .sidebar-step-text {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .security-badge {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1rem;
+      background-color: #f0f9f8;
+      border-radius: 6px;
+      border-left: 4px solid #14b8a6;
+    }
+
+    .security-badge-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .security-badge-text {
+      color: #666;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .security-badge-text strong {
+      color: #001F3F;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #001F3F;
+      color: #f8f5ef;
+      padding: 2.5rem 2rem;
+      margin-top: 3rem;
+      border-top: 4px solid #14b8a6;
+    }
+
+    .footer-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h4 {
+      color: #14b8a6;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: #f8f5ef;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: #14b8a6;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(148, 163, 184, 0.3);
+      padding-top: 2rem;
+      text-align: center;
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .form-container {
+        padding: 1.5rem;
+      }
+
+      .step-title {
+        font-size: 1.35rem;
+      }
+
+      .form-buttons {
+        flex-direction: column;
+      }
+
+      .badges-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">⚕️</div>
+        <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <div class="nav-dropdown"><a href="programs.html">Programs</a>
+          <div class="dropdown-menu">
+            <a href="high-school.html"><span>🎓</span> High School</a>
+            <a href="college.html"><span>📚</span> College / Pre-Med</a>
+            <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+            <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+          </div>
+        </div>
+        <a href="for-institutions.html">For Institutions</a>
+        <a href="about.html">About</a>
+        <a href="testimonials.html">Testimonials</a>
+        <a href="additional-services.html">Services</a>
+        <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-label">Apply Now</div>
+      <h1>Begin Your Research Journey</h1>
+      <p>Applications are reviewed by our faculty team. You'll hear back within 3–5 business days.</p>
+    </div>
+  </section>
+
+  <!-- Trust Badges -->
+  <section class="trust-badges">
+    <div class="badges-inner">
+      <div class="badge">
+        <div class="badge-icon">🔒</div>
+        <div>Secure & Confidential</div>
+      </div>
+      <div class="badge">
+        <div class="badge-icon">✓</div>
+        <div>No application fee</div>
+      </div>
+      <div class="badge">
+        <div class="badge-icon">📧</div>
+        <div>Confirmation sent instantly</div>
+      </div>
+      <div class="badge">
+        <div class="badge-icon">👨‍⚕️</div>
+        <div>Faculty reviewed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="apply-layout">
+      <!-- Form -->
+      <div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="step-indicators">
+            <div class="step-indicator active" id="step1Indicator">
+              <div class="step-number">1</div>
+              <div class="step-label">Basic Info</div>
+            </div>
+            <div class="step-indicator" id="step2Indicator">
+              <div class="step-number">2</div>
+              <div class="step-label">Education</div>
+            </div>
+            <div class="step-indicator" id="step3Indicator">
+              <div class="step-number">3</div>
+              <div class="step-label">Research</div>
+            </div>
+            <div class="step-indicator" id="step4Indicator">
+              <div class="step-number">4</div>
+              <div class="step-label">Motivation</div>
+            </div>
+            <div class="step-indicator" id="step5Indicator">
+              <div class="step-number">5</div>
+              <div class="step-label">Review</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-container">
+          <form id="applicationForm">
+            <!-- STEP 1: Basic Information -->
+            <div class="form-step active" id="step1">
+              <h2 class="step-title">Basic Information</h2>
+              <p class="step-description">Tell us who you are</p>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName" class="required">First Name</label>
+                  <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
+                  <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                  <label for="lastName" class="required">Last Name</label>
+                  <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
+                  <div class="error-message"></div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="dob" class="required">Date of Birth</label>
+                  <input type="date" id="dob" name="dob">
+                  <div class="error-message"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email" class="required">Email</label>
+                <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="phone" class="required">Phone with Country Code</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="city" class="required">City</label>
+                  <input type="text" id="city" name="city" placeholder="Your city">
+                  <div class="error-message"></div>
+                </div>
+                <div class="form-group">
+                  <label for="state" class="required">State/Province</label>
+                  <input type="text" id="state" name="state" placeholder="Your state">
+                  <div class="error-message"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="country" class="required">Country</label>
+                <select id="country" name="country">
+                  <option value="">Select a country</option>
+                  <option value="USA" selected>United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-buttons">
+                <div></div>
+                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue →</button>
+              </div>
+            </div>
+
+            <!-- STEP 2: Education & Track -->
+            <div class="form-step" id="step2">
+              <h2 class="step-title">Education & Track</h2>
+              <p class="step-description">Tell us about your education and goals</p>
+
+              <div class="form-group">
+                <label for="educationLevel" class="required">Current Education Level</label>
+                <select id="educationLevel" name="educationLevel">
+                  <option value="">Select your education level</option>
+                  <option value="hs-910">High School (9th-10th)</option>
+                  <option value="hs-1112">High School (11th-12th)</option>
+                  <option value="college">College/Undergraduate</option>
+                  <option value="ms-ms12">Medical School MS1-MS2</option>
+                  <option value="ms-ms34">Medical School MS3-MS4</option>
+                  <option value="residency">Residency</option>
+                  <option value="fellowship">Fellowship</option>
+                  <option value="other">Other</option>
+                </select>
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="programTrack" class="required">Program Track</label>
+                <select id="programTrack" name="programTrack">
+                  <option value="">Select a program track</option>
+                  <option value="future-physician">Future Physician Scholars (High School)</option>
+                  <option value="pre-med">Pre-Med Research Scholars (College)</option>
+                  <option value="med-accelerator">Medical Student Accelerator</option>
+                  <option value="resident-accelerator">Resident & Fellow Accelerator</option>
+                  <option value="12month">12-Month Research Track</option>
+                  <option value="institutional">Institutional Program</option>
+                </select>
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="cycle">Preferred Cycle</label>
+                <select id="cycle" name="cycle">
+                  <option value="">Select a cycle</option>
+                  <option value="spring2026">Spring 2026</option>
+                  <option value="summer2026">Summer 2026</option>
+                  <option value="fall2026">Fall 2026</option>
+                  <option value="spring2027">Spring 2027</option>
+                </select>
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="year">Year</label>
+                <input type="text" id="year" name="year" placeholder="Auto-filled based on cycle" readonly>
+              </div>
+
+              <!-- Conditional: Parent/Guardian Information -->
+              <div class="conditional-section" id="parentalSection">
+                <h4>Parent/Guardian Information</h4>
+                <p>Parental consent is required for students under 18. A consent form will be emailed to your parent/guardian.</p>
+
+                <div class="form-group">
+                  <label for="parentName" class="required">Parent/Guardian Full Name</label>
+                  <input type="text" id="parentName" name="parentName" placeholder="Full name">
+                  <div class="error-message"></div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="parentPhone" class="required">Parent Phone</label>
+                    <input type="tel" id="parentPhone" name="parentPhone" placeholder="+1 (555) 123-4567">
+                    <div class="error-message"></div>
+                  </div>
+                  <div class="form-group">
+                    <label for="parentEmail" class="required">Parent Email</label>
+                    <input type="email" id="parentEmail" name="parentEmail" placeholder="parent@example.com">
+                    <div class="error-message"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-buttons">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue →</button>
+              </div>
+            </div>
+
+            <!-- STEP 3: Research Interests -->
+            <div class="form-step" id="step3">
+              <h2 class="step-title">Research Interests</h2>
+              <p class="step-description">What topics excite you?</p>
+
+              <div class="form-group">
+                <label for="topic1" class="required">Research Interest Topic 1</label>
+                <input type="text" id="topic1" name="topic1" placeholder="e.g., Cardiovascular Disease, Cancer Biology">
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="topic2">Research Interest Topic 2</label>
+                <input type="text" id="topic2" name="topic2" placeholder="(Optional)">
+              </div>
+
+              <div class="form-group">
+                <label for="topic3">Research Interest Topic 3</label>
+                <input type="text" id="topic3" name="topic3" placeholder="(Optional)">
+              </div>
+
+              <div class="form-group">
+                <label class="required">Do you have any prior research experience?</label>
+                <div class="toggle-group">
+                  <button type="button" class="toggle-btn" onclick="toggleResearchExp(this, 'yes')">Yes</button>
+                  <button type="button" class="toggle-btn" onclick="toggleResearchExp(this, 'no')">No</button>
+                </div>
+                <input type="hidden" id="priorResearch" name="priorResearch" value="">
+                <div class="error-message"></div>
+              </div>
+
+              <div class="conditional-section" id="researchExpSection">
+                <div class="form-group">
+                  <label for="researchDescription" class="required">Please briefly describe your research experience</label>
+                  <textarea id="researchDescription" name="researchDescription" placeholder="Describe your experience..."></textarea>
+                  <div class="error-message"></div>
+                </div>
+              </div>
+
+              <div class="form-buttons">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue →</button>
+              </div>
+            </div>
+
+            <!-- STEP 4: Motivation -->
+            <div class="form-step" id="step4">
+              <h2 class="step-title">Motivation</h2>
+              <p class="step-description">Help us understand your goals</p>
+
+              <div class="form-group">
+                <label for="interest" class="required">Why are you interested in MD Scholars?</label>
+                <textarea id="interest" name="interest" placeholder="Tell us what excites you about this program..." maxlength="1000"></textarea>
+                <div class="char-counter"><span id="interestCount">0</span>/1000 characters (min 100)</div>
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="careerGoals" class="required">What are your career goals?</label>
+                <textarea id="careerGoals" name="careerGoals" placeholder="Describe your career aspirations..." maxlength="1000"></textarea>
+                <div class="char-counter"><span id="careerCount">0</span>/1000 characters (min 100)</div>
+                <div class="error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="heardAbout">How did you hear about MD Scholars?</label>
+                <select id="heardAbout" name="heardAbout">
+                  <option value="">Select an option</option>
+                  <option value="google">Google Search</option>
+                  <option value="social">Social Media (Instagram/Facebook)</option>
+                  <option value="friend">Friend/Colleague</option>
+                  <option value="doctor">Doctor/Mentor</option>
+                  <option value="school">University/School</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-buttons">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep()">Continue →</button>
+              </div>
+            </div>
+
+            <!-- STEP 5: Review & Agreement -->
+            <div class="form-step" id="step5">
+              <h2 class="step-title">Review & Agreement</h2>
+              <p class="step-description">Confirm your information before submitting</p>
+
+              <div class="summary-card">
+                <h4>Application Summary</h4>
+                <div class="summary-row">
+                  <div class="summary-label">Name:</div>
+                  <div class="summary-value"><span id="summaryName">-</span></div>
+                </div>
+                <div class="summary-row">
+                  <div class="summary-label">Email:</div>
+                  <div class="summary-value"><span id="summaryEmail">-</span></div>
+                </div>
+                <div class="summary-row">
+                  <div class="summary-label">Program Track:</div>
+                  <div class="summary-value"><span id="summaryTrack">-</span></div>
+                </div>
+                <div class="summary-row">
+                  <div class="summary-label">Preferred Cycle:</div>
+                  <div class="summary-value"><span id="summaryCycle">-</span></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label style="font-weight: 600; margin-bottom: 1rem; display: block;">Required Agreements</label>
+                <div class="checkbox-group">
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="termsCheck" name="termsCheck">
+                    <label for="termsCheck">I agree to the MD Scholars Terms and Conditions</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="accuracyCheck" name="accuracyCheck">
+                    <label for="accuracyCheck">I confirm all information provided is accurate</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="acceptanceCheck" name="acceptanceCheck">
+                    <label for="acceptanceCheck">I understand that acceptance is not guaranteed and is based on faculty review</label>
+                  </div>
+                  <div class="checkbox-item">
+                    <input type="checkbox" id="consentCheck" name="consentCheck">
+                    <label for="consentCheck">I consent to be contacted by MD Scholars via email and phone regarding my application</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-buttons">
+                <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button type="submit" class="btn btn-submit">Submit Application 🎓</button>
+              </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+              <div class="success-icon">🎓</div>
+              <h2>Application Received!</h2>
+              <p>Thank you for applying to MD Scholars. Our faculty team will review your application and reach out within 3–5 business days.</p>
+              <div style="text-align: left; background-color: #f0f9f8; padding: 1.5rem; border-radius: 6px; border-left: 4px solid #14b8a6; margin: 1.5rem 0;">
+                <h4 style="color: #001F3F; margin-bottom: 1rem;">What's Next?</h4>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; color: #666;">
+                  <span style="color: #14b8a6; font-weight: 700;">✓</span>
+                  <span><strong>Check your email</strong> for a confirmation message</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; color: #666;">
+                  <span style="color: #14b8a6; font-weight: 700;">✓</span>
+                  <span><strong>Follow us</strong> on social media for cohort announcements</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; color: #666;">
+                  <span style="color: #14b8a6; font-weight: 700;">✓</span>
+                  <span><strong>Prepare</strong> a brief statement of research interest</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="apply-sidebar">
+        <div class="sidebar-card">
+          <h4>What Happens Next</h4>
+          <div class="sidebar-step">
+            <div class="sidebar-step-number">1</div>
+            <div class="sidebar-step-text">Application submitted</div>
+          </div>
+          <div class="sidebar-step">
+            <div class="sidebar-step-number">2</div>
+            <div class="sidebar-step-text">Faculty review (3-5 days)</div>
+          </div>
+          <div class="sidebar-step">
+            <div class="sidebar-step-number">3</div>
+            <div class="sidebar-step-text">Acceptance email with payment link</div>
+          </div>
+          <div class="sidebar-step">
+            <div class="sidebar-step-number">4</div>
+            <div class="sidebar-step-text">Enrollment confirmed</div>
+          </div>
+          <div class="sidebar-step">
+            <div class="sidebar-step-number">5</div>
+            <div class="sidebar-step-text">Dashboard access + cohort welcome</div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h4>Have Questions?</h4>
+          <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Reach out anytime — we're here to help.</p>
+          <a href="contact.html" style="display: inline-block; color: #14b8a6; text-decoration: none; font-weight: 600; font-size: 0.95rem;">Contact Us →</a>
+        </div>
+
+        <div class="security-badge">
+          <div class="security-badge-icon">🔒</div>
+          <div class="security-badge-text"><strong>Your information is kept private and secure.</strong> We never sell or share your data.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>MD Scholars</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="for-institutions.html">For Institutions</a></li>
+          <li><a href="additional-services.html">Services</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></li>
+          <li><a href="tel:+1234567890">+1 (234) 567-8900</a></li>
+          <li>Research Mentorship Program</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 MD Scholars LLC. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+    const formData = {};
+
+    // Form validation
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    function validatePhone(phone) {
+      const re = /^\+?[\d\s\-()]{10,}$/;
+      return re.test(phone);
+    }
+
+    function clearErrors(step) {
+      const stepEl = document.getElementById(`step${step}`);
+      if (!stepEl) return;
+      const errorMessages = stepEl.querySelectorAll('.error-message');
+      const inputs = stepEl.querySelectorAll('input, select, textarea');
+      errorMessages.forEach(el => el.textContent = '');
+      inputs.forEach(el => el.classList.remove('error'));
+    }
+
+    function showError(inputId, message) {
+      const input = document.getElementById(inputId);
+      const errorEl = input.parentElement.querySelector('.error-message');
+      if (errorEl) {
+        errorEl.textContent = message;
+      }
+      if (input) {
+        input.classList.add('error');
+      }
+    }
+
+    function validateStep(step) {
+      clearErrors(step);
+      let isValid = true;
+
+      if (step === 1) {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const dob = document.getElementById('dob').value;
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const country = document.getElementById('country').value;
+
+        if (!firstName) { showError('firstName', 'First name is required'); isValid = false; }
+        if (!lastName) { showError('lastName', 'Last name is required'); isValid = false; }
+        if (!dob) { showError('dob', 'Date of birth is required'); isValid = false; }
+        if (!email) { showError('email', 'Email is required'); isValid = false; }
+        else if (!validateEmail(email)) { showError('email', 'Please enter a valid email'); isValid = false; }
+        if (!phone) { showError('phone', 'Phone is required'); isValid = false; }
+        else if (!validatePhone(phone)) { showError('phone', 'Please enter a valid phone number'); isValid = false; }
+        if (!city) { showError('city', 'City is required'); isValid = false; }
+        if (!state) { showError('state', 'State/Province is required'); isValid = false; }
+        if (!country) { showError('country', 'Country is required'); isValid = false; }
+
+        if (isValid) {
+          formData.firstName = firstName;
+          formData.lastName = lastName;
+          formData.dob = dob;
+          formData.email = email;
+          formData.phone = phone;
+          formData.city = city;
+          formData.state = state;
+          formData.country = country;
+        }
+      }
+
+      if (step === 2) {
+        const educationLevel = document.getElementById('educationLevel').value;
+        const programTrack = document.getElementById('programTrack').value;
+
+        if (!educationLevel) { showError('educationLevel', 'Please select an education level'); isValid = false; }
+        if (!programTrack) { showError('programTrack', 'Please select a program track'); isValid = false; }
+
+        formData.educationLevel = educationLevel;
+        formData.programTrack = programTrack;
+        formData.cycle = document.getElementById('cycle').value || 'Not specified';
+
+        // Validate parental info if needed
+        const parentalSection = document.getElementById('parentalSection');
+        if (parentalSection.classList.contains('show')) {
+          const parentName = document.getElementById('parentName').value.trim();
+          const parentPhone = document.getElementById('parentPhone').value.trim();
+          const parentEmail = document.getElementById('parentEmail').value.trim();
+
+          if (!parentName) { showError('parentName', 'Parent name is required'); isValid = false; }
+          if (!parentPhone) { showError('parentPhone', 'Parent phone is required'); isValid = false; }
+          if (!parentEmail) { showError('parentEmail', 'Parent email is required'); isValid = false; }
+          else if (!validateEmail(parentEmail)) { showError('parentEmail', 'Please enter a valid email'); isValid = false; }
+
+          if (isValid) {
+            formData.parentName = parentName;
+            formData.parentPhone = parentPhone;
+            formData.parentEmail = parentEmail;
+          }
+        }
+      }
+
+      if (step === 3) {
+        const topic1 = document.getElementById('topic1').value.trim();
+        const priorResearch = document.getElementById('priorResearch').value;
+
+        if (!topic1) { showError('topic1', 'At least one research topic is required'); isValid = false; }
+        if (!priorResearch) { showError('priorResearch', 'Please select yes or no'); isValid = false; }
+
+        if (priorResearch === 'yes') {
+          const description = document.getElementById('researchDescription').value.trim();
+          if (!description) { showError('researchDescription', 'Please describe your research experience'); isValid = false; }
+          if (isValid) formData.researchDescription = description;
+        }
+
+        if (isValid) {
+          formData.topic1 = topic1;
+          formData.topic2 = document.getElementById('topic2').value.trim();
+          formData.topic3 = document.getElementById('topic3').value.trim();
+          formData.priorResearch = priorResearch;
+        }
+      }
+
+      if (step === 4) {
+        const interest = document.getElementById('interest').value.trim();
+        const careerGoals = document.getElementById('careerGoals').value.trim();
+
+        if (!interest) { showError('interest', 'This field is required'); isValid = false; }
+        else if (interest.length < 100) { showError('interest', 'Please write at least 100 characters'); isValid = false; }
+
+        if (!careerGoals) { showError('careerGoals', 'This field is required'); isValid = false; }
+        else if (careerGoals.length < 100) { showError('careerGoals', 'Please write at least 100 characters'); isValid = false; }
+
+        if (isValid) {
+          formData.interest = interest;
+          formData.careerGoals = careerGoals;
+          formData.heardAbout = document.getElementById('heardAbout').value || 'Not specified';
+        }
+      }
+
+      if (step === 5) {
+        const termsCheck = document.getElementById('termsCheck').checked;
+        const accuracyCheck = document.getElementById('accuracyCheck').checked;
+        const acceptanceCheck = document.getElementById('acceptanceCheck').checked;
+        const consentCheck = document.getElementById('consentCheck').checked;
+
+        if (!termsCheck || !accuracyCheck || !acceptanceCheck || !consentCheck) {
+          showError('termsCheck', 'All agreements must be accepted');
+          isValid = false;
+        }
+      }
+
+      return isValid;
+    }
+
+    function nextStep() {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) {
+        currentStep++;
+        updateStep();
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStep();
+      }
+    }
+
+    function updateStep() {
+      // Hide all steps
+      for (let i = 1; i <= totalSteps; i++) {
+        const stepEl = document.getElementById(`step${i}`);
+        if (stepEl) stepEl.classList.remove('active');
+      }
+
+      // Show current step
+      const currentStepEl = document.getElementById(`step${currentStep}`);
+      if (currentStepEl) currentStepEl.classList.add('active');
+
+      // Update progress bar
+      const progress = (currentStep / totalSteps) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+
+      // Update step indicators
+      for (let i = 1; i <= totalSteps; i++) {
+        const indicator = document.getElementById(`step${i}Indicator`);
+        if (indicator) {
+          indicator.classList.remove('active', 'completed');
+          if (i < currentStep) indicator.classList.add('completed');
+          if (i === currentStep) indicator.classList.add('active');
+        }
+      }
+
+      // Update summary on step 5
+      if (currentStep === 5) {
+        document.getElementById('summaryName').textContent = (formData.firstName || '') + ' ' + (formData.lastName || '');
+        document.getElementById('summaryEmail').textContent = formData.email || '-';
+        document.getElementById('summaryTrack').textContent = document.getElementById('programTrack').options[document.getElementById('programTrack').selectedIndex]?.text || '-';
+        document.getElementById('summaryCycle').textContent = document.getElementById('cycle').options[document.getElementById('cycle').selectedIndex]?.text || '-';
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    function toggleResearchExp(btn, value) {
+      const group = btn.parentElement;
+      group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('priorResearch').value = value;
+
+      const section = document.getElementById('researchExpSection');
+      if (value === 'yes') {
+        section.classList.add('show');
+      } else {
+        section.classList.remove('show');
+        document.getElementById('researchDescription').value = '';
+      }
+    }
+
+    // Update parental section visibility based on age or education level
+    function updateParentalSection() {
+      const dob = document.getElementById('dob').value;
+      const educationLevel = document.getElementById('educationLevel').value;
+      const parentalSection = document.getElementById('parentalSection');
+
+      let showParental = false;
+
+      if (educationLevel === 'hs-910' || educationLevel === 'hs-1112') {
+        showParental = true;
+      }
+
+      if (dob) {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+        if (age < 18) showParental = true;
+      }
+
+      if (showParental) {
+        parentalSection.classList.add('show');
+        parentalSection.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"]').forEach(input => {
+          const label = input.parentElement.querySelector('label');
+          if (label && label.textContent.includes('Parent')) {
+            label.classList.add('required');
+          }
+        });
+      } else {
+        parentalSection.classList.remove('show');
+      }
+    }
+
+    // Character counter for textareas
+    document.addEventListener('DOMContentLoaded', function() {
+      const interestTA = document.getElementById('interest');
+      const careerTA = document.getElementById('careerGoals');
+      const dobInput = document.getElementById('dob');
+      const educationSelect = document.getElementById('educationLevel');
+      const cycleSelect = document.getElementById('cycle');
+
+      if (interestTA) {
+        interestTA.addEventListener('input', function() {
+          document.getElementById('interestCount').textContent = this.value.length;
+          const counter = this.parentElement.querySelector('.char-counter');
+          if (this.value.length < 100) {
+            counter.classList.add('low');
+          } else {
+            counter.classList.remove('low');
+          }
+        });
+      }
+
+      if (careerTA) {
+        careerTA.addEventListener('input', function() {
+          document.getElementById('careerCount').textContent = this.value.length;
+          const counter = this.parentElement.querySelector('.char-counter');
+          if (this.value.length < 100) {
+            counter.classList.add('low');
+          } else {
+            counter.classList.remove('low');
+          }
+        });
+      }
+
+      if (dobInput) {
+        dobInput.addEventListener('change', updateParentalSection);
+      }
+
+      if (educationSelect) {
+        educationSelect.addEventListener('change', updateParentalSection);
+      }
+
+      if (cycleSelect) {
+        cycleSelect.addEventListener('change', function() {
+          const cycleMap = {
+            'spring2026': '2026',
+            'summer2026': '2026',
+            'fall2026': '2026',
+            'spring2027': '2027'
+          };
+          document.getElementById('year').value = cycleMap[this.value] || '';
+        });
+      }
+
+      // Form submission
+      document.getElementById('applicationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!validateStep(5)) return;
+
+        // Show success message
+        const form = this;
+        form.style.display = 'none';
+        document.getElementById('successMessage').classList.add('show');
+
+        // Redirect after 3 seconds
+        setTimeout(function() {
+          window.location.href = 'thank-you.html';
+        }, 3000);
+      });
+    });
+  </script>
+</body>
+</html>

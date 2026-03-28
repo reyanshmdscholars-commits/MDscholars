@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Received - MD Scholars</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #001F3F;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Minimal Navigation */
+        nav {
+            background-color: #001F3F;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(20, 184, 166, 0.1);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #f8f5ef;
+        }
+
+        .nav-logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+        }
+
+        .nav-logo-text strong {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .nav-logo-text span {
+            font-size: 0.7rem;
+            color: #14b8a6;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #f8f5ef;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #14b8a6;
+        }
+
+        .nav-links a.active {
+            color: #14b8a6;
+            border-bottom: 2px solid #14b8a6;
+            padding-bottom: 0.25rem;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #134E4A;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            min-width: 200px;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-dropdown:hover .dropdown-menu {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-menu a {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #f8f5ef;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #0d9488;
+        }
+
+        .nav-cta {
+            background-color: #c9a84c;
+            color: #001F3F;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+        }
+
+        .nav-cta:hover {
+            background-color: #e6c85a;
+            color: #001F3F;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .thank-you-container {
+            background-color: #f8f5ef;
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .emoji-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .thank-you-container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #001F3F;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .thank-you-container > p {
+            color: #666;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: white;
+            border-left: 4px solid #14b8a6;
+            border-radius: 0.4rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            font-family: 'Playfair Display', serif;
+            color: #001F3F;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkmark {
+            color: #14b8a6;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+
+        /* While You Wait Section */
+        .while-you-wait {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .while-you-wait h3 {
+            font-family: 'Playfair Display', serif;
+            color: #001F3F;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card {
+            background-color: #f8f5ef;
+            border: 2px solid #eee;
+            border-radius: 0.4rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-placeholder {
+            background-color: #e0e0e0;
+            border: 2px dashed #999;
+            border-radius: 0.4rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .play-icon {
+            font-size: 2.5rem;
+            color: #c9a84c;
+        }
+
+        .video-text {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .content-card h4 {
+            font-family: 'Playfair Display', serif;
+            color: #001F3F;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card a {
+            color: #14b8a6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .content-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Action Links */
+        .action-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.4rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #c9a84c;
+            color: #001F3F;
+        }
+
+        .btn-primary:hover {
+            background-color: #e6c85a;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #14b8a6;
+            border: 2px solid #14b8a6;
+        }
+
+        .btn-secondary:hover {
+            background-color: #14b8a6;
+            color: #001F3F;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #001F3F;
+            color: #f8f5ef;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid rgba(20, 184, 166, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .thank-you-container {
+                padding: 2rem;
+            }
+
+            .thank-you-container h1 {
+                font-size: 1.75rem;
+            }
+
+            .emoji-icon {
+                font-size: 3rem;
+            }
+
+            .content-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .action-links {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-icon">⚕️</div>
+                <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <div class="nav-dropdown"><a href="programs.html">Programs</a>
+                    <div class="dropdown-menu">
+                        <a href="high-school.html"><span>🎓</span> High School</a>
+                        <a href="college.html"><span>📚</span> College / Pre-Med</a>
+                        <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+                        <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+                    </div>
+                </div>
+                <a href="for-institutions.html">For Institutions</a>
+                <a href="about.html">About</a>
+                <a href="testimonials.html">Testimonials</a>
+                <a href="additional-services.html">Services</a>
+                <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="thank-you-container">
+            <span class="emoji-icon">🎓</span>
+            <h1>Application Received!</h1>
+            <p>Thank you for applying to MD Scholars. Our faculty team will review your application and reach out within 3–5 business days.</p>
+
+            <div class="info-box">
+                <h3>What's Next?</h3>
+                <div class="info-item">
+                    <span class="checkmark">✓</span>
+                    <span><strong>Check your email</strong> for a confirmation message</span>
+                </div>
+                <div class="info-item">
+                    <span class="checkmark">✓</span>
+                    <span><strong>Follow us</strong> on social media for cohort announcements</span>
+                </div>
+                <div class="info-item">
+                    <span class="checkmark">✓</span>
+                    <span><strong>Prepare</strong> a brief statement of research interest</span>
+                </div>
+            </div>
+
+            <div class="while-you-wait">
+                <h3>While You Wait</h3>
+                <div class="content-cards">
+                    <div class="content-card">
+                        <div class="video-placeholder">
+                            <div class="play-icon">▶️</div>
+                            <div class="video-text">Video coming soon</div>
+                        </div>
+                        <h4>Watch Our Introduction</h4>
+                        <p>Learn about our mentorship approach and what sets MD Scholars apart</p>
+                    </div>
+
+                    <div class="content-card">
+                        <h4>Learn What Scholars Gain</h4>
+                        <p>Explore our comprehensive programs and see what you'll accomplish</p>
+                        <a href="programs.html">Explore Programs →</a>
+                    </div>
+                </div>
+
+                <div class="action-links">
+                    <a href="index.html" class="btn btn-primary">Back to Home</a>
+                    <a href="programs.html" class="btn btn-secondary">View Programs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-bottom">
+                © 2026 MD Scholars LLC. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

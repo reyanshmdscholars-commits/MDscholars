@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Institutions — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F;
+    --navy-mid: #002d5a;
+    --navy-light: #0a3a6e;
+    --teal: #134E4A;
+    --teal-mid: #1a6b65;
+    --teal-bright: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #c9a84c;
+    --gold-light: #e8c96d;
+    --cream: #f8f5ef;
+    --cream-dark: #ede8df;
+    --white: #ffffff;
+    --gray-100: #f4f6f8;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --text: #0f172a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0,31,63,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 72px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--white);
+  }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-text strong { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+  .nav-logo-text span { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-light); }
+  .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.02em;
+    padding: 0.5rem 0.9rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.15); }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown > a::after { content: ' ▾'; font-size: 0.7rem; }
+  .dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--white); border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    min-width: 220px; overflow: hidden;
+    border: 1px solid var(--gray-200);
+    animation: dropIn 0.2s ease;
+  }
+  @keyframes dropIn { from { opacity:0; transform:translateY(-8px);} to { opacity:1; transform:translateY(0);} }
+  .nav-dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-menu a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.85rem 1.25rem; color: var(--text) !important;
+    font-size: 0.9rem; border-radius: 0;
+    border-bottom: 1px solid var(--gray-100);
+    transition: all 0.15s;
+  }
+  .dropdown-menu a:hover { background: var(--gray-100) !important; color: var(--navy) !important; }
+  .dropdown-menu a span { font-size: 1rem; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright)) !important;
+    color: var(--white) !important; border-radius: 8px !important;
+    padding: 0.55rem 1.2rem !important; font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(13,148,136,0.35);
+    transition: all 0.2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.45) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 60vh;
+    background: var(--navy);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 72px;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(19,78,74,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 80% at 20% 80%, rgba(13,148,136,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, #001F3F 0%, #002040 40%, #001a35 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-inner {
+    max-width: 800px; margin: 0 auto; padding: 80px 2rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7);
+    font-weight: 300;
+  }
+
+  /* ── BASE ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 80px 0; }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 1rem;
+    padding: 0.3rem 0.9rem; background: rgba(19,78,74,0.08);
+    border-radius: 100px; border: 1px solid rgba(19,78,74,0.15);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2;
+    color: var(--navy); margin-bottom: 2rem;
+  }
+
+  /* ── PARTNERSHIP TYPES ── */
+  .partnerships { background: var(--white); }
+  .partnerships-intro {
+    max-width: 750px; margin-bottom: 3.5rem;
+  }
+  .partnerships-intro p {
+    font-size: 1.05rem; color: var(--gray-600); line-height: 1.75; margin-bottom: 1rem;
+  }
+  .partnerships-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+  .partnership-card {
+    border: 1px solid var(--gray-200); border-radius: 16px;
+    padding: 2rem; background: var(--white);
+    transition: all 0.3s;
+  }
+  .partnership-card:hover {
+    border-color: rgba(13,148,136,0.3);
+    box-shadow: 0 12px 40px rgba(0,31,63,0.08);
+    transform: translateY(-2px);
+  }
+  .partnership-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.75rem;
+  }
+  .partnership-card p {
+    font-size: 0.95rem; color: var(--gray-600); line-height: 1.65;
+  }
+
+  /* ── OPTIONS GRID ── */
+  .options { background: var(--cream); }
+  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+  .option-card {
+    background: var(--white); border-radius: 14px;
+    border: 1px solid var(--cream-dark);
+    padding: 2rem; text-align: center;
+    transition: all 0.3s;
+  }
+  .option-card:hover {
+    border-color: var(--teal-light);
+    box-shadow: 0 8px 25px rgba(13,148,136,0.12);
+  }
+  .option-icon {
+    font-size: 2.5rem; margin-bottom: 1rem; display: block;
+  }
+  .option-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.6rem;
+  }
+  .option-card p {
+    font-size: 0.9rem; color: var(--gray-600); line-height: 1.6;
+  }
+
+  /* ── ENDORSEMENTS ── */
+  .endorsements { background: var(--white); }
+  .endorsements-header {
+    text-align: center; margin-bottom: 3.5rem;
+  }
+  .endorsements-header p {
+    font-size: 1.05rem; color: var(--gray-600); max-width: 700px; margin: 0 auto;
+  }
+  .endorsement-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+  .endorsement-placeholder {
+    background: var(--gray-100); border: 1px solid var(--gray-200);
+    border-radius: 12px; padding: 3rem 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; min-height: 150px;
+    transition: all 0.3s;
+  }
+  .endorsement-placeholder:hover {
+    background: var(--cream);
+    border-color: var(--teal-light);
+  }
+  .endorsement-placeholder p {
+    font-size: 0.85rem; color: var(--gray-400);
+  }
+
+  /* ── INSTITUTIONAL SECTION ── */
+  .institutional { background: var(--navy); padding: 100px 0; position: relative; overflow: hidden; }
+  .institutional::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(19,78,74,0.3), transparent 65%);
+  }
+  .institutional-inner {
+    display: grid; grid-template-columns: 1.3fr 1fr; gap: 4rem; align-items: flex-start;
+    position: relative; z-index: 1;
+  }
+  .institutional-content h2 {
+    color: white; margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 700;
+  }
+  .institutional-content p {
+    color: rgba(255,255,255,0.7); font-size: 1rem; line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+  .institutional-content ul {
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+  .institutional-content li {
+    color: rgba(255,255,255,0.65); font-size: 0.95rem;
+    padding: 0.4rem 0; display: flex; align-items: center; gap: 10px;
+  }
+  .institutional-content li::before {
+    content: '✓'; color: var(--teal-light); font-weight: 700; font-size: 1.1rem;
+  }
+
+  /* ── FORM ── */
+  .inst-form-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 2rem;
+    backdrop-filter: blur(8px);
+  }
+  .inst-form-card h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700;
+    color: white; margin-bottom: 0.5rem;
+  }
+  .inst-form-card p { font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.85); margin-bottom: 0.4rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.8rem 1rem;
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    background: rgba(255,255,255,0.08); color: white;
+    transition: all 0.2s; outline: none;
+  }
+  .form-group input::placeholder, .form-group select::placeholder, .form-group textarea::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--teal-light); background: rgba(255,255,255,0.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-group select { appearance: none; padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+  }
+
+  /* ── CTA BUTTONS ── */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); padding: 0.9rem 2rem; border-radius: 8px;
+    font-weight: 600; font-size: 1rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 15px rgba(201,168,76,0.3);
+    transition: all 0.25s; border: none; cursor: pointer;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+  .form-button {
+    width: 100%; justify-content: center;
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    color: white;
+    box-shadow: 0 4px 15px rgba(13,148,136,0.35);
+  }
+  .form-button:hover {
+    box-shadow: 0 6px 20px rgba(13,148,136,0.45);
+  }
+
+  /* ── CONTACT INFO ── */
+  .contact-info {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 2rem; margin-top: 3rem; text-align: center;
+  }
+  .contact-info p {
+    color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 1rem;
+  }
+  .contact-email {
+    color: var(--teal-light); font-weight: 600; font-size: 1.1rem;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .contact-email:hover {
+    color: white; text-decoration: underline;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: white; padding: 60px 0 30px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { margin-bottom: 1rem; display: flex; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.45); max-width: 260px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1.1rem; }
+  .footer-col a { display: block; font-size: 0.88rem; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--teal-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 2rem;
+  }
+  .footer-bottom p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--teal-light); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-inner { padding: 0 1.5rem; }
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { min-height: 50vh; }
+    .hero-inner { padding: 60px 1.5rem; }
+    .hero h1 { font-size: 2rem; }
+    section { padding: 60px 0; }
+    .institutional-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .institutional-content h2 { font-size: 1.8rem; }
+    .partnerships-grid { grid-template-columns: 1fr; }
+    .endorsement-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    .nav-cta { padding: 0.5rem 1rem !important; font-size: 0.8rem !important; }
+    .section-title { font-size: 1.6rem; }
+    .endorsement-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚕️</div>
+      <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown">
+        <a href="programs.html">Programs</a>
+        <div class="dropdown-menu">
+          <a href="high-school.html"><span>🎓</span> High School</a>
+          <a href="college.html"><span>📚</span> College / Pre-Med</a>
+          <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+          <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+        </div>
+      </div>
+      <a href="for-institutions.html" class="active">For Institutions</a>
+      <a href="about.html">About</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="additional-services.html">Services</a>
+      <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <h1>Partnering With Institutions That Shape the Future of Medicine</h1>
+    <p class="hero-sub">MD Scholars partners with schools, universities, and training programs to deliver structured research mentorship at scale — with flexible enrollment options and institutional support.</p>
+  </div>
+</section>
+
+<!-- PARTNERSHIP TYPES -->
+<section class="partnerships">
+  <div class="container">
+    <h2 class="section-title">Partnership Options</h2>
+    <div class="partnerships-intro">
+      <p>We work with institutions across the medical education spectrum. Whether you're looking for cohort-based training, one-time workshops, or research symposiums, we offer customizable solutions.</p>
+    </div>
+    <div class="partnerships-grid">
+      <div class="partnership-card">
+        <h3>Cohort-Based Programs</h3>
+        <p>Enroll groups of students in structured 12-16 week research tracks with dedicated mentorship, group seminars, and institutional reporting. Ideal for medical schools, residency programs, and pre-med departments.</p>
+      </div>
+      <div class="partnership-card">
+        <h3>Research Workshops</h3>
+        <p>Single or multi-session seminars on topics like biostatistics, scientific writing, research design, and ethics. Perfect for career fairs, grand rounds, or faculty development.</p>
+      </div>
+      <div class="partnership-card">
+        <h3>Student Research Symposiums</h3>
+        <p>Host a research showcase where students present their work. We provide judging, mentoring, and certificates. Great for celebrating scholarly achievement across your institution.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM OPTIONS -->
+<section class="options">
+  <div class="container">
+    <h2 class="section-title">What We Offer</h2>
+    <div class="options-grid">
+      <div class="option-card">
+        <span class="option-icon">💰</span>
+        <h4>Group Pricing</h4>
+        <p>Enrollment discount for institutions with 20+ students. Custom pricing based on cohort size, duration, and institutional needs.</p>
+      </div>
+      <div class="option-card">
+        <span class="option-icon">📊</span>
+        <h4>KPI Dashboard</h4>
+        <p>Real-time tracking of student progress, mentorship metrics, research outcomes, and scholarly deliverables. Transparent reporting for institutional leadership.</p>
+      </div>
+      <div class="option-card">
+        <span class="option-icon">🎓</span>
+        <h4>Pilot Program</h4>
+        <p>Start with a smaller cohort to evaluate program fit. Scale up once outcomes and student satisfaction meet institutional benchmarks.</p>
+      </div>
+      <div class="option-card">
+        <span class="option-icon">📅</span>
+        <h4>Live Info Sessions</h4>
+        <p>Schedule presentations for your faculty, students, and leadership. Q&A sessions with our team and alumni from your institution.</p>
+      </div>
+      <div class="option-card">
+        <span class="option-icon">🎤</span>
+        <h4>Seminars &amp; Webinars</h4>
+        <p>Guest lectures on research methodology, publication strategy, residency competitiveness, and career development. Customized for your audience.</p>
+      </div>
+      <div class="option-card">
+        <span class="option-icon">🤝</span>
+        <h4>Career Fairs</h4>
+        <p>Connect your students with physician-scientists. Networking, mentorship matching, and direct pathways to research opportunities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDORSEMENTS -->
+<section class="endorsements">
+  <div class="container">
+    <div class="endorsements-header">
+      <h2 class="section-title">Trusted by Leading Institutions</h2>
+      <p>MD Scholars is endorsed and utilized by medical schools, residency programs, and academic medical centers across the country.</p>
+    </div>
+    <div class="endorsement-grid">
+      <div class="endorsement-placeholder">
+        <p>Institution Logo</p>
+      </div>
+      <div class="endorsement-placeholder">
+        <p>Institution Logo</p>
+      </div>
+      <div class="endorsement-placeholder">
+        <p>Institution Logo</p>
+      </div>
+      <div class="endorsement-placeholder">
+        <p>Institution Logo</p>
+      </div>
+      <div class="endorsement-placeholder">
+        <p>Institution Logo</p>
+      </div>
+      <div class="endorsement-placeholder">
+        <p>Institution Logo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTITUTIONAL PROGRAMS SECTION -->
+<section class="institutional">
+  <div class="container">
+    <div class="institutional-inner">
+      <div class="institutional-content">
+        <h2>Institutional Programs</h2>
+        <p>Flexible research mentorship tailored to your institution's needs. Whether you need cohort-based enrollment, standalone workshops, or a custom solution, we can deliver.</p>
+        <ul>
+          <li>Physician-led instruction and mentorship</li>
+          <li>Flexible scheduling and remote-first delivery</li>
+          <li>Curriculum customization by specialty or level</li>
+          <li>Small cohorts ensure quality mentoring relationships</li>
+          <li>Progress tracking and institutional reporting</li>
+          <li>Ongoing support and faculty engagement</li>
+        </ul>
+        <p style="margin-top:1.5rem;"><strong>Annual subscription, per-cohort, or pilot options available.</strong></p>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div class="inst-form-card">
+        <h3>Request a Proposal</h3>
+        <p>Tell us about your institution and we'll develop a customized partnership proposal.</p>
+        <form onsubmit="event.preventDefault(); alert('Thank you for your inquiry. We will contact you within 2 business days.');">
+          <div class="form-group">
+            <label for="inst-name">Institution Name</label>
+            <input type="text" id="inst-name" placeholder="Johns Hopkins School of Medicine" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-name">Contact Name</label>
+            <input type="text" id="contact-name" placeholder="Program Director, Dean, etc." required>
+          </div>
+          <div class="form-group">
+            <label for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" placeholder="you@institution.edu" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-phone">Phone Number</label>
+            <input type="tel" id="contact-phone" placeholder="+1 (555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label for="inst-type">Institution Type</label>
+            <select id="inst-type" required>
+              <option value="">Select institution type...</option>
+              <option value="high-school">High School</option>
+              <option value="university">University / College</option>
+              <option value="med-school">Medical School</option>
+              <option value="residency">Residency Program</option>
+              <option value="fellowship">Fellowship Program</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="num-students">Estimated Number of Students</label>
+            <input type="number" id="num-students" placeholder="e.g., 30, 50, 100+" min="1">
+          </div>
+          <div class="form-group">
+            <label for="message">Message / Specific Needs</label>
+            <textarea id="message" placeholder="Tell us about your institution's research mentorship goals..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary form-button">Submit Request →</button>
+        </form>
+
+        <div class="contact-info">
+          <p>Prefer to chat directly?</p>
+          <a href="mailto:contact@mdscholars.com" class="contact-email">contact@mdscholars.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem">
+          <div class="nav-logo-icon" style="background:rgba(255,255,255,0.08)">⚕️</div>
+          <div class="nav-logo-text">
+            <strong>MD Scholars</strong>
+            <span>Research Mentorship</span>
+          </div>
+        </div>
+        <p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <a href="high-school.html">High School Track</a>
+        <a href="college.html">Pre-Med Track</a>
+        <a href="medical-student.html">Medical Student Track</a>
+        <a href="resident-fellow.html">Resident &amp; Fellow Track</a>
+      </div>
+      <div class="footer-col">
+        <h4>Organization</h4>
+        <a href="about.html">About the Founder</a>
+        <a href="for-institutions.html">For Institutions</a>
+        <a href="enroll.html">Apply Now</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Verify Certificate</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Authorship Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 MD Scholars LLC. All rights reserved. Physician-led • Small cohorts • Ethical authorship.</p>
+      <div class="footer-links">
+        <a href="#">Verify Certificate</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Policies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

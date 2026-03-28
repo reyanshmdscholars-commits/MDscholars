@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Programs — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F;
+    --navy-mid: #002d5a;
+    --navy-light: #0a3a6e;
+    --teal: #134E4A;
+    --teal-mid: #1a6b65;
+    --teal-bright: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #c9a84c;
+    --gold-light: #e8c96d;
+    --cream: #f8f5ef;
+    --cream-dark: #ede8df;
+    --white: #ffffff;
+    --gray-100: #f4f6f8;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --text: #0f172a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(0,31,63,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 72px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--white);
+  }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-text strong { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+  .nav-logo-text span { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-light); }
+  .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.02em;
+    padding: 0.5rem 0.9rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.15); }
+  .nav-dropdown { position: relative; }
+  .nav-dropdown > a::after { content: ' ▾'; font-size: 0.7rem; }
+  .dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--white); border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    min-width: 220px; overflow: hidden;
+    border: 1px solid var(--gray-200);
+    animation: dropIn 0.2s ease;
+  }
+  @keyframes dropIn { from { opacity:0; transform:translateY(-8px);} to { opacity:1; transform:translateY(0);} }
+  .nav-dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-menu a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.85rem 1.25rem; color: var(--text) !important;
+    font-size: 0.9rem; border-radius: 0;
+    border-bottom: 1px solid var(--gray-100);
+    transition: all 0.15s;
+  }
+  .dropdown-menu a:hover { background: var(--gray-100) !important; color: var(--navy) !important; }
+  .dropdown-menu a span { font-size: 1rem; }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright)) !important;
+    color: var(--white) !important; border-radius: 8px !important;
+    padding: 0.55rem 1.2rem !important; font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(13,148,136,0.35);
+    transition: all 0.2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.45) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 60vh;
+    background: var(--navy);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 72px;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(19,78,74,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 80% at 20% 80%, rgba(13,148,136,0.12) 0%, transparent 60%),
+      linear-gradient(160deg, #001F3F 0%, #002040 40%, #001a35 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-inner {
+    max-width: 800px; margin: 0 auto; padding: 80px 2rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7);
+    font-weight: 300;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 80px 0; }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 1rem;
+    padding: 0.3rem 0.9rem; background: rgba(19,78,74,0.08);
+    border-radius: 100px; border: 1px solid rgba(19,78,74,0.15);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2;
+    color: var(--navy); margin-bottom: 1rem;
+  }
+  .section-title em { font-style: italic; color: var(--teal); }
+
+  /* ── PROGRAMS GRID ── */
+  .programs { background: var(--white); }
+  .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2rem; }
+  .program-card {
+    border: 1px solid var(--gray-200); border-radius: 18px;
+    padding: 2.5rem 2rem; position: relative; overflow: hidden;
+    transition: all 0.3s;
+    background: var(--white);
+    display: flex; flex-direction: column;
+  }
+  .program-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--teal));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .program-card:hover { border-color: rgba(13,148,136,0.3); transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,31,63,0.1); }
+  .program-card:hover::before { transform: scaleX(1); }
+  .program-header {
+    margin-bottom: 1.5rem;
+  }
+  .program-emoji {
+    font-size: 2rem; margin-bottom: 0.5rem; display: block;
+  }
+  .program-card h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.3rem; line-height: 1.25;
+  }
+  .program-duration {
+    font-size: 0.82rem; color: var(--gray-400); font-weight: 500; margin-bottom: 1rem;
+  }
+  .program-description {
+    font-size: 0.95rem; color: var(--gray-600); line-height: 1.65; margin-bottom: 1.5rem; flex-grow: 1;
+  }
+  .program-outcomes { list-style: none; margin-bottom: 1.5rem; }
+  .program-outcomes li {
+    font-size: 0.88rem; color: var(--gray-600); padding: 0.35rem 0;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .program-outcomes li::before { content: '→'; color: var(--teal-bright); font-weight: 700; flex-shrink: 0; }
+
+  /* ── LOCKED SECTION ── */
+  .locked-section {
+    background: rgba(0,31,63,0.04);
+    border: 1px solid rgba(0,31,63,0.12);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .locked-icon {
+    font-size: 1.5rem; margin-bottom: 0.5rem; display: block;
+  }
+  .locked-text {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    font-style: italic;
+  }
+  .locked-content {
+    filter: blur(3px);
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+  }
+  .locked-content p {
+    font-size: 0.85rem; color: var(--gray-600); padding: 0.5rem 0;
+  }
+
+  /* ── CARD FOOTER / BUTTONS ── */
+  .program-footer {
+    display: flex; gap: 0.75rem; margin-top: auto;
+    padding-top: 1.5rem; border-top: 1px solid var(--gray-100);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+    color: white; padding: 0.7rem 1.5rem; border-radius: 8px;
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 12px rgba(13,148,136,0.3);
+    transition: all 0.25s; border: none; cursor: pointer;
+    flex: 1; justify-content: center;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(13,148,136,0.4); }
+  .btn-secondary {
+    background: transparent; color: var(--navy);
+    padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+    text-decoration: none; border: 1.5px solid var(--navy);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.25s; cursor: pointer;
+    flex: 1; justify-content: center;
+  }
+  .btn-secondary:hover { background: var(--navy); color: white; }
+
+  /* ── PRICING NOTE ── */
+  .pricing-note {
+    text-align: center;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 4rem auto 0;
+    max-width: 700px;
+  }
+  .pricing-note h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.5rem;
+  }
+  .pricing-note p {
+    font-size: 1rem; color: var(--gray-600); line-height: 1.65;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: white; padding: 60px 0 30px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { margin-bottom: 1rem; display: flex; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.45); max-width: 260px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 1.1rem; }
+  .footer-col a { display: block; font-size: 0.88rem; color: rgba(255,255,255,0.45); text-decoration: none; margin-bottom: 0.6rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--teal-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 2rem;
+  }
+  .footer-bottom p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--teal-light); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-inner { padding: 0 1.5rem; }
+    .nav-links { gap: 0; }
+    .nav-links a { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+    .hero { min-height: 50vh; }
+    .hero-inner { padding: 60px 1.5rem; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .program-card { padding: 2rem; }
+    section { padding: 60px 0; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-cta { padding: 0.5rem 1rem !important; font-size: 0.8rem !important; }
+    .hero h1 { font-size: 1.8rem; }
+    .section-title { font-size: 1.6rem; }
+    .program-card h3 { font-size: 1.2rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚕️</div>
+      <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown">
+        <a href="programs.html" class="active">Programs</a>
+        <div class="dropdown-menu">
+          <a href="high-school.html"><span>🎓</span> High School</a>
+          <a href="college.html"><span>📚</span> College / Pre-Med</a>
+          <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+          <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+        </div>
+      </div>
+      <a href="for-institutions.html">For Institutions</a>
+      <a href="about.html">About</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="additional-services.html">Services</a>
+      <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <h1>Research Programs Tailored to Your Stage</h1>
+    <p class="hero-sub">Physician-led mentorship designed for high school students, pre-med undergraduates, medical students, and residents. Choose your track and start building your research portfolio today.</p>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="programs">
+  <div class="container">
+    <div class="programs-grid">
+
+      <!-- 1. HIGH SCHOOL -->
+      <div class="program-card">
+        <div class="program-header">
+          <span class="program-emoji">🎓</span>
+          <h3>Future Physician Scholars</h3>
+          <div class="program-duration">12 weeks</div>
+        </div>
+        <p class="program-description">Early Exposure to Real Medical Research — Build the foundation that separates competitive pre-med applicants before you even get to college.</p>
+        <ul class="program-outcomes">
+          <li>Research Completion Certificate</li>
+          <li>Abstract submission</li>
+          <li>Scientific poster or report</li>
+          <li>Physician mentor evaluation letter</li>
+        </ul>
+        <div class="locked-section">
+          <div class="locked-icon">🔒</div>
+          <div class="locked-text">Full curriculum unlocked after enrollment</div>
+          <div class="locked-content">
+            <p>• Introduction to Biomedical Research • Research Methodology Fundamentals • Data Literacy & Critical Appraisal • Abstract Writing Workshop • Poster Development & Presentation • Research Completion & Certificate</p>
+          </div>
+        </div>
+        <div class="program-footer">
+          <a href="#" class="btn-secondary">Learn More →</a>
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- 2. COLLEGE / PRE-MED -->
+      <div class="program-card">
+        <div class="program-header">
+          <span class="program-emoji">📚</span>
+          <h3>Pre-Med Research Scholars</h3>
+          <div class="program-duration">12 weeks</div>
+        </div>
+        <p class="program-description">Build Meaningful Research Experience for Medical School — Create a portfolio that distinguishes you in a competitive AMCAS applicant pool.</p>
+        <ul class="program-outcomes">
+          <li>Dataset-based research project</li>
+          <li>Abstract submission to conference</li>
+          <li>AMCAS-ready documentation</li>
+          <li>Possible co-authorship opportunity</li>
+        </ul>
+        <div class="locked-section">
+          <div class="locked-icon">🔒</div>
+          <div class="locked-text">Full curriculum unlocked after enrollment</div>
+          <div class="locked-content">
+            <p>• Clinical Research Fundamentals • Study Design & Epidemiology • Dataset-Based Research Project • Statistical Analysis Basics • Abstract & Manuscript Writing • Conference Submission & AMCAS Documentation</p>
+          </div>
+        </div>
+        <div class="program-footer">
+          <a href="#" class="btn-secondary">Learn More →</a>
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- 3. MEDICAL STUDENT -->
+      <div class="program-card">
+        <div class="program-header">
+          <span class="program-emoji">🩺</span>
+          <h3>Medical Student Accelerator</h3>
+          <div class="program-duration">12 weeks</div>
+        </div>
+        <p class="program-description">Strengthen Your Residency Application With Research — Produce peer-reviewed publications and conference presentations that make your ERAS application competitive.</p>
+        <ul class="program-outcomes">
+          <li>Manuscript submission or in-revision</li>
+          <li>National conference abstract</li>
+          <li>ERAS-ready documentation</li>
+          <li>Performance-based mentor letter</li>
+        </ul>
+        <div class="locked-section">
+          <div class="locked-icon">🔒</div>
+          <div class="locked-text">Full curriculum unlocked after enrollment</div>
+          <div class="locked-content">
+            <p>• Research Strategy Session • Advanced Study Design • IRB & Ethics in Clinical Research • Manuscript Development Workshop • National Conference Submission • ERAS Documentation & Letter Support</p>
+          </div>
+        </div>
+        <div class="program-footer">
+          <a href="#" class="btn-secondary">Learn More →</a>
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- 4. RESIDENT & FELLOW -->
+      <div class="program-card">
+        <div class="program-header">
+          <span class="program-emoji">🔬</span>
+          <h3>Resident &amp; Fellow Accelerator</h3>
+          <div class="program-duration">16 weeks</div>
+        </div>
+        <p class="program-description">Produce Scholarly Output Without Overloading Your Schedule — ACGME-aligned research mentorship that fits into resident and fellow timelines.</p>
+        <ul class="program-outcomes">
+          <li>Peer-reviewed manuscript submission</li>
+          <li>ACGME scholarly activity documentation</li>
+          <li>Dataset-based research deliverables</li>
+          <li>Fellowship application support</li>
+        </ul>
+        <div class="locked-section">
+          <div class="locked-icon">🔒</div>
+          <div class="locked-text">Full curriculum unlocked after enrollment</div>
+          <div class="locked-content">
+            <p>• Scholarly Activity Audit & Planning • Dataset Access & Project Matching • Advanced Biostatistics & Analysis • Manuscript Development Pipeline • Peer Review & Journal Strategy • ACGME Documentation & Fellowship Portfolio</p>
+          </div>
+        </div>
+        <div class="program-footer">
+          <a href="#" class="btn-secondary">Learn More →</a>
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- 5. 12-MONTH TRACK -->
+      <div class="program-card">
+        <div class="program-header">
+          <span class="program-emoji">📊</span>
+          <h3>12-Month Research Track</h3>
+          <div class="program-duration">12 months</div>
+        </div>
+        <p class="program-description">Comprehensive Research Training with Peer-Reviewed Publication — Extended track for high school and college students pursuing in-depth research and manuscript publication.</p>
+        <ul class="program-outcomes">
+          <li>Peer-reviewed publication</li>
+          <li>Comprehensive research portfolio</li>
+          <li>Dataset and manuscript-based work</li>
+          <li>Authorship on published work</li>
+        </ul>
+        <div class="locked-section">
+          <div class="locked-icon">🔒</div>
+          <div class="locked-text">Full curriculum unlocked after enrollment</div>
+          <div class="locked-content">
+            <p>• Research question development and literature review • Dataset assignment and ongoing analysis • Statistical methodology and interpretation • Manuscript preparation across multiple sections • Submission strategy and journal selection • Revision cycles and publication support</p>
+          </div>
+        </div>
+        <div class="program-footer">
+          <a href="#" class="btn-secondary">Learn More →</a>
+          <a href="enroll.html" class="btn-primary">Enroll →</a>
+        </div>
+      </div>
+
+      <!-- 6. INSTITUTIONAL PROGRAMS -->
+      <div class="program-card">
+        <div class="program-header">
+          <span class="program-emoji">🏥</span>
+          <h3>Institutional Programs</h3>
+          <div class="program-duration">Flexible</div>
+        </div>
+        <p class="program-description">Turnkey Research Mentorship for Residency Programs — Cohort-based programs, workshops, and symposiums for schools and training institutions.</p>
+        <ul class="program-outcomes">
+          <li>Customized curriculum</li>
+          <li>Group pricing available (20+ students)</li>
+          <li>Live seminars and info sessions</li>
+          <li>KPI dashboard and outcomes tracking</li>
+        </ul>
+        <div class="locked-section">
+          <div class="locked-icon">🔒</div>
+          <div class="locked-text">Full details available upon inquiry</div>
+          <div class="locked-content">
+            <p>• Customizable track design • Batch enrollment and group rates • Institutional reporting and dashboards • Career fairs and networking events • Direct contact with leadership team</p>
+          </div>
+        </div>
+        <div class="program-footer">
+          <a href="for-institutions.html" class="btn-secondary">Learn More →</a>
+          <a href="for-institutions.html" class="btn-primary">Inquire →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PRICING NOTE -->
+    <div class="pricing-note">
+      <h3>Pricing &amp; Enrollment</h3>
+      <p>Pricing is available upon acceptance. Apply or contact us to receive your personalized enrollment offer based on your program track, cohort size, and institutional needs.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1rem">
+          <div class="nav-logo-icon" style="background:rgba(255,255,255,0.08)">⚕️</div>
+          <div class="nav-logo-text">
+            <strong>MD Scholars</strong>
+            <span>Research Mentorship</span>
+          </div>
+        </div>
+        <p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <a href="high-school.html">High School Track</a>
+        <a href="college.html">Pre-Med Track</a>
+        <a href="medical-student.html">Medical Student Track</a>
+        <a href="resident-fellow.html">Resident &amp; Fellow Track</a>
+      </div>
+      <div class="footer-col">
+        <h4>Organization</h4>
+        <a href="about.html">About the Founder</a>
+        <a href="for-institutions.html">For Institutions</a>
+        <a href="enroll.html">Apply Now</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Verify Certificate</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Authorship Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 MD Scholars LLC. All rights reserved. Physician-led • Small cohorts • Ethical authorship.</p>
+      <div class="footer-links">
+        <a href="#">Verify Certificate</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Policies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

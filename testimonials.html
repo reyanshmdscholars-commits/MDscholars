@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials - MD Scholars</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f5ef;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #001F3F;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: #f8f5ef;
+        }
+
+        .nav-logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-logo-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+        }
+
+        .nav-logo-text strong {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .nav-logo-text span {
+            font-size: 0.7rem;
+            color: #14b8a6;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #f8f5ef;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #14b8a6;
+        }
+
+        .nav-links a.active {
+            color: #14b8a6;
+            border-bottom: 2px solid #14b8a6;
+            padding-bottom: 0.25rem;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #134E4A;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            min-width: 200px;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-dropdown:hover .dropdown-menu {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-menu a {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #f8f5ef;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #0d9488;
+        }
+
+        .nav-cta {
+            background-color: #c9a84c;
+            color: #001F3F;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+        }
+
+        .nav-cta:hover {
+            background-color: #e6c85a;
+            color: #001F3F;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #001F3F 0%, #134E4A 100%);
+            color: #f8f5ef;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #14b8a6;
+            margin-bottom: 1rem;
+        }
+
+        .hero-note {
+            background-color: rgba(20, 184, 166, 0.1);
+            border-left: 4px solid #14b8a6;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-radius: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        /* Testimonials Grid */
+        .testimonials-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .quote-icon {
+            font-size: 2.5rem;
+            color: #c9a84c;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .testimonial-author {
+            flex: 1;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: #001F3F;
+            margin-bottom: 0.25rem;
+        }
+
+        .track-badge {
+            display: inline-block;
+            background-color: #134E4A;
+            color: #f8f5ef;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .star-rating {
+            color: #c9a84c;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        /* Program Outcomes Section */
+        .outcomes-section {
+            background-color: #134E4A;
+            color: #f8f5ef;
+            padding: 3rem 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .outcomes-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .outcomes-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .outcome-item {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #c9a84c;
+        }
+
+        .outcome-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #14b8a6;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .outcome-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Social Media Section */
+        .social-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+
+        .social-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #001F3F;
+        }
+
+        .social-message {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .social-placeholders {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .social-placeholder {
+            background-color: #e0e0e0;
+            border: 2px dashed #999;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .contact-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #001F3F;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-card {
+            background-color: #134E4A;
+            color: #f8f5ef;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card p {
+            color: #14b8a6;
+            word-break: break-word;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-badge {
+            background-color: #001F3F;
+            color: #f8f5ef;
+            padding: 0.6rem 1rem;
+            border-radius: 0.4rem;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-badge:hover {
+            background-color: #14b8a6;
+        }
+
+        /* Feedback Form */
+        .feedback-section {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .feedback-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #001F3F;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #001F3F;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.4rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            background-color: #c9a84c;
+            color: #001F3F;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.4rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #e6c85a;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: #001F3F;
+            color: #f8f5ef;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0.4rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #c9a84c;
+            color: #001F3F;
+        }
+
+        .btn-primary:hover {
+            background-color: #e6c85a;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #14b8a6;
+            border: 2px solid #14b8a6;
+        }
+
+        .btn-secondary:hover {
+            background-color: #14b8a6;
+            color: #001F3F;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #001F3F;
+            color: #f8f5ef;
+            padding: 3rem 1.5rem 1.5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #c9a84c;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #14b8a6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #f8f5ef;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(20, 184, 166, 0.2);
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-icon">⚕️</div>
+                <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <div class="nav-dropdown"><a href="programs.html">Programs</a>
+                    <div class="dropdown-menu">
+                        <a href="high-school.html"><span>🎓</span> High School</a>
+                        <a href="college.html"><span>📚</span> College / Pre-Med</a>
+                        <a href="medical-student.html"><span>🩺</span> Medical Student</a>
+                        <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+                    </div>
+                </div>
+                <a href="for-institutions.html">For Institutions</a>
+                <a href="about.html">About</a>
+                <a href="testimonials.html" class="active">Testimonials</a>
+                <a href="additional-services.html">Services</a>
+                <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>What Our Scholars Are Saying</h1>
+            <p>Real outcomes from real students pushing the boundaries of medical research</p>
+            <div class="hero-note">
+                📝 Testimonials from our first cohorts coming soon — we're just getting started!
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <div class="testimonial-meta">
+                    <div class="testimonial-author">
+                        <div class="testimonial-name">Future Scholar</div>
+                        <span class="track-badge">High School</span>
+                    </div>
+                    <div class="star-rating">★★★★★</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <div class="testimonial-meta">
+                    <div class="testimonial-author">
+                        <div class="testimonial-name">Future Scholar</div>
+                        <span class="track-badge">Pre-Med</span>
+                    </div>
+                    <div class="star-rating">★★★★★</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <div class="testimonial-meta">
+                    <div class="testimonial-author">
+                        <div class="testimonial-name">Future Scholar</div>
+                        <span class="track-badge">Medical Student</span>
+                    </div>
+                    <div class="star-rating">★★★★★</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <div class="testimonial-meta">
+                    <div class="testimonial-author">
+                        <div class="testimonial-name">Future Scholar</div>
+                        <span class="track-badge">Resident</span>
+                    </div>
+                    <div class="star-rating">★★★★★</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <div class="testimonial-meta">
+                    <div class="testimonial-author">
+                        <div class="testimonial-name">Future Scholar</div>
+                        <span class="track-badge">12-Month</span>
+                    </div>
+                    <div class="star-rating">★★★★★</div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="quote-icon">"</div>
+                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <div class="testimonial-meta">
+                    <div class="testimonial-author">
+                        <div class="testimonial-name">Future Scholar</div>
+                        <span class="track-badge">Alumni</span>
+                    </div>
+                    <div class="star-rating">★★★★★</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="outcomes-section">
+        <div class="outcomes-content">
+            <h2>Program Outcomes</h2>
+            <div class="outcomes-grid">
+                <div class="outcome-item">
+                    <div class="outcome-label">Research Completion Certificates</div>
+                    <div class="outcome-value">Growing with each cohort</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-label">Conference Abstract Submissions</div>
+                    <div class="outcome-value">—</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-label">Posters & Presentations</div>
+                    <div class="outcome-value">—</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-label">Manuscripts in Progress</div>
+                    <div class="outcome-value">—</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="social-section">
+        <h2>Share Your Research</h2>
+        <p class="social-message">Tag us @MDScholars to be featured here!</p>
+        <div class="social-placeholders">
+            <div class="social-placeholder">📸 Instagram Feed</div>
+            <div class="social-placeholder">💼 LinkedIn Posts</div>
+            <div class="social-placeholder">🎬 YouTube Videos</div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <h2>Contact & Customer Service</h2>
+        <div class="contact-cards">
+            <div class="contact-card">
+                <div class="contact-icon">✉️</div>
+                <h3>Email</h3>
+                <p>contact@mdscholars.com</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">📞</div>
+                <h3>Phone</h3>
+                <p>Coming soon</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">📍</div>
+                <h3>Address</h3>
+                <p>Coming soon</p>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <div class="social-links">
+                <a href="#" class="social-badge">✉️ Email</a>
+                <a href="#" class="social-badge">📷 Instagram</a>
+                <a href="#" class="social-badge">👍 Facebook</a>
+                <a href="#" class="social-badge">🎵 TikTok</a>
+                <a href="#" class="social-badge">🤖 Reddit</a>
+                <a href="#" class="social-badge">💬 WhatsApp</a>
+                <a href="#" class="social-badge">🔬 ResearchGate</a>
+                <a href="#" class="social-badge">📺 YouTube</a>
+                <a href="#" class="social-badge">💼 LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="feedback-section">
+        <h2>Share Your Feedback</h2>
+        <form>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="feedback-name">Name</label>
+                    <input type="text" id="feedback-name" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedback-email">Email</label>
+                    <input type="email" id="feedback-email" placeholder="your@email.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="feedback-track">Track</label>
+                <select id="feedback-track" required>
+                    <option value="">Select your track...</option>
+                    <option value="high-school">High School</option>
+                    <option value="pre-med">College / Pre-Med</option>
+                    <option value="med-student">Medical Student</option>
+                    <option value="resident">Resident & Fellow</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feedback-message">Message</label>
+                <textarea id="feedback-message" placeholder="Share your thoughts..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Feedback</button>
+        </form>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Join MD Scholars?</h2>
+            <p>Start your research mentorship journey today.</p>
+            <div class="cta-buttons">
+                <a href="enroll.html" class="btn btn-primary">Apply Now</a>
+                <a href="programs.html" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Programs</h3>
+                    <a href="high-school.html">High School</a>
+                    <a href="college.html">College / Pre-Med</a>
+                    <a href="medical-student.html">Medical Student</a>
+                    <a href="resident-fellow.html">Resident & Fellow</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Organization</h3>
+                    <a href="about.html">About</a>
+                    <a href="for-institutions.html">For Institutions</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <a href="verify.html">Verify Certificate</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Authorship</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 MD Scholars LLC. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
