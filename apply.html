@@ -1278,7 +1278,21 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+      toast.style.color = 'white';
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
     let currentStep = 1;
     const totalSteps = 5;
     const formData = {};
@@ -1601,22 +1615,22 @@
             city: document.getElementById('city').value,
             state: document.getElementById('state').value,
             country: document.getElementById('country').value,
-            program_track: document.getElementById('track').value,
-            education_level: document.getElementById('education').value,
-            school_name: document.getElementById('schoolName').value,
-            graduation_year: document.getElementById('gradYear').value,
-            gpa: document.getElementById('gpa').value,
-            parent_name: document.getElementById('parentName').value,
-            parent_email: document.getElementById('parentEmail').value,
-            parent_phone: document.getElementById('parentPhone').value,
-            research_topic_1: document.getElementById('research1').value,
-            research_topic_2: document.getElementById('research2').value,
-            research_topic_3: document.getElementById('research3').value,
-            prior_research: document.querySelector('input[name="priorResearch"]:checked')?.value === 'yes' ? true : false,
-            prior_research_details: document.getElementById('priorResearchDetails')?.value || null,
-            motivation: document.getElementById('motivation').value,
-            goals: document.getElementById('career').value,
-            how_heard: document.getElementById('hearAbout').value,
+            program_track: document.getElementById('programTrack').value,
+            education_level: document.getElementById('educationLevel').value,
+            school_name: null,
+            graduation_year: (document.getElementById('year') && document.getElementById('year').value) || null,
+            gpa: null,
+            parent_name: (document.getElementById('parentName') && document.getElementById('parentName').value) || null,
+            parent_email: (document.getElementById('parentEmail') && document.getElementById('parentEmail').value) || null,
+            parent_phone: (document.getElementById('parentPhone') && document.getElementById('parentPhone').value) || null,
+            research_topic_1: document.getElementById('topic1').value,
+            research_topic_2: (document.getElementById('topic2') && document.getElementById('topic2').value) || null,
+            research_topic_3: (document.getElementById('topic3') && document.getElementById('topic3').value) || null,
+            prior_research: document.getElementById('priorResearch') && document.getElementById('priorResearch').value === 'yes',
+            prior_research_details: (document.getElementById('researchDescription') && document.getElementById('researchDescription').value) || null,
+            motivation: document.getElementById('interest').value,
+            goals: document.getElementById('careerGoals').value,
+            how_heard: (document.getElementById('heardAbout') && document.getElementById('heardAbout').value) || null,
             status: 'pending',
             payment_status: 'unpaid'
           };
@@ -1646,22 +1660,5 @@
 
   <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script>
-    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
-      toast.style.color = 'white';
-      toast.style.display = 'block';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 4000);
-    }
-  </script>
 </body>
 </html>
