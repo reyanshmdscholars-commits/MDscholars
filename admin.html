@@ -902,16 +902,42 @@
     </div>
   </div>
 
+  <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1Njk5OCwiZXhwIjoyMDkwMjMyOTk4fQ.H_4VhvT8ENyuuH16aK0dGvjQvlz4v97XJpAbtmUHibc';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+    let allApplications = [];
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+      toast.style.color = 'white';
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 4000);
+    }
+
     function handleLogin(event) {
       event.preventDefault();
-      // Demo: Hide login and show dashboard
-      document.getElementById('loginContainer').style.display = 'none';
-      document.getElementById('dashboardWrapper').classList.add('active');
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (email === 'admin@mdscholars.com' && password === 'MDScholars2024!') {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('dashboardWrapper').classList.add('active');
+        loadDashboardData();
+      } else {
+        showToast('Invalid email or password', 'error');
+      }
     }
 
     function handleLogout() {
-      // Demo: Hide dashboard and show login
       document.getElementById('dashboardWrapper').classList.remove('active');
       document.getElementById('loginContainer').style.display = 'flex';
       document.getElementById('email').value = '';
@@ -932,6 +958,170 @@
       // Show selected section
       document.getElementById(tabName).classList.add('active');
       event.target.classList.add('active');
+
+      if (tabName === 'applications') {
+        loadApplicationsTable();
+      } else if (tabName === 'students') {
+        loadStudentsTable();
+      }
+    }
+
+    async function loadDashboardData() {
+      try {
+        const { data: applications, error } = await supabase
+          .from('applications')
+          .select('*');
+
+        if (error) throw error;
+
+        allApplications = applications || [];
+
+        const totalApps = allApplications.length;
+        const pendingApps = allApplications.filter(app => app.status === 'pending').length;
+        const acceptedApps = allApplications.filter(app => app.status === 'accepted').length;
+        const enrolledApps = allApplications.filter(app => app.status === 'accepted' && app.payment_status === 'paid').length;
+
+        // Update stats
+        const statsRow = document.querySelector('.stats-row');
+        if (statsRow) {
+          statsRow.children[0].querySelector('.stat-value').textContent = totalApps;
+          statsRow.children[1].querySelector('.stat-value').textContent = pendingApps;
+          statsRow.children[2].querySelector('.stat-value').textContent = acceptedApps;
+          statsRow.children[3].querySelector('.stat-value').textContent = enrolledApps;
+        }
+      } catch (err) {
+        console.error('Error loading dashboard:', err);
+        showToast('Error loading dashboard data', 'error');
+      }
+    }
+
+    async function loadApplicationsTable() {
+      try {
+        if (allApplications.length === 0) {
+          const { data, error } = await supabase
+            .from('applications')
+            .select('*');
+
+          if (error) throw error;
+          allApplications = data || [];
+        }
+
+        const tbody = document.querySelector('#applications .data-table tbody');
+        tbody.innerHTML = '';
+
+        allApplications.forEach(app => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td><strong>${app.first_name} ${app.last_name}</strong></td>
+            <td>${app.program_track || '-'}</td>
+            <td>${new Date(app.created_at || '').toLocaleDateString() || '-'}</td>
+            <td>${app.education_level || '-'}</td>
+            <td><span class="status-badge status-${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-sm" onclick="viewApplication(${app.id})">View</button>
+                <button class="btn-sm" onclick="updateStatus(${app.id}, 'accepted')">Accept</button>
+                <button class="btn-sm" onclick="updateStatus(${app.id}, 'waitlisted')">Waitlist</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error('Error loading applications:', err);
+        showToast('Error loading applications', 'error');
+      }
+    }
+
+    async function loadStudentsTable() {
+      try {
+        const { data: acceptedApps, error } = await supabase
+          .from('applications')
+          .select('*')
+          .eq('status', 'accepted');
+
+        if (error) throw error;
+
+        const tbody = document.querySelector('#students .data-table tbody');
+        tbody.innerHTML = '';
+
+        (acceptedApps || []).forEach(app => {
+          const row = document.createElement('tr');
+          const paymentStatus = app.payment_status === 'paid' ? 'Paid' : 'Pending';
+          const paymentBadgeClass = app.payment_status === 'paid' ? 'status-enrolled' : 'status-due';
+
+          row.innerHTML = `
+            <td><strong>${app.first_name} ${app.last_name}</strong></td>
+            <td>${app.program_track || '-'}</td>
+            <td>${new Date(app.created_at || '').toLocaleDateString() || '-'}</td>
+            <td>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%;"></div>
+              </div>
+              <span style="font-size: 0.8rem; color: #999;">25%</span>
+            </td>
+            <td><span class="status-badge ${paymentBadgeClass}">${paymentStatus}</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-sm" onclick="viewApplication(${app.id})">View</button>
+                <button class="btn-sm" onclick="togglePaymentStatus(${app.id}, '${app.payment_status}')">Mark ${app.payment_status === 'paid' ? 'Unpaid' : 'Paid'}</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error('Error loading students:', err);
+        showToast('Error loading students', 'error');
+      }
+    }
+
+    async function updateStatus(appId, newStatus) {
+      try {
+        const { error } = await supabase
+          .from('applications')
+          .update({ status: newStatus })
+          .eq('id', appId);
+
+        if (error) throw error;
+
+        showToast(`Application status updated to ${newStatus}`, 'success');
+        allApplications = allApplications.map(app =>
+          app.id === appId ? { ...app, status: newStatus } : app
+        );
+        await loadApplicationsTable();
+      } catch (err) {
+        console.error('Error updating status:', err);
+        showToast('Error updating status', 'error');
+      }
+    }
+
+    async function togglePaymentStatus(appId, currentStatus) {
+      try {
+        const newStatus = currentStatus === 'paid' ? 'unpaid' : 'paid';
+        const { error } = await supabase
+          .from('applications')
+          .update({ payment_status: newStatus })
+          .eq('id', appId);
+
+        if (error) throw error;
+
+        showToast(`Payment status updated to ${newStatus}`, 'success');
+        allApplications = allApplications.map(app =>
+          app.id === appId ? { ...app, payment_status: newStatus } : app
+        );
+        await loadStudentsTable();
+      } catch (err) {
+        console.error('Error updating payment status:', err);
+        showToast('Error updating payment status', 'error');
+      }
+    }
+
+    function viewApplication(appId) {
+      const app = allApplications.find(a => a.id === appId);
+      if (app) {
+        alert(`Application Details:\n\nName: ${app.first_name} ${app.last_name}\nEmail: ${app.email}\nTrack: ${app.program_track}\nStatus: ${app.status}\nEducation: ${app.education_level}`);
+      }
     }
   </script>
 </body>

@@ -799,7 +799,7 @@
 
     <section class="feedback-section">
         <h2>Share Your Feedback</h2>
-        <form>
+        <form id="feedbackForm">
             <div class="form-row">
                 <div class="form-group">
                     <label for="feedback-name">Name</label>
@@ -870,5 +870,56 @@
             </div>
         </div>
     </footer>
+
+    <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+            toast.style.color = 'white';
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 4000);
+        }
+
+        const feedbackForm = document.getElementById('feedbackForm');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                try {
+                    const name = document.getElementById('feedback-name').value;
+                    const email = document.getElementById('feedback-email').value;
+                    const program = document.getElementById('feedback-track').value;
+                    const message = document.getElementById('feedback-message').value;
+
+                    const { error } = await supabase
+                        .from('feedback')
+                        .insert([{
+                            name,
+                            email,
+                            program,
+                            message,
+                            approved: false
+                        }]);
+
+                    if (error) throw error;
+
+                    showToast('Thank you for your feedback!', 'success');
+                    feedbackForm.reset();
+                } catch (err) {
+                    console.error('Error:', err);
+                    showToast('Error submitting feedback. Please try again.', 'error');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

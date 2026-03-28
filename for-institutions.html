@@ -528,7 +528,7 @@
       <div class="inst-form-card">
         <h3>Request a Proposal</h3>
         <p>Tell us about your institution and we'll develop a customized partnership proposal.</p>
-        <form onsubmit="event.preventDefault(); alert('Thank you for your inquiry. We will contact you within 2 business days.');">
+        <form id="institutionForm">
           <div class="form-group">
             <label for="inst-name">Institution Name</label>
             <input type="text" id="inst-name" placeholder="Johns Hopkins School of Medicine" required>
@@ -624,6 +624,63 @@
     </div>
   </div>
 </footer>
+
+<div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+    toast.style.color = 'white';
+    toast.style.display = 'block';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 4000);
+  }
+
+  const instForm = document.getElementById('institutionForm');
+  if (instForm) {
+    instForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const contact_name = document.getElementById('contact-name').value;
+        const institution_name = document.getElementById('inst-name').value;
+        const email = document.getElementById('contact-email').value;
+        const phone = document.getElementById('contact-phone').value;
+        const institution_type = document.getElementById('inst-type').value;
+        const student_count = document.getElementById('num-students').value;
+        const message = document.getElementById('message').value;
+
+        const { error } = await supabase
+          .from('institution_inquiries')
+          .insert([{
+            contact_name,
+            institution_name,
+            email,
+            phone,
+            institution_type,
+            student_count,
+            message,
+            status: 'new'
+          }]);
+
+        if (error) throw error;
+
+        showToast('Proposal request submitted! We\'ll contact you within 2 business days.', 'success');
+        instForm.reset();
+      } catch (err) {
+        console.error('Error:', err);
+        showToast('Error submitting request. Please try again.', 'error');
+      }
+    });
+  }
+</script>
 
 </body>
 </html>

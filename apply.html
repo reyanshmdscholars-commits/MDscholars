@@ -1586,21 +1586,82 @@
       }
 
       // Form submission
-      document.getElementById('applicationForm').addEventListener('submit', function(e) {
+      document.getElementById('applicationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         if (!validateStep(5)) return;
 
-        // Show success message
-        const form = this;
-        form.style.display = 'none';
-        document.getElementById('successMessage').classList.add('show');
+        try {
+          // Collect form data from all steps
+          const applicationData = {
+            first_name: document.getElementById('firstName').value,
+            last_name: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            date_of_birth: document.getElementById('dob').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            country: document.getElementById('country').value,
+            program_track: document.getElementById('track').value,
+            education_level: document.getElementById('education').value,
+            school_name: document.getElementById('schoolName').value,
+            graduation_year: document.getElementById('gradYear').value,
+            gpa: document.getElementById('gpa').value,
+            parent_name: document.getElementById('parentName').value,
+            parent_email: document.getElementById('parentEmail').value,
+            parent_phone: document.getElementById('parentPhone').value,
+            research_topic_1: document.getElementById('research1').value,
+            research_topic_2: document.getElementById('research2').value,
+            research_topic_3: document.getElementById('research3').value,
+            prior_research: document.querySelector('input[name="priorResearch"]:checked')?.value === 'yes' ? true : false,
+            prior_research_details: document.getElementById('priorResearchDetails')?.value || null,
+            motivation: document.getElementById('motivation').value,
+            goals: document.getElementById('career').value,
+            how_heard: document.getElementById('hearAbout').value,
+            status: 'pending',
+            payment_status: 'unpaid'
+          };
 
-        // Redirect after 3 seconds
-        setTimeout(function() {
-          window.location.href = 'thank-you.html';
-        }, 3000);
+          const { error } = await supabase
+            .from('applications')
+            .insert([applicationData]);
+
+          if (error) throw error;
+
+          // Show success message
+          const form = this;
+          form.style.display = 'none';
+          document.getElementById('successMessage').classList.add('show');
+
+          // Redirect after 3 seconds
+          setTimeout(function() {
+            window.location.href = 'thank-you.html';
+          }, 3000);
+        } catch (err) {
+          console.error('Error submitting application:', err);
+          showToast('Error submitting application. Please try again.', 'error');
+        }
       });
     });
+  </script>
+
+  <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+      toast.style.color = 'white';
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 4000);
+    }
   </script>
 </body>
 </html>
