@@ -414,89 +414,6 @@
     border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,148,136,0.08);
   }
   .form-group textarea { resize: vertical; min-height: 90px; }
-  /* ── APPLY FUNNEL ── */
-  .apply-section { background: var(--navy); padding: 100px 0; position: relative; overflow: hidden; }
-  .apply-section::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(19,78,74,0.4), transparent 65%);
-  }
-  .apply-header { text-align: center; margin-bottom: 3rem; position: relative; z-index: 1; }
-  .apply-header .section-label { background: rgba(20,184,166,0.12); border-color: rgba(20,184,166,0.25); color: var(--teal-light); }
-  .apply-header h2 { color: white; }
-  .apply-header p { color: rgba(255,255,255,0.6); max-width: 540px; margin: 0 auto; font-size: 1rem; }
-  .apply-funnel {
-    max-width: 680px; margin: 0 auto; position: relative; z-index: 1;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px; padding: 3rem; backdrop-filter: blur(8px);
-  }
-  .funnel-steps { display: flex; gap: 0; margin-bottom: 2.5rem; }
-  .funnel-step {
-    flex: 1; display: flex; flex-direction: column; align-items: center;
-    gap: 0.4rem; position: relative;
-  }
-  .funnel-step:not(:last-child)::after {
-    content: ''; position: absolute; top: 14px; left: 60%; width: 80%;
-    height: 2px; background: rgba(255,255,255,0.15);
-  }
-  .funnel-step.active:not(:last-child)::after { background: var(--teal-bright); }
-  .step-num {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5);
-    transition: all 0.3s;
-  }
-  .funnel-step.active .step-num, .funnel-step.done .step-num {
-    background: var(--teal); border-color: var(--teal); color: white;
-  }
-  .step-label { font-size: 0.68rem; color: rgba(255,255,255,0.4); text-align: center; font-weight: 500; }
-  .funnel-step.active .step-label { color: var(--teal-light); }
-  .funnel-body { display: none; }
-  .funnel-body.active { display: block; animation: fadeUp 0.3s ease; }
-  .funnel-body h3 {
-    font-family: 'Playfair Display', serif; font-size: 1.3rem; color: white;
-    margin-bottom: 0.4rem;
-  }
-  .funnel-body p { font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-bottom: 1.75rem; }
-  .funnel-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .funnel-input {
-    width: 100%; padding: 0.8rem 1.1rem;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px; font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem; color: white; outline: none;
-    transition: all 0.2s; margin-bottom: 1rem;
-  }
-  .funnel-input::placeholder { color: rgba(255,255,255,0.3); }
-  .funnel-input:focus { border-color: var(--teal-bright); background: rgba(255,255,255,0.09); box-shadow: 0 0 0 3px rgba(13,148,136,0.12); }
-  .funnel-input option { background: var(--navy); }
-  .track-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
-  .track-option {
-    padding: 1rem; border-radius: 12px; cursor: pointer;
-    border: 1.5px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.04); transition: all 0.2s;
-  }
-  .track-option:hover, .track-option.selected {
-    border-color: var(--teal-bright); background: rgba(13,148,136,0.1);
-  }
-  .track-option .track-icon { font-size: 1.4rem; margin-bottom: 0.4rem; display: block; }
-  .track-option .track-name { font-size: 0.82rem; font-weight: 600; color: white; display: block; }
-  .track-option .track-level { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
-  .funnel-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
-  .btn-funnel-back {
-    background: transparent; border: 1px solid rgba(255,255,255,0.15);
-    color: rgba(255,255,255,0.6); padding: 0.75rem 1.5rem;
-    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .btn-funnel-back:hover { border-color: rgba(255,255,255,0.3); color: white; }
-  .btn-funnel-next {
-    background: linear-gradient(135deg, var(--teal), var(--teal-bright));
-    color: white; padding: 0.75rem 2rem; border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600;
-    border: none; cursor: pointer; transition: all 0.25s;
-    box-shadow: 0 6px 20px rgba(13,148,136,0.35);
-  }
-  .btn-funnel-next:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(13,148,136,0.45); }
   /* ── FOOTER ── */
   footer {
     background: #00111f; color: rgba(255,255,255,0.6);
@@ -655,7 +572,7 @@
         <div class="trust-pill">Real publications</div>
       </div>
       <div class="hero-buttons">
-        <a href="#apply" class="btn-primary">Apply Now →</a>
+        <a href="apply.html" class="btn-primary">Apply Now →</a>
         <a href="#programs" class="btn-ghost">Explore Programs</a>
       </div>
     </div>
@@ -902,164 +819,19 @@
             </div>
           </div>
         </div>
-        <a href="#" class="btn-primary" style="display:inline-flex;">Request a Proposal →</a>
+        <a href="for-institutions.html" class="btn-primary" style="display:inline-flex;">Request a Proposal →</a>
       </div>
       <div>
         <div class="inst-form-card">
-          <h3>Request Information</h3>
-          <p>Tell us about your institution and we'll be in touch within 2 business days.</p>
-          <div class="form-group"><label>Institution Name</label><input type="text" placeholder="Johns Hopkins University"></div>
-          <div class="form-group"><label>Your Role</label><input type="text" placeholder="Program Director, Dean, etc."></div>
-          <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@institution.edu"></div>
-          <div class="form-group">
-            <label>Type of Program</label>
-            <select>
-              <option>Select program type...</option>
-              <option>Medical School</option>
-              <option>Residency / GME Program</option>
-              <option>Fellowship Program</option>
-              <option>Undergraduate Pre-Med</option>
-              <option>High School / Prep Program</option>
-            </select>
-          </div>
-          <div class="form-group"><label>Notes or Questions</label><textarea placeholder="Tell us about your institution's needs..."></textarea></div>
-          <button class="btn-primary" style="width:100%;justify-content:center;border:none;font-size:0.95rem;">Submit Request →</button>
+          <h3>Ready to Partner?</h3>
+          <p>Fill out our full inquiry form and we'll be in touch within 2 business days to discuss how MD Scholars can support your program.</p>
+          <a href="for-institutions.html" class="btn-primary" style="display:inline-flex;width:100%;justify-content:center;text-decoration:none;margin-top:1rem;">Submit an Inquiry →</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- APPLY FUNNEL -->
-<section class="apply-section" id="apply">
-  <div class="container">
-    <div class="apply-header">
-      <div class="section-label">Apply Now</div>
-      <h2 class="section-title" style="color:white;">Start Your <em style="color:var(--teal-light)">Scholar Journey</em></h2>
-      <p>Applications are reviewed on a rolling basis. Cohorts are small by design — apply early to secure your spot.</p>
-    </div>
-    <div class="apply-funnel">
-      <!-- Steps indicator -->
-      <div class="funnel-steps">
-        <div class="funnel-step active" id="step-ind-1"><div class="step-num">1</div><div class="step-label">About You</div></div>
-        <div class="funnel-step" id="step-ind-2"><div class="step-num">2</div><div class="step-label">Program</div></div>
-        <div class="funnel-step" id="step-ind-3"><div class="step-num">3</div><div class="step-label">Background</div></div>
-        <div class="funnel-step" id="step-ind-4"><div class="step-num">4</div><div class="step-label">Goals</div></div>
-        <div class="funnel-step" id="step-ind-5"><div class="step-num">5</div><div class="step-label">Submit</div></div>
-      </div>
-      <!-- Step 1 -->
-      <div class="funnel-body active" id="step-1">
-        <h3>Tell us about yourself</h3>
-        <p>Basic information to get started with your application.</p>
-        <div class="funnel-form-row">
-          <input class="funnel-input" type="text" placeholder="First Name">
-          <input class="funnel-input" type="text" placeholder="Last Name">
-        </div>
-        <input class="funnel-input" type="email" placeholder="Email Address" style="width:100%">
-        <input class="funnel-input" type="tel" placeholder="Phone Number (optional)" style="width:100%">
-        <div class="funnel-nav">
-          <span></span>
-          <button class="btn-funnel-next" onclick="nextStep(1)">Continue →</button>
-        </div>
-      </div>
-      <!-- Step 2 -->
-      <div class="funnel-body" id="step-2">
-        <h3>Select your program track</h3>
-        <p>Choose the track that best matches your current stage.</p>
-        <div class="track-options">
-          <div class="track-option" onclick="selectTrack(this)">
-            <span class="track-icon">🎓</span>
-            <span class="track-name">Future Physician Scholar</span>
-            <span class="track-level">High School</span>
-          </div>
-          <div class="track-option" onclick="selectTrack(this)">
-            <span class="track-icon">📚</span>
-            <span class="track-name">Pre-Med Research Scholar</span>
-            <span class="track-level">College / Undergraduate</span>
-          </div>
-          <div class="track-option" onclick="selectTrack(this)">
-            <span class="track-icon">🩺</span>
-            <span class="track-name">Med Student Accelerator</span>
-            <span class="track-level">Medical School MS1–MS4</span>
-          </div>
-          <div class="track-option" onclick="selectTrack(this)">
-            <span class="track-icon">🔬</span>
-            <span class="track-name">Resident & Fellow Accelerator</span>
-            <span class="track-level">Residency / Fellowship</span>
-          </div>
-        </div>
-        <div class="funnel-nav">
-          <button class="btn-funnel-back" onclick="prevStep(2)">← Back</button>
-          <button class="btn-funnel-next" onclick="nextStep(2)">Continue →</button>
-        </div>
-      </div>
-      <!-- Step 3 -->
-      <div class="funnel-body" id="step-3">
-        <h3>Your academic background</h3>
-        <p>Help us understand where you are in your journey.</p>
-        <select class="funnel-input" style="width:100%">
-          <option value="">Current Education Level...</option>
-          <option>High School (9th-10th grade)</option>
-          <option>High School (11th-12th grade)</option>
-          <option>Undergraduate (1st-2nd year)</option>
-          <option>Undergraduate (3rd-4th year)</option>
-          <option>Post-Bacc / Gap Year</option>
-          <option>Medical Student (MS1-MS2)</option>
-          <option>Medical Student (MS3-MS4)</option>
-          <option>Resident (PGY1-PGY2)</option>
-          <option>Resident (PGY3+)</option>
-          <option>Fellow</option>
-        </select>
-        <select class="funnel-input" style="width:100%;margin-top:0">
-          <option value="">Prior Research Experience...</option>
-          <option>No prior research experience</option>
-          <option>Basic lab or shadowing exposure</option>
-          <option>1 research project (no publication)</option>
-          <option>Published abstract or poster</option>
-          <option>Peer-reviewed publication</option>
-        </select>
-        <select class="funnel-input" style="width:100%;margin-top:0">
-          <option value="">Availability...</option>
-          <option>5-7 hours/week</option>
-          <option>8-12 hours/week</option>
-          <option>13+ hours/week</option>
-        </select>
-        <div class="funnel-nav">
-          <button class="btn-funnel-back" onclick="prevStep(3)">← Back</button>
-          <button class="btn-funnel-next" onclick="nextStep(3)">Continue →</button>
-        </div>
-      </div>
-      <!-- Step 4 -->
-      <div class="funnel-body" id="step-4">
-        <h3>Your scholarly goals</h3>
-        <p>Tell us what you hope to achieve. This helps us match you with the right mentor.</p>
-        <textarea class="funnel-input" style="width:100%;min-height:130px;resize:vertical" placeholder="Describe your research interests and what you hope to accomplish through MD Scholars..."></textarea>
-        <textarea class="funnel-input" style="width:100%;min-height:100px;resize:vertical;margin-top:0" placeholder="Is there a specific outcome you need (e.g., publication for residency application, ACGME requirement)?"></textarea>
-        <div class="funnel-nav">
-          <button class="btn-funnel-back" onclick="prevStep(4)">← Back</button>
-          <button class="btn-funnel-next" onclick="nextStep(4)">Review →</button>
-        </div>
-      </div>
-      <!-- Step 5 -->
-      <div class="funnel-body" id="step-5">
-        <h3>Ready to submit</h3>
-        <p>Your application will be reviewed by our faculty within 5 business days. Small cohorts fill quickly.</p>
-        <div style="background:rgba(20,184,166,0.08);border:1px solid rgba(20,184,166,0.2);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;">
-          <p style="color:rgba(255,255,255,0.7);font-size:0.88rem;margin:0;line-height:1.7;">
-            ✓ &nbsp;Physician-led review of every application<br>
-            ✓ &nbsp;Small cohorts — typically 6-10 scholars per track<br>
-            ✓ &nbsp;No ghostwriting. No purchased authorship.<br>
-            ✓ &nbsp;100% ethical, ICMJE-compliant authorship standards
-          </p>
-        </div>
-        <div class="funnel-nav">
-          <button class="btn-funnel-back" onclick="prevStep(5)">← Back</button>
-          <button class="btn-funnel-next" onclick="submitApp()" style="background:linear-gradient(135deg,#c9a84c,#e8c96d);color:#001F3F;box-shadow:0 6px 20px rgba(201,168,76,0.4);">Submit Application 🎓</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 </div> <!-- end #home-page -->
 
@@ -1171,47 +943,6 @@
 </footer>
 
 <script>
-// ── FUNNEL LOGIC ──
-let currentStep = 1;
-const totalSteps = 5;
-function nextStep(n) {
-  if (n < totalSteps) goToStep(n + 1);
-}
-function prevStep(n) {
-  if (n > 1) goToStep(n - 1);
-}
-function goToStep(n) {
-  document.getElementById('step-' + currentStep).classList.remove('active');
-  document.getElementById('step-ind-' + currentStep).classList.remove('active');
-  if (currentStep < n) document.getElementById('step-ind-' + currentStep).classList.add('done');
-  currentStep = n;
-  document.getElementById('step-' + n).classList.add('active');
-  document.getElementById('step-ind-' + n).classList.add('active');
-  document.querySelector('.apply-funnel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-function selectTrack(el) {
-  document.querySelectorAll('.track-option').forEach(t => t.classList.remove('selected'));
-  el.classList.add('selected');
-}
-function submitApp() {
-  const funnel = document.querySelector('.apply-funnel');
-  funnel.innerHTML = `
-    <div style="text-align:center;padding:3rem 1rem;">
-      <div style="font-size:4rem;margin-bottom:1rem">🎓</div>
-      <h2 style="font-family:'Playfair Display',serif;color:white;font-size:1.8rem;margin-bottom:0.75rem;">Application Received!</h2>
-      <p style="color:rgba(255,255,255,0.6);font-size:0.95rem;max-width:420px;margin:0 auto 2rem;line-height:1.65;">
-        Thank you for applying to MD Scholars. Our faculty team will review your application and reach out within 5 business days.
-      </p>
-      <div style="background:rgba(20,184,166,0.1);border:1px solid rgba(20,184,166,0.25);border-radius:12px;padding:1.25rem;display:inline-block;text-align:left;">
-        <p style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin:0;line-height:1.8;">
-          ✓ &nbsp;Check your email for a confirmation<br>
-          ✓ &nbsp;Follow us for cohort announcements<br>
-          ✓ &nbsp;Prepare a brief statement of interest
-        </p>
-      </div>
-    </div>`;
-}
-
 // ── PAGE ROUTING ──
 const programData = {
   hs: {
