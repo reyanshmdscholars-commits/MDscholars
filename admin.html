@@ -6,625 +6,245 @@
   <title>MD Scholars Admin Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background-color: #f8f5ef; color: #333; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Playfair Display', serif; color: #001F3F; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background-color: #f8f5ef;
-      color: #333;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Playfair Display', serif;
-      color: #001F3F;
-    }
-
-    /* LOGIN SCREEN STYLES */
+    /* LOGIN */
     .login-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
       min-height: 100vh;
       background: linear-gradient(135deg, #001F3F 0%, #0d9488 100%);
       padding: 2rem;
     }
-
     .login-card {
-      background-color: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      padding: 3rem;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
+      background-color: white; border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 3rem; max-width: 420px; width: 100%; text-align: center;
     }
-
-    .login-card-logo {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .login-card h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .login-card-subtitle {
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .form-group {
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      color: #001F3F;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
+    .login-card-logo { font-size: 3rem; margin-bottom: 1rem; }
+    .login-card h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    .login-card-subtitle { color: #666; font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.6; }
+    .login-form { display: flex; flex-direction: column; gap: 1.25rem; }
+    .form-group { text-align: left; }
+    .form-group label { display: block; color: #001F3F; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
     .form-group input {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      border: 2px solid #e0dbd0;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.3s ease;
-      background-color: #f8f5ef;
+      width: 100%; padding: 0.85rem 1rem; border: 2px solid #e0dbd0;
+      border-radius: 6px; font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+      transition: all 0.3s ease; background-color: #f8f5ef;
     }
-
     .form-group input:focus {
-      outline: none;
-      border-color: #14b8a6;
-      background-color: white;
-      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+      outline: none; border-color: #14b8a6; background-color: white;
+      box-shadow: 0 0 0 3px rgba(20,184,166,0.1);
     }
-
     .login-button {
-      background-color: #14b8a6;
-      color: white;
-      padding: 0.95rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'DM Sans', sans-serif;
-      margin-top: 0.5rem;
+      background-color: #14b8a6; color: white; padding: 0.95rem;
+      border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem;
     }
+    .login-button:hover { background-color: #0d9488; }
+    .login-card-notice { color: #999; font-size: 0.8rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e0dbd0; }
 
-    .login-button:hover {
-      background-color: #0d9488;
-    }
-
-    .login-card-notice {
-      color: #999;
-      font-size: 0.8rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #e0dbd0;
-    }
-
-    /* DASHBOARD STYLES */
-    .dashboard-wrapper {
-      display: none;
-      min-height: 100vh;
-      background-color: #f1f5f9;
-    }
-
-    .dashboard-wrapper.active {
-      display: flex;
-    }
-
-    /* Top Bar */
+    /* DASHBOARD */
+    .dashboard-wrapper { display: none; min-height: 100vh; background-color: #f1f5f9; }
+    .dashboard-wrapper.active { display: flex; }
     .dashboard-topbar {
-      background-color: #001F3F;
-      color: #f8f5ef;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: #001F3F; color: #f8f5ef; padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .topbar-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-      color: #f8f5ef;
-    }
-
-    .topbar-logo-icon {
-      font-size: 1.5rem;
-    }
-
-    .topbar-logo-text strong {
-      font-size: 1.1rem;
-      color: #14b8a6;
-    }
-
-    .topbar-divider {
-      width: 1px;
-      height: 30px;
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .topbar-label {
-      font-size: 0.95rem;
-      color: #f8f5ef;
-    }
-
+    .topbar-left { display: flex; align-items: center; gap: 1.5rem; }
+    .topbar-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #f8f5ef; }
+    .topbar-logo-icon { font-size: 1.5rem; }
+    .topbar-logo-text strong { font-size: 1.1rem; color: #14b8a6; }
+    .topbar-divider { width: 1px; height: 30px; background-color: rgba(255,255,255,0.2); }
+    .topbar-label { font-size: 0.95rem; color: #f8f5ef; }
     .logout-button {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #f8f5ef;
-      padding: 0.6rem 1.2rem;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'DM Sans', sans-serif;
+      background-color: rgba(255,255,255,0.1); color: #f8f5ef; padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; font-size: 0.85rem;
+      cursor: pointer; transition: all 0.3s ease; font-family: 'DM Sans', sans-serif;
     }
+    .logout-button:hover { background-color: #14b8a6; color: #001F3F; border-color: #14b8a6; }
 
-    .logout-button:hover {
-      background-color: #14b8a6;
-      color: #001F3F;
-      border-color: #14b8a6;
-    }
-
-    /* Main Layout */
-    .dashboard-main {
-      display: flex;
-      flex: 1;
-    }
-
-    /* Sidebar */
+    .dashboard-main { display: flex; flex: 1; }
     .dashboard-sidebar {
-      width: 260px;
-      background-color: #f8f5ef;
-      border-right: 1px solid #e0dbd0;
-      padding: 2rem 0;
-      overflow-y: auto;
+      width: 260px; background-color: #f8f5ef;
+      border-right: 1px solid #e0dbd0; padding: 2rem 0; overflow-y: auto;
     }
-
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0; }
     .sidebar-nav a {
-      padding: 1rem 1.5rem;
-      color: #333;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      border-left: 4px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.95rem;
+      padding: 1rem 1.5rem; color: #333; text-decoration: none; transition: all 0.3s ease;
+      border-left: 4px solid transparent; display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem;
     }
+    .sidebar-nav a:hover { background-color: #f0f0f0; border-left-color: #14b8a6; color: #14b8a6; }
+    .sidebar-nav a.active { background-color: white; border-left-color: #14b8a6; color: #14b8a6; font-weight: 600; }
 
-    .sidebar-nav a:hover {
-      background-color: #f0f0f0;
-      border-left-color: #14b8a6;
-      color: #14b8a6;
-    }
+    .dashboard-content { flex: 1; padding: 2rem; overflow-y: auto; }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
 
-    .sidebar-nav a.active {
-      background-color: white;
-      border-left-color: #14b8a6;
-      color: #14b8a6;
-      font-weight: 600;
-    }
-
-    /* Content Area */
-    .dashboard-content {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-
-    .content-section {
-      display: none;
-    }
-
-    .content-section.active {
-      display: block;
-    }
-
-    /* Stats Row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .stat-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 1.5rem;
-      border: 1px solid #e0dbd0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .stat-label {
-      color: #666;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #001F3F;
-    }
-
-    /* Tabs */
-    .tabs-header {
-      display: flex;
-      gap: 0;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid #e0dbd0;
-    }
-
-    .tab-button {
-      padding: 1rem 1.5rem;
-      border: none;
-      background: none;
-      color: #666;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-    }
-
-    .tab-button:hover {
-      color: #14b8a6;
-    }
-
-    .tab-button.active {
-      color: #14b8a6;
-      border-bottom-color: #14b8a6;
-    }
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    .stat-card { background-color: white; border-radius: 8px; padding: 1.5rem; border: 1px solid #e0dbd0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .stat-label { color: #666; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: #001F3F; }
 
     /* Quick Actions */
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
+    .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
     .action-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 1.5rem;
-      border: 1px solid #e0dbd0;
-      text-decoration: none;
-      color: #001F3F;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      background-color: white; border-radius: 8px; padding: 1.5rem;
+      border: 1px solid #e0dbd0; text-decoration: none; color: #001F3F;
+      transition: all 0.3s ease; cursor: pointer;
     }
+    .action-card:hover { box-shadow: 0 8px 20px rgba(13,148,136,0.15); border-color: #14b8a6; transform: translateY(-2px); }
+    .action-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .action-card p { font-size: 0.85rem; color: #666; }
 
-    .action-card:hover {
-      box-shadow: 0 8px 20px rgba(13, 148, 136, 0.15);
-      border-color: #14b8a6;
-      transform: translateY(-2px);
+    /* Table Controls */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .table-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap; }
+    .filters { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    .filter-select {
+      padding: 0.6rem 1rem; border: 1px solid #e0dbd0; border-radius: 4px;
+      background-color: white; font-family: 'DM Sans', sans-serif; color: #333; font-size: 0.9rem; cursor: pointer;
     }
-
-    .action-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
+    .search-input {
+      padding: 0.6rem 1rem; border: 1px solid #e0dbd0; border-radius: 4px;
+      background-color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; width: 250px;
     }
-
-    .action-card p {
-      font-size: 0.85rem;
-      color: #666;
+    .search-input::placeholder { color: #999; }
+    .button-group { display: flex; gap: 0.75rem; }
+    .btn-secondary {
+      padding: 0.6rem 1.2rem; border: 1px solid #e0dbd0; background-color: white;
+      color: #333; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+      font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
     }
+    .btn-secondary:hover { border-color: #14b8a6; color: #14b8a6; }
+    .btn-primary {
+      padding: 0.6rem 1.2rem; background-color: #14b8a6; color: white; border: none;
+      border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+      font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
+    }
+    .btn-primary:hover { background-color: #0d9488; }
+    .btn-danger {
+      padding: 0.6rem 1.2rem; background-color: #dc2626; color: white; border: none;
+      border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+      font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
+    }
+    .btn-danger:hover { background-color: #b91c1c; }
 
     /* Tables */
-    .table-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
+    .data-table { width: 100%; background-color: white; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e0dbd0; }
+    .data-table thead { background-color: #f8f5ef; }
+    .data-table th { padding: 1rem; text-align: left; color: #001F3F; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e0dbd0; }
+    .data-table td { padding: 1rem; border-bottom: 1px solid #e0dbd0; font-size: 0.9rem; color: #555; }
+    .data-table tbody tr:hover { background-color: #f8f5ef; }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .empty-state { text-align: center; padding: 3rem; color: #999; font-size: 0.95rem; }
 
-    .filters {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
+    /* Badges */
+    .status-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .status-pending { background-color: #fef3c7; color: #b45309; }
+    .status-accepted { background-color: #d1fae5; color: #065f46; }
+    .status-waitlisted { background-color: #dbeafe; color: #1e40af; }
+    .status-rejected { background-color: #fee2e2; color: #991b1b; }
+    .status-enrolled { background-color: #d1fae5; color: #065f46; }
+    .status-due { background-color: #fef3c7; color: #b45309; }
+    .status-new { background-color: #ede9fe; color: #6d28d9; }
+    .status-unread { background-color: #fef3c7; color: #b45309; }
+    .status-read { background-color: #f3f4f6; color: #374151; }
 
-    .filter-select {
-      padding: 0.6rem 1rem;
-      border: 1px solid #e0dbd0;
-      border-radius: 4px;
-      background-color: white;
-      font-family: 'DM Sans', sans-serif;
-      color: #333;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .search-input {
-      padding: 0.6rem 1rem;
-      border: 1px solid #e0dbd0;
-      border-radius: 4px;
-      background-color: white;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      width: 250px;
-    }
-
-    .search-input::placeholder {
-      color: #999;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .btn-secondary {
-      padding: 0.6rem 1.2rem;
-      border: 1px solid #e0dbd0;
-      background-color: white;
-      color: #333;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.3s ease;
-    }
-
-    .btn-secondary:hover {
-      border-color: #14b8a6;
-      color: #14b8a6;
-    }
-
-    .btn-primary {
-      padding: 0.6rem 1.2rem;
-      background-color: #14b8a6;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-      background-color: #0d9488;
-    }
-
-    /* Table */
-    .data-table {
-      width: 100%;
-      background-color: white;
-      border-collapse: collapse;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e0dbd0;
-    }
-
-    .data-table thead {
-      background-color: #f8f5ef;
-    }
-
-    .data-table th {
-      padding: 1rem;
-      text-align: left;
-      color: #001F3F;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border-bottom: 2px solid #e0dbd0;
-    }
-
-    .data-table td {
-      padding: 1rem;
-      border-bottom: 1px solid #e0dbd0;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .data-table tbody tr:hover {
-      background-color: #f8f5ef;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 0.4rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .status-pending {
-      background-color: #fef3c7;
-      color: #b45309;
-    }
-
-    .status-accepted {
-      background-color: #d1fae5;
-      color: #065f46;
-    }
-
-    .status-waitlisted {
-      background-color: #fee2e2;
-      color: #7f1d1d;
-    }
-
-    .status-rejected {
-      background-color: #f3e8ff;
-      color: #6b21a8;
-    }
-
-    .status-enrolled {
-      background-color: #d1fae5;
-      color: #065f46;
-    }
-
-    .status-due {
-      background-color: #fef3c7;
-      color: #b45309;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background-color: #e0dbd0;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background-color: #14b8a6;
-      transition: width 0.3s ease;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-    }
-
+    /* Action Buttons */
+    .action-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .btn-sm {
-      padding: 0.4rem 0.75rem;
-      background-color: transparent;
-      color: #14b8a6;
-      border: 1px solid #14b8a6;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      font-family: 'DM Sans', sans-serif;
-      transition: all 0.3s ease;
+      padding: 0.4rem 0.75rem; background-color: transparent; color: #14b8a6;
+      border: 1px solid #14b8a6; border-radius: 3px; cursor: pointer; font-size: 0.8rem;
+      font-weight: 600; font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
     }
+    .btn-sm:hover { background-color: #14b8a6; color: white; }
+    .btn-sm.danger { color: #dc2626; border-color: #dc2626; }
+    .btn-sm.danger:hover { background-color: #dc2626; color: white; }
+    .btn-sm.success { color: #059669; border-color: #059669; }
+    .btn-sm.success:hover { background-color: #059669; color: white; }
+    .btn-sm.warning { color: #d97706; border-color: #d97706; }
+    .btn-sm.warning:hover { background-color: #d97706; color: white; }
 
-    .btn-sm:hover {
-      background-color: #14b8a6;
-      color: white;
-    }
+    /* Progress */
+    .progress-bar { width: 100%; height: 6px; background-color: #e0dbd0; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+    .progress-fill { height: 100%; background-color: #14b8a6; transition: width 0.3s ease; }
 
-    .btn-sm.danger {
-      color: #dc2626;
-      border-color: #dc2626;
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.5); z-index: 9000; align-items: center; justify-content: center; padding: 2rem;
     }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background-color: white; border-radius: 12px; max-width: 700px; width: 100%;
+      max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      padding: 1.5rem 2rem; border-bottom: 1px solid #e0dbd0;
+      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white;
+    }
+    .modal-header h3 { font-size: 1.3rem; }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; line-height: 1; }
+    .modal-close:hover { color: #333; }
+    .modal-body { padding: 2rem; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .detail-item label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-bottom: 0.25rem; font-weight: 600; }
+    .detail-item p { color: #333; font-size: 0.95rem; }
+    .detail-full { grid-column: 1 / -1; }
+    .modal-actions { padding: 1.5rem 2rem; border-top: 1px solid #e0dbd0; display: flex; gap: 1rem; flex-wrap: wrap; }
 
-    .btn-sm.danger:hover {
-      background-color: #dc2626;
-      color: white;
-    }
+    /* Message detail */
+    .message-box { background-color: #f8f5ef; border-radius: 6px; padding: 1.25rem; font-size: 0.95rem; line-height: 1.7; color: #555; border-left: 3px solid #14b8a6; margin-top: 0.5rem; }
+
+    /* Coming soon */
+    .coming-soon-card { background-color: white; border-radius: 8px; padding: 2rem; border: 1px solid #e0dbd0; max-width: 500px; }
+    .coming-soon-card h3 { margin-bottom: 0.75rem; }
+    .coming-soon-card p { color: #666; font-size: 0.95rem; line-height: 1.6; }
 
     /* Responsive */
     @media (max-width: 1024px) {
-      .dashboard-main {
-        flex-direction: column;
-      }
-
-      .dashboard-sidebar {
-        width: 100%;
-        display: flex;
-        padding: 0;
-        border-right: none;
-        border-bottom: 1px solid #e0dbd0;
-      }
-
-      .sidebar-nav {
-        flex-direction: row;
-        width: 100%;
-      }
-
-      .sidebar-nav a {
-        flex: 1;
-        border-left: none;
-        border-bottom: 3px solid transparent;
-        text-align: center;
-      }
-
-      .sidebar-nav a.active {
-        border-left: none;
-        border-bottom-color: #14b8a6;
-      }
-
-      .search-input {
-        width: 100%;
-      }
+      .dashboard-main { flex-direction: column; }
+      .dashboard-sidebar { width: 100%; display: flex; padding: 0; border-right: none; border-bottom: 1px solid #e0dbd0; }
+      .sidebar-nav { flex-direction: row; width: 100%; overflow-x: auto; }
+      .sidebar-nav a { flex: none; border-left: none; border-bottom: 3px solid transparent; font-size: 0.8rem; padding: 0.75rem 1rem; }
+      .sidebar-nav a.active { border-left: none; border-bottom-color: #14b8a6; }
+      .search-input { width: 100%; }
+      .detail-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
   <!-- LOGIN SCREEN -->
   <div class="login-container" id="loginContainer">
     <div class="login-card">
       <div class="login-card-logo">⚕️</div>
       <h1>Admin Access</h1>
       <p class="login-card-subtitle">This area is restricted to authorized MD Scholars staff only.</p>
-
       <form class="login-form" id="loginForm">
         <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="text" id="email" name="email" required placeholder="1234">
+          <label for="loginUser">Username</label>
+          <input type="text" id="loginUser" name="loginUser" required placeholder="Enter username">
         </div>
-
         <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required placeholder="Enter your password">
+          <label for="loginPass">Password</label>
+          <input type="password" id="loginPass" name="loginPass" required placeholder="Enter password">
         </div>
-
         <button type="submit" class="login-button">Login to Admin Panel</button>
       </form>
-
-      <div class="login-card-notice">
-        For security reasons, this access is limited to authorized personnel.
-      </div>
+      <div class="login-card-notice">For security reasons, this access is limited to authorized personnel.</div>
     </div>
   </div>
 
   <!-- DASHBOARD -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
-    <!-- Top Bar -->
     <div style="width: 100%; display: flex; flex-direction: column;">
+
+      <!-- Top Bar -->
       <div class="dashboard-topbar">
         <div class="topbar-left">
           <a href="index.html" class="topbar-logo">
@@ -639,276 +259,284 @@
 
       <!-- Main Layout -->
       <div class="dashboard-main">
+
         <!-- Sidebar -->
         <div class="dashboard-sidebar">
           <div class="sidebar-nav">
-            <a href="#" class="nav-item active" onclick="switchTab(event, 'dashboard')">📊 Dashboard</a>
-            <a href="#" class="nav-item" onclick="switchTab(event, 'applications')">📋 Applications</a>
-            <a href="#" class="nav-item" onclick="switchTab(event, 'students')">👥 Students</a>
-            <a href="#" class="nav-item" onclick="switchTab(event, 'email')">✉️ Email</a>
-            <a href="#" class="nav-item" onclick="switchTab(event, 'payments')">💰 Payments</a>
-            <a href="#" class="nav-item" onclick="switchTab(event, 'settings')">⚙️ Settings</a>
+            <a href="#" class="nav-item active" onclick="switchTab(event,'overview')">📊 Dashboard</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'applications')">📋 Applications</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'students')">👥 Students</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'contacts')">✉️ Messages</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'inquiries')">🏫 Institutions</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'feedback')">⭐ Feedback</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'payments')">💰 Payments</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'settings')">⚙️ Settings</a>
           </div>
         </div>
 
-        <!-- Content Area -->
+        <!-- Content -->
         <div class="dashboard-content">
-          <!-- DASHBOARD TAB -->
-          <div id="dashboard" class="content-section active">
-            <h2 style="margin-bottom: 2rem;">Dashboard Overview</h2>
 
-            <!-- Stats -->
+          <!-- OVERVIEW TAB -->
+          <div id="overview" class="content-section active">
+            <h2 style="margin-bottom: 2rem;">Dashboard Overview</h2>
             <div class="stats-row">
               <div class="stat-card">
                 <div class="stat-label">Total Applications</div>
-                <div class="stat-value">47</div>
+                <div class="stat-value" id="stat-total">—</div>
               </div>
               <div class="stat-card">
                 <div class="stat-label">Pending Review</div>
-                <div class="stat-value">12</div>
+                <div class="stat-value" id="stat-pending">—</div>
               </div>
               <div class="stat-card">
                 <div class="stat-label">Accepted</div>
-                <div class="stat-value">28</div>
+                <div class="stat-value" id="stat-accepted">—</div>
               </div>
               <div class="stat-card">
-                <div class="stat-label">Enrolled</div>
-                <div class="stat-value">22</div>
+                <div class="stat-label">New Messages</div>
+                <div class="stat-value" id="stat-messages">—</div>
               </div>
             </div>
-
-            <!-- Quick Actions -->
-            <h3 style="margin-bottom: 1.5rem; color: #001F3F;">Quick Actions</h3>
+            <h3 style="margin-bottom: 1.5rem;">Quick Actions</h3>
             <div class="quick-actions">
-              <div class="action-card">
-                <h3>Review New Applications</h3>
-                <p>Review 12 pending applications</p>
+              <div class="action-card" onclick="goToTab('applications')">
+                <h3>📋 Review Applications</h3>
+                <p>View and manage all pending applications</p>
               </div>
-              <div class="action-card">
-                <h3>Send Acceptance Emails</h3>
-                <p>Notify 5 accepted applicants</p>
+              <div class="action-card" onclick="goToTab('contacts')">
+                <h3>✉️ Check Messages</h3>
+                <p>View new contact form submissions</p>
               </div>
-              <div class="action-card">
-                <h3>Export Data</h3>
-                <p>Download application reports</p>
+              <div class="action-card" onclick="goToTab('students')">
+                <h3>👥 Manage Students</h3>
+                <p>View enrolled and accepted students</p>
+              </div>
+              <div class="action-card" onclick="exportApplicationsCSV()">
+                <h3>📥 Export Data</h3>
+                <p>Download all applications as CSV</p>
               </div>
             </div>
           </div>
 
           <!-- APPLICATIONS TAB -->
           <div id="applications" class="content-section">
-            <h2 style="margin-bottom: 2rem;">Applications</h2>
-
-            <!-- Controls -->
-            <div class="table-controls">
-              <div class="filters">
-                <select class="filter-select">
-                  <option value="">Filter by Track</option>
-                  <option value="">All Tracks</option>
-                  <option value="">High School</option>
-                  <option value="">College / Pre-Med</option>
-                  <option value="">Medical Student</option>
-                  <option value="">Resident & Fellow</option>
-                </select>
-
-                <select class="filter-select">
-                  <option value="">Filter by Status</option>
-                  <option value="">All Statuses</option>
-                  <option value="">Pending</option>
-                  <option value="">Accepted</option>
-                  <option value="">Waitlisted</option>
-                  <option value="">Rejected</option>
-                </select>
-
-                <input type="text" class="search-input" placeholder="Search by applicant name...">
-              </div>
-
+            <div class="section-header">
+              <h2>Applications</h2>
               <div class="button-group">
-                <button class="btn-secondary">Export to CSV</button>
-                <button class="btn-primary">Manual Entry</button>
+                <button class="btn-secondary" onclick="exportApplicationsCSV()">📥 Export CSV</button>
               </div>
             </div>
-
-            <!-- Table -->
+            <div class="table-controls">
+              <div class="filters">
+                <select class="filter-select" id="filterTrack" onchange="renderApplicationsTable()">
+                  <option value="">All Tracks</option>
+                  <option value="High School">High School</option>
+                  <option value="College / Pre-Med">College / Pre-Med</option>
+                  <option value="Medical Student">Medical Student</option>
+                  <option value="Resident & Fellow">Resident &amp; Fellow</option>
+                </select>
+                <select class="filter-select" id="filterStatus" onchange="renderApplicationsTable()">
+                  <option value="">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="accepted">Accepted</option>
+                  <option value="waitlisted">Waitlisted</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+                <input type="text" class="search-input" id="searchApps" placeholder="Search by name or email..." oninput="renderApplicationsTable()">
+              </div>
+            </div>
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Track</th>
                   <th>Date Applied</th>
-                  <th>Education Level</th>
+                  <th>Education</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Sarah Chen</strong></td>
-                  <td>College / Pre-Med</td>
-                  <td>Mar 24, 2026</td>
-                  <td>Junior</td>
-                  <td><span class="status-badge status-pending">Pending</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-sm">View</button>
-                      <button class="btn-sm">Accept</button>
-                      <button class="btn-sm">Waitlist</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Marcus Johnson</strong></td>
-                  <td>Medical Student</td>
-                  <td>Mar 22, 2026</td>
-                  <td>M2</td>
-                  <td><span class="status-badge status-accepted">Accepted</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-sm">View</button>
-                      <button class="btn-sm danger">Reject</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Alex Rivera</strong></td>
-                  <td>High School</td>
-                  <td>Mar 20, 2026</td>
-                  <td>Senior</td>
-                  <td><span class="status-badge status-waitlisted">Waitlisted</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-sm">View</button>
-                      <button class="btn-sm">Accept</button>
-                    </div>
-                  </td>
-                </tr>
+              <tbody id="apps-tbody">
+                <tr><td colspan="6" class="empty-state">Loading applications...</td></tr>
               </tbody>
             </table>
           </div>
 
           <!-- STUDENTS TAB -->
           <div id="students" class="content-section">
-            <h2 style="margin-bottom: 2rem;">Enrolled Students</h2>
-
-            <!-- Controls -->
-            <div class="table-controls">
-              <div class="filters">
-                <input type="text" class="search-input" placeholder="Search by student name...">
-              </div>
+            <div class="section-header">
+              <h2>Enrolled Students</h2>
               <div class="button-group">
-                <button class="btn-secondary">Export to CSV</button>
+                <button class="btn-secondary" onclick="exportStudentsCSV()">📥 Export CSV</button>
               </div>
             </div>
-
-            <!-- Table -->
+            <div class="table-controls">
+              <div class="filters">
+                <input type="text" class="search-input" id="searchStudents" placeholder="Search by name..." oninput="renderStudentsTable()">
+              </div>
+            </div>
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Track</th>
-                  <th>Start Date</th>
-                  <th>Progress</th>
+                  <th>Date Applied</th>
                   <th>Payment Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Emma Thompson</strong></td>
-                  <td>College / Pre-Med</td>
-                  <td>Mar 10, 2026</td>
-                  <td>
-                    <div class="progress-bar">
-                      <div class="progress-fill" style="width: 25%;"></div>
-                    </div>
-                    <span style="font-size: 0.8rem; color: #999;">25%</span>
-                  </td>
-                  <td><span class="status-badge status-enrolled">Paid</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-sm">View</button>
-                      <button class="btn-sm">Contact</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>James Park</strong></td>
-                  <td>Medical Student</td>
-                  <td>Mar 3, 2026</td>
-                  <td>
-                    <div class="progress-bar">
-                      <div class="progress-fill" style="width: 42%;"></div>
-                    </div>
-                    <span style="font-size: 0.8rem; color: #999;">42%</span>
-                  </td>
-                  <td><span class="status-badge status-due">Pending</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-sm">View</button>
-                      <button class="btn-sm">Contact</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Priya Patel</strong></td>
-                  <td>College / Pre-Med</td>
-                  <td>Feb 24, 2026</td>
-                  <td>
-                    <div class="progress-bar">
-                      <div class="progress-fill" style="width: 58%;"></div>
-                    </div>
-                    <span style="font-size: 0.8rem; color: #999;">58%</span>
-                  </td>
-                  <td><span class="status-badge status-enrolled">Paid</span></td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-sm">View</button>
-                      <button class="btn-sm">Contact</button>
-                    </div>
-                  </td>
-                </tr>
+              <tbody id="students-tbody">
+                <tr><td colspan="5" class="empty-state">Loading students...</td></tr>
               </tbody>
             </table>
           </div>
 
-          <!-- EMAIL TAB -->
-          <div id="email" class="content-section">
-            <h2 style="margin-bottom: 2rem;">Email Communications</h2>
-            <div class="action-card" style="max-width: 500px;">
-              <h3>Coming Soon</h3>
-              <p>Email management features are being developed. You'll be able to send templated emails to applicants and students here.</p>
+          <!-- CONTACTS TAB -->
+          <div id="contacts" class="content-section">
+            <div class="section-header">
+              <h2>Contact Messages</h2>
+              <div class="button-group">
+                <button class="btn-secondary" onclick="exportContactsCSV()">📥 Export CSV</button>
+              </div>
             </div>
+            <div class="table-controls">
+              <div class="filters">
+                <select class="filter-select" id="filterContactStatus" onchange="renderContactsTable()">
+                  <option value="">All</option>
+                  <option value="unread">Unread</option>
+                  <option value="read">Read</option>
+                </select>
+                <input type="text" class="search-input" id="searchContacts" placeholder="Search by name or email..." oninput="renderContactsTable()">
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="contacts-tbody">
+                <tr><td colspan="6" class="empty-state">Loading messages...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- INSTITUTIONS TAB -->
+          <div id="inquiries" class="content-section">
+            <div class="section-header">
+              <h2>Institution Inquiries</h2>
+              <div class="button-group">
+                <button class="btn-secondary" onclick="exportInquiriesCSV()">📥 Export CSV</button>
+              </div>
+            </div>
+            <div class="table-controls">
+              <div class="filters">
+                <input type="text" class="search-input" id="searchInquiries" placeholder="Search by institution or contact..." oninput="renderInquiriesTable()">
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Institution</th>
+                  <th>Contact</th>
+                  <th>Email</th>
+                  <th>Type</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inquiries-tbody">
+                <tr><td colspan="7" class="empty-state">Loading inquiries...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- FEEDBACK TAB -->
+          <div id="feedback" class="content-section">
+            <div class="section-header">
+              <h2>Feedback &amp; Testimonials</h2>
+              <div class="button-group">
+                <button class="btn-secondary" onclick="exportFeedbackCSV()">📥 Export CSV</button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Program</th>
+                  <th>Rating</th>
+                  <th>Date</th>
+                  <th>Approved</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="feedback-tbody">
+                <tr><td colspan="6" class="empty-state">Loading feedback...</td></tr>
+              </tbody>
+            </table>
           </div>
 
           <!-- PAYMENTS TAB -->
           <div id="payments" class="content-section">
             <h2 style="margin-bottom: 2rem;">Payment Tracking</h2>
-            <div class="action-card" style="max-width: 500px;">
-              <h3>Coming Soon</h3>
-              <p>Payment management and billing dashboard will be available soon. Track all enrollment payments and plan statuses.</p>
+            <div class="coming-soon-card">
+              <h3>💰 Coming Soon</h3>
+              <p>Payment management and billing dashboard will be available once a payment processor (e.g. Stripe) is connected. You can track enrollment payment statuses per student in the Students tab in the meantime.</p>
             </div>
           </div>
 
           <!-- SETTINGS TAB -->
           <div id="settings" class="content-section">
             <h2 style="margin-bottom: 2rem;">Settings</h2>
-            <div class="action-card" style="max-width: 500px;">
-              <h3>Coming Soon</h3>
-              <p>Admin settings, user management, and system configuration options will be available here.</p>
+            <div class="coming-soon-card">
+              <h3>⚙️ Coming Soon</h3>
+              <p>Admin settings, user management, and system configuration will be available here in a future update.</p>
             </div>
           </div>
-        </div>
+
+        </div><!-- end dashboard-content -->
+      </div><!-- end dashboard-main -->
+    </div>
+  </div><!-- end dashboard-wrapper -->
+
+  <!-- APPLICATION DETAIL MODAL -->
+  <div class="modal-overlay" id="appModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="appModalTitle">Application Details</h3>
+        <button class="modal-close" onclick="closeModal('appModal')">✕</button>
       </div>
+      <div class="modal-body" id="appModalBody"></div>
+      <div class="modal-actions" id="appModalActions"></div>
     </div>
   </div>
 
-  <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
+  <!-- CONTACT/MESSAGE MODAL -->
+  <div class="modal-overlay" id="msgModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="msgModalTitle">Message</h3>
+        <button class="modal-close" onclick="closeModal('msgModal')">✕</button>
+      </div>
+      <div class="modal-body" id="msgModalBody"></div>
+      <div class="modal-actions" id="msgModalActions"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" style="display:none; position:fixed; bottom:2rem; right:2rem; padding:1rem 1.5rem; border-radius:6px; z-index:10000; font-weight:600; max-width:300px; box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
+    /* ─── Supabase ─── */
     var _db = null;
-    var allApplications = [];
-
     function getDB() {
       if (!_db) {
         _db = window.supabase.createClient(
@@ -919,217 +547,583 @@
       return _db;
     }
 
+    /* ─── Data caches ─── */
+    var allApplications = [];
+    var allContacts     = [];
+    var allInquiries    = [];
+    var allFeedback     = [];
+
+    /* ─── Login ─── */
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        var email = document.getElementById('email').value;
-        var pass  = document.getElementById('password').value;
-        if (email === '1234' && pass === '1234') {
+        var u = document.getElementById('loginUser').value;
+        var p = document.getElementById('loginPass').value;
+        if (u === '1234' && p === '1234') {
           document.getElementById('loginContainer').style.display = 'none';
           document.getElementById('dashboardWrapper').classList.add('active');
-          loadDashboardData();
+          loadAllData();
         } else {
           showToast('Invalid credentials', 'error');
         }
       });
     });
 
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
-      toast.style.color = 'white';
-      toast.style.display = 'block';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 4000);
-    }
-
     function handleLogout() {
       document.getElementById('dashboardWrapper').classList.remove('active');
       document.getElementById('loginContainer').style.display = 'flex';
-      document.getElementById('email').value = '';
-      document.getElementById('password').value = '';
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPass').value = '';
+      allApplications = []; allContacts = []; allInquiries = []; allFeedback = [];
     }
 
-    function switchTab(event, tabName) {
-      event.preventDefault();
+    /* ─── Toast ─── */
+    function showToast(msg, type) {
+      type = type || 'success';
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+      t.style.color = 'white';
+      t.style.display = 'block';
+      setTimeout(function() { t.style.display = 'none'; }, 4000);
+    }
 
-      // Hide all sections
-      const sections = document.querySelectorAll('.content-section');
-      sections.forEach(section => section.classList.remove('active'));
-
-      // Remove active class from all nav items
-      const navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach(item => item.classList.remove('active'));
-
-      // Show selected section
+    /* ─── Tab switching ─── */
+    function switchTab(e, tabName) {
+      if (e) e.preventDefault();
+      document.querySelectorAll('.content-section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.nav-item').forEach(function(a) { a.classList.remove('active'); });
       document.getElementById(tabName).classList.add('active');
-      event.target.classList.add('active');
-
-      if (tabName === 'applications') {
-        loadApplicationsTable();
-      } else if (tabName === 'students') {
-        loadStudentsTable();
-      }
+      if (e && e.target) e.target.classList.add('active');
+      // Refresh data on tab switch
+      if (tabName === 'applications') renderApplicationsTable();
+      else if (tabName === 'students') renderStudentsTable();
+      else if (tabName === 'contacts') { if (allContacts.length === 0) loadContacts(); else renderContactsTable(); }
+      else if (tabName === 'inquiries') { if (allInquiries.length === 0) loadInquiries(); else renderInquiriesTable(); }
+      else if (tabName === 'feedback') { if (allFeedback.length === 0) loadFeedback(); else renderFeedbackTable(); }
     }
 
-    async function loadDashboardData() {
-      try {
-        const { data: applications, error } = await getDB()
-          .from('applications')
-          .select('*');
-
-        if (error) throw error;
-
-        allApplications = applications || [];
-
-        const totalApps = allApplications.length;
-        const pendingApps = allApplications.filter(app => app.status === 'pending').length;
-        const acceptedApps = allApplications.filter(app => app.status === 'accepted').length;
-        const enrolledApps = allApplications.filter(app => app.status === 'accepted' && app.payment_status === 'paid').length;
-
-        // Update stats
-        const statsRow = document.querySelector('.stats-row');
-        if (statsRow) {
-          statsRow.children[0].querySelector('.stat-value').textContent = totalApps;
-          statsRow.children[1].querySelector('.stat-value').textContent = pendingApps;
-          statsRow.children[2].querySelector('.stat-value').textContent = acceptedApps;
-          statsRow.children[3].querySelector('.stat-value').textContent = enrolledApps;
+    function goToTab(tabName) {
+      // Used by quick action cards — simulates click on sidebar item
+      document.querySelectorAll('.content-section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.nav-item').forEach(function(a) { a.classList.remove('active'); });
+      document.getElementById(tabName).classList.add('active');
+      // highlight correct nav item
+      document.querySelectorAll('.nav-item').forEach(function(a) {
+        if (a.getAttribute('onclick') && a.getAttribute('onclick').indexOf("'" + tabName + "'") !== -1) {
+          a.classList.add('active');
         }
-      } catch (err) {
-        console.error('Error loading dashboard:', err);
-        showToast('Error loading dashboard data', 'error');
-      }
+      });
+      if (tabName === 'applications') renderApplicationsTable();
+      else if (tabName === 'contacts') { if (allContacts.length === 0) loadContacts(); else renderContactsTable(); }
+      else if (tabName === 'students') renderStudentsTable();
     }
 
-    async function loadApplicationsTable() {
+    /* ─── Load all data on login ─── */
+    async function loadAllData() {
+      await Promise.all([loadApplications(), loadContacts(), loadInquiries(), loadFeedback()]);
+      updateDashboardStats();
+    }
+
+    async function loadApplications() {
       try {
-        if (allApplications.length === 0) {
-          const { data, error } = await getDB()
-            .from('applications')
-            .select('*');
-
-          if (error) throw error;
-          allApplications = data || [];
-        }
-
-        const tbody = document.querySelector('#applications .data-table tbody');
-        tbody.innerHTML = '';
-
-        allApplications.forEach(app => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td><strong>${app.first_name} ${app.last_name}</strong></td>
-            <td>${app.program_track || '-'}</td>
-            <td>${new Date(app.created_at || '').toLocaleDateString() || '-'}</td>
-            <td>${app.education_level || '-'}</td>
-            <td><span class="status-badge status-${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn-sm" onclick="viewApplication('${app.id}')">View</button>
-                <button class="btn-sm" onclick="updateStatus('${app.id}', 'accepted')">Accept</button>
-                <button class="btn-sm" onclick="updateStatus('${app.id}', 'waitlisted')">Waitlist</button>
-              </div>
-            </td>
-          `;
-          tbody.appendChild(row);
-        });
-      } catch (err) {
+        var res = await getDB().from('applications').select('*').order('created_at', { ascending: false });
+        if (res.error) throw res.error;
+        allApplications = res.data || [];
+      } catch(err) {
         console.error('Error loading applications:', err);
         showToast('Error loading applications', 'error');
       }
     }
 
-    async function loadStudentsTable() {
+    async function loadContacts() {
       try {
-        const { data: acceptedApps, error } = await getDB()
-          .from('applications')
-          .select('*')
-          .eq('status', 'accepted');
-
-        if (error) throw error;
-
-        const tbody = document.querySelector('#students .data-table tbody');
-        tbody.innerHTML = '';
-
-        (acceptedApps || []).forEach(app => {
-          const row = document.createElement('tr');
-          const paymentStatus = app.payment_status === 'paid' ? 'Paid' : 'Pending';
-          const paymentBadgeClass = app.payment_status === 'paid' ? 'status-enrolled' : 'status-due';
-
-          row.innerHTML = `
-            <td><strong>${app.first_name} ${app.last_name}</strong></td>
-            <td>${app.program_track || '-'}</td>
-            <td>${new Date(app.created_at || '').toLocaleDateString() || '-'}</td>
-            <td>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 25%;"></div>
-              </div>
-              <span style="font-size: 0.8rem; color: #999;">25%</span>
-            </td>
-            <td><span class="status-badge ${paymentBadgeClass}">${paymentStatus}</span></td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn-sm" onclick="viewApplication('${app.id}')">View</button>
-                <button class="btn-sm" onclick="togglePaymentStatus('${app.id}', '${app.payment_status}')">Mark ${app.payment_status === 'paid' ? 'Unpaid' : 'Paid'}</button>
-              </div>
-            </td>
-          `;
-          tbody.appendChild(row);
-        });
-      } catch (err) {
-        console.error('Error loading students:', err);
-        showToast('Error loading students', 'error');
+        var res = await getDB().from('contacts').select('*').order('created_at', { ascending: false });
+        if (res.error) throw res.error;
+        allContacts = res.data || [];
+        renderContactsTable();
+      } catch(err) {
+        console.error('Error loading contacts:', err);
       }
     }
 
-    async function updateStatus(appId, newStatus) {
+    async function loadInquiries() {
       try {
-        const { error } = await getDB()
-          .from('applications')
-          .update({ status: newStatus })
-          .eq('id', appId);
+        var res = await getDB().from('institution_inquiries').select('*').order('created_at', { ascending: false });
+        if (res.error) throw res.error;
+        allInquiries = res.data || [];
+        renderInquiriesTable();
+      } catch(err) {
+        console.error('Error loading inquiries:', err);
+      }
+    }
 
-        if (error) throw error;
+    async function loadFeedback() {
+      try {
+        var res = await getDB().from('feedback').select('*').order('created_at', { ascending: false });
+        if (res.error) throw res.error;
+        allFeedback = res.data || [];
+        renderFeedbackTable();
+      } catch(err) {
+        console.error('Error loading feedback:', err);
+      }
+    }
 
-        showToast(`Application status updated to ${newStatus}`, 'success');
-        allApplications = allApplications.map(app =>
-          app.id === appId ? { ...app, status: newStatus } : app
-        );
-        await loadApplicationsTable();
-      } catch (err) {
-        console.error('Error updating status:', err);
+    /* ─── Dashboard Stats ─── */
+    function updateDashboardStats() {
+      document.getElementById('stat-total').textContent   = allApplications.length;
+      document.getElementById('stat-pending').textContent = allApplications.filter(function(a){return a.status==='pending';}).length;
+      document.getElementById('stat-accepted').textContent= allApplications.filter(function(a){return a.status==='accepted';}).length;
+      var unread = allContacts.filter(function(c){return c.status==='unread';}).length;
+      document.getElementById('stat-messages').textContent= unread;
+    }
+
+    /* ─── Applications Table ─── */
+    function renderApplicationsTable() {
+      var track  = document.getElementById('filterTrack') ? document.getElementById('filterTrack').value : '';
+      var status = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : '';
+      var search = document.getElementById('searchApps') ? document.getElementById('searchApps').value.toLowerCase() : '';
+
+      var filtered = allApplications.filter(function(a) {
+        var matchTrack  = !track  || (a.program_track || '') === track;
+        var matchStatus = !status || a.status === status;
+        var name = ((a.first_name||'') + ' ' + (a.last_name||'')).toLowerCase();
+        var email = (a.email||'').toLowerCase();
+        var matchSearch = !search || name.indexOf(search) !== -1 || email.indexOf(search) !== -1;
+        return matchTrack && matchStatus && matchSearch;
+      });
+
+      var tbody = document.getElementById('apps-tbody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No applications found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(function(app) {
+        var statusLabel = app.status.charAt(0).toUpperCase() + app.status.slice(1);
+        var date = app.created_at ? new Date(app.created_at).toLocaleDateString() : '—';
+        var actionBtns = '';
+        if (app.status === 'pending') {
+          actionBtns = '<button class="btn-sm success" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\')">Accept</button>' +
+                       '<button class="btn-sm warning" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\')">Waitlist</button>' +
+                       '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
+        } else if (app.status === 'waitlisted') {
+          actionBtns = '<button class="btn-sm success" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\')">Accept</button>' +
+                       '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
+        } else if (app.status === 'accepted') {
+          actionBtns = '<button class="btn-sm warning" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\')">Waitlist</button>' +
+                       '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
+        } else {
+          actionBtns = '<button class="btn-sm" onclick="updateAppStatus(\'' + app.id + '\',\'pending\')">Reopen</button>';
+        }
+        return '<tr>' +
+          '<td><strong>' + escHtml(app.first_name) + ' ' + escHtml(app.last_name) + '</strong><br><small style="color:#999;">' + escHtml(app.email||'') + '</small></td>' +
+          '<td>' + escHtml(app.program_track || '—') + '</td>' +
+          '<td>' + date + '</td>' +
+          '<td>' + escHtml(app.education_level || '—') + '</td>' +
+          '<td><span class="status-badge status-' + app.status + '">' + statusLabel + '</span></td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="viewApplication(\'' + app.id + '\')">View</button>' +
+            actionBtns +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    async function updateAppStatus(appId, newStatus) {
+      try {
+        var res = await getDB().from('applications').update({ status: newStatus }).eq('id', appId);
+        if (res.error) throw res.error;
+        allApplications = allApplications.map(function(a) {
+          return a.id === appId ? Object.assign({}, a, { status: newStatus }) : a;
+        });
+        renderApplicationsTable();
+        renderStudentsTable();
+        updateDashboardStats();
+        showToast('Status updated to ' + newStatus, 'success');
+      } catch(err) {
+        console.error(err);
         showToast('Error updating status', 'error');
       }
     }
 
-    async function togglePaymentStatus(appId, currentStatus) {
+    function viewApplication(appId) {
+      var app = allApplications.find(function(a) { return a.id === appId; });
+      if (!app) return;
+      var date = app.created_at ? new Date(app.created_at).toLocaleDateString() : '—';
+      document.getElementById('appModalTitle').textContent = app.first_name + ' ' + app.last_name + ' — Application';
+      document.getElementById('appModalBody').innerHTML =
+        '<div class="detail-grid">' +
+          dItem('First Name', app.first_name) +
+          dItem('Last Name', app.last_name) +
+          dItem('Email', app.email) +
+          dItem('Phone', app.phone) +
+          dItem('Date of Birth', app.date_of_birth) +
+          dItem('City / State', (app.city||'') + (app.state ? ', '+app.state : '')) +
+          dItem('Country', app.country) +
+          dItem('Program Track', app.program_track) +
+          dItem('Education Level', app.education_level) +
+          dItem('School', app.school_name) +
+          dItem('Graduation Year', app.graduation_year) +
+          dItem('GPA', app.gpa) +
+          dItem('Parent / Guardian', app.parent_name) +
+          dItem('Parent Email', app.parent_email) +
+          dItem('Research Topic 1', app.research_topic_1, true) +
+          dItem('Research Topic 2', app.research_topic_2, true) +
+          dItem('Prior Research', app.prior_research === 'yes' ? 'Yes' : 'No') +
+          (app.prior_research === 'yes' ? dItem('Research Details', app.prior_research_details, true) : '') +
+          dItem('Motivation', app.motivation, true) +
+          dItem('Goals', app.goals, true) +
+          dItem('How They Heard', app.how_heard) +
+          dItem('Applied On', date) +
+          dItem('Status', app.status ? app.status.charAt(0).toUpperCase() + app.status.slice(1) : '—') +
+        '</div>';
+
+      var actions = '';
+      if (app.status === 'pending') {
+        actions = '<button class="btn-primary" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\'); closeModal(\'appModal\')">Accept</button>' +
+                  '<button class="btn-secondary" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\'); closeModal(\'appModal\')">Waitlist</button>' +
+                  '<button class="btn-danger" onclick="updateAppStatus(\'' + app.id + '\',\'rejected\'); closeModal(\'appModal\')">Reject</button>';
+      } else if (app.status === 'accepted') {
+        actions = '<button class="btn-danger" onclick="updateAppStatus(\'' + app.id + '\',\'rejected\'); closeModal(\'appModal\')">Reject</button>';
+      } else if (app.status === 'waitlisted') {
+        actions = '<button class="btn-primary" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\'); closeModal(\'appModal\')">Accept</button>' +
+                  '<button class="btn-danger" onclick="updateAppStatus(\'' + app.id + '\',\'rejected\'); closeModal(\'appModal\')">Reject</button>';
+      }
+      document.getElementById('appModalActions').innerHTML = actions;
+      openModal('appModal');
+    }
+
+    /* ─── Students Table ─── */
+    function renderStudentsTable() {
+      var search = document.getElementById('searchStudents') ? document.getElementById('searchStudents').value.toLowerCase() : '';
+      var students = allApplications.filter(function(a) { return a.status === 'accepted'; });
+      if (search) {
+        students = students.filter(function(a) {
+          var name = ((a.first_name||'') + ' ' + (a.last_name||'')).toLowerCase();
+          return name.indexOf(search) !== -1;
+        });
+      }
+      var tbody = document.getElementById('students-tbody');
+      if (students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No accepted students yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = students.map(function(app) {
+        var date = app.created_at ? new Date(app.created_at).toLocaleDateString() : '—';
+        var paidLabel = app.payment_status === 'paid' ? 'Paid' : 'Pending';
+        var paidClass = app.payment_status === 'paid' ? 'status-enrolled' : 'status-due';
+        var markBtn = app.payment_status === 'paid'
+          ? '<button class="btn-sm warning" onclick="togglePaymentStatus(\'' + app.id + '\',\'paid\')">Mark Unpaid</button>'
+          : '<button class="btn-sm success" onclick="togglePaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Paid</button>';
+        return '<tr>' +
+          '<td><strong>' + escHtml(app.first_name) + ' ' + escHtml(app.last_name) + '</strong><br><small style="color:#999;">' + escHtml(app.email||'') + '</small></td>' +
+          '<td>' + escHtml(app.program_track||'—') + '</td>' +
+          '<td>' + date + '</td>' +
+          '<td><span class="status-badge ' + paidClass + '">' + paidLabel + '</span></td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="viewApplication(\'' + app.id + '\')">View</button>' +
+            markBtn +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    async function togglePaymentStatus(appId, current) {
+      var newStatus = current === 'paid' ? 'unpaid' : 'paid';
       try {
-        const newStatus = currentStatus === 'paid' ? 'unpaid' : 'paid';
-        const { error } = await getDB()
-          .from('applications')
-          .update({ payment_status: newStatus })
-          .eq('id', appId);
-
-        if (error) throw error;
-
-        showToast(`Payment status updated to ${newStatus}`, 'success');
-        allApplications = allApplications.map(app =>
-          app.id === appId ? { ...app, payment_status: newStatus } : app
-        );
-        await loadStudentsTable();
-      } catch (err) {
-        console.error('Error updating payment status:', err);
+        var res = await getDB().from('applications').update({ payment_status: newStatus }).eq('id', appId);
+        if (res.error) throw res.error;
+        allApplications = allApplications.map(function(a) {
+          return a.id === appId ? Object.assign({}, a, { payment_status: newStatus }) : a;
+        });
+        renderStudentsTable();
+        showToast('Payment status updated to ' + newStatus, 'success');
+      } catch(err) {
+        console.error(err);
         showToast('Error updating payment status', 'error');
       }
     }
 
-    function viewApplication(appId) {
-      const app = allApplications.find(a => a.id === appId);
-      if (app) {
-        alert(`Application Details:\n\nName: ${app.first_name} ${app.last_name}\nEmail: ${app.email}\nTrack: ${app.program_track}\nStatus: ${app.status}\nEducation: ${app.education_level}`);
+    /* ─── Contacts Table ─── */
+    function renderContactsTable() {
+      var statusFilter = document.getElementById('filterContactStatus') ? document.getElementById('filterContactStatus').value : '';
+      var search = document.getElementById('searchContacts') ? document.getElementById('searchContacts').value.toLowerCase() : '';
+
+      var filtered = allContacts.filter(function(c) {
+        var matchStatus = !statusFilter || c.status === statusFilter;
+        var matchSearch = !search || (c.name||'').toLowerCase().indexOf(search) !== -1 || (c.email||'').toLowerCase().indexOf(search) !== -1;
+        return matchStatus && matchSearch;
+      });
+
+      var tbody = document.getElementById('contacts-tbody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No messages found.</td></tr>';
+        return;
       }
+      tbody.innerHTML = filtered.map(function(c) {
+        var date = c.created_at ? new Date(c.created_at).toLocaleDateString() : '—';
+        var statusLabel = c.status === 'unread' ? 'Unread' : 'Read';
+        return '<tr>' +
+          '<td><strong>' + escHtml(c.name||'') + '</strong></td>' +
+          '<td>' + escHtml(c.email||'') + '</td>' +
+          '<td>' + escHtml(c.subject||'—') + '</td>' +
+          '<td>' + date + '</td>' +
+          '<td><span class="status-badge status-' + (c.status||'unread') + '">' + statusLabel + '</span></td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="viewContact(\'' + c.id + '\')">View</button>' +
+            (c.status === 'unread'
+              ? '<button class="btn-sm" onclick="markContactRead(\'' + c.id + '\')">Mark Read</button>'
+              : '<button class="btn-sm warning" onclick="markContactUnread(\'' + c.id + '\')">Mark Unread</button>') +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function viewContact(id) {
+      var c = allContacts.find(function(x){ return x.id === id; });
+      if (!c) return;
+      var date = c.created_at ? new Date(c.created_at).toLocaleString() : '—';
+      document.getElementById('msgModalTitle').textContent = 'Message from ' + (c.name||'');
+      document.getElementById('msgModalBody').innerHTML =
+        '<div class="detail-grid">' +
+          dItem('From', c.name) +
+          dItem('Email', c.email) +
+          dItem('Subject', c.subject) +
+          dItem('Received', date) +
+        '</div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Message</label>' +
+        '<div class="message-box">' + escHtml(c.message||'') + '</div></div>';
+      document.getElementById('msgModalActions').innerHTML =
+        '<button class="btn-primary" onclick="markContactRead(\'' + c.id + '\'); closeModal(\'msgModal\')">Mark as Read</button>' +
+        '<a href="mailto:' + escHtml(c.email||'') + '" class="btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;padding:0.6rem 1.2rem;border-radius:4px;">Reply via Email</a>';
+      openModal('msgModal');
+      if (c.status === 'unread') markContactRead(c.id);
+    }
+
+    async function markContactRead(id) {
+      try {
+        await getDB().from('contacts').update({ status: 'read' }).eq('id', id);
+        allContacts = allContacts.map(function(c){ return c.id===id ? Object.assign({},c,{status:'read'}) : c; });
+        renderContactsTable();
+        updateDashboardStats();
+      } catch(err) { console.error(err); }
+    }
+
+    async function markContactUnread(id) {
+      try {
+        await getDB().from('contacts').update({ status: 'unread' }).eq('id', id);
+        allContacts = allContacts.map(function(c){ return c.id===id ? Object.assign({},c,{status:'unread'}) : c; });
+        renderContactsTable();
+        updateDashboardStats();
+      } catch(err) { console.error(err); }
+    }
+
+    /* ─── Inquiries Table ─── */
+    function renderInquiriesTable() {
+      var search = document.getElementById('searchInquiries') ? document.getElementById('searchInquiries').value.toLowerCase() : '';
+      var filtered = allInquiries.filter(function(i) {
+        return !search ||
+          (i.institution_name||'').toLowerCase().indexOf(search) !== -1 ||
+          (i.contact_name||'').toLowerCase().indexOf(search) !== -1;
+      });
+      var tbody = document.getElementById('inquiries-tbody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No institution inquiries yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = filtered.map(function(inq) {
+        var date = inq.created_at ? new Date(inq.created_at).toLocaleDateString() : '—';
+        var statusLabel = (inq.status||'new').charAt(0).toUpperCase() + (inq.status||'new').slice(1);
+        return '<tr>' +
+          '<td><strong>' + escHtml(inq.institution_name||'') + '</strong></td>' +
+          '<td>' + escHtml(inq.contact_name||'') + '</td>' +
+          '<td>' + escHtml(inq.email||'') + '</td>' +
+          '<td>' + escHtml(inq.institution_type||'—') + '</td>' +
+          '<td>' + date + '</td>' +
+          '<td><span class="status-badge status-new">' + statusLabel + '</span></td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="viewInquiry(\'' + inq.id + '\')">View</button>' +
+            '<a href="mailto:' + escHtml(inq.email||'') + '" class="btn-sm" style="text-decoration:none;">Reply</a>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function viewInquiry(id) {
+      var inq = allInquiries.find(function(x){ return x.id === id; });
+      if (!inq) return;
+      var date = inq.created_at ? new Date(inq.created_at).toLocaleString() : '—';
+      document.getElementById('msgModalTitle').textContent = 'Inquiry from ' + (inq.institution_name||'');
+      document.getElementById('msgModalBody').innerHTML =
+        '<div class="detail-grid">' +
+          dItem('Institution', inq.institution_name) +
+          dItem('Type', inq.institution_type) +
+          dItem('Contact Name', inq.contact_name) +
+          dItem('Email', inq.email) +
+          dItem('Phone', inq.phone) +
+          dItem('Student Count', inq.student_count) +
+          dItem('Received', date) +
+        '</div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Message</label>' +
+        '<div class="message-box">' + escHtml(inq.message||'') + '</div></div>';
+      document.getElementById('msgModalActions').innerHTML =
+        '<a href="mailto:' + escHtml(inq.email||'') + '" class="btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;padding:0.6rem 1.2rem;border-radius:4px;color:white;">Reply via Email</a>';
+      openModal('msgModal');
+    }
+
+    /* ─── Feedback Table ─── */
+    function renderFeedbackTable() {
+      var tbody = document.getElementById('feedback-tbody');
+      if (allFeedback.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No feedback submitted yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = allFeedback.map(function(f) {
+        var date = f.created_at ? new Date(f.created_at).toLocaleDateString() : '—';
+        var stars = '★'.repeat(Math.min(5,parseInt(f.rating)||0)) + '☆'.repeat(Math.max(0,5-(parseInt(f.rating)||0)));
+        return '<tr>' +
+          '<td><strong>' + escHtml(f.name||'') + '</strong><br><small style="color:#999;">' + escHtml(f.email||'') + '</small></td>' +
+          '<td>' + escHtml(f.program||'—') + '</td>' +
+          '<td style="color:#c9a84c;font-size:1.1rem;">' + stars + '</td>' +
+          '<td>' + date + '</td>' +
+          '<td>' + (f.approved ? '<span class="status-badge status-accepted">Approved</span>' : '<span class="status-badge status-pending">Pending</span>') + '</td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="viewFeedback(\'' + f.id + '\')">View</button>' +
+            (!f.approved
+              ? '<button class="btn-sm success" onclick="approveFeedback(\'' + f.id + '\')">Approve</button>'
+              : '<button class="btn-sm danger" onclick="unapproveFeedback(\'' + f.id + '\')">Unapprove</button>') +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function viewFeedback(id) {
+      var f = allFeedback.find(function(x){ return x.id === id; });
+      if (!f) return;
+      var stars = '★'.repeat(Math.min(5,parseInt(f.rating)||0)) + '☆'.repeat(Math.max(0,5-(parseInt(f.rating)||0)));
+      document.getElementById('msgModalTitle').textContent = 'Feedback from ' + (f.name||'');
+      document.getElementById('msgModalBody').innerHTML =
+        '<div class="detail-grid">' +
+          dItem('Name', f.name) +
+          dItem('Email', f.email) +
+          dItem('Program', f.program) +
+          '<div class="detail-item"><label>Rating</label><p style="color:#c9a84c;font-size:1.3rem;">' + stars + '</p></div>' +
+        '</div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Message</label>' +
+        '<div class="message-box">' + escHtml(f.message||'') + '</div></div>';
+      document.getElementById('msgModalActions').innerHTML =
+        (!f.approved
+          ? '<button class="btn-primary" onclick="approveFeedback(\'' + f.id + '\'); closeModal(\'msgModal\')">Approve for Website</button>'
+          : '<button class="btn-danger" onclick="unapproveFeedback(\'' + f.id + '\'); closeModal(\'msgModal\')">Unapprove</button>');
+      openModal('msgModal');
+    }
+
+    async function approveFeedback(id) {
+      try {
+        await getDB().from('feedback').update({ approved: true }).eq('id', id);
+        allFeedback = allFeedback.map(function(f){ return f.id===id ? Object.assign({},f,{approved:true}) : f; });
+        renderFeedbackTable();
+        showToast('Feedback approved', 'success');
+      } catch(err) { showToast('Error approving feedback', 'error'); }
+    }
+
+    async function unapproveFeedback(id) {
+      try {
+        await getDB().from('feedback').update({ approved: false }).eq('id', id);
+        allFeedback = allFeedback.map(function(f){ return f.id===id ? Object.assign({},f,{approved:false}) : f; });
+        renderFeedbackTable();
+        showToast('Feedback unapproved', 'success');
+      } catch(err) { showToast('Error', 'error'); }
+    }
+
+    /* ─── Export CSV ─── */
+    function downloadCSV(rows, filename) {
+      var csv = rows.map(function(r) {
+        return r.map(function(cell) {
+          var s = (cell === null || cell === undefined) ? '' : String(cell);
+          return '"' + s.replace(/"/g,'""') + '"';
+        }).join(',');
+      }).join('\n');
+      var blob = new Blob([csv], { type: 'text/csv' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportApplicationsCSV() {
+      if (allApplications.length === 0) { showToast('No applications to export', 'error'); return; }
+      var headers = ['First Name','Last Name','Email','Phone','Track','Education','Status','Payment Status','Applied On'];
+      var rows = [headers].concat(allApplications.map(function(a) {
+        return [a.first_name, a.last_name, a.email, a.phone, a.program_track, a.education_level, a.status, a.payment_status, a.created_at ? new Date(a.created_at).toLocaleDateString() : ''];
+      }));
+      downloadCSV(rows, 'mdscholars-applications.csv');
+      showToast('CSV downloaded!', 'success');
+    }
+
+    function exportStudentsCSV() {
+      var students = allApplications.filter(function(a){ return a.status === 'accepted'; });
+      if (students.length === 0) { showToast('No students to export', 'error'); return; }
+      var headers = ['First Name','Last Name','Email','Track','Payment Status','Applied On'];
+      var rows = [headers].concat(students.map(function(a) {
+        return [a.first_name, a.last_name, a.email, a.program_track, a.payment_status, a.created_at ? new Date(a.created_at).toLocaleDateString() : ''];
+      }));
+      downloadCSV(rows, 'mdscholars-students.csv');
+      showToast('CSV downloaded!', 'success');
+    }
+
+    function exportContactsCSV() {
+      if (allContacts.length === 0) { showToast('No contacts to export', 'error'); return; }
+      var headers = ['Name','Email','Subject','Message','Status','Date'];
+      var rows = [headers].concat(allContacts.map(function(c) {
+        return [c.name, c.email, c.subject, c.message, c.status, c.created_at ? new Date(c.created_at).toLocaleDateString() : ''];
+      }));
+      downloadCSV(rows, 'mdscholars-contacts.csv');
+      showToast('CSV downloaded!', 'success');
+    }
+
+    function exportInquiriesCSV() {
+      if (allInquiries.length === 0) { showToast('No inquiries to export', 'error'); return; }
+      var headers = ['Institution','Contact','Email','Phone','Type','Students','Message','Date'];
+      var rows = [headers].concat(allInquiries.map(function(i) {
+        return [i.institution_name, i.contact_name, i.email, i.phone, i.institution_type, i.student_count, i.message, i.created_at ? new Date(i.created_at).toLocaleDateString() : ''];
+      }));
+      downloadCSV(rows, 'mdscholars-inquiries.csv');
+      showToast('CSV downloaded!', 'success');
+    }
+
+    function exportFeedbackCSV() {
+      if (allFeedback.length === 0) { showToast('No feedback to export', 'error'); return; }
+      var headers = ['Name','Email','Program','Rating','Message','Approved','Date'];
+      var rows = [headers].concat(allFeedback.map(function(f) {
+        return [f.name, f.email, f.program, f.rating, f.message, f.approved ? 'Yes' : 'No', f.created_at ? new Date(f.created_at).toLocaleDateString() : ''];
+      }));
+      downloadCSV(rows, 'mdscholars-feedback.csv');
+      showToast('CSV downloaded!', 'success');
+    }
+
+    /* ─── Modal helpers ─── */
+    function openModal(id)  { document.getElementById(id).classList.add('active');    }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    // Close modal on overlay click
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.classList.remove('active');
+        });
+      });
+    });
+
+    /* ─── Helpers ─── */
+    function escHtml(s) {
+      return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function dItem(label, value, fullWidth) {
+      return '<div class="detail-item' + (fullWidth ? ' detail-full' : '') + '">' +
+        '<label>' + label + '</label>' +
+        '<p>' + escHtml(value||'—') + '</p>' +
+        '</div>';
     }
   </script>
 </body>
