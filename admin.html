@@ -904,11 +904,17 @@
 
   <div id="toast" style="display: none; position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 6px; z-index: 10000; font-weight: 600; max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
     const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
     const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1Njk5OCwiZXhwIjoyMDkwMjMyOTk4fQ.H_4VhvT8ENyuuH16aK0dGvjQvlz4v97XJpAbtmUHibc';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    let supabase = null;
+    function getSupabase() {
+      if (!supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+      }
+      return supabase;
+    }
 
     let allApplications = [];
 
@@ -968,7 +974,7 @@
 
     async function loadDashboardData() {
       try {
-        const { data: applications, error } = await supabase
+        const { data: applications, error } = await getSupabase()
           .from('applications')
           .select('*');
 
@@ -998,7 +1004,7 @@
     async function loadApplicationsTable() {
       try {
         if (allApplications.length === 0) {
-          const { data, error } = await supabase
+          const { data, error } = await getSupabase()
             .from('applications')
             .select('*');
 
@@ -1019,9 +1025,9 @@
             <td><span class="status-badge status-${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn-sm" onclick="viewApplication(${app.id})">View</button>
-                <button class="btn-sm" onclick="updateStatus(${app.id}, 'accepted')">Accept</button>
-                <button class="btn-sm" onclick="updateStatus(${app.id}, 'waitlisted')">Waitlist</button>
+                <button class="btn-sm" onclick="viewApplication('${app.id}')">View</button>
+                <button class="btn-sm" onclick="updateStatus('${app.id}', 'accepted')">Accept</button>
+                <button class="btn-sm" onclick="updateStatus('${app.id}', 'waitlisted')">Waitlist</button>
               </div>
             </td>
           `;
@@ -1035,7 +1041,7 @@
 
     async function loadStudentsTable() {
       try {
-        const { data: acceptedApps, error } = await supabase
+        const { data: acceptedApps, error } = await getSupabase()
           .from('applications')
           .select('*')
           .eq('status', 'accepted');
@@ -1063,8 +1069,8 @@
             <td><span class="status-badge ${paymentBadgeClass}">${paymentStatus}</span></td>
             <td>
               <div class="action-buttons">
-                <button class="btn-sm" onclick="viewApplication(${app.id})">View</button>
-                <button class="btn-sm" onclick="togglePaymentStatus(${app.id}, '${app.payment_status}')">Mark ${app.payment_status === 'paid' ? 'Unpaid' : 'Paid'}</button>
+                <button class="btn-sm" onclick="viewApplication('${app.id}')">View</button>
+                <button class="btn-sm" onclick="togglePaymentStatus('${app.id}', '${app.payment_status}')">Mark ${app.payment_status === 'paid' ? 'Unpaid' : 'Paid'}</button>
               </div>
             </td>
           `;
@@ -1078,7 +1084,7 @@
 
     async function updateStatus(appId, newStatus) {
       try {
-        const { error } = await supabase
+        const { error } = await getSupabase()
           .from('applications')
           .update({ status: newStatus })
           .eq('id', appId);
@@ -1099,7 +1105,7 @@
     async function togglePaymentStatus(appId, currentStatus) {
       try {
         const newStatus = currentStatus === 'paid' ? 'unpaid' : 'paid';
-        const { error } = await supabase
+        const { error } = await getSupabase()
           .from('applications')
           .update({ payment_status: newStatus })
           .eq('id', appId);
