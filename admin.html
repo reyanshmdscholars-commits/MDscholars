@@ -604,7 +604,7 @@
       <form class="login-form" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" required placeholder="admin@mdscholars.com">
+          <input type="text" id="email" name="email" required placeholder="1234">
         </div>
 
         <div class="form-group">
@@ -934,7 +934,7 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      if (email === 'admin@mdscholars.com' && password === 'MDScholars2024!') {
+      if (email === '1234' && password === '1234') {
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('dashboardWrapper').classList.add('active');
         loadDashboardData();
