@@ -601,7 +601,7 @@
       <h1>Admin Access</h1>
       <p class="login-card-subtitle">This area is restricted to authorized MD Scholars staff only.</p>
 
-      <form class="login-form" onsubmit="handleLogin(event)">
+      <form class="login-form" id="loginForm">
         <div class="form-group">
           <label for="email">Email Address</label>
           <input type="text" id="email" name="email" required placeholder="1234">
@@ -906,17 +906,33 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
-    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
-    const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1Njk5OCwiZXhwIjoyMDkwMjMyOTk4fQ.H_4VhvT8ENyuuH16aK0dGvjQvlz4v97XJpAbtmUHibc';
-    let supabase = null;
-    function getSupabase() {
-      if (!supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    var _db = null;
+    var allApplications = [];
+
+    function getDB() {
+      if (!_db) {
+        _db = window.supabase.createClient(
+          'https://nygeinaoevzyptkgchqb.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1Njk5OCwiZXhwIjoyMDkwMjMyOTk4fQ.H_4VhvT8ENyuuH16aK0dGvjQvlz4v97XJpAbtmUHibc'
+        );
       }
-      return supabase;
+      return _db;
     }
 
-    let allApplications = [];
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var email = document.getElementById('email').value;
+        var pass  = document.getElementById('password').value;
+        if (email === '1234' && pass === '1234') {
+          document.getElementById('loginContainer').style.display = 'none';
+          document.getElementById('dashboardWrapper').classList.add('active');
+          loadDashboardData();
+        } else {
+          showToast('Invalid credentials', 'error');
+        }
+      });
+    });
 
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
@@ -927,20 +943,6 @@
       setTimeout(() => {
         toast.style.display = 'none';
       }, 4000);
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (email === '1234' && password === '1234') {
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('dashboardWrapper').classList.add('active');
-        loadDashboardData();
-      } else {
-        showToast('Invalid email or password', 'error');
-      }
     }
 
     function handleLogout() {
@@ -974,7 +976,7 @@
 
     async function loadDashboardData() {
       try {
-        const { data: applications, error } = await getSupabase()
+        const { data: applications, error } = await getDB()
           .from('applications')
           .select('*');
 
@@ -1004,7 +1006,7 @@
     async function loadApplicationsTable() {
       try {
         if (allApplications.length === 0) {
-          const { data, error } = await getSupabase()
+          const { data, error } = await getDB()
             .from('applications')
             .select('*');
 
@@ -1041,7 +1043,7 @@
 
     async function loadStudentsTable() {
       try {
-        const { data: acceptedApps, error } = await getSupabase()
+        const { data: acceptedApps, error } = await getDB()
           .from('applications')
           .select('*')
           .eq('status', 'accepted');
@@ -1084,7 +1086,7 @@
 
     async function updateStatus(appId, newStatus) {
       try {
-        const { error } = await getSupabase()
+        const { error } = await getDB()
           .from('applications')
           .update({ status: newStatus })
           .eq('id', appId);
@@ -1105,7 +1107,7 @@
     async function togglePaymentStatus(appId, currentStatus) {
       try {
         const newStatus = currentStatus === 'paid' ? 'unpaid' : 'paid';
-        const { error } = await getSupabase()
+        const { error } = await getDB()
           .from('applications')
           .update({ payment_status: newStatus })
           .eq('id', appId);
