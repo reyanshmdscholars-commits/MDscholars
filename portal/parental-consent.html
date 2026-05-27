@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Parental Consent Form — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#001F3F; --teal:#134E4A; --teal-bright:#0d9488; --teal-light:#14b8a6; --gold:#c9a84c; --cream:#f8f5ef; --white:#ffffff; --gray-100:#f4f6f8; --gray-200:#e2e8f0; --gray-400:#94a3b8; --gray-600:#475569; --text:#0f172a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans', sans-serif; color:var(--text); background:var(--gray-100); }
+  .topbar { background:var(--navy); color:white; padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; }
+  .brand { display:flex; align-items:center; gap:0.75rem; }
+  .brand-icon { width:38px; height:38px; background:linear-gradient(135deg, var(--teal), var(--teal-bright)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+  .brand strong { font-family:'Playfair Display', serif; font-size:1.05rem; }
+  .brand span { display:block; font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal-light); }
+  .topbar a { color:rgba(255,255,255,0.75); text-decoration:none; font-size:0.9rem; }
+
+  .hero { background:linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%); color:white; padding:3rem 2rem; }
+  .hero-inner { max-width:760px; margin:0 auto; }
+  .hero h1 { font-family:'Playfair Display', serif; font-size:2rem; margin-bottom:0.5rem; }
+  .hero p { font-size:1.05rem; opacity:0.95; }
+
+  .container { max-width:760px; margin:0 auto; padding:2.5rem 2rem; }
+  .card { background:var(--white); border-radius:14px; padding:2.25rem; box-shadow:0 2px 8px rgba(0,0,0,0.05); border:1px solid var(--gray-200); margin-bottom:1.5rem; }
+  .card h2 { font-family:'Playfair Display', serif; font-size:1.35rem; color:var(--navy); margin-bottom:1rem; padding-bottom:0.75rem; border-bottom:2px solid var(--gray-200); }
+  .field { margin-bottom:1.1rem; }
+  .field-row { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
+  @media (max-width:600px) { .field-row { grid-template-columns:1fr; } }
+  label { display:block; font-size:0.88rem; font-weight:500; color:var(--navy); margin-bottom:0.35rem; }
+  .required::after { content:" *"; color:#ef4444; }
+  input[type=text], input[type=email], input[type=tel], input[type=date], select { width:100%; padding:0.75rem 0.95rem; border:1px solid var(--gray-200); border-radius:8px; font-size:0.95rem; font-family:inherit; }
+  input:focus, select:focus { outline:none; border-color:var(--teal-bright); box-shadow:0 0 0 3px rgba(20,184,166,0.15); }
+
+  .agreement { background:var(--cream); border:1px solid var(--gray-200); border-radius:10px; padding:1rem 1.25rem; margin-bottom:0.85rem; display:flex; gap:0.85rem; align-items:flex-start; cursor:pointer; }
+  .agreement input { margin-top:0.25rem; cursor:pointer; width:18px; height:18px; accent-color:var(--teal-bright); }
+  .agreement-text { font-size:0.92rem; line-height:1.55; color:var(--gray-600); }
+  .agreement-text strong { color:var(--navy); }
+
+  .signature { padding:1.1rem 1.25rem; background:var(--cream); border:2px dashed var(--gray-200); border-radius:10px; margin-top:0.75rem; }
+  .signature input { background:transparent; border:none; border-bottom:2px solid var(--gray-400); border-radius:0; padding:0.5rem 0; font-family:'Playfair Display', cursive; font-style:italic; font-size:1.3rem; color:var(--navy); width:100%; }
+  .signature input:focus { border-bottom-color:var(--teal-bright); box-shadow:none; }
+  .signature .label { font-size:0.78rem; color:var(--gray-600); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:0.4rem; }
+
+  .submit-btn { background:linear-gradient(135deg, var(--teal-bright), var(--teal-light)); color:white; padding:0.95rem 2rem; border:none; border-radius:10px; font-size:1.05rem; font-weight:600; font-family:inherit; cursor:pointer; width:100%; margin-top:1rem; transition:opacity 0.2s; }
+  .submit-btn:hover { opacity:0.92; }
+  .submit-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+  .msg { padding:1rem 1.25rem; border-radius:8px; font-size:0.92rem; margin-bottom:1rem; display:none; }
+  .msg.error { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
+  .msg.success { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+
+  .success-panel { display:none; text-align:center; padding:3rem 2rem; }
+  .success-panel.show { display:block; }
+  .success-panel .icon { font-size:4rem; margin-bottom:1rem; }
+  .success-panel h2 { font-family:'Playfair Display', serif; font-size:1.7rem; color:var(--navy); margin-bottom:0.75rem; border:none; padding:0; }
+  .success-panel p { color:var(--gray-600); line-height:1.6; margin-bottom:1.5rem; }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><div class="brand-icon">⚕️</div><div><strong>MD Scholars</strong><span>Parental Consent</span></div></div>
+    <a href="../index.html">← Back to mdscholars.com</a>
+  </div>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Parental / Guardian Consent</h1>
+      <p>Your child has been accepted to the MD Scholars Research Mentorship Program. As they are under 18, we require your signed consent before they can begin the program. This is a 5-minute form.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="formWrapper">
+      <div id="msg" class="msg"></div>
+
+      <form id="consentForm" autocomplete="on">
+        <!-- Parent info -->
+        <div class="card">
+          <h2>Parent / Guardian Information</h2>
+          <div class="field"><label class="required" for="parentName">Full legal name</label><input type="text" id="parentName" required autocomplete="name"></div>
+          <div class="field-row">
+            <div class="field"><label class="required" for="parentEmail">Email</label><input type="email" id="parentEmail" required autocomplete="email"></div>
+            <div class="field"><label for="parentPhone">Phone (optional)</label><input type="tel" id="parentPhone" autocomplete="tel"></div>
+          </div>
+          <div class="field"><label class="required" for="relationship">Relationship to child</label>
+            <select id="relationship" required>
+              <option value="">Select…</option>
+              <option value="parent">Parent</option>
+              <option value="legal-guardian">Legal Guardian</option>
+              <option value="grandparent">Grandparent (with legal custody)</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Child info -->
+        <div class="card">
+          <h2>Student (Your Child) Information</h2>
+          <div class="field-row">
+            <div class="field"><label class="required" for="childFirst">First name</label><input type="text" id="childFirst" required></div>
+            <div class="field"><label class="required" for="childLast">Last name</label><input type="text" id="childLast" required></div>
+          </div>
+          <div class="field"><label class="required" for="childDob">Date of birth</label><input type="date" id="childDob" required></div>
+        </div>
+
+        <!-- Agreements -->
+        <div class="card">
+          <h2>Consent Agreements</h2>
+          <p style="color:var(--gray-600); font-size:0.92rem; margin-bottom:1rem;">Please review and check each box to indicate your consent.</p>
+
+          <label class="agreement">
+            <input type="checkbox" id="agreeProgram" required>
+            <div class="agreement-text"><strong>Program participation.</strong> I consent for my child to participate in the MD Scholars Research Mentorship Program. I understand the program involves academic coursework, physician-led mentorship, weekly written deliverables, and a research project culminating in an abstract or manuscript.</div>
+          </label>
+
+          <label class="agreement">
+            <input type="checkbox" id="agreeCommunications" required>
+            <div class="agreement-text"><strong>Communications.</strong> I consent to MD Scholars communicating with me (the parent/guardian) and my child via email and phone regarding program logistics, scheduling, mentor meetings, and progress reports.</div>
+          </label>
+
+          <label class="agreement">
+            <input type="checkbox" id="agreeAuthorship" required>
+            <div class="agreement-text"><strong>Authorship &amp; Ethics.</strong> I understand that authorship on any work my child contributes to is ICMJE-compliant and earned, not gifted. I consent to MD Scholars representing my child's research contributions ethically in any conference submissions or publications that arise from this program.</div>
+          </label>
+        </div>
+
+        <!-- Signature -->
+        <div class="card">
+          <h2>Electronic Signature</h2>
+          <p style="color:var(--gray-600); font-size:0.92rem; margin-bottom:0.75rem;">By typing your full legal name below, you are electronically signing this consent form. This signature has the same legal effect as a handwritten signature.</p>
+          <div class="signature">
+            <div class="label">Type your full legal name to sign</div>
+            <input type="text" id="signature" required autocomplete="off" placeholder="Your full legal name">
+          </div>
+          <p style="color:var(--gray-400); font-size:0.82rem; margin-top:0.75rem;">Signed on: <strong id="signedDateDisplay" style="color:var(--gray-600);"></strong></p>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit signed consent →</button>
+      </form>
+    </div>
+
+    <div id="successPanel" class="success-panel card">
+      <div class="icon">✅</div>
+      <h2>Consent received</h2>
+      <p>Thank you. We've recorded your signed consent for <strong id="successChildName"></strong>. The MD Scholars team will reach out within 2 business days with cohort start dates and next steps.</p>
+      <p style="font-size:0.92rem; color:var(--gray-400);">A confirmation email is on its way to <strong id="successEmail" style="color:var(--gray-600);"></strong>.</p>
+      <a href="../index.html" style="display:inline-block; margin-top:1rem; padding:0.75rem 1.5rem; background:var(--teal-bright); color:white; border-radius:8px; text-decoration:none; font-weight:600;">Back to MD Scholars</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function showMsg(type, text) {
+      const m = document.getElementById('msg'); m.className = 'msg ' + type; m.textContent = text; m.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function init() {
+      // Pre-fill child name from URL if provided (?for=Reyansh+Gupta or ?email=...)
+      const params = new URLSearchParams(window.location.search);
+      const forName = params.get('for');
+      if (forName) {
+        const parts = forName.trim().split(/\s+/);
+        if (parts[0]) document.getElementById('childFirst').value = parts[0];
+        if (parts[1]) document.getElementById('childLast').value = parts.slice(1).join(' ');
+      }
+      const fromEmail = params.get('email');
+      if (fromEmail) document.getElementById('parentEmail').value = fromEmail;
+      document.getElementById('signedDateDisplay').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+      document.getElementById('consentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.textContent = 'Submitting…';
+
+        const parent_name = document.getElementById('parentName').value.trim();
+        const parent_email = document.getElementById('parentEmail').value.trim().toLowerCase();
+        const parent_phone = document.getElementById('parentPhone').value.trim() || null;
+        const relationship = document.getElementById('relationship').value;
+        const child_first_name = document.getElementById('childFirst').value.trim();
+        const child_last_name = document.getElementById('childLast').value.trim();
+        const child_dob = document.getElementById('childDob').value;
+        const signature_typed = document.getElementById('signature').value.trim();
+
+        const agree_program = document.getElementById('agreeProgram').checked;
+        const agree_communications = document.getElementById('agreeCommunications').checked;
+        const agree_authorship = document.getElementById('agreeAuthorship').checked;
+
+        // Sanity check: signature must match parent name (case-insensitive)
+        if (signature_typed.toLowerCase().replace(/\s+/g,' ') !== parent_name.toLowerCase().replace(/\s+/g,' ')) {
+          showMsg('error', 'Your typed signature must exactly match your full legal name as entered above.');
+          btn.disabled = false; btn.textContent = 'Submit signed consent →';
+          return;
+        }
+        if (!agree_program || !agree_communications || !agree_authorship) {
+          showMsg('error', 'Please check all three consent agreement boxes.');
+          btn.disabled = false; btn.textContent = 'Submit signed consent →';
+          return;
+        }
+
+        const { error } = await sb.from('parental_consents').insert([{
+          parent_name, parent_email, parent_phone, relationship,
+          child_first_name, child_last_name, child_dob,
+          agree_program, agree_communications, agree_authorship,
+          signature_typed, status: 'signed'
+        }]);
+
+        if (error) {
+          showMsg('error', 'Could not submit: ' + error.message);
+          btn.disabled = false; btn.textContent = 'Submit signed consent →';
+          return;
+        }
+
+        // Show the success panel
+        document.getElementById('formWrapper').style.display = 'none';
+        document.getElementById('successPanel').classList.add('show');
+        document.getElementById('successChildName').textContent = child_first_name + ' ' + child_last_name;
+        document.getElementById('successEmail').textContent = parent_email;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  </script>
+</body>
+</html>
