@@ -89,7 +89,10 @@
 
   /* TEAM */
   .team-section { background: var(--cream); }
-  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .team-subhead { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); margin: 3.5rem 0 0.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gray-200); position: relative; }
+  .team-subhead::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 60px; height: 2px; background: var(--teal-bright); }
+  .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+  .team-avatar { letter-spacing: 0.02em; font-weight: 600; }
   .team-card { background: var(--white); border-radius: 16px; padding: 2rem; border: 1px solid var(--gray-200); transition: all 0.25s; text-align: center; }
   .team-card:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,31,63,0.1); border-color: rgba(13,148,136,0.25); }
   .team-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; }
@@ -254,27 +257,38 @@
   <div class="container">
     <div class="section-label dark">Our Team</div>
     <h2 class="section-title">World-Class Experts &amp; <em>Mentors</em></h2>
-    <p class="section-sub">Our team of experts and mentors include distinguished physicians and scholars who are pioneers in their fields, with vast experience in didactic and scholarly activities — including mentoring the next generation of researchers.</p>
+    <p class="section-sub">Our team of distinguished physicians and scholars are pioneers in their fields, with vast experience in didactic and scholarly activities — including mentoring the next generation of researchers.</p>
+
+    <h3 class="team-subhead">Faculty Mentors</h3>
     <div class="team-grid">
-      <!-- Placeholder cards — replace with real team members -->
-      <div class="team-card placeholder-card">
-        <div class="team-avatar">👤</div>
-        <h4>Team Member</h4>
-        <div class="role">Faculty Mentor</div>
-        <p>Bio and credentials to be added soon.</p>
-      </div>
-      <div class="team-card placeholder-card">
-        <div class="team-avatar">👤</div>
-        <h4>Team Member</h4>
-        <div class="role">Research Advisor</div>
-        <p>Bio and credentials to be added soon.</p>
-      </div>
-      <div class="team-card placeholder-card">
-        <div class="team-avatar">👤</div>
-        <h4>Team Member</h4>
-        <div class="role">Student Ambassador</div>
-        <p>Bio and credentials to be added soon.</p>
-      </div>
+      <div class="team-card"><div class="team-avatar">AG</div><h4>Dr. Ashutosh Gupta, MD</h4><div class="role">Faculty Mentor</div><p>Gastroenterology</p></div>
+      <div class="team-card"><div class="team-avatar">KK</div><h4>Dr. Krishna Chaitanya Kottapalli, MD</h4><div class="role">Faculty Mentor</div><p>Hospital Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">CR</div><h4>Dr. Chaitanya Reddy, MD</h4><div class="role">Faculty Mentor</div><p>Hospital Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">DB</div><h4>Dr. Dinesh Belani, MD</h4><div class="role">Faculty Mentor</div><p>Critical Care, Sleep &amp; Pulmonary Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">JP</div><h4>Dr. Jose Antony Paul, MD</h4><div class="role">Faculty Mentor</div><p>Critical Care, Pulmonary &amp; Interventional Pulmonary Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">LW</div><h4>Dr. Lily Walson, MD</h4><div class="role">Faculty Mentor</div><p>Human Genetics</p></div>
+      <div class="team-card"><div class="team-avatar">SH</div><h4>Dr. Susheela Hadigal, MD</h4><div class="role">Faculty Mentor</div><p>Critical Care, Sleep &amp; Pulmonary Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">SP</div><h4>Dr. Sripal Padam, MD</h4><div class="role">Faculty Mentor</div><p>Geriatrics &amp; Hospital Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">DR</div><h4>Dr. Raju, MD</h4><div class="role">Faculty Mentor</div><p>Nephrology</p></div>
+      <div class="team-card"><div class="team-avatar">RA</div><h4>Dr. Raman Anam, MD</h4><div class="role">Faculty Mentor</div><p>Nephrology</p></div>
+      <div class="team-card"><div class="team-avatar">NS</div><h4>Dr. Nauman Siddique, MD, MPH</h4><div class="role">Faculty Mentor</div><p>Hematology &amp; Oncology Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">NK</div><h4>Dr. Naveen Krishna, MD</h4><div class="role">Faculty Mentor</div><p>Hospital Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">LK</div><h4>Dr. Laxmi Krishna, MD</h4><div class="role">Faculty Mentor</div><p>Psychiatry</p></div>
+      <div class="team-card"><div class="team-avatar">VG</div><h4>Dr. Veerainder Goli, MD</h4><div class="role">Faculty Mentor</div><p>Psychiatry &amp; Pain Medicine</p></div>
+      <div class="team-card"><div class="team-avatar">KC</div><h4>Dr. Karthik Cherabuddi, MD</h4><div class="role">Faculty Mentor</div><p>Infectious Diseases</p></div>
+      <div class="team-card"><div class="team-avatar">GT</div><h4>Dr. Guru Trikudanathan, MD</h4><div class="role">Faculty Mentor</div><p>Gastroenterology</p></div>
+    </div>
+
+    <h3 class="team-subhead">Research Advisors</h3>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-avatar">DvS</div><h4>Dr. Divya Subramaniam, PhD, MPH</h4><div class="role">Research Advisor</div><p>Health services research &amp; epidemiology</p></div>
+      <div class="team-card"><div class="team-avatar">DpS</div><h4>Dr. Dipti Subramaniam, PhD, MPH</h4><div class="role">Research Advisor</div><p>Health services research &amp; epidemiology</p></div>
+    </div>
+
+    <h3 class="team-subhead">Student Ambassadors</h3>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-avatar">RG</div><h4>Reyansh Gupta</h4><div class="role">Student Ambassador</div><p>Outreach &amp; cohort support</p></div>
+      <div class="team-card"><div class="team-avatar">AG</div><h4>Arna Gowda</h4><div class="role">Student Ambassador</div><p>Outreach &amp; cohort support</p></div>
     </div>
   </div>
 </section>
