@@ -514,7 +514,7 @@
                 <a href="about.html">About</a>
                 <a href="testimonials.html">Testimonials</a>
                 <a href="additional-services.html">Services</a>
-                <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+                <a href="apply.html" class="nav-cta">Apply Now →</a>
             </div>
         </div>
     </nav>
@@ -553,7 +553,7 @@
                 </div>
             </div>
 
-            <form>
+            <form id="verifyForm">
                 <div class="form-group">
                     <label for="cert-id">Certificate ID</label>
                     <div class="input-wrapper">
@@ -563,7 +563,7 @@
                 </div>
             </form>
 
-            <div class="result-placeholder">
+            <div class="result-placeholder" id="verifyResult">
                 Certificate details will appear here
             </div>
         </div>
@@ -650,5 +650,41 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function initVerifyListener() {
+            const form = document.getElementById('verifyForm');
+            const result = document.getElementById('verifyResult');
+            if (!form || !result) return;
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = (document.getElementById('cert-id').value || '').trim().toUpperCase();
+                const trackMap = { HS: 'High School', PM: 'Pre-Med', MS: 'Medical Student', RF: 'Resident/Fellow' };
+                const match = id.match(/^MDS-(\d{4})-(HS|PM|MS|RF)-(\d{3,})$/);
+                if (!match) {
+                    result.style.borderColor = '#ef4444';
+                    result.style.color = '#ef4444';
+                    result.innerHTML = '<strong>Invalid Certificate ID format.</strong><br><span style="font-size:0.9rem;">Expected format: MDS-YYYY-XX-NNN (e.g. MDS-2026-HS-001)</span>';
+                    return;
+                }
+                const [, year, track, num] = match;
+                result.style.borderColor = '#14b8a6';
+                result.style.color = '#001F3F';
+                result.innerHTML =
+                    '<div style="text-align:left;">' +
+                    '<p style="color:#14b8a6;font-weight:600;margin-bottom:0.75rem;">✓ Certificate ID format is valid.</p>' +
+                    '<p style="margin-bottom:0.5rem;"><strong>Year:</strong> ' + year + '</p>' +
+                    '<p style="margin-bottom:0.5rem;"><strong>Track:</strong> ' + (trackMap[track] || track) + '</p>' +
+                    '<p style="margin-bottom:0.5rem;"><strong>Certificate Number:</strong> ' + num + '</p>' +
+                    '<p style="margin-top:1rem;font-size:0.9rem;color:#666;">For full verification and confirmation of holder name, please email <a href="mailto:contact@mdscholars.com" style="color:#14b8a6;">contact@mdscholars.com</a> with this certificate ID.</p>' +
+                    '</div>';
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initVerifyListener);
+        } else {
+            initVerifyListener();
+        }
+    </script>
 </body>
 </html>

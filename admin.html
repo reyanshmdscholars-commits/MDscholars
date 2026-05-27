@@ -780,8 +780,8 @@
           dItem('Parent Email', app.parent_email) +
           dItem('Research Topic 1', app.research_topic_1, true) +
           dItem('Research Topic 2', app.research_topic_2, true) +
-          dItem('Prior Research', app.prior_research === 'yes' ? 'Yes' : 'No') +
-          (app.prior_research === 'yes' ? dItem('Research Details', app.prior_research_details, true) : '') +
+          dItem('Prior Research', (app.prior_research === true || app.prior_research === 'yes') ? 'Yes' : 'No') +
+          ((app.prior_research === true || app.prior_research === 'yes') ? dItem('Research Details', app.prior_research_details, true) : '') +
           dItem('Motivation', app.motivation, true) +
           dItem('Goals', app.goals, true) +
           dItem('How They Heard', app.how_heard) +

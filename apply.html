@@ -810,7 +810,7 @@
         <a href="about.html">About</a>
         <a href="testimonials.html">Testimonials</a>
         <a href="additional-services.html">Services</a>
-        <a href="enroll.html" class="nav-cta">Enroll Now →</a>
+        <a href="apply.html" class="nav-cta active">Apply Now →</a>
       </div>
     </div>
   </nav>
@@ -1554,6 +1554,19 @@
       const dobInput = document.getElementById('dob');
       const educationSelect = document.getElementById('educationLevel');
       const cycleSelect = document.getElementById('cycle');
+
+      // Pre-select program track from ?track= URL query param
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const trackParam = params.get('track');
+        const trackSelect = document.getElementById('programTrack');
+        if (trackParam && trackSelect) {
+          const validTracks = ['future-physician','pre-med','med-accelerator','resident-accelerator','12month','institutional'];
+          if (validTracks.indexOf(trackParam) !== -1) {
+            trackSelect.value = trackParam;
+          }
+        }
+      } catch (e) { console.warn('Track pre-select failed:', e); }
 
       if (interestTA) {
         interestTA.addEventListener('input', function() {
