@@ -654,74 +654,14 @@
     </section>
 
     <section class="testimonials-section">
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
+        <div class="testimonials-grid" id="testimonials-grid">
+            <div class="testimonial-card" data-placeholder="true">
                 <div class="quote-icon">"</div>
-                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
+                <p class="testimonial-text">Loading testimonials…</p>
                 <div class="testimonial-meta">
                     <div class="testimonial-author">
-                        <div class="testimonial-name">Future Scholar</div>
-                        <span class="track-badge">High School</span>
-                    </div>
-                    <div class="star-rating">★★★★★</div>
-                </div>
-            </div>
-
-            <div class="testimonial-card">
-                <div class="quote-icon">"</div>
-                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
-                <div class="testimonial-meta">
-                    <div class="testimonial-author">
-                        <div class="testimonial-name">Future Scholar</div>
-                        <span class="track-badge">Pre-Med</span>
-                    </div>
-                    <div class="star-rating">★★★★★</div>
-                </div>
-            </div>
-
-            <div class="testimonial-card">
-                <div class="quote-icon">"</div>
-                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
-                <div class="testimonial-meta">
-                    <div class="testimonial-author">
-                        <div class="testimonial-name">Future Scholar</div>
-                        <span class="track-badge">Medical Student</span>
-                    </div>
-                    <div class="star-rating">★★★★★</div>
-                </div>
-            </div>
-
-            <div class="testimonial-card">
-                <div class="quote-icon">"</div>
-                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
-                <div class="testimonial-meta">
-                    <div class="testimonial-author">
-                        <div class="testimonial-name">Future Scholar</div>
-                        <span class="track-badge">Resident</span>
-                    </div>
-                    <div class="star-rating">★★★★★</div>
-                </div>
-            </div>
-
-            <div class="testimonial-card">
-                <div class="quote-icon">"</div>
-                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
-                <div class="testimonial-meta">
-                    <div class="testimonial-author">
-                        <div class="testimonial-name">Future Scholar</div>
-                        <span class="track-badge">12-Month</span>
-                    </div>
-                    <div class="star-rating">★★★★★</div>
-                </div>
-            </div>
-
-            <div class="testimonial-card">
-                <div class="quote-icon">"</div>
-                <p class="testimonial-text">Testimonial coming soon — check back after our first cohort completes!</p>
-                <div class="testimonial-meta">
-                    <div class="testimonial-author">
-                        <div class="testimonial-name">Future Scholar</div>
-                        <span class="track-badge">Alumni</span>
+                        <div class="testimonial-name">MD Scholars</div>
+                        <span class="track-badge">All Tracks</span>
                     </div>
                     <div class="star-rating">★★★★★</div>
                 </div>
@@ -901,6 +841,64 @@
                 toast.style.display = 'none';
             }, 4000);
         }
+
+        // ── Load approved testimonials from Supabase and render them ──
+        const PROGRAM_LABELS = {
+            'high-school': 'High School',
+            'pre-med': 'Pre-Med',
+            'med-student': 'Medical Student',
+            'medical-student': 'Medical Student',
+            'resident': 'Resident',
+            'resident-fellow': 'Resident & Fellow',
+            '12month': '12-Month',
+            'alumni': 'Alumni'
+        };
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+        function renderTestimonials(rows) {
+            const grid = document.getElementById('testimonials-grid');
+            if (!grid) return;
+            if (!rows || rows.length === 0) {
+                grid.innerHTML = '<div class="testimonial-card" style="grid-column:1/-1;text-align:center;">' +
+                    '<div class="quote-icon">"</div>' +
+                    '<p class="testimonial-text">Testimonials from our first cohorts coming soon — we\'re just getting started!</p>' +
+                    '<div class="testimonial-meta"><div class="testimonial-author"><div class="testimonial-name">MD Scholars</div><span class="track-badge">Coming Soon</span></div><div class="star-rating">★★★★★</div></div>' +
+                    '</div>';
+                return;
+            }
+            grid.innerHTML = rows.map(function(r) {
+                const rating = Math.max(0, Math.min(5, parseInt(r.rating, 10) || 5));
+                const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+                const trackLabel = PROGRAM_LABELS[r.program] || r.program || 'Scholar';
+                return '<div class="testimonial-card">' +
+                    '<div class="quote-icon">"</div>' +
+                    '<p class="testimonial-text">' + escapeHtml(r.message) + '</p>' +
+                    '<div class="testimonial-meta">' +
+                        '<div class="testimonial-author">' +
+                            '<div class="testimonial-name">' + escapeHtml(r.name) + '</div>' +
+                            '<span class="track-badge">' + escapeHtml(trackLabel) + '</span>' +
+                        '</div>' +
+                        '<div class="star-rating">' + stars + '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+        (async function loadTestimonials() {
+            try {
+                const { data, error } = await sb
+                    .from('feedback')
+                    .select('name, program, message, rating, created_at')
+                    .eq('approved', true)
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+                renderTestimonials(data || []);
+            } catch (err) {
+                console.error('Failed to load testimonials:', err);
+                renderTestimonials([]);
+            }
+        })();
 
         // Star-rating UI wiring
         (function initStars() {
