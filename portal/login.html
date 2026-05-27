@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Student Portal — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F;
+    --teal: #134E4A;
+    --teal-bright: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #c9a84c;
+    --cream: #f8f5ef;
+    --white: #ffffff;
+    --gray-100: #f4f6f8;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --text: #0f172a;
+    --danger: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+  .login-card { background: var(--white); border-radius: 16px; padding: 2.5rem 2.5rem 2rem; max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .brand { text-align: center; margin-bottom: 1.5rem; }
+  .brand-icon { width: 56px; height: 56px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--teal), var(--teal-bright)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; }
+  .brand h1 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); }
+  .brand .subtitle { font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem; }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 0.25rem; text-align: center; }
+  .hint { text-align: center; color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1.75rem; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--navy); margin-bottom: 0.4rem; }
+  .field input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+  .field input:focus { outline: none; border-color: var(--teal-bright); box-shadow: 0 0 0 3px rgba(20,184,166,0.15); }
+  .submit { width: 100%; background: linear-gradient(135deg, var(--teal-bright), var(--teal-light)); color: var(--white); padding: 0.85rem 1rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem; }
+  .submit:hover { opacity: 0.92; }
+  .submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .alt-actions { text-align: center; margin-top: 1.25rem; font-size: 0.9rem; color: var(--gray-600); }
+  .alt-actions a { color: var(--teal-bright); text-decoration: none; font-weight: 600; }
+  .alt-actions a:hover { text-decoration: underline; }
+  .msg { padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
+  .msg.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+  .msg.info { background: #f0f9f8; color: var(--navy); border: 1px solid #99f6e4; }
+  .footer-link { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; }
+  .footer-link a { color: var(--gray-400); text-decoration: none; }
+  .footer-link a:hover { color: var(--gray-600); }
+</style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-icon">⚕️</div>
+      <h1>MD Scholars</h1>
+      <div class="subtitle">Student Portal</div>
+    </div>
+
+    <h2>Sign in</h2>
+    <p class="hint">Use the email tied to your accepted application.</p>
+
+    <div id="msg" class="msg"></div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="username" required placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="submit" id="submitBtn">Sign in →</button>
+    </form>
+
+    <div class="alt-actions">
+      <a href="#" id="forgotLink">Forgot password?</a>
+    </div>
+
+    <div class="footer-link">
+      <a href="../index.html">← Back to mdscholars.com</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function showMsg(type, text) {
+      const m = document.getElementById('msg');
+      m.className = 'msg ' + type;
+      m.textContent = text;
+      m.style.display = 'block';
+    }
+
+    function initListeners() {
+      // If already signed in AND has a student profile, send straight to dashboard.
+      sb.auth.getSession().then(async ({ data }) => {
+        if (data.session) {
+          const { data: prof } = await sb.from('student_access').select('is_active, days_remaining').maybeSingle();
+          if (prof && prof.is_active) {
+            window.location.href = 'dashboard.html';
+          }
+        }
+      });
+
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.textContent = 'Signing in…';
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) {
+          showMsg('error', error.message || 'Sign-in failed. Please check your email and password.');
+          btn.disabled = false; btn.textContent = 'Sign in →';
+          return;
+        }
+        // Gate: must have a student_profiles row that's active
+        const { data: prof, error: profErr } = await sb.from('student_access').select('is_active, days_remaining, full_name').maybeSingle();
+        if (profErr || !prof) {
+          await sb.auth.signOut();
+          showMsg('error', 'Your account is not associated with an active MD Scholars cohort. Please contact contact@mdscholars.com if you believe this is an error.');
+          btn.disabled = false; btn.textContent = 'Sign in →';
+          return;
+        }
+        if (!prof.is_active) {
+          await sb.auth.signOut();
+          showMsg('error', 'Your course access has ended. Please contact support@mdscholars.com if you need an extension.');
+          btn.disabled = false; btn.textContent = 'Sign in →';
+          return;
+        }
+        // Success — record login + redirect
+        sb.from('student_profiles').update({ last_login_at: new Date().toISOString() }).eq('auth_user_id', data.user.id).then(() => {});
+        window.location.href = 'dashboard.html';
+      });
+
+      document.getElementById('forgotLink').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        if (!email) { showMsg('error', 'Enter your email above first, then click Forgot password.'); return; }
+        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/portal/set-password.html' });
+        if (error) { showMsg('error', error.message); return; }
+        showMsg('info', 'If an account exists for this email, a password reset link is on its way.');
+      });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initListeners); else initListeners();
+  </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dashboard — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F; --navy-mid: #002d5a; --teal: #134E4A; --teal-bright: #0d9488; --teal-light: #14b8a6;
+    --gold: #c9a84c; --cream: #f8f5ef; --white: #ffffff;
+    --gray-100: #f4f6f8; --gray-200: #e2e8f0; --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-600: #475569; --gray-800: #1e293b;
+    --text: #0f172a; --success: #10b981; --warning: #c9a84c; --danger: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--gray-100); min-height: 100vh; }
+
+  /* Topbar */
+  .topbar { background: var(--navy); color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--teal), var(--teal-bright)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+  .brand-text { line-height: 1.15; }
+  .brand-text strong { font-family: 'Playfair Display', serif; font-size: 1.15rem; }
+  .brand-text span { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-light); }
+  .topbar-right { display: flex; align-items: center; gap: 1.25rem; font-size: 0.9rem; }
+  .topbar-right .greeting { color: rgba(255,255,255,0.85); }
+  .topbar-right button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 0.45rem 0.9rem; font-size: 0.85rem; font-family: inherit; cursor: pointer; transition: background 0.2s; }
+  .topbar-right button:hover { background: rgba(255,255,255,0.18); }
+
+  /* Layout */
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  .hero-strip { background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%); color: white; padding: 2.5rem 2rem; margin-bottom: 2rem; border-radius: 0; }
+  .hero-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+  .hero-h1 { font-family: 'Playfair Display', serif; font-size: 1.85rem; margin-bottom: 0.5rem; }
+  .hero-sub { color: rgba(255,255,255,0.85); font-size: 1rem; }
+  .countdown { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 1rem 1.5rem; text-align: center; backdrop-filter: blur(8px); }
+  .countdown-num { font-family: 'Playfair Display', serif; font-size: 2.25rem; font-weight: 700; color: var(--gold); line-height: 1; }
+  .countdown-label { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.8); margin-top: 0.4rem; }
+
+  /* Cards grid */
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--white); border-radius: 14px; padding: 1.75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); }
+  .card h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--navy); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .card h2 .icon { font-size: 1.2rem; }
+  .card-cta { display: inline-block; background: var(--teal-bright); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; margin-top: 1rem; transition: background 0.2s; }
+  .card-cta:hover { background: var(--teal); }
+
+  /* Track card */
+  .track-card { background: linear-gradient(135deg, var(--teal-bright), var(--teal-light)); color: white; }
+  .track-card h2 { color: white; }
+  .track-name { font-size: 1.4rem; font-weight: 700; margin-top: 0.5rem; }
+  .track-meta { font-size: 0.9rem; opacity: 0.9; margin-top: 0.35rem; }
+
+  /* Quick stats */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+  .stat { background: var(--gray-100); padding: 1rem; border-radius: 10px; text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: var(--navy); font-weight: 700; }
+  .stat-label { font-size: 0.78rem; color: var(--gray-600); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.25rem; }
+
+  /* Progress bar */
+  .progress-bar { background: var(--gray-200); height: 10px; border-radius: 5px; overflow: hidden; margin: 0.75rem 0 0.4rem; }
+  .progress-fill { background: linear-gradient(90deg, var(--teal-bright), var(--gold)); height: 100%; transition: width 0.4s; }
+  .progress-text { font-size: 0.85rem; color: var(--gray-600); }
+
+  /* Section list */
+  .list-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--gray-100); font-size: 0.95rem; }
+  .list-item:last-child { border-bottom: none; }
+  .badge { font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 99px; font-weight: 600; letter-spacing: 0.02em; }
+  .badge.warning { background: #fef3c7; color: #92400e; }
+  .badge.success { background: #d1fae5; color: #065f46; }
+  .badge.info { background: #dbeafe; color: #1e40af; }
+
+  .loading { text-align: center; padding: 4rem 2rem; color: var(--gray-600); }
+  .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid var(--gray-200); border-top-color: var(--teal-bright); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div id="loading" class="loading"><div class="spinner"></div><p>Loading your dashboard…</p></div>
+  <div id="appWrapper" style="display:none;">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-icon">⚕️</div>
+        <div class="brand-text"><strong>MD Scholars</strong><br><span>Student Portal</span></div>
+      </div>
+      <div class="topbar-right">
+        <span class="greeting" id="greeting">Welcome</span>
+        <button id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+
+    <div class="hero-strip">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-h1" id="heroTitle">Welcome back</div>
+          <div class="hero-sub" id="heroSub">Your scholar dashboard</div>
+        </div>
+        <div class="countdown">
+          <div class="countdown-num" id="daysLeft">—</div>
+          <div class="countdown-label">days of access remaining</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="grid">
+        <!-- LEFT: track + content -->
+        <div>
+          <div class="card track-card">
+            <h2><span class="icon">📚</span> Your Program</h2>
+            <div class="track-name" id="trackName">—</div>
+            <div class="track-meta" id="trackMeta">—</div>
+            <a class="card-cta" id="trackLink" href="#" style="background: rgba(255,255,255,0.18); color: white;">Open course materials →</a>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <h2><span class="icon">📊</span> Course Progress</h2>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+            <div class="progress-text" id="progressText">Week 1 of 12</div>
+            <div class="stats">
+              <div class="stat"><div class="stat-num" id="statSubmitted">0</div><div class="stat-label">Submissions</div></div>
+              <div class="stat"><div class="stat-num" id="statQuestions">0</div><div class="stat-label">Questions Asked</div></div>
+              <div class="stat"><div class="stat-num" id="statWeeks">12</div><div class="stat-label">Total Weeks</div></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <h2><span class="icon">🎬</span> Welcome Videos</h2>
+            <p style="color:var(--gray-600); font-size:0.95rem; margin-bottom:1rem;">Get oriented with the program. New cohort videos will appear here as they're released.</p>
+            <div style="position:relative; padding-bottom:56.25%; height:0; border-radius:12px; overflow:hidden; background:var(--gray-200); margin-bottom:0.75rem;">
+              <iframe id="founderVideo" src="" title="Founder Introduction" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>
+              <div id="founderPlaceholder" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gray-600); flex-direction:column; gap:0.5rem;">
+                <div style="font-size:2.5rem;">🎥</div>
+                <div style="font-size:0.95rem; font-weight:500;">Founder welcome video — coming soon</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: quick actions -->
+        <div>
+          <div class="card">
+            <h2><span class="icon">📝</span> Quick Actions</h2>
+            <a id="submitAssignmentLink" class="list-item" href="#" style="text-decoration:none; color:inherit;">
+              Submit an assignment <span class="badge info">Open →</span>
+            </a>
+            <a id="askQuestionLink" class="list-item" href="#" style="text-decoration:none; color:inherit;">
+              Ask a question <span class="badge info">Open →</span>
+            </a>
+            <a class="list-item" href="mailto:support@mdscholars.com?subject=Education%20—%20" style="text-decoration:none; color:inherit;">
+              Email support <span class="badge info">→</span>
+            </a>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <h2><span class="icon">📜</span> Account</h2>
+            <div class="list-item">Email <strong id="acctEmail" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+            <div class="list-item">Track <strong id="acctTrack" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+            <div class="list-item">Cohort started <strong id="acctStart" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+            <div class="list-item">Access ends <strong id="acctEnd" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+            <div class="list-item">Payment status <strong id="acctFee" style="font-weight:600;"><span class="badge warning">Unpaid</span></strong></div>
+          </div>
+
+          <div class="card" style="margin-top:1.5rem;">
+            <h2><span class="icon">💬</span> Need help?</h2>
+            <p style="color:var(--gray-600); font-size:0.92rem; line-height:1.6;">Email <a href="mailto:support@mdscholars.com" style="color:var(--teal-bright); text-decoration:none; font-weight:600;">support@mdscholars.com</a> with the subject <strong>"Billing"</strong> for payment or invoice questions, or <strong>"Education"</strong> for course content.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const TRACK_LABELS = {
+      'future-physician': { name: 'Future Physician Scholars', subtitle: 'High School Track', weeks: 12, file: 'future-physician.html' },
+      'pre-med': { name: 'Pre-Med Research Scholars', subtitle: 'College Track', weeks: 12, file: 'pre-med.html' },
+      'med-accelerator': { name: 'Medical Student Accelerator', subtitle: 'Medical Student Track', weeks: 12, file: 'med-accelerator.html' },
+      'resident-accelerator': { name: 'Resident & Fellow Accelerator', subtitle: 'Resident / Fellow Track', weeks: 16, file: 'resident-accelerator.html' },
+      '12month': { name: '12-Month Research Track', subtitle: 'Extended Program', weeks: 52, file: '12month.html' },
+      'institutional': { name: 'Institutional Program', subtitle: 'Custom Cohort', weeks: 12, file: 'institutional.html' }
+    };
+
+    async function loadDashboard() {
+      const { data: sess } = await sb.auth.getSession();
+      if (!sess?.session) { window.location.href = 'login.html'; return; }
+
+      const { data: prof, error } = await sb.from('student_access').select('*').maybeSingle();
+      if (error || !prof) {
+        alert('Your account is not provisioned. Please contact contact@mdscholars.com.');
+        await sb.auth.signOut(); window.location.href = 'login.html'; return;
+      }
+      if (!prof.is_active) {
+        alert('Your course access has ended.');
+        await sb.auth.signOut(); window.location.href = 'login.html'; return;
+      }
+
+      const trk = TRACK_LABELS[prof.program_track] || { name: prof.program_track, subtitle: '—', weeks: 12, file: 'pre-med.html' };
+
+      document.getElementById('greeting').textContent = 'Hi, ' + (prof.full_name?.split(' ')[0] || '');
+      document.getElementById('heroTitle').textContent = 'Welcome back, ' + (prof.full_name?.split(' ')[0] || '');
+      document.getElementById('heroSub').textContent = trk.name + ' · ' + trk.subtitle;
+      document.getElementById('daysLeft').textContent = Math.max(0, prof.days_remaining ?? 0);
+      document.getElementById('trackName').textContent = trk.name;
+      document.getElementById('trackMeta').textContent = trk.subtitle + ' · ' + trk.weeks + ' weeks';
+      document.getElementById('trackLink').href = 'courses/' + trk.file;
+      document.getElementById('submitAssignmentLink').href = 'courses/' + trk.file + '#assignment';
+      document.getElementById('askQuestionLink').href = 'courses/' + trk.file + '#questions';
+      document.getElementById('acctEmail').textContent = prof.email;
+      document.getElementById('acctTrack').textContent = trk.name;
+      document.getElementById('acctStart').textContent = new Date(prof.cohort_start).toLocaleDateString();
+      document.getElementById('acctEnd').textContent = new Date(prof.course_expires_at).toLocaleDateString();
+      const feeBadge = prof.fee_status === 'paid' ? '<span class="badge success">Paid</span>' : (prof.fee_status === 'free' ? '<span class="badge success">Free enrollment</span>' : '<span class="badge warning">Unpaid</span>');
+      document.getElementById('acctFee').innerHTML = feeBadge;
+      document.getElementById('statWeeks').textContent = trk.weeks;
+
+      // Progress: weeks elapsed since cohort start out of total weeks
+      const start = new Date(prof.cohort_start).getTime();
+      const now = Date.now();
+      const elapsedWeeks = Math.max(0, Math.floor((now - start) / (7 * 86400000)));
+      const currentWeek = Math.min(trk.weeks, elapsedWeeks + 1);
+      const pct = Math.min(100, Math.round((currentWeek / trk.weeks) * 100));
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressText').textContent = 'Week ' + currentWeek + ' of ' + trk.weeks + ' · ' + pct + '% through your cohort';
+
+      // Submissions + questions counts
+      const [subs, qs] = await Promise.all([
+        sb.from('assignment_submissions').select('id', { count: 'exact', head: true }),
+        sb.from('student_questions').select('id', { count: 'exact', head: true })
+      ]);
+      document.getElementById('statSubmitted').textContent = subs.count ?? 0;
+      document.getElementById('statQuestions').textContent = qs.count ?? 0;
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('appWrapper').style.display = 'block';
+    }
+
+    document.addEventListener('click', async (e) => {
+      if (e.target && e.target.id === 'logoutBtn') {
+        await sb.auth.signOut();
+        window.location.href = 'login.html';
+      }
+    });
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadDashboard); else loadDashboard();
+  </script>
+</body>
+</html>
