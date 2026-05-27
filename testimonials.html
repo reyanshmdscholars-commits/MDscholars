@@ -821,6 +821,18 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="feedback-rating">Rating</label>
+                <div id="feedback-rating-stars" style="display:flex; gap:0.4rem; font-size:1.8rem; cursor:pointer; user-select:none;">
+                    <span data-val="1" style="color:#d0d0d0;">★</span>
+                    <span data-val="2" style="color:#d0d0d0;">★</span>
+                    <span data-val="3" style="color:#d0d0d0;">★</span>
+                    <span data-val="4" style="color:#d0d0d0;">★</span>
+                    <span data-val="5" style="color:#d0d0d0;">★</span>
+                </div>
+                <input type="hidden" id="feedback-rating" name="feedback-rating" value="" required>
+                <div style="font-size:0.85rem; color:#666; margin-top:0.25rem;">Click to rate (1–5)</div>
+            </div>
+            <div class="form-group">
                 <label for="feedback-message">Message</label>
                 <textarea id="feedback-message" placeholder="Share your thoughts..." required></textarea>
             </div>
@@ -890,15 +902,42 @@
             }, 4000);
         }
 
+        // Star-rating UI wiring
+        (function initStars() {
+            const container = document.getElementById('feedback-rating-stars');
+            const hidden = document.getElementById('feedback-rating');
+            if (!container || !hidden) return;
+            const stars = container.querySelectorAll('span[data-val]');
+            function paint(n) {
+                stars.forEach(s => {
+                    s.style.color = Number(s.dataset.val) <= n ? '#c9a84c' : '#d0d0d0';
+                });
+            }
+            stars.forEach(s => {
+                s.addEventListener('mouseenter', () => paint(Number(s.dataset.val)));
+                s.addEventListener('click', () => {
+                    hidden.value = s.dataset.val;
+                    paint(Number(s.dataset.val));
+                });
+            });
+            container.addEventListener('mouseleave', () => paint(Number(hidden.value) || 0));
+        })();
+
         const feedbackForm = document.getElementById('feedbackForm');
         if (feedbackForm) {
             feedbackForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                const ratingValue = document.getElementById('feedback-rating').value;
+                if (!ratingValue) {
+                    showToast('Please select a rating (1–5 stars).', 'error');
+                    return;
+                }
                 try {
                     const name = document.getElementById('feedback-name').value;
                     const email = document.getElementById('feedback-email').value;
                     const program = document.getElementById('feedback-track').value;
                     const message = document.getElementById('feedback-message').value;
+                    const rating = parseInt(ratingValue, 10);
 
                     const { error } = await sb
                         .from('feedback')
@@ -907,6 +946,7 @@
                             email,
                             program,
                             message,
+                            rating,
                             approved: false
                         }]);
 
@@ -914,6 +954,8 @@
 
                     showToast('Thank you for your feedback!', 'success');
                     feedbackForm.reset();
+                    document.getElementById('feedback-rating').value = '';
+                    document.querySelectorAll('#feedback-rating-stars span').forEach(s => s.style.color = '#d0d0d0');
                 } catch (err) {
                     console.error('Error:', err);
                     showToast('Error submitting feedback. Please try again.', 'error');
