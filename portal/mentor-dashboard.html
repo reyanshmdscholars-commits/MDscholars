@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Mentor Dashboard — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F; --navy-mid: #002d5a; --teal: #134E4A; --teal-bright: #0d9488; --teal-light: #14b8a6;
+    --gold: #c9a84c; --cream: #f8f5ef; --white: #ffffff;
+    --gray-100: #f4f6f8; --gray-200: #e2e8f0; --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-600: #475569; --gray-800: #1e293b;
+    --text: #0f172a; --success: #10b981; --warning: #c9a84c; --danger: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--gray-100); min-height: 100vh; }
+  .topbar { background: var(--navy); color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--navy-mid), var(--teal-bright)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+  .brand-text { line-height: 1.15; }
+  .brand-text strong { font-family: 'Playfair Display', serif; font-size: 1.15rem; }
+  .brand-text span { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  .topbar-right { display: flex; align-items: center; gap: 1rem; font-size: 0.9rem; }
+  .topbar-right .greeting { color: rgba(255,255,255,0.85); }
+  .topbar-right button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 0.45rem 0.9rem; font-size: 0.85rem; font-family: inherit; cursor: pointer; }
+  .topbar-right button:hover { background: rgba(255,255,255,0.18); }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--teal-bright) 100%); color: white; padding: 2.5rem 2rem; border-radius: 16px; margin-bottom: 2rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 1.85rem; margin-bottom: 0.5rem; }
+  .hero p { color: rgba(255,255,255,0.85); font-size: 1rem; }
+
+  .tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--gray-200); }
+  .tabs button { background: none; border: none; padding: 0.85rem 1.25rem; font-family: inherit; font-size: 0.95rem; font-weight: 500; color: var(--gray-600); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+  .tabs button.active { color: var(--navy); border-bottom-color: var(--teal-bright); font-weight: 600; }
+  .tabs button:hover:not(.active) { color: var(--navy); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+  .team-card { background: var(--white); border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); }
+  .team-card h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.2rem; margin-bottom: 0.25rem; }
+  .team-card .session-tag { font-size: 0.72rem; color: var(--teal-bright); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 0.75rem; }
+  .team-card .meta { font-size: 0.85rem; color: var(--gray-600); margin: 0.5rem 0; }
+  .team-card ul { list-style: none; padding: 0; margin: 0.75rem 0; }
+  .team-card ul li { padding: 0.45rem 0; border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+  .team-card ul li:last-child { border-bottom: none; }
+  .team-card ul li small { color: var(--gray-400); font-size: 0.78rem; }
+  .doc-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--gray-100); }
+  .doc-row input { flex: 1; padding: 0.55rem 0.75rem; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 0.85rem; font-family: inherit; }
+  .doc-row input:focus { outline: none; border-color: var(--teal-bright); }
+  .btn { background: var(--teal-bright); color: white; border: none; padding: 0.55rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none; display: inline-block; }
+  .btn:hover { background: var(--teal); }
+  .btn-ghost { background: transparent; color: var(--teal-bright); border: 1px solid var(--teal-bright); }
+  .btn-ghost:hover { background: var(--teal-bright); color: white; }
+
+  .submissions-list, .questions-list { background: var(--white); border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); }
+  .submission-row, .question-row { padding: 1rem 0; border-bottom: 1px solid var(--gray-100); }
+  .submission-row:last-child, .question-row:last-child { border-bottom: none; }
+  .submission-row h4, .question-row h4 { color: var(--navy); font-size: 1rem; margin-bottom: 0.25rem; }
+  .submission-row .meta, .question-row .meta { font-size: 0.82rem; color: var(--gray-600); margin-bottom: 0.5rem; }
+  .submission-row .content, .question-row .content { font-size: 0.9rem; color: var(--text); background: var(--gray-100); padding: 0.85rem 1rem; border-radius: 8px; margin: 0.5rem 0; white-space: pre-wrap; }
+  .feedback-form, .answer-form { margin-top: 0.75rem; }
+  .feedback-form textarea, .answer-form textarea { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--gray-200); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical; min-height: 80px; }
+  .feedback-form textarea:focus, .answer-form textarea:focus { outline: none; border-color: var(--teal-bright); }
+  .status-pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 99px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em; }
+  .status-pending { background: #fef3c7; color: #92400e; }
+  .status-answered, .status-reviewed { background: #d1fae5; color: #065f46; }
+
+  .empty { text-align: center; padding: 3rem 2rem; color: var(--gray-600); }
+  .empty .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); display: none; z-index: 1000; }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="mentor-dashboard.html" class="brand" style="text-decoration:none;color:white;">
+      <div class="brand-icon">🩺</div>
+      <div class="brand-text"><strong>MD Scholars</strong><br><span>Mentor Portal</span></div>
+    </a>
+    <div class="topbar-right">
+      <span class="greeting" id="greeting">Welcome</span>
+      <button onclick="logout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero">
+      <h1 id="heroHeading">Mentor Dashboard</h1>
+      <p id="heroSubtitle">Loading your teams…</p>
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-tab="teams">My Teams</button>
+      <button data-tab="submissions">Submissions</button>
+      <button data-tab="questions">Questions</button>
+    </div>
+
+    <div class="panel active" id="panel-teams">
+      <div id="teamsContainer">
+        <div class="empty"><div class="icon">⏳</div><p>Loading…</p></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-submissions">
+      <div id="submissionsContainer" class="submissions-list">
+        <div class="empty"><div class="icon">⏳</div><p>Loading…</p></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-questions">
+      <div id="questionsContainer" class="questions-list">
+        <div class="empty"><div class="icon">⏳</div><p>Loading…</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.zJYG-NgNyTRk-IbE-jK0AwO0VfuNTwTaECiy1V4Lrkk';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let mentor = null;
+    let myTeams = [];           // [{id,name,session_name,team_doc_url,members:[{full_name,email}]}]
+    let memberProfileIds = [];  // student_profile_id list for filtering submissions/questions
+
+    function toast(msg, type) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast ' + (type || '');
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3500);
+    }
+
+    async function logout() {
+      await sb.auth.signOut();
+      window.location.href = 'mentor-login.html';
+    }
+
+    function escapeHtml(s) {
+      if (s == null) return '';
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[c]);
+    }
+
+    function fmtDate(s) {
+      if (!s) return '—';
+      try { return new Date(s).toLocaleString(); } catch { return s; }
+    }
+
+    async function loadMentor() {
+      const { data: sess } = await sb.auth.getSession();
+      if (!sess.session) { window.location.href = 'mentor-login.html'; return false; }
+      const { data: m, error } = await sb.from('mentors').select('id, full_name, email, specialty, status').eq('auth_user_id', sess.session.user.id).maybeSingle();
+      if (error || !m) {
+        await sb.auth.signOut();
+        window.location.href = 'mentor-login.html';
+        return false;
+      }
+      mentor = m;
+      document.getElementById('greeting').textContent = 'Hi, ' + (m.full_name || m.email).split(' ')[0];
+      document.getElementById('heroHeading').textContent = 'Welcome back, ' + m.full_name;
+      return true;
+    }
+
+    async function loadTeams() {
+      const { data: teams, error } = await sb.from('teams')
+        .select('id, name, session_id, team_doc_url, program_track, grade_band, sessions(name)')
+        .eq('mentor_id', mentor.id);
+      if (error) { document.getElementById('teamsContainer').innerHTML = '<div class="empty">Error loading teams.</div>'; return; }
+      if (!teams || teams.length === 0) {
+        document.getElementById('teamsContainer').innerHTML = '<div class="empty"><div class="icon">👥</div><p>No teams assigned yet. Dr. Munigala will assign teams from the admin panel.</p></div>';
+        document.getElementById('heroSubtitle').textContent = 'You currently have no teams assigned.';
+        return;
+      }
+
+      // Load members for each team
+      const teamIds = teams.map(t => t.id);
+      const { data: members } = await sb.from('team_members')
+        .select('team_id, student_profile_id, application_id, student_profiles(full_name, email, program_track)')
+        .in('team_id', teamIds);
+
+      // Group members by team
+      const byTeam = {};
+      memberProfileIds = [];
+      (members || []).forEach(m => {
+        if (!byTeam[m.team_id]) byTeam[m.team_id] = [];
+        byTeam[m.team_id].push(m);
+        if (m.student_profile_id) memberProfileIds.push(m.student_profile_id);
+      });
+
+      myTeams = teams.map(t => ({
+        ...t,
+        session_name: t.sessions ? t.sessions.name : '',
+        members: byTeam[t.id] || []
+      }));
+
+      document.getElementById('heroSubtitle').textContent = `You're mentoring ${teams.length} team${teams.length === 1 ? '' : 's'} (${memberProfileIds.length} student${memberProfileIds.length === 1 ? '' : 's'}).`;
+      renderTeams();
+    }
+
+    function renderTeams() {
+      const grid = document.createElement('div');
+      grid.className = 'teams-grid';
+      myTeams.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'team-card';
+        const memList = (t.members || []).map(m => {
+          const sp = m.student_profiles || {};
+          return `<li><span>${escapeHtml(sp.full_name || 'Student')}</span><small>${escapeHtml(sp.email || '')}</small></li>`;
+        }).join('');
+        card.innerHTML = `
+          <div class="session-tag">${escapeHtml(t.session_name)}${t.grade_band ? ' · ' + escapeHtml(t.grade_band) : ''}</div>
+          <h3>${escapeHtml(t.name)}</h3>
+          <div class="meta">${escapeHtml(t.program_track || '')} · ${(t.members || []).length} member${(t.members||[]).length===1?'':'s'}</div>
+          <ul>${memList || '<li><small>No students assigned yet.</small></li>'}</ul>
+          <div class="doc-row">
+            <input type="url" placeholder="Paste Google Doc URL" data-team-id="${t.id}" value="${escapeHtml(t.team_doc_url || '')}">
+            <button class="btn" onclick="saveTeamDoc('${t.id}', this.previousElementSibling.value)">Save</button>
+          </div>
+          ${t.team_doc_url ? `<a href="${escapeHtml(t.team_doc_url)}" target="_blank" class="btn btn-ghost" style="margin-top:0.5rem;display:inline-block;">Open team Doc →</a>` : ''}
+        `;
+        grid.appendChild(card);
+      });
+      const container = document.getElementById('teamsContainer');
+      container.innerHTML = '';
+      container.appendChild(grid);
+    }
+
+    async function saveTeamDoc(teamId, url) {
+      const trimmed = (url || '').trim();
+      const { error } = await sb.from('teams').update({ team_doc_url: trimmed || null }).eq('id', teamId);
+      if (error) { toast('Failed to save Doc URL: ' + error.message, 'error'); return; }
+      const t = myTeams.find(x => x.id === teamId); if (t) t.team_doc_url = trimmed || null;
+      toast('Team Doc URL saved', 'success');
+      renderTeams();
+    }
+
+    async function loadSubmissions() {
+      const container = document.getElementById('submissionsContainer');
+      if (!memberProfileIds.length) {
+        container.innerHTML = '<div class="empty"><div class="icon">📝</div><p>No team members yet — submissions will appear here.</p></div>';
+        return;
+      }
+      const { data, error } = await sb.from('assignment_submissions')
+        .select('id, student_profile_id, assignment_title, content, submitted_at, status, feedback, student_profiles(full_name, email)')
+        .in('student_profile_id', memberProfileIds)
+        .order('submitted_at', { ascending: false });
+      if (error) { container.innerHTML = '<div class="empty">Error: ' + escapeHtml(error.message) + '</div>'; return; }
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="empty"><div class="icon">📝</div><p>No submissions yet from your students.</p></div>';
+        return;
+      }
+      container.innerHTML = data.map(s => {
+        const sp = s.student_profiles || {};
+        return `
+          <div class="submission-row">
+            <h4>${escapeHtml(s.assignment_title || 'Submission')} <span class="status-pill ${s.status === 'reviewed' ? 'status-reviewed' : 'status-pending'}">${escapeHtml(s.status || 'pending')}</span></h4>
+            <div class="meta">From <strong>${escapeHtml(sp.full_name || 'Student')}</strong> · ${fmtDate(s.submitted_at)}</div>
+            <div class="content">${escapeHtml(s.content || '')}</div>
+            <div class="feedback-form">
+              <textarea id="fb-${s.id}" placeholder="Write feedback for the student…">${escapeHtml(s.feedback || '')}</textarea>
+              <div style="margin-top:0.5rem;display:flex;gap:0.5rem;">
+                <button class="btn" onclick="saveFeedback('${s.id}')">Save feedback &amp; mark reviewed</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function saveFeedback(id) {
+      const fb = document.getElementById('fb-' + id).value.trim();
+      const { error } = await sb.from('assignment_submissions').update({ feedback: fb, status: 'reviewed', reviewed_at: new Date().toISOString() }).eq('id', id);
+      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
+      toast('Feedback saved', 'success');
+      loadSubmissions();
+    }
+
+    async function loadQuestions() {
+      const container = document.getElementById('questionsContainer');
+      if (!memberProfileIds.length) {
+        container.innerHTML = '<div class="empty"><div class="icon">❓</div><p>No team members yet — questions will appear here.</p></div>';
+        return;
+      }
+      const { data, error } = await sb.from('student_questions')
+        .select('id, student_profile_id, question, answer, asked_at, answered_at, status, student_profiles(full_name, email)')
+        .in('student_profile_id', memberProfileIds)
+        .order('asked_at', { ascending: false });
+      if (error) { container.innerHTML = '<div class="empty">Error: ' + escapeHtml(error.message) + '</div>'; return; }
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div class="empty"><div class="icon">❓</div><p>No questions from your students yet.</p></div>';
+        return;
+      }
+      container.innerHTML = data.map(q => {
+        const sp = q.student_profiles || {};
+        return `
+          <div class="question-row">
+            <h4>Question from ${escapeHtml(sp.full_name || 'Student')} <span class="status-pill ${q.status === 'answered' ? 'status-answered' : 'status-pending'}">${escapeHtml(q.status || 'pending')}</span></h4>
+            <div class="meta">${fmtDate(q.asked_at)}</div>
+            <div class="content">${escapeHtml(q.question || '')}</div>
+            <div class="answer-form">
+              <textarea id="ans-${q.id}" placeholder="Write an answer…">${escapeHtml(q.answer || '')}</textarea>
+              <div style="margin-top:0.5rem;">
+                <button class="btn" onclick="saveAnswer('${q.id}')">Save answer</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function saveAnswer(id) {
+      const ans = document.getElementById('ans-' + id).value.trim();
+      const { error } = await sb.from('student_questions').update({ answer: ans, status: 'answered', answered_at: new Date().toISOString() }).eq('id', id);
+      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
+      toast('Answer posted', 'success');
+      loadQuestions();
+    }
+
+    function initTabs() {
+      document.querySelectorAll('.tabs button').forEach(b => {
+        b.addEventListener('click', () => {
+          document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+          document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+          document.getElementById('panel-' + b.dataset.tab).classList.add('active');
+          if (b.dataset.tab === 'submissions') loadSubmissions();
+          if (b.dataset.tab === 'questions') loadQuestions();
+        });
+      });
+    }
+
+    (async () => {
+      if (!(await loadMentor())) return;
+      initTabs();
+      await loadTeams();
+    })();
+  </script>
+</body>
+</html>
