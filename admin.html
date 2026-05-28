@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Force browsers to always re-validate this page so admin updates appear without a hard refresh. -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>MD Scholars Admin Panel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -254,6 +258,7 @@
           <div class="topbar-divider"></div>
           <div class="topbar-label">Admin Panel</div>
         </div>
+        <button class="logout-button" onclick="loadAllData()" style="margin-right:0.5rem;">↻ Refresh data</button>
         <button class="logout-button" onclick="handleLogout()">Logout</button>
       </div>
 
