@@ -269,8 +269,8 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'contacts')">✉️ Messages</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'inquiries')">🏫 Institutions</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'feedback')">⭐ Feedback</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'payments')">💰 Payments</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'settings')">⚙️ Settings</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'submissions')">📝 Submissions</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'questions')">💬 Q&amp;A</a>
           </div>
         </div>
 
@@ -484,21 +484,75 @@
           </div>
 
           <!-- PAYMENTS TAB -->
-          <div id="payments" class="content-section">
-            <h2 style="margin-bottom: 2rem;">Payment Tracking</h2>
-            <div class="coming-soon-card">
-              <h3>💰 Coming Soon</h3>
-              <p>Payment management and billing dashboard will be available once a payment processor (e.g. Stripe) is connected. You can track enrollment payment statuses per student in the Students tab in the meantime.</p>
+          <div id="submissions" class="content-section">
+            <div class="section-header">
+              <h2>Student Assignment Submissions</h2>
+              <div class="button-group">
+                <button class="btn-secondary" onclick="exportSubmissionsCSV()">📥 Export CSV</button>
+              </div>
             </div>
+            <div class="table-controls">
+              <div class="filters">
+                <select class="search-input" id="filterSubmissionStatus" onchange="renderSubmissionsTable()" style="max-width:180px;">
+                  <option value="">All statuses</option>
+                  <option value="submitted">Submitted</option>
+                  <option value="reviewed">Reviewed</option>
+                  <option value="needs_revision">Needs revision</option>
+                </select>
+                <input type="text" class="search-input" id="searchSubmissions" placeholder="Search by student name..." oninput="renderSubmissionsTable()">
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Track</th>
+                  <th>Week</th>
+                  <th>Words</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="submissions-tbody">
+                <tr><td colspan="7" class="empty-state">Loading submissions...</td></tr>
+              </tbody>
+            </table>
           </div>
 
-          <!-- SETTINGS TAB -->
-          <div id="settings" class="content-section">
-            <h2 style="margin-bottom: 2rem;">Settings</h2>
-            <div class="coming-soon-card">
-              <h3>⚙️ Coming Soon</h3>
-              <p>Admin settings, user management, and system configuration will be available here in a future update.</p>
+          <!-- Q&A TAB -->
+          <div id="questions" class="content-section">
+            <div class="section-header">
+              <h2>Student Questions</h2>
+              <div class="button-group">
+                <button class="btn-secondary" onclick="exportQuestionsCSV()">📥 Export CSV</button>
+              </div>
             </div>
+            <div class="table-controls">
+              <div class="filters">
+                <select class="search-input" id="filterQuestionStatus" onchange="renderQuestionsTable()" style="max-width:180px;">
+                  <option value="">All statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="answered">Answered</option>
+                </select>
+                <input type="text" class="search-input" id="searchQuestions" placeholder="Search by student or question..." oninput="renderQuestionsTable()">
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Track</th>
+                  <th>Question (preview)</th>
+                  <th>Asked</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="questions-tbody">
+                <tr><td colspan="6" class="empty-state">Loading questions...</td></tr>
+              </tbody>
+            </table>
           </div>
 
         </div><!-- end dashboard-content -->
@@ -552,6 +606,9 @@
     var allContacts     = [];
     var allInquiries    = [];
     var allFeedback     = [];
+    var allSubmissions  = [];
+    var allQuestions    = [];
+    var studentLookup   = {};
 
     /* ─── Login ─── */
     function initAdminListeners() {
@@ -611,6 +668,8 @@
       else if (tabName === 'contacts') { if (allContacts.length === 0) loadContacts(); else renderContactsTable(); }
       else if (tabName === 'inquiries') { if (allInquiries.length === 0) loadInquiries(); else renderInquiriesTable(); }
       else if (tabName === 'feedback') { if (allFeedback.length === 0) loadFeedback(); else renderFeedbackTable(); }
+      else if (tabName === 'submissions') { loadSubmissions(); }
+      else if (tabName === 'questions') { loadQuestions(); }
     }
 
     function goToTab(tabName) {
@@ -677,6 +736,192 @@
       } catch(err) {
         console.error('Error loading feedback:', err);
       }
+    }
+
+    async function loadStudentLookup() {
+      try {
+        var res = await getDB().from('student_profiles').select('id, full_name, email, program_track');
+        if (res.error) throw res.error;
+        studentLookup = {};
+        (res.data || []).forEach(function(s) { studentLookup[s.id] = s; });
+      } catch(err) { console.error('student lookup failed:', err); }
+    }
+
+    async function loadSubmissions() {
+      try {
+        if (Object.keys(studentLookup).length === 0) await loadStudentLookup();
+        var res = await getDB().from('assignment_submissions').select('*').order('submitted_at', { ascending: false });
+        if (res.error) throw res.error;
+        allSubmissions = res.data || [];
+        renderSubmissionsTable();
+      } catch(err) { console.error('Error loading submissions:', err); showToast('Error loading submissions', 'error'); }
+    }
+
+    async function loadQuestions() {
+      try {
+        if (Object.keys(studentLookup).length === 0) await loadStudentLookup();
+        var res = await getDB().from('student_questions').select('*').order('asked_at', { ascending: false });
+        if (res.error) throw res.error;
+        allQuestions = res.data || [];
+        renderQuestionsTable();
+      } catch(err) { console.error('Error loading questions:', err); showToast('Error loading questions', 'error'); }
+    }
+
+    function renderSubmissionsTable() {
+      var statusFilter = document.getElementById('filterSubmissionStatus') ? document.getElementById('filterSubmissionStatus').value : '';
+      var search = document.getElementById('searchSubmissions') ? document.getElementById('searchSubmissions').value.toLowerCase() : '';
+      var filtered = allSubmissions.filter(function(s) {
+        if (statusFilter && s.status !== statusFilter) return false;
+        if (search) {
+          var student = studentLookup[s.student_id];
+          var name = student ? (student.full_name || '').toLowerCase() : '';
+          if (name.indexOf(search) === -1) return false;
+        }
+        return true;
+      });
+      var tbody = document.getElementById('submissions-tbody');
+      if (!tbody) return;
+      if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No submissions found.</td></tr>'; return; }
+      tbody.innerHTML = filtered.map(function(s) {
+        var student = studentLookup[s.student_id] || {};
+        var statusBadge = '<span class="status-badge status-' + (s.status === 'reviewed' ? 'accepted' : (s.status === 'needs_revision' ? 'rejected' : 'pending')) + '">' + s.status.replace('_',' ') + '</span>';
+        return '<tr>' +
+          '<td><strong>' + escHtml(student.full_name || '—') + '</strong><br><small style="color:#999;">' + escHtml(student.email || '') + '</small></td>' +
+          '<td>' + escHtml(student.program_track || '—') + '</td>' +
+          '<td><strong>Week ' + s.week_number + '</strong></td>' +
+          '<td>' + (s.word_count || '—') + '</td>' +
+          '<td>' + (s.submitted_at ? new Date(s.submitted_at).toLocaleDateString() : '—') + '</td>' +
+          '<td>' + statusBadge + '</td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="viewSubmission(\'' + s.id + '\')">Review</button>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function viewSubmission(id) {
+      var s = allSubmissions.find(function(x){ return x.id === id; });
+      if (!s) return;
+      var student = studentLookup[s.student_id] || {};
+      document.getElementById('msgModalTitle').textContent = 'Submission from ' + (student.full_name || 'Student');
+      document.getElementById('msgModalBody').innerHTML =
+        '<div class="detail-grid">' +
+          dItem('Student', student.full_name) +
+          dItem('Email', student.email) +
+          dItem('Track', student.program_track) +
+          dItem('Week', 'Week ' + s.week_number) +
+          dItem('Word count', s.word_count) +
+          dItem('Submitted', s.submitted_at ? new Date(s.submitted_at).toLocaleString() : '—') +
+          dItem('Status', s.status) +
+        '</div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Student Submission</label>' +
+        '<div class="message-box" style="white-space:pre-wrap;">' + escHtml(s.content || '') + '</div></div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Mentor Feedback</label>' +
+        '<textarea id="feedbackInput" style="width:100%; min-height:120px; padding:0.75rem; border:1px solid #e2e8f0; border-radius:6px; font-family:inherit; font-size:0.95rem; margin-top:0.5rem;" placeholder="Write feedback for the student here...">' + escHtml(s.feedback || '') + '</textarea></div>';
+      document.getElementById('msgModalActions').innerHTML =
+        '<button class="btn-primary" onclick="saveSubmissionReview(\'' + s.id + '\', \'reviewed\')">Save &amp; Mark Reviewed</button>' +
+        '<button class="btn-secondary" onclick="saveSubmissionReview(\'' + s.id + '\', \'needs_revision\')">Save &amp; Request Revision</button>';
+      openModal('msgModal');
+    }
+
+    async function saveSubmissionReview(id, newStatus) {
+      var feedback = document.getElementById('feedbackInput').value.trim();
+      try {
+        var res = await getDB().from('assignment_submissions').update({ feedback: feedback, status: newStatus, reviewed_at: new Date().toISOString() }).eq('id', id);
+        if (res.error) throw res.error;
+        allSubmissions = allSubmissions.map(function(s){ return s.id === id ? Object.assign({}, s, { feedback: feedback, status: newStatus }) : s; });
+        renderSubmissionsTable();
+        closeModal('msgModal');
+        showToast('Feedback saved — status: ' + newStatus, 'success');
+      } catch(err) { console.error(err); showToast('Error saving feedback', 'error'); }
+    }
+
+    function renderQuestionsTable() {
+      var statusFilter = document.getElementById('filterQuestionStatus') ? document.getElementById('filterQuestionStatus').value : '';
+      var search = document.getElementById('searchQuestions') ? document.getElementById('searchQuestions').value.toLowerCase() : '';
+      var filtered = allQuestions.filter(function(q) {
+        if (statusFilter && q.status !== statusFilter) return false;
+        if (search) {
+          var student = studentLookup[q.student_id];
+          var name = student ? (student.full_name || '').toLowerCase() : '';
+          var qLower = (q.question || '').toLowerCase();
+          if (name.indexOf(search) === -1 && qLower.indexOf(search) === -1) return false;
+        }
+        return true;
+      });
+      var tbody = document.getElementById('questions-tbody');
+      if (!tbody) return;
+      if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No questions found.</td></tr>'; return; }
+      tbody.innerHTML = filtered.map(function(q) {
+        var student = studentLookup[q.student_id] || {};
+        var statusBadge = '<span class="status-badge status-' + (q.status === 'answered' ? 'accepted' : 'pending') + '">' + q.status + '</span>';
+        var preview = (q.question || '').slice(0, 120) + ((q.question || '').length > 120 ? '…' : '');
+        return '<tr>' +
+          '<td><strong>' + escHtml(student.full_name || '—') + '</strong><br><small style="color:#999;">' + escHtml(student.email || '') + '</small></td>' +
+          '<td>' + escHtml(student.program_track || '—') + '</td>' +
+          '<td>' + escHtml(preview) + '</td>' +
+          '<td>' + (q.asked_at ? new Date(q.asked_at).toLocaleDateString() : '—') + '</td>' +
+          '<td>' + statusBadge + '</td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm ' + (q.status === 'pending' ? 'success' : '') + '" onclick="viewQuestion(\'' + q.id + '\')">' + (q.status === 'pending' ? 'Answer' : 'View') + '</button>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function viewQuestion(id) {
+      var q = allQuestions.find(function(x){ return x.id === id; });
+      if (!q) return;
+      var student = studentLookup[q.student_id] || {};
+      document.getElementById('msgModalTitle').textContent = 'Question from ' + (student.full_name || 'Student');
+      document.getElementById('msgModalBody').innerHTML =
+        '<div class="detail-grid">' +
+          dItem('Student', student.full_name) +
+          dItem('Email', student.email) +
+          dItem('Track', student.program_track) +
+          dItem('Asked', q.asked_at ? new Date(q.asked_at).toLocaleString() : '—') +
+          dItem('Status', q.status) +
+        '</div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Question</label>' +
+        '<div class="message-box" style="white-space:pre-wrap;">' + escHtml(q.question || '') + '</div></div>' +
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Your Answer</label>' +
+        '<textarea id="answerInput" style="width:100%; min-height:140px; padding:0.75rem; border:1px solid #e2e8f0; border-radius:6px; font-family:inherit; font-size:0.95rem; margin-top:0.5rem;" placeholder="Write your answer to the student here...">' + escHtml(q.answer || '') + '</textarea></div>';
+      document.getElementById('msgModalActions').innerHTML =
+        '<button class="btn-primary" onclick="saveQuestionAnswer(\'' + q.id + '\')">Save Answer &amp; Mark Answered</button>';
+      openModal('msgModal');
+    }
+
+    async function saveQuestionAnswer(id) {
+      var answer = document.getElementById('answerInput').value.trim();
+      if (!answer) { showToast('Please write an answer first', 'error'); return; }
+      try {
+        var res = await getDB().from('student_questions').update({ answer: answer, status: 'answered', answered_at: new Date().toISOString() }).eq('id', id);
+        if (res.error) throw res.error;
+        allQuestions = allQuestions.map(function(q){ return q.id === id ? Object.assign({}, q, { answer: answer, status: 'answered' }) : q; });
+        renderQuestionsTable();
+        closeModal('msgModal');
+        showToast('Answer saved — student can now see it in their portal', 'success');
+      } catch(err) { console.error(err); showToast('Error saving answer', 'error'); }
+    }
+
+    function exportSubmissionsCSV() {
+      if (allSubmissions.length === 0) { showToast('No submissions to export', 'error'); return; }
+      var headers = ['Student','Email','Track','Week','Word Count','Status','Content','Feedback','Submitted'];
+      var rows = [headers].concat(allSubmissions.map(function(s) {
+        var st = studentLookup[s.student_id] || {};
+        return [st.full_name, st.email, st.program_track, s.week_number, s.word_count, s.status, s.content, s.feedback, s.submitted_at];
+      }));
+      downloadCSV(rows, 'mdscholars-submissions.csv');
+    }
+
+    function exportQuestionsCSV() {
+      if (allQuestions.length === 0) { showToast('No questions to export', 'error'); return; }
+      var headers = ['Student','Email','Track','Question','Answer','Status','Asked','Answered'];
+      var rows = [headers].concat(allQuestions.map(function(q) {
+        var st = studentLookup[q.student_id] || {};
+        return [st.full_name, st.email, st.program_track, q.question, q.answer, q.status, q.asked_at, q.answered_at];
+      }));
+      downloadCSV(rows, 'mdscholars-questions.csv');
     }
 
     /* ─── Dashboard Stats ─── */
@@ -821,39 +1066,48 @@
       }
       tbody.innerHTML = students.map(function(app) {
         var date = app.created_at ? new Date(app.created_at).toLocaleDateString() : '—';
-        var paidLabel = app.payment_status === 'paid' ? 'Paid' : 'Pending';
-        var paidClass = app.payment_status === 'paid' ? 'status-enrolled' : 'status-due';
-        var markBtn = app.payment_status === 'paid'
-          ? '<button class="btn-sm warning" onclick="togglePaymentStatus(\'' + app.id + '\',\'paid\')">Mark Unpaid</button>'
-          : '<button class="btn-sm success" onclick="togglePaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Paid</button>';
+        var status = app.payment_status || 'unpaid';
+        var labels = { paid: 'Paid', unpaid: 'Unpaid', free: 'Free enrollment' };
+        var classes = { paid: 'status-enrolled', unpaid: 'status-due', free: 'status-accepted' };
+        var label = labels[status] || status;
+        var cls = classes[status] || 'status-due';
+        var actions = '';
+        if (status !== 'paid') actions += '<button class="btn-sm success" onclick="setPaymentStatus(\'' + app.id + '\',\'paid\')">Mark Paid</button>';
+        if (status !== 'unpaid') actions += '<button class="btn-sm warning" onclick="setPaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Unpaid</button>';
+        if (status !== 'free') actions += '<button class="btn-sm" style="background:#ddd6fe;color:#5b21b6;border-color:#c4b5fd;" onclick="setPaymentStatus(\'' + app.id + '\',\'free\')">Mark Free</button>';
         return '<tr>' +
           '<td><strong>' + escHtml(app.first_name) + ' ' + escHtml(app.last_name) + '</strong><br><small style="color:#999;">' + escHtml(app.email||'') + '</small></td>' +
           '<td>' + escHtml(app.program_track||'—') + '</td>' +
           '<td>' + date + '</td>' +
-          '<td><span class="status-badge ' + paidClass + '">' + paidLabel + '</span></td>' +
+          '<td><span class="status-badge ' + cls + '">' + label + '</span></td>' +
           '<td><div class="action-buttons">' +
             '<button class="btn-sm" onclick="viewApplication(\'' + app.id + '\')">View</button>' +
-            markBtn +
+            actions +
           '</div></td>' +
         '</tr>';
       }).join('');
     }
 
-    async function togglePaymentStatus(appId, current) {
-      var newStatus = current === 'paid' ? 'unpaid' : 'paid';
+    async function setPaymentStatus(appId, newStatus) {
       try {
+        // Update applications.payment_status
         var res = await getDB().from('applications').update({ payment_status: newStatus }).eq('id', appId);
         if (res.error) throw res.error;
+        // Also keep student_profiles.fee_status in sync if a student profile exists
+        await getDB().from('student_profiles').update({ fee_status: newStatus }).eq('application_id', appId);
         allApplications = allApplications.map(function(a) {
           return a.id === appId ? Object.assign({}, a, { payment_status: newStatus }) : a;
         });
         renderStudentsTable();
-        showToast('Payment status updated to ' + newStatus, 'success');
+        var label = newStatus === 'free' ? 'free enrollment' : newStatus;
+        showToast('Payment status updated to ' + label, 'success');
       } catch(err) {
         console.error(err);
         showToast('Error updating payment status', 'error');
       }
     }
+    // Back-compat alias for any cached pages still referencing the old name
+    var togglePaymentStatus = setPaymentStatus;
 
     /* ─── Contacts Table ─── */
     function renderContactsTable() {
