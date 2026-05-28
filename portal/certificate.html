@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate of Completion — MD Scholars</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'DM Sans', sans-serif; background:#1a1d2b; color:#0f172a; min-height:100vh; padding:32px 16px; }
+
+  .page-header { max-width: 1120px; margin: 0 auto 24px; display:flex; justify-content:space-between; align-items:center; color:#f8f5ef; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size:1.5rem; }
+  .actions { display:flex; gap:10px; }
+  .btn { background:#14b8a6; color:#001F3F; padding:0.7rem 1.4rem; border:0; border-radius:8px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.92rem; text-decoration:none; display:inline-block; }
+  .btn.ghost { background:transparent; color:#f8f5ef; border:1px solid rgba(255,255,255,0.25); }
+  .btn:hover { background:#0d9488; color:#fff; }
+
+  /* Certificate frame */
+  .cert-wrap { max-width: 1120px; margin: 0 auto; }
+  .cert {
+    position:relative;
+    width: 100%;
+    aspect-ratio: 1.414 / 1;   /* A4 landscape */
+    background:
+      radial-gradient(ellipse 60% 70% at 50% 50%, rgba(20,184,166,0.06), transparent 70%),
+      linear-gradient(135deg, #fdfbf6 0%, #f8f5ef 100%);
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    overflow:hidden;
+    color:#0f172a;
+  }
+  /* Decorative outer border */
+  .cert::before {
+    content:''; position:absolute; inset:18px;
+    border: 1.5px solid #c9a84c;
+    border-radius: 4px;
+    pointer-events:none;
+  }
+  .cert::after {
+    content:''; position:absolute; inset:28px;
+    border: 0.5px solid rgba(201,168,76,0.4);
+    border-radius: 2px;
+    pointer-events:none;
+  }
+  /* Corner accents */
+  .corner { position:absolute; width:90px; height:90px; pointer-events:none; opacity:0.5; }
+  .corner svg { width:100%; height:100%; }
+  .corner.tl { top: 30px; left: 30px; }
+  .corner.tr { top: 30px; right: 30px; transform: scaleX(-1); }
+  .corner.bl { bottom: 30px; left: 30px; transform: scaleY(-1); }
+  .corner.br { bottom: 30px; right: 30px; transform: scale(-1, -1); }
+
+  .cert-inner { position:absolute; inset:60px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding: 1rem 2rem; }
+
+  .cert-top { text-align:center; }
+  .cert-logo { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:10px; }
+  .cert-logo-mark { width:56px; height:56px; border-radius:12px; background: linear-gradient(135deg, #001F3F, #0d9488); display:flex; align-items:center; justify-content:center; color:#fff; font-size:24px; }
+  .cert-logo-text { font-family:'Playfair Display', serif; font-size:1.4rem; font-weight:800; color:#001F3F; letter-spacing:0.02em; }
+  .cert-logo-sub { font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; color:#0d9488; margin-top:2px; }
+
+  .cert-title { font-family:'Playfair Display', serif; font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight:700; color:#001F3F; margin-top: 14px; letter-spacing: 0.04em; }
+  .cert-flourish { width:120px; height:8px; margin: 8px auto 0; opacity:0.7; }
+
+  .cert-presented { font-size:0.82rem; color:#475569; letter-spacing:0.22em; text-transform:uppercase; }
+
+  .cert-name { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-style: italic; font-weight:600; font-size: clamp(2.2rem, 5vw, 3.6rem); color:#0d9488; margin: 6px 0 4px; line-height:1.1; }
+  .cert-name-underline { width: 60%; max-width:560px; height:1px; background:linear-gradient(to right, transparent, #c9a84c, transparent); margin: 0 auto; }
+
+  .cert-body { text-align:center; max-width: 720px; font-size: 0.98rem; color:#334155; line-height:1.7; margin-top: 12px; }
+  .cert-body strong { color:#001F3F; }
+
+  .cert-bottom { width:100%; display:grid; grid-template-columns: 1fr 1fr 1fr; align-items:end; gap:2rem; margin-top:1rem; }
+  .sig-block { text-align:center; }
+  .sig-line { border-top: 1px solid #001F3F; padding-top:6px; font-family:'Playfair Display', serif; font-weight:700; color:#001F3F; font-size:0.95rem; }
+  .sig-role { font-size:0.72rem; color:#64748b; letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
+
+  .seal {
+    position:relative; width:110px; height:110px; margin:0 auto;
+    border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fef9d7, #c9a84c 70%, #8b6f1f);
+    box-shadow: 0 6px 18px rgba(139,111,31,0.35);
+    display:flex; align-items:center; justify-content:center;
+    color:#3a2a06;
+    font-family:'Playfair Display', serif; font-weight:800;
+    text-align:center;
+  }
+  .seal::after { content:''; position:absolute; inset:8px; border-radius:50%; border:1.5px dashed rgba(58,42,6,0.5); }
+  .seal-inner { font-size:0.7rem; line-height:1.15; padding: 0 8px; }
+  .seal-inner span { display:block; font-size:1.1rem; margin-top:2px; }
+
+  .cert-meta { text-align:right; font-size:0.78rem; color:#475569; line-height:1.5; }
+  .cert-meta strong { color:#001F3F; font-family:'DM Sans',sans-serif; }
+  .cert-meta .verify-line { margin-top:10px; padding-top:6px; border-top: 1px solid rgba(0,31,63,0.15); }
+
+  .cert-id-chip { display:inline-block; background:#001F3F; color:#fff; padding:3px 10px; border-radius:100px; font-size:0.7rem; font-family:'DM Sans',sans-serif; letter-spacing:0.08em; }
+
+  .loading, .error-msg {
+    background:#fff; border-radius:12px; padding:3rem; text-align:center;
+    max-width: 520px; margin: 80px auto; box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .error-msg h2 { font-family:'Playfair Display', serif; color:#001F3F; margin-bottom:0.5rem; font-size:1.4rem; }
+  .error-msg p { color:#64748b; line-height:1.6; }
+  .error-msg .code { display:inline-block; background:#f8f5ef; padding:6px 12px; border-radius:6px; font-family:monospace; font-size:0.85rem; margin-top:1rem; }
+
+  @media print {
+    body { background:#fff; padding:0; }
+    .page-header, .no-print { display:none !important; }
+    .cert { box-shadow:none; border-radius:0; }
+    .cert-wrap { max-width:none; margin:0; }
+    @page { size: A4 landscape; margin: 0; }
+  }
+
+  @media (max-width: 820px) {
+    .cert-name { font-size: 2.2rem; }
+    .cert-bottom { grid-template-columns: 1fr; gap:1.5rem; }
+    .cert-meta { text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header no-print">
+  <h1 style="font-size:1.1rem;">Certificate Preview</h1>
+  <div class="actions">
+    <a href="dashboard.html" class="btn ghost">← Back to Dashboard</a>
+    <button class="btn" id="downloadBtn" onclick="window.print()">Save / Print as PDF</button>
+  </div>
+</div>
+
+<div class="cert-wrap">
+  <div id="content">
+    <div class="loading">Loading certificate…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.zJYG-NgNyTRk-IbE-jK0AwO0VfuNTwTaECiy1V4Lrkk';
+  var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  var TRACK_LABELS = {
+    'future-physician': 'Future Physician Scholars (High School)',
+    'pre-med': 'Pre-Med Research Scholars (College)',
+    'med-accelerator': 'Medical Student Accelerator',
+    'resident-accelerator': 'Resident & Fellow Accelerator',
+    '12month': '12-Month Research Track',
+    'institutional': 'Institutional Program'
+  };
+
+  function param(name) {
+    var m = new URLSearchParams(location.search).get(name);
+    return m ? m.trim() : '';
+  }
+
+  function fmtDate(s) {
+    try {
+      var d = new Date(s);
+      if (isNaN(d.getTime())) return s;
+      return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    } catch (e) { return s; }
+  }
+
+  function renderError(msg, code) {
+    document.getElementById('content').innerHTML =
+      '<div class="error-msg">' +
+        '<h2>Certificate Not Available</h2>' +
+        '<p>' + msg + '</p>' +
+        (code ? '<div class="code">Code: ' + code + '</div>' : '') +
+        '<p style="margin-top:1.5rem;font-size:0.85rem;">If you believe this is an error, please contact <a href="mailto:contact@mdscholars.com" style="color:#0d9488;">contact@mdscholars.com</a>.</p>' +
+      '</div>';
+  }
+
+  function cornerSVG() {
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M5 5 L40 5 M5 5 L5 40 M5 5 Q25 25 45 45" stroke="#c9a84c" stroke-width="1.2" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="5" cy="5" r="2" fill="#c9a84c"/>' +
+      '<path d="M15 15 Q25 20 35 20 M15 15 Q20 25 20 35" stroke="#c9a84c" stroke-width="0.8" fill="none" opacity="0.6"/>' +
+    '</svg>';
+  }
+
+  function flourishSVG() {
+    return '<svg viewBox="0 0 120 8" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M0 4 Q30 0 60 4 Q90 8 120 4" stroke="#c9a84c" stroke-width="1" fill="none"/>' +
+      '<circle cx="60" cy="4" r="2" fill="#c9a84c"/>' +
+    '</svg>';
+  }
+
+  function renderCertificate(c) {
+    var trackLabel = TRACK_LABELS[c.program_track] || c.program_track || '';
+    var html =
+      '<div class="cert">' +
+        '<div class="corner tl">' + cornerSVG() + '</div>' +
+        '<div class="corner tr">' + cornerSVG() + '</div>' +
+        '<div class="corner bl">' + cornerSVG() + '</div>' +
+        '<div class="corner br">' + cornerSVG() + '</div>' +
+        '<div class="cert-inner">' +
+          '<div class="cert-top">' +
+            '<div class="cert-logo">' +
+              '<div class="cert-logo-mark">⚕️</div>' +
+              '<div>' +
+                '<div class="cert-logo-text">MD Scholars</div>' +
+                '<div class="cert-logo-sub">Research Mentorship</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="cert-title">Certificate of Completion</div>' +
+            '<div class="cert-flourish">' + flourishSVG() + '</div>' +
+          '</div>' +
+
+          '<div style="text-align:center;">' +
+            '<div class="cert-presented">This Certifies That</div>' +
+            '<div class="cert-name">' + escapeHtml(c.recipient_name) + '</div>' +
+            '<div class="cert-name-underline"></div>' +
+            '<div class="cert-body">' +
+              'has successfully completed the <strong>' + escapeHtml(trackLabel) + '</strong> ' +
+              'of the MD Scholars Research Mentorship Program' +
+              (c.cohort_label ? ' &mdash; <strong>' + escapeHtml(c.cohort_label) + '</strong>' : '') +
+              ', demonstrating proficiency in research methodology, scientific writing, and the responsible conduct of medical inquiry under the guidance of physician faculty mentors.' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="cert-bottom">' +
+            '<div class="sig-block">' +
+              '<div style="height:42px; display:flex; align-items:end; justify-content:center;">' +
+                '<span style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:#001F3F;">Satish Munigala</span>' +
+              '</div>' +
+              '<div class="sig-line">Dr. Satish Munigala, MD, MPH</div>' +
+              '<div class="sig-role">Founder &amp; Program Director</div>' +
+            '</div>' +
+            '<div class="sig-block">' +
+              '<div class="seal">' +
+                '<div class="seal-inner">MD<span>SCHOLARS</span><div style="font-size:0.55rem;font-weight:600;margin-top:2px;letter-spacing:0.1em;">SEAL</div></div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="cert-meta">' +
+              '<div><strong>Issued:</strong> ' + fmtDate(c.completion_date || c.issued_at) + '</div>' +
+              '<div><strong>Recipient:</strong> ' + escapeHtml(c.recipient_name) + '</div>' +
+              '<div class="verify-line">' +
+                '<span class="cert-id-chip">ID: ' + escapeHtml(c.cert_id) + '</span>' +
+              '</div>' +
+              '<div style="margin-top:6px;font-size:0.72rem;">Verify authenticity at<br><strong>mdscholars.com/verify.html</strong></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('content').innerHTML = html;
+    document.title = 'Certificate — ' + c.recipient_name + ' (' + c.cert_id + ')';
+  }
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, function(ch) {
+      return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+    });
+  }
+
+  async function load() {
+    var code = param('id') || param('code') || param('cert');
+    if (!code) {
+      renderError('No certificate code provided in URL.', null);
+      return;
+    }
+    code = code.toUpperCase();
+    try {
+      var res = await db.from('certificates').select('*').eq('cert_id', code).eq('status', 'active').maybeSingle();
+      if (res.error) { renderError('Unable to look up this certificate. Please try again later.', code); return; }
+      if (!res.data) { renderError('No active certificate found with this ID. The certificate may have been revoked or the ID may be incorrect.', code); return; }
+      renderCertificate(res.data);
+    } catch (err) {
+      renderError('An unexpected error occurred while loading this certificate.', code);
+    }
+  }
+  load();
+</script>
+</body>
+</html>
