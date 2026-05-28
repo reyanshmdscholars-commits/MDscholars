@@ -1075,6 +1075,7 @@
         if (status !== 'paid') actions += '<button class="btn-sm success" onclick="setPaymentStatus(\'' + app.id + '\',\'paid\')">Mark Paid</button>';
         if (status !== 'unpaid') actions += '<button class="btn-sm warning" onclick="setPaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Unpaid</button>';
         if (status !== 'free') actions += '<button class="btn-sm" style="background:#ddd6fe;color:#5b21b6;border-color:#c4b5fd;" onclick="setPaymentStatus(\'' + app.id + '\',\'free\')">Mark Free</button>';
+        actions += '<button class="btn-sm" style="background:#fef3c7;color:#92400e;border-color:#fcd34d;" onclick="issueCertificate(\'' + app.id + '\')">Issue Certificate</button>';
         return '<tr>' +
           '<td><strong>' + escHtml(app.first_name) + ' ' + escHtml(app.last_name) + '</strong><br><small style="color:#999;">' + escHtml(app.email||'') + '</small></td>' +
           '<td>' + escHtml(app.program_track||'—') + '</td>' +
@@ -1090,6 +1091,7 @@
 
     async function setPaymentStatus(appId, newStatus) {
       try {
+        var prev = (allApplications.find(function(a){return a.id===appId;}) || {}).payment_status;
         // Update applications.payment_status
         var res = await getDB().from('applications').update({ payment_status: newStatus }).eq('id', appId);
         if (res.error) throw res.error;
@@ -1101,6 +1103,18 @@
         renderStudentsTable();
         var label = newStatus === 'free' ? 'free enrollment' : newStatus;
         showToast('Payment status updated to ' + label, 'success');
+        // Trigger payment-confirmation email when transitioning to 'paid' (and not already paid)
+        if (newStatus === 'paid' && prev !== 'paid') {
+          try {
+            var app = allApplications.find(function(a){return a.id===appId;}) || {};
+            await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-payment-confirmation', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ record: app })
+            });
+            showToast('Payment confirmation email sent', 'success');
+          } catch (e) { console.warn('payment email failed', e); }
+        }
       } catch(err) {
         console.error(err);
         showToast('Error updating payment status', 'error');
@@ -1108,6 +1122,65 @@
     }
     // Back-compat alias for any cached pages still referencing the old name
     var togglePaymentStatus = setPaymentStatus;
+
+    /* ─── Issue Certificate ─── */
+    async function issueCertificate(appId) {
+      try {
+        var app = allApplications.find(function(a){return a.id===appId;});
+        if (!app) { showToast('Application not found', 'error'); return; }
+        var name = (app.first_name||'') + ' ' + (app.last_name||'');
+        name = name.trim();
+        var confirmed = confirm('Issue a Certificate of Completion for ' + name + ' (' + (app.program_track||'') + ')?\n\nThe certificate will be saved to the public verification database and emailed to the student.');
+        if (!confirmed) return;
+
+        // Check whether a profile exists for this application
+        var profileRes = await getDB().from('student_profiles').select('id').eq('application_id', appId).maybeSingle();
+        var studentProfileId = profileRes && profileRes.data ? profileRes.data.id : null;
+
+        // Generate the next cert_id using the RPC
+        var yr = new Date().getFullYear();
+        var rpc = await getDB().rpc('next_cert_id', { track: app.program_track || 'future-physician', yr: yr });
+        if (rpc.error) throw rpc.error;
+        var certId = rpc.data;
+        var trackLabels = {
+          'future-physician': 'Future Physician Scholars (High School)',
+          'pre-med': 'Pre-Med Research Scholars (College)',
+          'med-accelerator': 'Medical Student Accelerator',
+          'resident-accelerator': 'Resident & Fellow Accelerator',
+          '12month': '12-Month Research Track',
+          'institutional': 'Institutional Program'
+        };
+        var cohortLabel = (trackLabels[app.program_track] || app.program_track || 'Program') + ' — ' + yr + ' Cohort';
+        var insert = await getDB().from('certificates').insert({
+          cert_id: certId,
+          student_profile_id: studentProfileId,
+          application_id: appId,
+          recipient_name: name,
+          program_track: app.program_track,
+          cohort_label: cohortLabel,
+          completion_date: new Date().toISOString().slice(0,10),
+          status: 'active'
+        }).select().single();
+        if (insert.error) throw insert.error;
+
+        showToast('Certificate ' + certId + ' issued', 'success');
+
+        // Fire-and-forget email via Edge Function
+        try {
+          await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-certificate-issued', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ record: insert.data, application: app })
+          });
+        } catch (e) { console.warn('certificate email failed', e); }
+
+        // Open the certificate in a new tab
+        window.open('portal/certificate.html?id=' + encodeURIComponent(certId), '_blank');
+      } catch(err) {
+        console.error(err);
+        showToast('Error issuing certificate: ' + (err.message || err), 'error');
+      }
+    }
 
     /* ─── Contacts Table ─── */
     function renderContactsTable() {

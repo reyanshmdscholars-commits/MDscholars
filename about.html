@@ -87,6 +87,34 @@
   .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
   .tag { font-size: 0.78rem; padding: 0.35rem 0.9rem; background: rgba(19,78,74,0.08); border: 1px solid rgba(19,78,74,0.15); border-radius: 100px; color: var(--teal); font-weight: 500; }
 
+  /* INTRO VIDEOS */
+  .videos-section { background: var(--white); padding: 90px 0; }
+  .videos-section .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--navy); margin-bottom: 0.75rem; }
+  .videos-section .section-title em { font-style: italic; color: var(--teal); }
+  .videos-section .section-sub { color: var(--gray-600); font-size: 1rem; line-height: 1.7; max-width: 720px; margin-bottom: 2.5rem; }
+  .videos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; margin-top: 1.5rem; }
+  .video-card { background: var(--white); border-radius: 16px; overflow: hidden; border: 1px solid var(--gray-200); transition: all 0.25s; box-shadow: 0 4px 18px rgba(0,31,63,0.04); }
+  .video-card:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,31,63,0.1); border-color: rgba(13,148,136,0.25); }
+  .video-thumb { position: relative; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--navy), var(--teal)); overflow: hidden; }
+  .video-thumb iframe, .video-thumb video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .video-thumb-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.85); text-align: center; padding: 1.5rem; }
+  .video-thumb-placeholder .play-circle { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .video-thumb-placeholder small { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 0.25rem; }
+  .video-meta { padding: 1.25rem 1.5rem 1.5rem; }
+  .video-meta h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--navy); margin-bottom: 0.3rem; }
+  .video-meta .role { font-size: 0.75rem; color: var(--teal); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+  .video-meta p { font-size: 0.88rem; color: var(--gray-600); line-height: 1.55; }
+  .videos-featured { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; margin-bottom: 3rem; align-items: stretch; }
+  .videos-featured .video-card .video-thumb { aspect-ratio: auto; height: 100%; min-height: 320px; }
+  .videos-featured .featured-text { display: flex; flex-direction: column; justify-content: center; }
+  .videos-featured .featured-text .label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
+  .videos-featured .featured-text h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 0.85rem; line-height: 1.25; }
+  .videos-featured .featured-text p { color: var(--gray-600); font-size: 0.95rem; line-height: 1.7; }
+  @media (max-width: 900px) {
+    .videos-featured { grid-template-columns: 1fr; }
+    .videos-featured .video-card .video-thumb { min-height: 220px; }
+  }
+
   /* TEAM */
   .team-section { background: var(--cream); }
   .team-subhead { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); margin: 3.5rem 0 0.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gray-200); position: relative; }
@@ -249,6 +277,136 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- INTRO VIDEOS -->
+<section class="videos-section" id="videos">
+  <div class="container">
+    <div class="section-label dark">Meet Us in Person</div>
+    <h2 class="section-title">Introduction Videos from <em>Faculty &amp; Scholars</em></h2>
+    <p class="section-sub">Hear directly from our founder, faculty mentors, parents, student ambassadors, and program alumni about what makes the MD Scholars experience meaningful — and what you can expect when you join.</p>
+
+    <!-- FEATURED: Founder intro -->
+    <div class="videos-featured">
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="founder">
+          <!-- Replace this placeholder with a YouTube/Vimeo embed once the video is recorded.
+               Example: <iframe src="https://www.youtube.com/embed/XXXX" title="Founder Welcome" allowfullscreen></iframe>
+               Or a self-hosted video: <video controls poster="/portal/posters/founder.jpg" src="/portal/videos/founder-welcome.mp4"></video> -->
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:1rem;">A Welcome Message</strong>
+            <small>From Dr. Satish Munigala</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Dr. Satish Munigala, MD, MPH</h4>
+          <div class="role">Founder &amp; Program Director</div>
+          <p>Why MD Scholars exists, who it's for, and what we believe great physician-mentorship looks like.</p>
+        </div>
+      </div>
+      <div class="featured-text">
+        <div class="label">Founder Welcome</div>
+        <h3>Hear directly from <em style="font-style:italic;color:var(--teal);">Dr. Satish Munigala</em></h3>
+        <p>Dr. Munigala built MD Scholars to give serious students at every stage — high school through fellowship — the mentorship he wishes he'd had when he was learning to do real research. Watch his short welcome to understand the program's mission and what your year with us will look like.</p>
+      </div>
+    </div>
+
+    <!-- VIDEO GRID: Faculty, Mentors, Ambassadors, Alumni -->
+    <h3 class="team-subhead" style="margin-top:1rem;">Faculty &amp; Instructor Voices</h3>
+    <div class="videos-grid">
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="faculty-1">
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:0.95rem;">Faculty Mentor</strong>
+            <small>Intro &amp; Research Focus</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Faculty Mentor — Slot 1</h4>
+          <div class="role">Course Instructor</div>
+          <p>What I look for in a serious research mentee and the kind of work we'll do together.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="faculty-2">
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:0.95rem;">Faculty Mentor</strong>
+            <small>Intro &amp; Research Focus</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Faculty Mentor — Slot 2</h4>
+          <div class="role">Course Instructor</div>
+          <p>How I approach mentoring, project scoping, and giving feedback on student writing.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="faculty-3">
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:0.95rem;">Research Advisor</strong>
+            <small>Intro &amp; Research Focus</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Research Advisor — Slot 3</h4>
+          <div class="role">Research Advisor</div>
+          <p>What methodological rigor looks like in our program and how we teach study design.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="team-subhead">Parents, Ambassadors &amp; Alumni</h3>
+    <div class="videos-grid">
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="parent-1">
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:0.95rem;">Parent</strong>
+            <small>Family Perspective</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Parent of a 2025 Scholar</h4>
+          <div class="role">Family Voice</div>
+          <p>What it was like to watch their student grow over the program year.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="ambassador-1">
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:0.95rem;">Student Ambassador</strong>
+            <small>Day in the Life</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Reyansh Gupta</h4>
+          <div class="role">Student Ambassador</div>
+          <p>A current scholar's honest take on workload, expectations, and the cohort experience.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" data-video-id="alumni-1">
+          <div class="video-thumb-placeholder">
+            <div class="play-circle">▶</div>
+            <strong style="font-size:0.95rem;">Program Alum</strong>
+            <small>One Year Later</small>
+          </div>
+        </div>
+        <div class="video-meta">
+          <h4>Program Alum</h4>
+          <div class="role">Past Scholar</div>
+          <p>Where their MD Scholars project led — publications, conferences, and what came next.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:2rem;font-size:0.85rem;color:var(--gray-400);max-width:720px;">Video slots are placeholders during early launch. Each card supports a YouTube/Vimeo embed or a self-hosted MP4. Final videos will be added as the team records intros — admins can swap embed URLs via the dashboard once configured.</p>
   </div>
 </section>
 

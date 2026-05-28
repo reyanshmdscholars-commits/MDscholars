@@ -651,34 +651,99 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script>
+        var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.zJYG-NgNyTRk-IbE-jK0AwO0VfuNTwTaECiy1V4Lrkk';
+        var TRACK_LABELS = {
+            'future-physician': 'Future Physician Scholars (High School)',
+            'pre-med': 'Pre-Med Research Scholars (College)',
+            'med-accelerator': 'Medical Student Accelerator',
+            'resident-accelerator': 'Resident & Fellow Accelerator',
+            '12month': '12-Month Research Track',
+            'institutional': 'Institutional Program'
+        };
+        var _vdb = null;
+        function vdb() {
+            if (!_vdb) _vdb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return _vdb;
+        }
+        function fmtDate(s) {
+            try {
+                var d = new Date(s);
+                if (isNaN(d.getTime())) return s;
+                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch (e) { return s; }
+        }
+        function esc(s) {
+            if (s == null) return '';
+            return String(s).replace(/[&<>"']/g, function(ch) {
+                return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[ch];
+            });
+        }
         function initVerifyListener() {
-            const form = document.getElementById('verifyForm');
-            const result = document.getElementById('verifyResult');
+            var form = document.getElementById('verifyForm');
+            var result = document.getElementById('verifyResult');
             if (!form || !result) return;
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const id = (document.getElementById('cert-id').value || '').trim().toUpperCase();
-                const trackMap = { HS: 'High School', PM: 'Pre-Med', MS: 'Medical Student', RF: 'Resident/Fellow' };
-                const match = id.match(/^MDS-(\d{4})-(HS|PM|MS|RF)-(\d{3,})$/);
+                var id = (document.getElementById('cert-id').value || '').trim().toUpperCase();
+                if (!id) return;
+                // Format pre-check (kept friendly)
+                var match = id.match(/^MDS-(\d{4})-([A-Z]{2})-(\d{3,})$/);
                 if (!match) {
                     result.style.borderColor = '#ef4444';
                     result.style.color = '#ef4444';
                     result.innerHTML = '<strong>Invalid Certificate ID format.</strong><br><span style="font-size:0.9rem;">Expected format: MDS-YYYY-XX-NNN (e.g. MDS-2026-HS-001)</span>';
                     return;
                 }
-                const [, year, track, num] = match;
-                result.style.borderColor = '#14b8a6';
-                result.style.color = '#001F3F';
-                result.innerHTML =
-                    '<div style="text-align:left;">' +
-                    '<p style="color:#14b8a6;font-weight:600;margin-bottom:0.75rem;">✓ Certificate ID format is valid.</p>' +
-                    '<p style="margin-bottom:0.5rem;"><strong>Year:</strong> ' + year + '</p>' +
-                    '<p style="margin-bottom:0.5rem;"><strong>Track:</strong> ' + (trackMap[track] || track) + '</p>' +
-                    '<p style="margin-bottom:0.5rem;"><strong>Certificate Number:</strong> ' + num + '</p>' +
-                    '<p style="margin-top:1rem;font-size:0.9rem;color:#666;">For full verification and confirmation of holder name, please email <a href="mailto:contact@mdscholars.com" style="color:#14b8a6;">contact@mdscholars.com</a> with this certificate ID.</p>' +
-                    '</div>';
+                result.style.borderColor = '#cbd5e1';
+                result.style.color = '#475569';
+                result.innerHTML = 'Looking up certificate…';
+                try {
+                    var res = await vdb().from('certificates').select('*').eq('cert_id', id).maybeSingle();
+                    if (res.error) {
+                        result.style.borderColor = '#ef4444';
+                        result.style.color = '#ef4444';
+                        result.innerHTML = '<strong>Verification unavailable.</strong><br><span style="font-size:0.9rem;">' + esc(res.error.message || 'Please try again later.') + '</span>';
+                        return;
+                    }
+                    if (!res.data) {
+                        result.style.borderColor = '#ef4444';
+                        result.style.color = '#ef4444';
+                        result.innerHTML = '<strong>No certificate found with that ID.</strong><br><span style="font-size:0.9rem;">If you believe this is an error, contact contact@mdscholars.com.</span>';
+                        return;
+                    }
+                    var c = res.data;
+                    var revoked = c.status && c.status !== 'active';
+                    result.style.borderColor = revoked ? '#ef4444' : '#14b8a6';
+                    result.style.color = '#001F3F';
+                    var trackLabel = TRACK_LABELS[c.program_track] || c.program_track || '';
+                    result.innerHTML =
+                        '<div style="text-align:left;">' +
+                        (revoked
+                          ? '<p style="color:#ef4444;font-weight:700;margin-bottom:0.75rem;">⚠ This certificate has been revoked.</p>'
+                          : '<p style="color:#14b8a6;font-weight:700;margin-bottom:0.75rem;">✓ Authentic — certificate verified.</p>') +
+                        '<p style="margin-bottom:0.5rem;"><strong>Recipient:</strong> ' + esc(c.recipient_name) + '</p>' +
+                        '<p style="margin-bottom:0.5rem;"><strong>Program:</strong> ' + esc(trackLabel) + '</p>' +
+                        (c.cohort_label ? '<p style="margin-bottom:0.5rem;"><strong>Cohort:</strong> ' + esc(c.cohort_label) + '</p>' : '') +
+                        '<p style="margin-bottom:0.5rem;"><strong>Issued:</strong> ' + fmtDate(c.completion_date || c.issued_at) + '</p>' +
+                        '<p style="margin-bottom:0.5rem;"><strong>Certificate ID:</strong> ' + esc(c.cert_id) + '</p>' +
+                        (revoked ? '' :
+                            '<p style="margin-top:1rem;"><a href="portal/certificate.html?id=' + encodeURIComponent(c.cert_id) + '" target="_blank" style="background:#14b8a6;color:#fff;padding:0.6rem 1.2rem;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block;">View certificate →</a></p>') +
+                        '</div>';
+                } catch (err) {
+                    result.style.borderColor = '#ef4444';
+                    result.style.color = '#ef4444';
+                    result.innerHTML = '<strong>Verification unavailable.</strong><br><span style="font-size:0.9rem;">' + esc(err && err.message || 'Please try again later.') + '</span>';
+                }
             });
+            // Pre-fill from ?id= URL parameter
+            var pre = new URLSearchParams(location.search).get('id');
+            if (pre) {
+                document.getElementById('cert-id').value = pre.trim().toUpperCase();
+                form.dispatchEvent(new Event('submit'));
+            }
         }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initVerifyListener);
