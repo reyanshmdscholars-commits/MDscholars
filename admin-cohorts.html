@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Cohorts & Mentors — MD Scholars Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #001F3F; --teal: #134E4A; --teal-bright: #0d9488; --teal-light: #14b8a6;
+    --gold: #c9a84c; --cream: #f8f5ef; --white: #fff;
+    --gray-100: #f4f6f8; --gray-200: #e2e8f0; --gray-400: #94a3b8; --gray-600: #475569;
+    --danger: #ef4444; --success: #10b981;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #0f172a; min-height: 100vh; }
+  .topbar { background: var(--navy); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .topbar .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .topbar .brand-icon { font-size: 1.6rem; }
+  .topbar .brand-text { line-height: 1.1; }
+  .topbar .brand-text strong { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+  .topbar .brand-text span { color: var(--teal-light); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .topbar a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.9rem; }
+  .topbar a:hover { color: white; }
+  .topbar .actions { display: flex; gap: 1rem; align-items: center; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  h1 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.8rem; margin-bottom: 0.25rem; }
+  .subtitle { color: var(--gray-600); margin-bottom: 1.5rem; }
+
+  .session-bar { background: white; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  .session-bar label { font-weight: 600; color: var(--navy); margin-right: 0.5rem; }
+  .session-bar select { padding: 0.55rem 0.85rem; border: 1px solid var(--gray-200); border-radius: 6px; font-family: inherit; font-size: 0.92rem; background: white; min-width: 180px; }
+  .session-bar select:focus { outline: none; border-color: var(--teal-bright); }
+  .session-bar .pill { padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; }
+  .pill-active { background: #d1fae5; color: #065f46; }
+  .pill-upcoming { background: #dbeafe; color: #1e40af; }
+  .pill-closed { background: #f1f5f9; color: #475569; }
+
+  .tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--gray-200); }
+  .tabs button { background: none; border: none; padding: 0.85rem 1.25rem; font-family: inherit; font-size: 0.95rem; font-weight: 500; color: var(--gray-600); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  .tabs button.active { color: var(--navy); border-bottom-color: var(--teal-bright); font-weight: 600; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); margin-bottom: 1.5rem; }
+  .card h2 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 0.75rem; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-600); border-bottom: 1px solid var(--gray-200); font-weight: 600; }
+  td { padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--gray-100); font-size: 0.92rem; vertical-align: top; }
+
+  .btn { background: var(--teal-bright); color: white; border: none; padding: 0.55rem 1rem; border-radius: 6px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: none; display: inline-block; }
+  .btn:hover { background: var(--teal); }
+  .btn-danger { background: var(--danger); }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-ghost { background: transparent; color: var(--teal-bright); border: 1px solid var(--teal-bright); }
+  .btn-ghost:hover { background: var(--teal-bright); color: white; }
+  .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+  .btn-big { padding: 0.85rem 1.75rem; font-size: 1rem; }
+
+  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem; margin-bottom: 1rem; }
+  .form-row > div { display: flex; flex-direction: column; }
+  .form-row label { font-size: 0.82rem; font-weight: 600; color: var(--navy); margin-bottom: 0.3rem; }
+  .form-row input, .form-row select, .form-row textarea { padding: 0.55rem 0.75rem; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 0.92rem; font-family: inherit; }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { outline: none; border-color: var(--teal-bright); }
+
+  .team-card-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  .team-card { background: var(--gray-100); border-radius: 10px; padding: 1.25rem; border: 1px solid var(--gray-200); }
+  .team-card h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .team-card .meta { font-size: 0.8rem; color: var(--gray-600); margin-bottom: 0.75rem; }
+  .team-card ul { list-style: none; padding: 0; margin: 0.5rem 0; }
+  .team-card li { padding: 0.4rem 0; border-bottom: 1px solid var(--gray-200); font-size: 0.88rem; display: flex; justify-content: space-between; align-items: center; }
+  .team-card li:last-child { border-bottom: none; }
+  .team-card li button { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.78rem; }
+  .team-card select { width: 100%; padding: 0.45rem 0.6rem; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 0.85rem; margin-top: 0.5rem; }
+
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); display: none; z-index: 1000; }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+  .empty { text-align: center; padding: 2rem; color: var(--gray-600); font-size: 0.9rem; }
+  .empty .icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4; }
+
+  /* Login gate */
+  .login-gate { position: fixed; inset: 0; background: linear-gradient(135deg, var(--navy), var(--teal)); display: flex; align-items: center; justify-content: center; padding: 2rem; z-index: 10000; }
+  .login-card { background: white; padding: 2rem; border-radius: 12px; max-width: 360px; width: 100%; }
+  .login-card h2 { font-family: 'Playfair Display', serif; color: var(--navy); text-align: center; margin-bottom: 1rem; }
+  .login-card input { width: 100%; padding: 0.7rem 1rem; border: 1px solid var(--gray-200); border-radius: 6px; margin-bottom: 0.75rem; font-family: inherit; }
+  .login-card button { width: 100%; padding: 0.85rem; background: var(--teal-bright); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- Login gate -->
+<div id="loginGate" class="login-gate">
+  <div class="login-card">
+    <h2>Cohorts & Mentors</h2>
+    <p style="text-align:center;color:#666;font-size:0.85rem;margin-bottom:1rem;">Restricted access</p>
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button onclick="tryLogin()">Sign in</button>
+  </div>
+</div>
+
+<div id="dashboard" style="display:none;">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon">⚕️</div>
+      <div class="brand-text"><strong>MD Scholars</strong><br><span>Admin · Cohorts</span></div>
+    </div>
+    <div class="actions">
+      <a href="admin.html">← Back to main admin</a>
+      <button class="btn btn-sm" onclick="loadAll()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Cohorts &amp; Mentors</h1>
+    <p class="subtitle">Manage sessions, invite mentors, and organize student teams.</p>
+
+    <div class="session-bar">
+      <label for="sessionSelect">Active session view:</label>
+      <select id="sessionSelect" onchange="onSessionChange()"></select>
+      <span class="pill pill-active" id="sessionStatus">—</span>
+      <button class="btn btn-sm" onclick="makeActive()">Make this the active session</button>
+      <button class="btn btn-sm btn-ghost" onclick="showNewSessionForm()">+ New session</button>
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-tab="teams">Teams</button>
+      <button data-tab="mentors">Mentors</button>
+      <button data-tab="sessions">Sessions</button>
+    </div>
+
+    <!-- TEAMS PANEL -->
+    <div class="panel active" id="panel-teams">
+      <div class="card">
+        <h2>
+          <span>Teams in this session</span>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-sm btn-ghost" onclick="loadTeams()">Refresh</button>
+            <button class="btn btn-big" onclick="autoGroup()">⚡ Auto-group remaining students</button>
+          </div>
+        </h2>
+        <p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">Auto-grouping creates teams of ~5 from accepted students who aren't already in a team. HS pairs with undergrad and Med pairs with Resident if too few remain in a bucket.</p>
+        <div id="teamsContainer">
+          <div class="empty"><div class="icon">⏳</div>Loading…</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Ungrouped accepted students</h2>
+        <p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">Accepted students in this session not yet in a team.</p>
+        <div id="ungroupedContainer"></div>
+      </div>
+    </div>
+
+    <!-- MENTORS PANEL -->
+    <div class="panel" id="panel-mentors">
+      <div class="card">
+        <h2>Invite a new mentor</h2>
+        <p style="font-size:0.88rem;color:#666;margin-bottom:1rem;">The mentor will receive an email with a link to set their password and access the mentor portal.</p>
+        <div class="form-row">
+          <div><label>Full name *</label><input id="inv_name" type="text" placeholder="Dr. Jane Smith"></div>
+          <div><label>Email *</label><input id="inv_email" type="email" placeholder="jane@example.com"></div>
+          <div><label>Specialty</label><input id="inv_specialty" type="text" placeholder="Internal Medicine"></div>
+        </div>
+        <div class="form-row"><div style="grid-column:1/-1;"><label>Short bio (optional)</label><textarea id="inv_bio" rows="2" style="resize:vertical;"></textarea></div></div>
+        <button class="btn" onclick="inviteMentor()">Send invite</button>
+      </div>
+
+      <div class="card">
+        <h2>All mentors</h2>
+        <div id="mentorsContainer">
+          <div class="empty"><div class="icon">⏳</div>Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSIONS PANEL -->
+    <div class="panel" id="panel-sessions">
+      <div class="card">
+        <h2>All sessions</h2>
+        <div id="sessionsContainer">
+          <div class="empty"><div class="icon">⏳</div>Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  // Service role key — same pattern as admin.html. KEEP THIS PAGE BEHIND THE LOGIN GATE.
+  const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+  const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1Njk5OCwiZXhwIjoyMDkwMjMyOTk4fQ.H_4VhvT8ENyuuH16aK0dGvjQvlz4v97XJpAbtmUHibc';
+  let db;
+  function getDB() { if (!db) db = window.supabase.createClient(SUPABASE_URL, SERVICE_KEY); return db; }
+
+  let sessions = [];
+  let mentors = [];
+  let teams = [];
+  let teamMembers = [];
+  let ungrouped = [];
+  let currentSessionId = null;
+
+  function tryLogin() {
+    const u = document.getElementById('loginUser').value;
+    const p = document.getElementById('loginPass').value;
+    if (u === '1234' && p === '1234') {
+      document.getElementById('loginGate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll();
+    } else { toast('Invalid credentials', 'error'); }
+  }
+  function toast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + (type || '');
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+  function esc(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[c]);
+  }
+  function fmtDate(s) { try { return new Date(s).toLocaleDateString(); } catch { return s; } }
+
+  async function loadAll() {
+    await loadSessions();
+    await loadMentors();
+    if (currentSessionId) {
+      await loadTeams();
+      await loadUngrouped();
+    }
+    renderMentors();
+    renderSessions();
+  }
+
+  async function loadSessions() {
+    const { data, error } = await getDB().from('sessions').select('*').order('year', { ascending: false }).order('term');
+    if (error) { toast('Sessions load error: ' + error.message, 'error'); return; }
+    sessions = data || [];
+    const sel = document.getElementById('sessionSelect');
+    sel.innerHTML = sessions.map(s => `<option value="${s.id}">${esc(s.name)} (${esc(s.status)})</option>`).join('');
+    // Default to active or first
+    const active = sessions.find(s => s.status === 'active') || sessions[0];
+    if (active) {
+      currentSessionId = active.id;
+      sel.value = active.id;
+      updateSessionStatus();
+    }
+  }
+
+  function updateSessionStatus() {
+    const s = sessions.find(x => x.id === currentSessionId);
+    const pill = document.getElementById('sessionStatus');
+    if (!s) { pill.textContent = '—'; return; }
+    pill.textContent = s.status;
+    pill.className = 'pill pill-' + s.status;
+  }
+
+  async function onSessionChange() {
+    currentSessionId = document.getElementById('sessionSelect').value;
+    updateSessionStatus();
+    await loadTeams();
+    await loadUngrouped();
+  }
+
+  async function makeActive() {
+    if (!currentSessionId) return;
+    const { error } = await getDB().rpc('set_active_session', { p_session_id: currentSessionId });
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast('Active session updated', 'success');
+    await loadSessions();
+  }
+
+  async function showNewSessionForm() {
+    const name = prompt('Session name (e.g. "Spring 2027"):');
+    if (!name) return;
+    const term = prompt('Term — spring, summer, fall, or winter:', 'spring');
+    if (!term) return;
+    const year = parseInt(prompt('Year:', new Date().getFullYear()), 10);
+    if (!year) return;
+    const { error } = await getDB().from('sessions').insert([{ name, term: term.toLowerCase(), year, status: 'upcoming' }]);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast('Session created', 'success');
+    await loadSessions();
+  }
+
+  async function loadMentors() {
+    const { data } = await getDB().from('mentors').select('*').order('created_at', { ascending: false });
+    mentors = data || [];
+  }
+
+  function renderMentors() {
+    const container = document.getElementById('mentorsContainer');
+    if (!mentors.length) { container.innerHTML = '<div class="empty"><div class="icon">👨‍⚕️</div>No mentors yet — invite your first one above.</div>'; return; }
+    container.innerHTML = `<table><thead><tr><th>Name</th><th>Email</th><th>Specialty</th><th>Status</th><th>Teams</th><th>Invited</th></tr></thead><tbody>${
+      mentors.map(m => {
+        const teamCount = teams.filter(t => t.mentor_id === m.id).length;
+        return `<tr>
+          <td><strong>${esc(m.full_name)}</strong></td>
+          <td>${esc(m.email)}</td>
+          <td>${esc(m.specialty || '—')}</td>
+          <td><span class="pill ${m.status==='active'?'pill-active':m.status==='inactive'?'pill-closed':'pill-upcoming'}">${esc(m.status)}</span></td>
+          <td>${teamCount}</td>
+          <td>${fmtDate(m.invited_at)}</td>
+        </tr>`;
+      }).join('')
+    }</tbody></table>`;
+  }
+
+  function renderSessions() {
+    const container = document.getElementById('sessionsContainer');
+    if (!sessions.length) { container.innerHTML = '<div class="empty">No sessions.</div>'; return; }
+    container.innerHTML = `<table><thead><tr><th>Name</th><th>Term</th><th>Year</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead><tbody>${
+      sessions.map(s => `<tr>
+        <td><strong>${esc(s.name)}</strong></td>
+        <td>${esc(s.term)}</td>
+        <td>${s.year}</td>
+        <td><span class="pill pill-${s.status}">${esc(s.status)}</span></td>
+        <td>${fmtDate(s.created_at)}</td>
+        <td>
+          ${s.status !== 'active' ? `<button class="btn btn-sm" onclick="setActive('${s.id}')">Make active</button>` : ''}
+          ${s.status !== 'closed' ? `<button class="btn btn-sm btn-ghost" onclick="closeSession('${s.id}')">Close</button>` : ''}
+        </td>
+      </tr>`).join('')
+    }</tbody></table>`;
+  }
+
+  async function setActive(id) {
+    const { error } = await getDB().rpc('set_active_session', { p_session_id: id });
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast('Active session updated', 'success');
+    await loadSessions();
+  }
+  async function closeSession(id) {
+    if (!confirm('Mark this session as closed?')) return;
+    const { error } = await getDB().from('sessions').update({ status: 'closed' }).eq('id', id);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    await loadSessions();
+  }
+
+  async function loadTeams() {
+    if (!currentSessionId) return;
+    const { data: t } = await getDB().from('teams').select('*').eq('session_id', currentSessionId).order('name');
+    teams = t || [];
+    const teamIds = teams.map(x => x.id);
+    if (teamIds.length) {
+      const { data: m } = await getDB().from('team_members')
+        .select('id, team_id, application_id, student_profile_id, applications(first_name,last_name,email,program_track,applicant_role)')
+        .in('team_id', teamIds);
+      teamMembers = m || [];
+    } else { teamMembers = []; }
+    renderTeams();
+    renderMentors(); // mentor team counts may have changed
+  }
+
+  function renderTeams() {
+    const container = document.getElementById('teamsContainer');
+    if (!teams.length) {
+      container.innerHTML = '<div class="empty"><div class="icon">👥</div>No teams yet. Click "Auto-group" above to create teams from accepted students.</div>';
+      return;
+    }
+    const mentorOpts = '<option value="">— No mentor —</option>' + mentors.map(m => `<option value="${m.id}">${esc(m.full_name)}${m.specialty?' — '+esc(m.specialty):''}</option>`).join('');
+    container.innerHTML = '<div class="team-card-list">' + teams.map(t => {
+      const ms = teamMembers.filter(x => x.team_id === t.id);
+      return `<div class="team-card">
+        <h3>${esc(t.name)}</h3>
+        <div class="meta">${esc(t.grade_band || '—')} · ${esc(t.program_track || '—')} · ${ms.length} member${ms.length===1?'':'s'}</div>
+        <select onchange="assignMentor('${t.id}', this.value)">
+          ${mentorOpts.replace(`value="${t.mentor_id||''}"`, `value="${t.mentor_id||''}" selected`)}
+        </select>
+        <ul>${ms.length ? ms.map(x => {
+          const a = x.applications || {};
+          return `<li><span>${esc((a.first_name||'')+' '+(a.last_name||''))}<br><small style="color:#666;">${esc(a.applicant_role||'')}</small></span><button onclick="removeFromTeam('${x.id}')" title="Remove">×</button></li>`;
+        }).join('') : '<li><small style="color:#666;">No members yet.</small></li>'}</ul>
+        <button class="btn btn-sm btn-danger" style="margin-top:0.5rem;" onclick="deleteTeam('${t.id}')">Delete team</button>
+      </div>`;
+    }).join('') + '</div>';
+  }
+
+  async function assignMentor(teamId, mentorId) {
+    const { error } = await getDB().from('teams').update({ mentor_id: mentorId || null }).eq('id', teamId);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast('Mentor assigned', 'success');
+    await loadTeams();
+  }
+
+  async function removeFromTeam(memberId) {
+    if (!confirm('Remove this student from the team?')) return;
+    const { error } = await getDB().from('team_members').delete().eq('id', memberId);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    await loadTeams();
+    await loadUngrouped();
+  }
+
+  async function deleteTeam(teamId) {
+    if (!confirm('Delete this team and unassign all members?')) return;
+    const { error } = await getDB().from('teams').delete().eq('id', teamId);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    await loadTeams();
+    await loadUngrouped();
+  }
+
+  async function loadUngrouped() {
+    if (!currentSessionId) return;
+    // Accepted apps in session NOT in team_members
+    const { data: apps } = await getDB().from('applications')
+      .select('id, first_name, last_name, email, program_track, applicant_role')
+      .eq('session_id', currentSessionId)
+      .eq('status', 'accepted');
+    const inTeam = new Set(teamMembers.map(m => m.application_id));
+    ungrouped = (apps || []).filter(a => !inTeam.has(a.id));
+    renderUngrouped();
+  }
+
+  function renderUngrouped() {
+    const container = document.getElementById('ungroupedContainer');
+    if (!ungrouped.length) { container.innerHTML = '<div class="empty">All accepted students in this session are grouped. 🎉</div>'; return; }
+    const teamOpts = teams.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('');
+    container.innerHTML = `<table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Track</th><th>Assign to team</th></tr></thead><tbody>${
+      ungrouped.map(a => `<tr>
+        <td><strong>${esc((a.first_name||'')+' '+(a.last_name||''))}</strong></td>
+        <td>${esc(a.email||'')}</td>
+        <td>${esc(a.applicant_role||'—')}</td>
+        <td>${esc(a.program_track||'—')}</td>
+        <td>
+          <select onchange="addToTeam('${a.id}', this.value)">
+            <option value="">— Pick a team —</option>${teamOpts}
+          </select>
+        </td>
+      </tr>`).join('')
+    }</tbody></table>`;
+  }
+
+  async function addToTeam(appId, teamId) {
+    if (!teamId) return;
+    // Look up student_profile_id for this application
+    const { data: prof } = await getDB().from('student_profiles').select('id').eq('application_id', appId).maybeSingle();
+    const { error } = await getDB().from('team_members').insert([{
+      team_id: teamId, application_id: appId, student_profile_id: prof ? prof.id : null
+    }]);
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast('Added to team', 'success');
+    await loadTeams();
+    await loadUngrouped();
+  }
+
+  async function autoGroup() {
+    if (!currentSessionId) return;
+    if (!confirm('Auto-create teams (size ~5) for ungrouped accepted students in this session?')) return;
+    const { data, error } = await getDB().rpc('auto_group_session', { p_session_id: currentSessionId, p_team_size: 5 });
+    if (error) { toast('Failed: ' + error.message, 'error'); return; }
+    toast(`Auto-grouping complete: ${(data||[]).length} placements`, 'success');
+    await loadTeams();
+    await loadUngrouped();
+  }
+
+  async function inviteMentor() {
+    const fullName = document.getElementById('inv_name').value.trim();
+    const email = document.getElementById('inv_email').value.trim();
+    const specialty = document.getElementById('inv_specialty').value.trim();
+    const bio = document.getElementById('inv_bio').value.trim();
+    if (!fullName || !email) { toast('Name and email required', 'error'); return; }
+    const res = await fetch(SUPABASE_URL + '/functions/v1/invite-mentor', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ full_name: fullName, email, specialty: specialty || null, bio: bio || null })
+    });
+    const data = await res.json();
+    if (!res.ok) { toast('Invite failed: ' + (data.error || res.status), 'error'); return; }
+    toast('Invite sent to ' + email, 'success');
+    document.getElementById('inv_name').value = '';
+    document.getElementById('inv_email').value = '';
+    document.getElementById('inv_specialty').value = '';
+    document.getElementById('inv_bio').value = '';
+    await loadMentors();
+    renderMentors();
+  }
+
+  // Tab switching
+  document.querySelectorAll('.tabs button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      document.getElementById('panel-' + b.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

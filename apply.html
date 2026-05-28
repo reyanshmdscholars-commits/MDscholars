@@ -987,13 +987,9 @@
               </div>
 
               <div class="form-group">
-                <label for="cycle">Preferred Cycle</label>
-                <select id="cycle" name="cycle">
-                  <option value="">Select a cycle</option>
-                  <option value="spring2026">Spring 2026</option>
-                  <option value="summer2026">Summer 2026</option>
-                  <option value="fall2026">Fall 2026</option>
-                  <option value="spring2027">Spring 2027</option>
+                <label for="cycle" class="required">Preferred Session</label>
+                <select id="cycle" name="cycle" data-session-id="">
+                  <option value="">Loading sessions…</option>
                 </select>
                 <div class="error-message"></div>
               </div>
@@ -1601,14 +1597,34 @@
       }
 
       if (cycleSelect) {
+        // Populate dropdown from public sessions table
+        (async () => {
+          try {
+            const { data: sessions } = await sb.from('sessions')
+              .select('id, name, term, year, status')
+              .in('status', ['active', 'upcoming'])
+              .order('year', { ascending: true })
+              .order('term');
+            const opts = ['<option value="">Select a session</option>'];
+            (sessions || []).forEach(s => {
+              const tag = s.status === 'active' ? ' (open now)' : '';
+              opts.push('<option value="' + s.id + '" data-year="' + s.year + '">' + s.name + tag + '</option>');
+            });
+            cycleSelect.innerHTML = opts.join('');
+            // If only one active session, preselect it
+            const active = (sessions || []).find(s => s.status === 'active');
+            if (active && !cycleSelect.value) {
+              cycleSelect.value = active.id;
+              document.getElementById('year').value = active.year;
+            }
+          } catch (e) {
+            console.warn('Sessions load failed', e);
+            cycleSelect.innerHTML = '<option value="">No sessions available</option>';
+          }
+        })();
         cycleSelect.addEventListener('change', function() {
-          const cycleMap = {
-            'spring2026': '2026',
-            'summer2026': '2026',
-            'fall2026': '2026',
-            'spring2027': '2027'
-          };
-          document.getElementById('year').value = cycleMap[this.value] || '';
+          const opt = this.options[this.selectedIndex];
+          document.getElementById('year').value = opt && opt.dataset.year ? opt.dataset.year : '';
         });
       }
 
@@ -1645,7 +1661,24 @@
             goals: document.getElementById('careerGoals').value,
             how_heard: (document.getElementById('heardAbout') && document.getElementById('heardAbout').value) || null,
             status: 'pending',
-            payment_status: 'unpaid'
+            payment_status: 'unpaid',
+            session_id: document.getElementById('cycle').value || null,
+            applicant_role: (function() {
+              var track = document.getElementById('programTrack').value;
+              var edu = (document.getElementById('educationLevel') && document.getElementById('educationLevel').value) || '';
+              edu = edu.toLowerCase();
+              // Prefer education level when present
+              if (edu.indexOf('high') !== -1 || edu.indexOf('hs') !== -1) return 'hs';
+              if (edu.indexOf('college') !== -1 || edu.indexOf('undergrad') !== -1 || edu.indexOf('bachelor') !== -1) return 'undergrad';
+              if (edu.indexOf('medical') !== -1 || edu.indexOf('med school') !== -1) return 'med';
+              if (edu.indexOf('resident') !== -1 || edu.indexOf('fellow') !== -1) return 'resident';
+              // Fall back to track
+              if (track === 'future-physician' || track === '12month') return 'hs';
+              if (track === 'pre-med') return 'undergrad';
+              if (track === 'med-accelerator') return 'med';
+              if (track === 'resident-accelerator') return 'resident';
+              return null;
+            })()
           };
 
           const { error } = await sb
