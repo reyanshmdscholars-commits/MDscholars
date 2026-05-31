@@ -97,12 +97,32 @@
       m.style.display = 'block';
     }
 
+    // Check both the access view AND the underlying student_profiles row for fee_status.
+    async function loadAccessAndFee() {
+      const accessP = sb.from('student_access').select('is_active, days_remaining, full_name').maybeSingle();
+      const profileP = sb.from('student_profiles').select('fee_status, application_id').maybeSingle();
+      const [accessRes, profileRes] = await Promise.all([accessP, profileP]);
+      return {
+        access: accessRes.data,
+        accessErr: accessRes.error,
+        profile: profileRes.data,
+        profileErr: profileRes.error,
+      };
+    }
+
+    function isPaidOrFree(profile) {
+      // profile.fee_status: 'paid' | 'unpaid' | 'free' | null
+      if (!profile) return false;
+      const s = (profile.fee_status || '').toLowerCase();
+      return s === 'paid' || s === 'free';
+    }
+
     function initListeners() {
-      // If already signed in AND has a student profile, send straight to dashboard.
+      // If already signed in AND has a student profile that's active AND paid/free, send straight to dashboard.
       sb.auth.getSession().then(async ({ data }) => {
         if (data.session) {
-          const { data: prof } = await sb.from('student_access').select('is_active, days_remaining').maybeSingle();
-          if (prof && prof.is_active) {
+          const r = await loadAccessAndFee();
+          if (r.access && r.access.is_active && isPaidOrFree(r.profile)) {
             window.location.href = 'dashboard.html';
           }
         }
@@ -121,17 +141,24 @@
           btn.disabled = false; btn.textContent = 'Sign in →';
           return;
         }
-        // Gate: must have a student_profiles row that's active
-        const { data: prof, error: profErr } = await sb.from('student_access').select('is_active, days_remaining, full_name').maybeSingle();
-        if (profErr || !prof) {
+        // Gate 1: must have a student profile (i.e. an accepted application)
+        const r = await loadAccessAndFee();
+        if (r.accessErr || !r.access) {
           await sb.auth.signOut();
           showMsg('error', 'Your account is not associated with an active MD Scholars cohort. Please contact contact@mdscholars.com if you believe this is an error.');
           btn.disabled = false; btn.textContent = 'Sign in →';
           return;
         }
-        if (!prof.is_active) {
+        if (!r.access.is_active) {
           await sb.auth.signOut();
           showMsg('error', 'Your course access has ended. Please contact support@mdscholars.com if you need an extension.');
+          btn.disabled = false; btn.textContent = 'Sign in →';
+          return;
+        }
+        // Gate 2: payment must be marked paid or free
+        if (!isPaidOrFree(r.profile)) {
+          await sb.auth.signOut();
+          showMsg('error', 'Your application hasn’t been marked paid yet. Once we record your payment (typically within 1–2 business days of your transfer arriving) we’ll email you and you’ll be able to sign in here. Questions about billing? Email support@mdscholars.com.');
           btn.disabled = false; btn.textContent = 'Sign in →';
           return;
         }
