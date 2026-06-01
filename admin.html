@@ -380,6 +380,19 @@
                 <button class="btn-secondary" onclick="exportStudentsCSV()">📥 Export CSV</button>
               </div>
             </div>
+
+            <!-- Bank deposit auto-match panel -->
+            <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fcd34d;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;">
+              <h3 style="margin:0 0 0.4rem;color:#78350f;display:flex;align-items:center;gap:0.5rem;">💰 Log a bank deposit (auto-match to applicant)</h3>
+              <p style="margin:0 0 0.85rem;font-size:0.9rem;color:#7c2d12;">Paste the full CommunityAmerica deposit-alert email body below. The system will detect the amount, match the applicant by name/email/UUID, flip them to <strong>paid</strong>, sync their student profile, and auto-send the payment confirmation email.</p>
+              <textarea id="bankDepositBody" placeholder="Paste the bank deposit email here. e.g.:&#10;&#10;A deposit of $1,250.00 has been credited to account ****9488.&#10;Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 0.85rem;border:1px solid #e0dbd0;border-radius:6px;font-family:inherit;font-size:0.9rem;resize:vertical;"></textarea>
+              <div style="display:flex;gap:0.6rem;align-items:center;margin-top:0.6rem;">
+                <button class="btn-sm success" onclick="logBankDeposit()" id="logDepositBtn" style="background:#10b981;color:#fff;font-weight:600;padding:0.55rem 1rem;border-radius:6px;border:none;cursor:pointer;font-size:0.9rem;">Auto-match &amp; mark paid →</button>
+                <button class="btn-sm" onclick="document.getElementById('bankDepositBody').value=''" style="background:#fff;color:#78350f;border:1px solid #fcd34d;font-weight:600;padding:0.55rem 1rem;border-radius:6px;cursor:pointer;font-size:0.9rem;">Clear</button>
+                <span id="logDepositStatus" style="font-size:0.85rem;color:#7c2d12;"></span>
+              </div>
+            </div>
+
             <div class="table-controls">
               <div class="filters">
                 <input type="text" class="search-input" id="searchStudents" placeholder="Search by name..." oninput="renderStudentsTable()">
@@ -1131,6 +1144,53 @@
     }
     // Back-compat alias for any cached pages still referencing the old name
     var togglePaymentStatus = setPaymentStatus;
+
+    /* ─── Log a bank deposit (auto-match + mark paid) ─── */
+    // The shared secret is the same BANK_WEBHOOK_TOKEN set in Supabase secrets.
+    // This page lives behind the admin login (1234/1234), so the token is fine to keep client-side.
+    var BANK_WEBHOOK_TOKEN = '876cd5014f3982a9c43a2b541229db9f2de93e9a6af926b6';
+
+    async function logBankDeposit() {
+      var btn = document.getElementById('logDepositBtn');
+      var statusEl = document.getElementById('logDepositStatus');
+      var body = (document.getElementById('bankDepositBody').value || '').trim();
+      if (!body) { showToast('Paste the bank email body first', 'error'); return; }
+      btn.disabled = true; btn.textContent = 'Matching…'; statusEl.textContent = '';
+      try {
+        var res = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/bank-deposit-webhook?token=' + encodeURIComponent(BANK_WEBHOOK_TOKEN), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: body, subject: 'Manual deposit logged from admin' })
+        });
+        var data = await res.json();
+        if (!res.ok) {
+          statusEl.style.color = '#b91c1c';
+          statusEl.textContent = 'Error: ' + (data.error || res.status);
+          showToast('Webhook error: ' + (data.error || res.status), 'error');
+        } else if (data.matched && data.already_paid) {
+          statusEl.style.color = '#065f46';
+          statusEl.textContent = 'Already paid (no change). Amount: $' + (data.amount || '—');
+          showToast('Applicant was already marked paid', 'success');
+        } else if (data.matched) {
+          statusEl.style.color = '#065f46';
+          statusEl.textContent = '✓ Matched & marked PAID. Amount detected: $' + (data.amount || '—') + ' · Confirmation email sent.';
+          showToast('Auto-matched and marked paid', 'success');
+          // Refresh the table
+          await loadApplications();
+          renderStudentsTable();
+          document.getElementById('bankDepositBody').value = '';
+        } else {
+          statusEl.style.color = '#92400e';
+          statusEl.textContent = '⚠ No applicant matched. Amount detected: $' + (data.amount || '—') + '. An alert has been emailed to admin — mark paid manually below.';
+          showToast('No match found — see notification email', 'error');
+        }
+      } catch (err) {
+        statusEl.style.color = '#b91c1c';
+        statusEl.textContent = 'Failed: ' + err.message;
+        showToast('Failed to call webhook', 'error');
+      }
+      btn.disabled = false; btn.textContent = 'Auto-match & mark paid →';
+    }
 
     /* ─── Issue Certificate ─── */
     async function issueCertificate(appId) {
