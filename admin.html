@@ -252,7 +252,7 @@
       <div class="dashboard-topbar">
         <div class="topbar-left">
           <a href="index.html" class="topbar-logo">
-            <div class="topbar-logo-icon">⚕️</div>
+            <div class="topbar-logo-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
             <div class="topbar-logo-text"><strong>MD Scholars</strong></div>
           </a>
           <div class="topbar-divider"></div>
@@ -1081,13 +1081,19 @@
         var actionBtns = '';
         if (app.status === 'pending') {
           actionBtns = '<button class="btn-sm success" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\')">Accept</button>' +
+                       '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="updateAppStatus(\'' + app.id + '\',\'deferred\')">Defer to next semester</button>' +
                        '<button class="btn-sm warning" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\')">Waitlist</button>' +
                        '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
         } else if (app.status === 'waitlisted') {
           actionBtns = '<button class="btn-sm success" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\')">Accept</button>' +
+                       '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="updateAppStatus(\'' + app.id + '\',\'deferred\')">Defer</button>' +
                        '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
         } else if (app.status === 'accepted') {
-          actionBtns = '<button class="btn-sm warning" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\')">Waitlist</button>' +
+          actionBtns = '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="updateAppStatus(\'' + app.id + '\',\'deferred\')">Defer to next semester</button>' +
+                       '<button class="btn-sm warning" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\')">Waitlist</button>' +
+                       '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
+        } else if (app.status === 'deferred') {
+          actionBtns = '<button class="btn-sm success" onclick="updateAppStatus(\'' + app.id + '\',\'accepted\')">Re-accept this semester</button>' +
                        '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
         } else {
           actionBtns = '<button class="btn-sm" onclick="updateAppStatus(\'' + app.id + '\',\'pending\')">Reopen</button>';
@@ -1197,6 +1203,7 @@
         if (status !== 'unpaid') actions += '<button class="btn-sm warning" onclick="setPaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Unpaid</button>';
         if (status !== 'free') actions += '<button class="btn-sm" style="background:#ddd6fe;color:#5b21b6;border-color:#c4b5fd;" onclick="setPaymentStatus(\'' + app.id + '\',\'free\')">Mark Free</button>';
         actions += '<button class="btn-sm" style="background:#fef3c7;color:#92400e;border-color:#fcd34d;" onclick="issueCertificate(\'' + app.id + '\')">Issue Certificate</button>';
+        actions += '<button class="btn-sm" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;" onclick="dropStudent(\'' + app.id + '\')">Drop Student</button>';
         return '<tr>' +
           '<td><strong>' + escHtml(app.first_name) + ' ' + escHtml(app.last_name) + '</strong><br><small style="color:#999;">' + escHtml(app.email||'') + '</small></td>' +
           '<td>' + escHtml(app.program_track||'—') + '</td>' +
@@ -1289,6 +1296,36 @@
         showToast('Failed to call webhook', 'error');
       }
       btn.disabled = false; btn.textContent = 'Auto-match & mark paid →';
+    }
+
+    /* ─── Drop Student (revoke portal access) ─── */
+    async function dropStudent(appId) {
+      var app = allApplications.find(function(a){return a.id === appId;});
+      var name = app ? (app.first_name + ' ' + app.last_name) : 'this student';
+      var reason = prompt('Drop ' + name + ' from the program?\n\nThis will revoke their portal access. Enter an optional reason (e.g. "withdrew", "non-payment", "academic concern"):');
+      if (reason === null) return;
+      try {
+        // Find their student_profile
+        var profRes = await getDB().from('student_profiles').select('id').eq('application_id', appId).maybeSingle();
+        if (profRes.error || !profRes.data) {
+          showToast('No student profile found for this applicant', 'error');
+          return;
+        }
+        var profId = profRes.data.id;
+        var res = await getDB().from('student_profiles').update({
+          dropped_at: new Date().toISOString(),
+          drop_reason: reason || 'Dropped by admin',
+          fee_status: 'dropped'
+        }).eq('id', profId);
+        if (res.error) throw res.error;
+        // Also flip the application status so they're moved out of "active students"
+        await getDB().from('applications').update({ status: 'dropped' }).eq('id', appId);
+        showToast('Student dropped. Portal access revoked.', 'success');
+        await loadApplications(); renderStudentsTable();
+      } catch (err) {
+        console.error(err);
+        showToast('Drop failed: ' + (err.message || err), 'error');
+      }
     }
 
     /* ─── Issue Certificate ─── */

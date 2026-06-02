@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frequently Asked Questions — MD Scholars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#001F3F; --teal:#134E4A; --teal-bright:#0d9488; --teal-light:#14b8a6; --gold:#c9a84c; --cream:#f8f5ef; --gray-100:#f4f6f8; --gray-200:#e2e8f0; --gray-600:#475569; --text:#0f172a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; color:var(--text); background:white; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(0,31,63,0.97); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.08); }
+  .nav-inner { max-width:1200px; margin:0 auto; padding:0 2rem; height:72px; display:flex; align-items:center; justify-content:space-between; }
+  .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:white; }
+  .nav-logo-icon { width:42px; height:42px; background:linear-gradient(135deg,var(--teal),var(--teal-bright)); border-radius:10px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .nav-logo-icon img { width:100%; height:100%; object-fit:contain; display:block; }
+  .nav-logo-text strong { font-family:'Playfair Display',serif; font-size:1.15rem; }
+  .nav-logo-text span { display:block; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal-light); }
+  .nav-links { display:flex; gap:0.25rem; align-items:center; }
+  .nav-links a { color:rgba(255,255,255,0.82); text-decoration:none; padding:0.5rem 0.9rem; border-radius:6px; font-size:0.88rem; font-weight:500; }
+  .nav-links a:hover { color:white; background:rgba(255,255,255,0.08); }
+  .hero { background:linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%); color:white; padding:140px 2rem 80px; text-align:center; }
+  .hero-inner { max-width:900px; margin:0 auto; }
+  .hero .label { display:inline-block; font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal-light); margin-bottom:1rem; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); margin-bottom:1rem; }
+  .hero p { color:rgba(255,255,255,0.82); font-size:1.1rem; line-height:1.7; }
+  .content { max-width:820px; margin:0 auto; padding:4rem 2rem; }
+  .content h2 { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--navy); margin:2.5rem 0 1rem; }
+  .content h3 { font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--navy); margin:1.5rem 0 0.5rem; }
+  .content p, .content li { color:var(--gray-600); line-height:1.8; margin-bottom:1rem; font-size:1rem; }
+  .content ul, .content ol { padding-left:1.5rem; margin-bottom:1rem; }
+  .content a { color:var(--teal-bright); text-decoration:none; }
+  .content a:hover { text-decoration:underline; }
+  .content strong { color:var(--text); }
+  .updated { color:var(--gray-600); font-style:italic; font-size:0.92rem; margin-bottom:2rem; }
+
+  /* FAQ specific */
+  details { background:var(--cream); border-radius:10px; padding:1rem 1.25rem; margin-bottom:0.75rem; border:1px solid var(--gray-200); }
+  details summary { cursor:pointer; font-weight:600; color:var(--navy); font-family:'Playfair Display',serif; font-size:1.05rem; padding:0.25rem 0; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+  details summary::after { content:'+'; font-size:1.5rem; color:var(--teal-bright); font-weight:300; }
+  details[open] summary::after { content:'−'; }
+  details > div { padding-top:1rem; color:var(--gray-600); line-height:1.7; }
+
+  footer { background:var(--navy); color:rgba(255,255,255,0.6); padding:3rem 2rem 2rem; }
+  .footer-inner { max-width:1200px; margin:0 auto; text-align:center; }
+  .footer-links { display:flex; gap:1.5rem; justify-content:center; margin-bottom:1.5rem; flex-wrap:wrap; }
+  .footer-links a { color:rgba(255,255,255,0.6); text-decoration:none; font-size:0.88rem; }
+  .footer-links a:hover { color:var(--teal-light); }
+</style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon"><img src="logo.png" alt="MD Scholars logo"></div>
+        <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="apply.html">Apply</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="label">Help center</div>
+      <h1>Frequently Asked Questions</h1>
+      <p>Answers to the questions we hear most often. Cannot find what you need? Email contact@mdscholars.com.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <p class="updated">Last updated: June 2026</p>
+
+    <h2>About the program</h2>
+
+    <details>
+      <summary>What is MD Scholars?</summary>
+      <div>MD Scholars is a physician-led research mentorship program for students at every stage of the medical pathway — high school, college / pre-med, medical school, and residency / fellowship (including International Medical Graduates). We pair each scholar with a physician mentor and an assigned project, and we structure the cohort to produce a tangible scholarly output: an abstract, poster, or manuscript.</div>
+    </details>
+
+    <details>
+      <summary>Who is eligible to apply?</summary>
+      <div>Anyone 13 years or older who is on a path toward a medical or biomedical career. We have separate tracks for high school students, college / pre-med students, medical students, residents, fellows, and IMGs. Applicants under 18 require parental consent.</div>
+    </details>
+
+    <details>
+      <summary>How long does each program last?</summary>
+      <div>Our standard tracks (High School, College / Pre-Med, Medical School, Resident / IMG / Fellow) are <strong>12 weeks</strong>. The 12-Month Advanced Track for HS and college students is <strong>52 weeks</strong>. Institutional partnerships are customized.</div>
+    </details>
+
+    <details>
+      <summary>Is the program online or in-person?</summary>
+      <div>Remote-first. Cohort sessions, mentor 1:1s, and assignments are all conducted online. Scholars may attend optional in-person events (research symposia, conferences) when geographically possible.</div>
+    </details>
+
+    <h2>Application &amp; admissions</h2>
+
+    <details>
+      <summary>When does the next cohort start?</summary>
+      <div>We run Spring, Summer, and Fall cohorts each year. The current open application is shown in the announcement bar at the top of our home page. Spring starts in January, Summer starts in June, Fall starts in September.</div>
+    </details>
+
+    <details>
+      <summary>How long does the application take?</summary>
+      <div>About 20–30 minutes. You will need basic contact info, your education level and track of interest, a statement of research interest (≤500 words), and — if you are under 18 — your parent/guardian contact information.</div>
+    </details>
+
+    <details>
+      <summary>When will I hear back?</summary>
+      <div>Decisions are typically released within <strong>3–5 business days</strong> of application submission. You will receive an email and can also check the status anytime via the link in your application confirmation email.</div>
+    </details>
+
+    <details>
+      <summary>What if I'm deferred?</summary>
+      <div>If we defer your application to the next semester, you keep your place and any submitted materials carry over. We will email you when the next cohort opens for enrollment. There is no penalty or re-application required.</div>
+    </details>
+
+    <h2>Tuition &amp; payment</h2>
+
+    <details>
+      <summary>How much does it cost?</summary>
+      <div>
+        <ul>
+          <li>High School Track: <strong>$1,199</strong> (early-bird $1,049)</li>
+          <li>College / Pre-Med Track: <strong>$1,399</strong> (early-bird $1,249)</li>
+          <li>Medical School Track: <strong>$1,599</strong> (early-bird $1,449)</li>
+          <li>Resident / IMG / Fellowship Track: <strong>$1,599</strong> (early-bird $1,449)</li>
+          <li>12-Month Advanced Track: <strong>$1,799</strong> (early-bird $1,599)</li>
+        </ul>
+        Two-installment plans are available for every track. See the <a href="enroll.html">Enroll page</a> for full details.
+      </div>
+    </details>
+
+    <details>
+      <summary>How do I pay?</summary>
+      <div>We currently accept ACH bank transfer and mail-in checks / bank drafts. Credit card, Apple Pay, and Google Pay are coming soon. Full bank and mail-in details are in your acceptance email and on the <a href="enroll.html">Enroll page</a>.</div>
+    </details>
+
+    <details>
+      <summary>What's your refund policy?</summary>
+      <div>Full refund through the end of Week 1. 50% refund during Week 2. No refund after Week 2 of the course start date.</div>
+    </details>
+
+    <details>
+      <summary>Can I get a fee waiver?</summary>
+      <div>Yes — in limited cases. If cost is a barrier, email <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a> with subject "Fee Waiver Request." We evaluate requests on a rolling basis and prioritize students from under-resourced backgrounds.</div>
+    </details>
+
+    <h2>Program experience</h2>
+
+    <details>
+      <summary>What does a typical week look like?</summary>
+      <div>Most scholars spend <strong>6–10 hours per week</strong> on the program: ~2 hours of cohort instruction, 1 hour of mentor 1:1, and 3–7 hours on independent reading, analysis, and assignments. Heavier weeks fall during writing-intensive modules.</div>
+    </details>
+
+    <details>
+      <summary>How is the curriculum delivered?</summary>
+      <div>Through a private student portal with weekly lectures (video), reading materials (PDF), datasets for hands-on analysis, and assignment submission. You can see the full curriculum structure on each track's <a href="programs.html">program page</a>.</div>
+    </details>
+
+    <details>
+      <summary>Do I get a certificate?</summary>
+      <div>Yes. Upon successful completion, we issue an MD Scholars Completion Certificate. Each certificate has a unique ID and can be independently verified at <a href="verify.html">mdscholars.com/verify</a>.</div>
+    </details>
+
+    <details>
+      <summary>Will I get a publication?</summary>
+      <div>That depends on the scope of your project, your effort, and the venue you target. We structure every track around a <strong>submittable output</strong> — typically a conference abstract for the 12-week tracks and a journal manuscript for the 12-Month Advanced Track. We don't guarantee acceptance at any specific venue, but we do guarantee the support to produce submission-ready work.</div>
+    </details>
+
+    <h2>Authorship &amp; ethics</h2>
+
+    <details>
+      <summary>How is authorship determined?</summary>
+      <div>We follow <strong>ICMJE authorship criteria</strong>. Scholars who do the analytic and writing work earn first-author credit. Mentors who contribute substantively earn co-authorship; those who don't are listed in Acknowledgments. See our full <a href="authorship.html">Authorship Policy</a>.</div>
+    </details>
+
+    <details>
+      <summary>Is the certificate ICMJE-compliant?</summary>
+      <div>The certificate documents your completion of the MD Scholars program. ICMJE authorship criteria apply to specific authored works (papers, abstracts, posters) — not to certificates of completion. We do, however, document your specific contributions on any work product so authorship is verifiable.</div>
+    </details>
+
+    <h2>For institutions &amp; mentors</h2>
+
+    <details>
+      <summary>Do you partner with schools or hospitals?</summary>
+      <div>Yes. Our Institutional Program delivers a customized version of the curriculum to partner schools, colleges, and hospital systems. Get a custom quote at <a href="for-institutions.html">For Institutions</a>.</div>
+    </details>
+
+    <details>
+      <summary>How do I become a faculty mentor?</summary>
+      <div>Faculty mentors are physicians or physician-scientists with active research portfolios. If you're interested, email <a href="mailto:team@mdscholars.com">team@mdscholars.com</a> with your CV and a brief note about your research interests.</div>
+    </details>
+
+    <h2>Privacy, support, &amp; contact</h2>
+
+    <details>
+      <summary>How do you protect my information?</summary>
+      <div>See our <a href="privacy.html">Privacy Policy</a>. Short version: we collect only what we need, we don't sell your data, and we use industry-standard encryption.</div>
+    </details>
+
+    <details>
+      <summary>Who do I email for what?</summary>
+      <div>
+        <ul>
+          <li><strong>General questions:</strong> <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></li>
+          <li><strong>Partnerships / outreach / institutional sales:</strong> <a href="mailto:team@mdscholars.com">team@mdscholars.com</a></li>
+          <li><strong>Enrolled-student support:</strong> <a href="mailto:support@mdscholars.com">support@mdscholars.com</a> (Subject: <em>Billing</em> or <em>Education</em>)</li>
+        </ul>
+      </div>
+    </details>
+  
+    <p style="margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--gray-200);">Questions about this policy? Email <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a>.</p>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="apply.html">Apply</a>
+        <a href="enroll.html">Enroll &amp; Tuition</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="authorship.html">Authorship Policy</a>
+        <a href="faqs.html">FAQs</a>
+        <a href="verify.html">Verify Certificate</a>
+      </div>
+      <p style="font-size:0.85rem;">© 2026 MD Scholars LLC. Physician-led · Small cohorts · Ethical authorship.</p>
+    </div>
+  </footer>
+</body>
+</html>
