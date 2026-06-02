@@ -615,7 +615,11 @@
                 width: 100%;
             }
         }
-    </style>
+    /* MDS-LOGO-FIX */
+    .nav-logo-icon { width: 42px !important; height: 42px !important; padding: 0; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; }
+    .nav-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+    .brand-icon img, .topbar-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+  </style>
 </head>
 <body>
     <nav>
@@ -713,14 +717,9 @@
                 <p>contact@mdscholars.com</p>
             </div>
             <div class="contact-card">
-                <div class="contact-icon">📞</div>
-                <h3>Phone</h3>
-                <p>Coming soon</p>
-            </div>
-            <div class="contact-card">
-                <div class="contact-icon">📍</div>
-                <h3>Address</h3>
-                <p>Coming soon</p>
+                <div class="contact-icon">✉️</div>
+                <h3>Email</h3>
+                <p><a href="mailto:contact@mdscholars.com" style="color:#0d9488; text-decoration:none;">contact@mdscholars.com</a></p>
             </div>
         </div>
         <div style="text-align: center;">
