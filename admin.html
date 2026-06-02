@@ -276,6 +276,7 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'feedback')">⭐ Feedback</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'submissions')">📝 Submissions</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'questions')">💬 Q&amp;A</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'course-content')">🎓 Course Content</a>
           </div>
         </div>
 
@@ -577,6 +578,103 @@
             </table>
           </div>
 
+          <!-- COURSE CONTENT TAB -->
+          <div id="course-content" class="content-section">
+            <div class="section-header">
+              <h2>Course Content</h2>
+              <div class="button-group">
+                <button class="btn-secondary" onclick="loadCourseMaterials()">🔄 Refresh</button>
+              </div>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem;">
+              <h3 style="margin-bottom:0.85rem; font-family:'Playfair Display',serif; color:#001F3F;">Upload a course material</h3>
+              <p style="color:#555; font-size:0.92rem; margin-bottom:1rem;">Upload videos, slides, PDFs, datasets, or external links for any track and any week. Materials are visible immediately to students enrolled in that track unless you uncheck "Publish".</p>
+              <form id="materialUploadForm" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; align-items:end;">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Track</label>
+                  <select id="cmTrack" required style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                    <option value="future-physician">Future Physician (HS)</option>
+                    <option value="pre-med">Pre-Med (College)</option>
+                    <option value="med-accelerator">Med Student Accelerator</option>
+                    <option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
+                    <option value="12month">12-Month Track</option>
+                    <option value="institutional">Institutional</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Week #</label>
+                  <input type="number" id="cmWeek" min="0" max="52" placeholder="e.g. 1" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                  <small style="color:#888; font-size:0.78rem;">Leave blank for "all weeks" / syllabus</small>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Type</label>
+                  <select id="cmType" required style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                    <option value="video">Video</option>
+                    <option value="slides">Slides</option>
+                    <option value="pdf">PDF</option>
+                    <option value="dataset">Dataset</option>
+                    <option value="link">External link</option>
+                    <option value="syllabus">Syllabus</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title</label>
+                  <input type="text" id="cmTitle" required placeholder="e.g. Week 1 Lecture — Introduction to Health Research" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">File (or leave blank if using external link)</label>
+                  <input type="file" id="cmFile" accept="video/*,.pdf,.ppt,.pptx,.csv,.xlsx,.docx,.zip,image/*" style="width:100%; padding:0.4rem; font-family:inherit;">
+                  <small style="color:#888; font-size:0.78rem;">Uploads go to the <code>course-materials</code> Supabase Storage bucket (public).</small>
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">OR External URL (YouTube / Vimeo / Drive / etc.)</label>
+                  <input type="url" id="cmExternalUrl" placeholder="https://www.youtube.com/watch?v=…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+                  <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
+                    <input type="checkbox" id="cmPublish" checked> Publish to students immediately
+                  </label>
+                  <button type="submit" id="cmUploadBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer; margin-left:auto;">Upload material</button>
+                </div>
+                <div id="cmStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
+              </form>
+            </div>
+
+            <div class="table-controls">
+              <div class="filters">
+                <select class="search-input" id="filterCmTrack" onchange="renderCourseMaterialsTable()" style="max-width:220px;">
+                  <option value="">All tracks</option>
+                  <option value="future-physician">Future Physician (HS)</option>
+                  <option value="pre-med">Pre-Med (College)</option>
+                  <option value="med-accelerator">Med Student Accelerator</option>
+                  <option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
+                  <option value="12month">12-Month Track</option>
+                  <option value="institutional">Institutional</option>
+                </select>
+                <input type="text" class="search-input" id="searchCm" placeholder="Search by title…" oninput="renderCourseMaterialsTable()">
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Track</th>
+                  <th>Week</th>
+                  <th>Type</th>
+                  <th>Title</th>
+                  <th>Source</th>
+                  <th>Published</th>
+                  <th>Uploaded</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="course-materials-tbody">
+                <tr><td colspan="8" class="empty-state">Loading materials…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
         </div><!-- end dashboard-content -->
       </div><!-- end dashboard-main -->
     </div>
@@ -692,6 +790,7 @@
       else if (tabName === 'feedback') { if (allFeedback.length === 0) loadFeedback(); else renderFeedbackTable(); }
       else if (tabName === 'submissions') { loadSubmissions(); }
       else if (tabName === 'questions') { loadQuestions(); }
+      else if (tabName === 'course-content') { loadCourseMaterials(); }
     }
 
     function goToTab(tabName) {
@@ -1524,6 +1623,155 @@
         '<p>' + escHtml(value||'—') + '</p>' +
         '</div>';
     }
+
+    /* =====================================================================
+       COURSE CONTENT TAB — upload + manage course_materials
+       ===================================================================== */
+    var allCourseMaterials = [];
+
+    async function loadCourseMaterials() {
+      try {
+        var res = await getDB().from('course_materials').select('*').order('track').order('week_number', { nullsFirst: false }).order('display_order');
+        if (res.error) throw res.error;
+        allCourseMaterials = res.data || [];
+        renderCourseMaterialsTable();
+      } catch (err) {
+        console.error('Error loading course materials:', err);
+        document.getElementById('course-materials-tbody').innerHTML =
+          '<tr><td colspan="8" class="empty-state" style="color:#c00;">Error: ' + escHtml(err.message || String(err)) + '</td></tr>';
+      }
+    }
+
+    function renderCourseMaterialsTable() {
+      var trackFilter = (document.getElementById('filterCmTrack')||{}).value || '';
+      var search = ((document.getElementById('searchCm')||{}).value || '').toLowerCase();
+      var rows = allCourseMaterials.filter(function(m) {
+        if (trackFilter && m.track !== trackFilter) return false;
+        if (search && !(m.title||'').toLowerCase().includes(search)) return false;
+        return true;
+      });
+      var tbody = document.getElementById('course-materials-tbody');
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No materials yet. Use the form above to upload one.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows.map(function(m) {
+        var src = m.external_url
+          ? '<a href="' + escHtml(m.external_url) + '" target="_blank" rel="noopener" style="color:#0d9488;">External ↗</a>'
+          : (m.storage_path
+              ? '<a href="https://nygeinaoevzyptkgchqb.supabase.co/storage/v1/object/public/course-materials/' + encodeURI(m.storage_path) + '" target="_blank" rel="noopener" style="color:#0d9488;">File ↗</a>'
+              : '<em style="color:#888;">—</em>');
+        var pub = m.is_published
+          ? '<span style="background:#d1fae5; color:#065f46; padding:0.2rem 0.65rem; border-radius:99px; font-size:0.78rem; font-weight:600;">Published</span>'
+          : '<span style="background:#fef3c7; color:#92400e; padding:0.2rem 0.65rem; border-radius:99px; font-size:0.78rem; font-weight:600;">Draft</span>';
+        return '<tr>' +
+          '<td>' + escHtml(m.track) + '</td>' +
+          '<td>' + (m.week_number != null ? 'Week ' + m.week_number : '<em style="color:#888;">all</em>') + '</td>' +
+          '<td>' + escHtml(m.material_type) + '</td>' +
+          '<td>' + escHtml(m.title) + '</td>' +
+          '<td>' + src + '</td>' +
+          '<td>' + pub + '</td>' +
+          '<td>' + (m.created_at ? new Date(m.created_at).toLocaleDateString() : '—') + '</td>' +
+          '<td>' +
+            '<button class="btn-secondary" style="padding:0.35rem 0.65rem; font-size:0.8rem;" onclick="toggleCmPublished(\'' + m.id + '\', ' + (m.is_published ? 'false' : 'true') + ')">' + (m.is_published ? 'Unpublish' : 'Publish') + '</button> ' +
+            '<button class="btn-secondary" style="padding:0.35rem 0.65rem; font-size:0.8rem; color:#c00; border-color:#c00;" onclick="deleteCm(\'' + m.id + '\')">Delete</button>' +
+          '</td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    async function toggleCmPublished(id, newValue) {
+      try {
+        var res = await getDB().from('course_materials').update({ is_published: newValue, updated_at: new Date().toISOString() }).eq('id', id);
+        if (res.error) throw res.error;
+        showToast(newValue ? 'Published to students' : 'Unpublished', 'success');
+        loadCourseMaterials();
+      } catch (err) {
+        showToast('Update failed: ' + (err.message || err), 'error');
+      }
+    }
+
+    async function deleteCm(id) {
+      if (!confirm('Delete this course material? This cannot be undone.')) return;
+      try {
+        // Try to also remove the storage file, if any
+        var existing = allCourseMaterials.find(function(m){return m.id === id;});
+        if (existing && existing.storage_path) {
+          try { await getDB().storage.from('course-materials').remove([existing.storage_path]); } catch(e) {}
+        }
+        var res = await getDB().from('course_materials').delete().eq('id', id);
+        if (res.error) throw res.error;
+        showToast('Deleted', 'success');
+        loadCourseMaterials();
+      } catch (err) {
+        showToast('Delete failed: ' + (err.message || err), 'error');
+      }
+    }
+
+    function setCmStatus(kind, msg) {
+      var el = document.getElementById('cmStatus');
+      el.style.display = 'block';
+      if (kind === 'success') { el.style.background = '#d1fae5'; el.style.color = '#065f46'; }
+      else if (kind === 'error') { el.style.background = '#fee2e2'; el.style.color = '#991b1b'; }
+      else { el.style.background = '#dbeafe'; el.style.color = '#1e40af'; }
+      el.textContent = msg;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('materialUploadForm');
+      if (!form) return;
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('cmUploadBtn');
+        var track = document.getElementById('cmTrack').value;
+        var weekRaw = document.getElementById('cmWeek').value.trim();
+        var weekNumber = weekRaw === '' ? null : parseInt(weekRaw, 10);
+        var type = document.getElementById('cmType').value;
+        var title = document.getElementById('cmTitle').value.trim();
+        var externalUrl = document.getElementById('cmExternalUrl').value.trim();
+        var fileInput = document.getElementById('cmFile');
+        var file = fileInput.files[0];
+        var isPublished = document.getElementById('cmPublish').checked;
+
+        if (!title) { setCmStatus('error', 'Title is required.'); return; }
+        if (!file && !externalUrl) { setCmStatus('error', 'Provide either a file or an external URL.'); return; }
+
+        btn.disabled = true; btn.textContent = 'Uploading…';
+        setCmStatus('info', 'Uploading…');
+
+        try {
+          var storagePath = null;
+          if (file) {
+            var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            storagePath = track + '/' + (weekNumber != null ? 'week-' + weekNumber : 'general') + '/' + Date.now() + '-' + safeName;
+            var up = await getDB().storage.from('course-materials').upload(storagePath, file, { cacheControl: '3600', upsert: false });
+            if (up.error) throw up.error;
+          }
+          var ins = await getDB().from('course_materials').insert([{
+            track: track,
+            week_number: weekNumber,
+            title: title,
+            material_type: type,
+            storage_path: storagePath,
+            external_url: externalUrl || null,
+            is_published: isPublished,
+            display_order: 0
+          }]);
+          if (ins.error) throw ins.error;
+          setCmStatus('success', 'Material uploaded successfully.');
+          // Reset form
+          document.getElementById('cmTitle').value = '';
+          document.getElementById('cmExternalUrl').value = '';
+          fileInput.value = '';
+          loadCourseMaterials();
+        } catch (err) {
+          console.error(err);
+          setCmStatus('error', 'Upload failed: ' + (err.message || String(err)));
+        } finally {
+          btn.disabled = false; btn.textContent = 'Upload material';
+        }
+      });
+    });
   </script>
 </body>
 </html>
