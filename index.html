@@ -518,7 +518,11 @@
     .apply-funnel { padding: 2rem 1.5rem; }
     section { padding: 70px 0; }
   }
-</style>
+/* MDS-LOGO-FIX */
+    .nav-logo-icon { width: 42px !important; height: 42px !important; padding: 0; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; }
+    .nav-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+    .brand-icon img, .topbar-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+  </style>
 </head>
 <body>
 <!-- NAVIGATION -->
@@ -704,7 +708,7 @@
           <li>AMCAS research activity documentation</li>
         </ul>
         <div class="program-card-footer">
-          <span class="program-duration">🕐 16-week cohort</span>
+          <span class="program-duration">🕐 12-week cohort</span>
           <a class="btn-sm" href="college.html">Learn More →</a>
         </div>
       </div>
@@ -720,7 +724,7 @@
           <li>Residency letter of support (performance-based)</li>
         </ul>
         <div class="program-card-footer">
-          <span class="program-duration">🕐 20-week intensive</span>
+          <span class="program-duration">🕐 12-week intensive</span>
           <a class="btn-sm" href="medical-student.html">Learn More →</a>
         </div>
       </div>
@@ -1010,7 +1014,7 @@ const programData = {
     badge: '📚 Pre-Med Research Scholars',
     title: 'Pre-Med Research Scholars Program',
     description: 'Build the research experience and letters of support that make medical school applications competitive. Real projects, real mentors, real outcomes aligned with AMCAS documentation.',
-    duration: '16-week cohort',
+    duration: '12-week cohort',
     overview: 'Designed for undergraduate students navigating the AMCAS research activity section, this program provides hands-on research training with physician mentors. Mentees work on real datasets, develop research skills, and pursue conference abstract submission — creating a portfolio that distinguishes them in a competitive applicant pool.',
     curriculum: [
       { title: 'Clinical Research Fundamentals', desc: 'Research question development, IRB basics, literature review methodology, and citation management.' },
@@ -1027,7 +1031,7 @@ const programData = {
     badge: '🩺 Medical Student Accelerator',
     title: 'Medical Student Accelerator',
     description: 'Strengthen your residency application with peer-reviewed publications and scholarly presentations. Designed to fit into MS1–MS4 timelines without overwhelming your clinical schedule.',
-    duration: '20-week intensive',
+    duration: '12-week intensive',
     overview: 'The Medical Student Accelerator bridges the gap between clinical training and scholarly productivity. With ERAS deadlines in mind, students work 1:1 with physician mentors to develop manuscripts, submit to national conferences, and build a research portfolio that makes them competitive for their specialty of choice.',
     curriculum: [
       { title: 'Research Strategy Session', desc: 'Personalized assessment of research interests, career goals, and timeline — building your scholarly roadmap.' },
