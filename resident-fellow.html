@@ -112,7 +112,11 @@
 
   @media (max-width: 900px) { .detail-body { grid-template-columns: 1fr; } .detail-sidebar-card { position: static; } .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; } }
   @media (max-width: 600px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr; } }
-</style>
+/* MDS-LOGO-FIX */
+    .nav-logo-icon { width: 42px !important; height: 42px !important; padding: 0; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; }
+    .nav-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+    .brand-icon img, .topbar-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+  </style>
 </head>
 <body>
 
