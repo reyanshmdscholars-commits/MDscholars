@@ -83,7 +83,7 @@
   <div id="appWrapper" style="display:none;">
     <div class="topbar">
       <div class="brand">
-        <div class="brand-icon">⚕️</div>
+        <div class="brand-icon"><img src="../logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
         <div class="brand-text"><strong>MD Scholars</strong><br><span>Student Portal</span></div>
       </div>
       <div class="topbar-right">
@@ -157,6 +157,7 @@
 
           <div class="card" style="margin-top:1.5rem;">
             <h2><span class="icon">📜</span> Account</h2>
+            <div class="list-item">Student ID <strong id="acctStudentId" style="font-weight:700; font-family:monospace; font-size:0.85rem; color:var(--teal-bright);">—</strong></div>
             <div class="list-item">Email <strong id="acctEmail" style="font-weight:600; font-size:0.85rem;">—</strong></div>
             <div class="list-item">Track <strong id="acctTrack" style="font-weight:600; font-size:0.85rem;">—</strong></div>
             <div class="list-item">Cohort started <strong id="acctStart" style="font-weight:600; font-size:0.85rem;">—</strong></div>
@@ -213,6 +214,7 @@
       document.getElementById('trackLink').href = 'courses/' + trk.file;
       document.getElementById('submitAssignmentLink').href = 'courses/' + trk.file + '#assignment';
       document.getElementById('askQuestionLink').href = 'courses/' + trk.file + '#questions';
+      document.getElementById('acctStudentId').textContent = prof.student_id || 'Pending';
       document.getElementById('acctEmail').textContent = prof.email;
       document.getElementById('acctTrack').textContent = trk.name;
       document.getElementById('acctStart').textContent = new Date(prof.cohort_start).toLocaleDateString();
