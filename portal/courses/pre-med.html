@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Pre-Med Research Scholars — Course Materials</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Pre-Med Research Scholars — MD Scholars Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --navy:#001F3F; --teal:#134E4A; --teal-bright:#0d9488; --teal-light:#14b8a6; --gold:#c9a84c; --cream:#f8f5ef; --white:#ffffff; --gray-100:#f4f6f8; --gray-200:#e2e8f0; --gray-400:#94a3b8; --gray-600:#475569; --text:#0f172a; }
+  :root { --navy:#001F3F; --teal:#134E4A; --teal-bright:#0d9488; --teal-light:#14b8a6; --gold:#c9a84c; --cream:#f8f5ef; --white:#ffffff; --gray-100:#f4f6f8; --gray-200:#e2e8f0; --gray-300:#cbd5e1; --gray-400:#94a3b8; --gray-600:#475569; --text:#0f172a; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'DM Sans', sans-serif; color:var(--text); background:var(--gray-100); }
   .topbar { background:var(--navy); color:white; padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; }
@@ -25,7 +26,11 @@
   .crumbs { font-size:0.85rem; opacity:0.85; margin-bottom:0.75rem; }
   .crumbs a { color:rgba(255,255,255,0.85); text-decoration:none; }
   .hero h1 { font-family:'Playfair Display', serif; font-size:2.1rem; }
-  .hero p { font-size:1.05rem; opacity:0.95; max-width:700px; margin-top:0.5rem; }
+  .hero .subtitle { font-size:0.95rem; opacity:0.85; margin-top:0.25rem; }
+  .hero p { font-size:1.05rem; opacity:0.95; max-width:760px; margin-top:0.85rem; }
+  .progress-strip { background:rgba(255,255,255,0.1); border-radius:99px; height:10px; overflow:hidden; max-width:380px; margin-top:1.25rem; }
+  .progress-strip-fill { background:linear-gradient(90deg, var(--gold), #fde68a); height:100%; transition:width 0.4s; }
+  .progress-meta { font-size:0.85rem; opacity:0.95; margin-top:0.45rem; letter-spacing:0.02em; }
 
   .container { max-width:1100px; margin:0 auto; padding:2.5rem 2rem; }
   .tabs { display:flex; gap:0; border-bottom:2px solid var(--gray-200); margin-bottom:2rem; overflow-x:auto; }
@@ -34,7 +39,6 @@
   .panel { display:none; }
   .panel.active { display:block; }
 
-  /* Syllabus */
   .section-card { background:var(--white); border-radius:14px; padding:2rem; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid var(--gray-200); margin-bottom:1.5rem; }
   .section-card h2 { font-family:'Playfair Display', serif; font-size:1.45rem; color:var(--navy); margin-bottom:1rem; }
   .section-card h3 { font-family:'Playfair Display', serif; font-size:1.1rem; color:var(--navy); margin:1.25rem 0 0.5rem; }
@@ -43,45 +47,62 @@
   .pill-list { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.75rem 0; }
   .pill { background:var(--cream); color:var(--navy); padding:0.4rem 0.85rem; border-radius:99px; font-size:0.85rem; font-weight:500; border:1px solid var(--gray-200); }
 
-  /* Weekly modules */
   .week-card { background:var(--white); border-radius:14px; padding:1.75rem; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid var(--gray-200); margin-bottom:1.25rem; }
+  .week-card.locked { opacity:0.55; }
+  .week-card.locked .resources, .week-card.locked .video-wrap { pointer-events:none; }
   .week-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; gap:1rem; flex-wrap:wrap; }
   .week-num { background:linear-gradient(135deg, var(--teal-bright), var(--teal-light)); color:white; padding:0.4rem 0.85rem; border-radius:99px; font-size:0.82rem; font-weight:600; letter-spacing:0.04em; }
-  .week-title { font-family:'Playfair Display', serif; font-size:1.25rem; color:var(--navy); }
+  .week-num.locked { background:var(--gray-300); }
+  .week-title { font-family:'Playfair Display', serif; font-size:1.25rem; color:var(--navy); flex:1; min-width:0; }
+  .week-status-badge { font-size:0.72rem; padding:0.2rem 0.65rem; border-radius:99px; font-weight:600; letter-spacing:0.02em; }
+  .badge.unlocked { background:#d1fae5; color:#065f46; }
+  .badge.locked { background:#fef3c7; color:#92400e; }
+  .badge.completed { background:#dbeafe; color:#1e40af; }
   .video-wrap { position:relative; padding-bottom:56.25%; height:0; border-radius:10px; overflow:hidden; background:var(--gray-100); margin:1rem 0; }
-  .video-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
-  .video-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--gray-400); gap:0.5rem; font-size:0.95rem; }
+  .video-wrap iframe, .video-wrap video { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+  .video-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--gray-400); gap:0.5rem; font-size:0.95rem; text-align:center; padding:1rem; }
   .resources { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:0.85rem; margin-top:1rem; }
   .resource { background:var(--cream); border:1px solid var(--gray-200); border-radius:10px; padding:0.85rem 1rem; display:flex; align-items:center; gap:0.75rem; text-decoration:none; color:var(--navy); font-size:0.92rem; font-weight:500; transition:all 0.2s; }
   .resource:hover { border-color:var(--teal-bright); transform:translateY(-1px); box-shadow:0 4px 12px rgba(13,148,136,0.1); }
   .resource-icon { font-size:1.3rem; }
+  .week-topics { margin:0.75rem 0; }
+  .week-assignment { margin-top:0.85rem; padding:0.85rem 1rem; background:#fff7ed; border-left:3px solid var(--gold); border-radius:6px; font-size:0.9rem; color:var(--text); }
+  .week-assignment strong { color:#78350f; }
 
-  /* Assignment / Question forms */
-  textarea { width:100%; min-height:160px; padding:0.85rem 1rem; border:1px solid var(--gray-200); border-radius:8px; font-family:inherit; font-size:0.95rem; resize:vertical; }
-  textarea:focus { outline:none; border-color:var(--teal-bright); box-shadow:0 0 0 3px rgba(20,184,166,0.15); }
+  textarea, input[type=text], select { width:100%; padding:0.85rem 1rem; border:1px solid var(--gray-200); border-radius:8px; font-family:inherit; font-size:0.95rem; }
+  textarea { min-height:160px; resize:vertical; }
+  textarea:focus, input:focus, select:focus { outline:none; border-color:var(--teal-bright); box-shadow:0 0 0 3px rgba(20,184,166,0.15); }
   .word-count { font-size:0.85rem; color:var(--gray-600); margin-top:0.5rem; }
   .word-count.over { color:#ef4444; font-weight:600; }
-  .submit-btn { background:linear-gradient(135deg, var(--teal-bright), var(--teal-light)); color:white; padding:0.75rem 1.5rem; border:none; border-radius:8px; font-size:0.95rem; font-weight:600; font-family:inherit; cursor:pointer; margin-top:1rem; transition:opacity 0.2s; }
+  .submit-btn { background:linear-gradient(135deg, var(--teal-bright), var(--teal-light)); color:white; padding:0.75rem 1.5rem; border:none; border-radius:8px; font-size:0.95rem; font-weight:600; font-family:inherit; cursor:pointer; margin-top:1rem; }
   .submit-btn:hover { opacity:0.92; }
   .submit-btn:disabled { opacity:0.5; cursor:not-allowed; }
-  select { padding:0.6rem 0.85rem; border:1px solid var(--gray-200); border-radius:8px; font-size:0.95rem; font-family:inherit; background:var(--white); }
+  .toggle-row { display:flex; gap:0.5rem; padding:0.35rem; background:var(--gray-100); border-radius:8px; margin-bottom:1rem; width:fit-content; }
+  .toggle-btn { background:transparent; border:0; padding:0.5rem 1rem; border-radius:6px; font-size:0.88rem; cursor:pointer; font-family:inherit; color:var(--gray-600); font-weight:500; }
+  .toggle-btn.active { background:var(--white); color:var(--navy); box-shadow:0 1px 3px rgba(0,0,0,0.08); font-weight:600; }
   .toast { position:fixed; bottom:2rem; right:2rem; padding:1rem 1.5rem; border-radius:8px; font-weight:500; box-shadow:0 8px 24px rgba(0,0,0,0.15); display:none; z-index:10000; }
   .toast.success { background:#10b981; color:white; }
   .toast.error { background:#ef4444; color:white; }
 
-  /* History */
   .history-item { padding:1rem; border:1px solid var(--gray-200); border-radius:10px; margin-bottom:0.75rem; }
-  .history-meta { display:flex; justify-content:space-between; font-size:0.85rem; color:var(--gray-600); margin-bottom:0.5rem; }
+  .history-meta { display:flex; justify-content:space-between; font-size:0.85rem; color:var(--gray-600); margin-bottom:0.5rem; gap:0.5rem; flex-wrap:wrap; }
   .history-content { color:var(--text); font-size:0.95rem; line-height:1.5; white-space:pre-wrap; }
   .badge { font-size:0.72rem; padding:0.2rem 0.6rem; border-radius:99px; font-weight:600; }
   .badge.pending { background:#fef3c7; color:#92400e; }
   .badge.submitted { background:#dbeafe; color:#1e40af; }
   .badge.reviewed { background:#d1fae5; color:#065f46; }
   .badge.answered { background:#d1fae5; color:#065f46; }
+  .badge.group { background:#fce7f3; color:#9d174d; }
+  .badge.individual { background:#e0e7ff; color:#3730a3; }
 
   .loading { text-align:center; padding:5rem; color:var(--gray-600); }
   .loading .spinner { display:inline-block; width:32px; height:32px; border:3px solid var(--gray-200); border-top-color:var(--teal-bright); border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom:1rem; }
   @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* Week filter dropdown for the weekly panel */
+  .week-filter-row { display:flex; gap:0.75rem; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; }
+  .week-filter-row select { width:auto; min-width:160px; padding:0.5rem 0.85rem; font-size:0.9rem; background:white; }
+  .week-filter-row small { color:var(--gray-600); font-size:0.85rem; }
 </style>
 </head>
 <body>
@@ -100,7 +121,10 @@
       <div class="hero-inner">
         <div class="crumbs"><a href="../dashboard.html">Dashboard</a> &nbsp;›&nbsp; Pre-Med Research Scholars</div>
         <h1>Pre-Med Research Scholars</h1>
-        <p>Build Meaningful Research Experience for Medical School — a 12-week curriculum that takes you from research question to a submitted conference abstract.</p>
+        <div class="subtitle">College / Pre-Med Track · 12-Week Curriculum</div>
+        <p>Equips undergraduate pre-med students with the practical research skills and AMCAS-ready scholarly output medical schools care about. Students execute a real dataset-based project from research question to submitted abstract, paired with a physician mentor.</p>
+        <div class="progress-strip"><div class="progress-strip-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-meta" id="progressMeta">Loading progress…</div>
       </div>
     </div>
 
@@ -117,111 +141,47 @@
       <div class="panel active" id="panel-syllabus">
         <div class="section-card">
           <h2>Course Overview</h2>
-          <p>The Pre-Med Research Scholars program is a 12-week, faculty-mentored research experience designed for undergraduate students preparing to apply to medical school. You'll work on a real, dataset-based research project alongside a physician mentor, build the technical skills that AMCAS reviewers care about, and produce a conference-ready abstract.</p>
+          <p>Equips undergraduate pre-med students with the practical research skills and AMCAS-ready scholarly output medical schools care about. Students execute a real dataset-based project from research question to submitted abstract, paired with a physician mentor.</p>
           <h3>Course Goals</h3>
           <ul>
-            <li>Develop a working research question and the methodology to answer it</li>
-            <li>Gain hands-on experience with de-identified clinical datasets</li>
-            <li>Learn descriptive and inferential biostatistics relevant to clinical research</li>
-            <li>Produce a complete abstract (background, methods, results, conclusion) submitted to a regional or national conference</li>
-            <li>Acquire AMCAS-ready documentation of your scholarly activity</li>
+            <li>Develop a publishable research question grounded in current literature</li>
+            <li>Conduct hands-on analysis of a de-identified clinical dataset</li>
+            <li>Apply descriptive and inferential biostatistics to a real research problem</li>
+            <li>Write a structured abstract using IMRAD</li>
+            <li>Document research activity in AMCAS-ready format</li>
+            <li>Submit work to a regional or national conference</li>
           </ul>
           <h3>What You'll Walk Away With</h3>
           <div class="pill-list">
-            <span class="pill">📄 Conference abstract</span>
-            <span class="pill">📊 Dataset analysis portfolio</span>
-            <span class="pill">📝 AMCAS-ready writeup</span>
-            <span class="pill">🏅 Research Completion Certificate</span>
-            <span class="pill">👨‍⚕️ Physician mentor evaluation letter</span>
-            <span class="pill">📑 Possible co-authorship</span>
+            <span class="pill">Formal research question + PICO</span>
+            <span class="pill">Literature review (mini-systematic)</span>
+            <span class="pill">Dataset analysis portfolio (SPSS / R / STATA output)</span>
+            <span class="pill">Conference-ready abstract</span>
+            <span class="pill">AMCAS scholarly activity writeup</span>
+            <span class="pill">Mentor evaluation letter</span>
+            <span class="pill">Possible co-authorship on a manuscript</span>
           </div>
           <h3>Expectations</h3>
           <ul>
-            <li><strong>Time commitment:</strong> Plan for 8–10 hours per week of mentored work, reading, and project development.</li>
+            <li><strong>Time commitment:</strong> Plan for 6–10 hours per week of mentored work, reading, and assignments.</li>
             <li><strong>Assignment cadence:</strong> One short written deliverable per week (max 1000 words), submitted via the <em>Submit Assignment</em> tab.</li>
-            <li><strong>Mentor meetings:</strong> One 30-minute video meeting per week with your assigned physician mentor.</li>
+            <li><strong>Mentor meetings:</strong> Regular 1:1 or small-group sessions with your assigned physician mentor.</li>
             <li><strong>Authorship policy:</strong> Authorship is ICMJE-compliant and earned, not gifted. We document your contributions to support any publications that arise from the program.</li>
+            <li><strong>Group work:</strong> Some assignments allow group submissions when you're on a team. Use the toggle on the assignment form to choose individual or group submission.</li>
           </ul>
         </div>
       </div>
 
       <!-- WEEKLY CONTENT -->
       <div class="panel" id="panel-weekly">
-        <!-- Week 1 -->
-        <div class="week-card">
-          <div class="week-head">
-            <div><span class="week-num">WEEK 1</span></div>
-            <div class="week-title">Clinical Research Fundamentals</div>
-          </div>
-          <p>Introduction to clinical research methodology, the research question framework (PICO), and an overview of how studies move from idea to publication.</p>
-          <div class="video-wrap">
-            <iframe data-video-id="" src="" title="Week 1 lecture" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <div class="video-placeholder">🎥 Week 1 lecture video — uploading soon</div>
-          </div>
-          <div class="resources">
-            <a class="resource" href="#"><span class="resource-icon">📊</span> Slides (PPT)</a>
-            <a class="resource" href="#"><span class="resource-icon">📄</span> Reading list (PDF)</a>
-            <a class="resource" href="#"><span class="resource-icon">📁</span> Sample dataset</a>
-          </div>
+        <div class="week-filter-row">
+          <label for="weekFilter"><strong>Jump to week:</strong></label>
+          <select id="weekFilter">
+            <option value="all">All weeks</option>
+          </select>
+          <small>Tip — locked weeks become available as you complete prior assignments.</small>
         </div>
-
-        <!-- Week 2 -->
-        <div class="week-card">
-          <div class="week-head"><div><span class="week-num">WEEK 2</span></div><div class="week-title">Study Design &amp; Epidemiology</div></div>
-          <p>Observational study designs (cohort, case-control, cross-sectional), confounding, and causality frameworks relevant to clinical research.</p>
-          <div class="video-wrap"><iframe data-video-id="" src="" title="Week 2 lecture" allowfullscreen></iframe><div class="video-placeholder">🎥 Week 2 lecture video — uploading soon</div></div>
-          <div class="resources">
-            <a class="resource" href="#"><span class="resource-icon">📊</span> Slides (PPT)</a>
-            <a class="resource" href="#"><span class="resource-icon">📄</span> Reading list (PDF)</a>
-          </div>
-        </div>
-
-        <!-- Week 3 -->
-        <div class="week-card">
-          <div class="week-head"><div><span class="week-num">WEEK 3</span></div><div class="week-title">Dataset-Based Research Project — Kickoff</div></div>
-          <p>You're assigned to a faculty-led research project. Get oriented to the dataset, ethics protocols, and your research question.</p>
-          <div class="video-wrap"><iframe data-video-id="" src="" title="Week 3 lecture" allowfullscreen></iframe><div class="video-placeholder">🎥 Week 3 lecture video — uploading soon</div></div>
-          <div class="resources">
-            <a class="resource" href="#"><span class="resource-icon">📊</span> Slides (PPT)</a>
-            <a class="resource" href="#"><span class="resource-icon">📁</span> Your project dataset</a>
-            <a class="resource" href="#"><span class="resource-icon">📄</span> Data dictionary (PDF)</a>
-          </div>
-        </div>
-
-        <!-- Week 4 -->
-        <div class="week-card">
-          <div class="week-head"><div><span class="week-num">WEEK 4</span></div><div class="week-title">Statistical Analysis Basics</div></div>
-          <p>Descriptive statistics, t-tests, chi-square, and an introduction to regression — using SPSS / R / STATA.</p>
-          <div class="video-wrap"><iframe data-video-id="" src="" title="Week 4 lecture" allowfullscreen></iframe><div class="video-placeholder">🎥 Week 4 lecture video — uploading soon</div></div>
-          <div class="resources">
-            <a class="resource" href="#"><span class="resource-icon">📊</span> Slides (PPT)</a>
-            <a class="resource" href="#"><span class="resource-icon">📄</span> Stats cheat sheet (PDF)</a>
-          </div>
-        </div>
-
-        <!-- Week 5 -->
-        <div class="week-card">
-          <div class="week-head"><div><span class="week-num">WEEK 5</span></div><div class="week-title">Abstract &amp; Manuscript Writing</div></div>
-          <p>Structured writing support from abstract to full manuscript. Background, methods, results, conclusion — and how reviewers read each.</p>
-          <div class="video-wrap"><iframe data-video-id="" src="" title="Week 5 lecture" allowfullscreen></iframe><div class="video-placeholder">🎥 Week 5 lecture video — uploading soon</div></div>
-          <div class="resources">
-            <a class="resource" href="#"><span class="resource-icon">📊</span> Slides (PPT)</a>
-            <a class="resource" href="#"><span class="resource-icon">📄</span> Abstract template (DOCX)</a>
-          </div>
-        </div>
-
-        <!-- Week 6 -->
-        <div class="week-card">
-          <div class="week-head"><div><span class="week-num">WEEK 6</span></div><div class="week-title">Conference Submission &amp; AMCAS Documentation</div></div>
-          <p>Submit your abstract to a regional or national conference. Properly document your research activity for AMCAS.</p>
-          <div class="video-wrap"><iframe data-video-id="" src="" title="Week 6 lecture" allowfullscreen></iframe><div class="video-placeholder">🎥 Week 6 lecture video — uploading soon</div></div>
-          <div class="resources">
-            <a class="resource" href="#"><span class="resource-icon">📊</span> Slides (PPT)</a>
-            <a class="resource" href="#"><span class="resource-icon">📄</span> AMCAS writeup guide (PDF)</a>
-          </div>
-        </div>
-
-        <p style="text-align:center; color:var(--gray-600); padding:1.5rem; background:var(--cream); border-radius:10px;">Weeks 7–12 unlock as you progress through the cohort. Your mentor will let you know when each module is ready.</p>
+        <div id="weeksContainer"></div>
       </div>
 
       <!-- ASSIGNMENT -->
@@ -230,10 +190,16 @@
           <h2>Submit an Assignment</h2>
           <p>Submit your weekly deliverable. Max 1000 words. Your mentor will review and respond within 5 business days.</p>
           <form id="assignmentForm" style="margin-top:1.5rem;">
+            <label style="display:block; margin-bottom:0.5rem; font-weight:500;">Submission type</label>
+            <div class="toggle-row">
+              <button type="button" class="toggle-btn active" data-type="individual">Individual</button>
+              <button type="button" class="toggle-btn" data-type="group">Group (my team)</button>
+            </div>
+            <small id="groupHint" style="display:none; color:var(--gray-600); font-size:0.85rem; display:block; margin-bottom:1rem;">Group submissions are linked to your assigned team. All teammates will see this submission.</small>
+
             <label for="weekNum" style="display:block; margin-bottom:0.5rem; font-weight:500;">Week</label>
-            <select id="weekNum" required>
-              <option value="1">Week 1</option><option value="2">Week 2</option><option value="3">Week 3</option><option value="4">Week 4</option><option value="5">Week 5</option><option value="6">Week 6</option><option value="7">Week 7</option><option value="8">Week 8</option><option value="9">Week 9</option><option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option>
-            </select>
+            <select id="weekNum" required></select>
+
             <label for="content" style="display:block; margin:1rem 0 0.5rem; font-weight:500;">Your submission</label>
             <textarea id="content" placeholder="Write your assignment here. Maximum 1000 words." required></textarea>
             <div class="word-count" id="wordCount">0 / 1000 words</div>
@@ -275,9 +241,16 @@
   <script>
     const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
-    const TRACK_KEY = 'pre-med'; // Identifies which track this page belongs to
+    const TRACK_KEY = "pre-med";
+    const TOTAL_WEEKS = 12;
+    const WEEKS = [{"n":1,"t":"Clinical Research Fundamentals","topics":["How clinical research moves from question to publication","PICO + literature search strategy","Searching PubMed effectively"],"assignment":"Submit a refined PICO question + 5 high-quality citations"},{"n":2,"t":"Study Design & Epidemiology","topics":["Cohort, case-control, cross-sectional, RCT","Confounding and effect modification","Causality frameworks"],"assignment":"Critique a published study; identify design + 2 sources of bias"},{"n":3,"t":"Dataset Project Kickoff","topics":["Your assigned faculty-led project","Data dictionary walk-through","Ethics + de-identification refresher"],"assignment":"Submit a one-page project plan"},{"n":4,"t":"Biostatistics Basics","topics":["Descriptive stats, t-tests, chi-square","Intro to regression using SPSS / R / STATA"],"assignment":"Run descriptive stats on your dataset and submit output"},{"n":5,"t":"Inferential Analyses","topics":["Choosing the right statistical test","Reading statistical output critically","Common analytic pitfalls"],"assignment":"Run a primary analysis and interpret results in 1 page"},{"n":6,"t":"Abstract Writing — Background & Methods","topics":["Writing the background (what is known, what is the gap)","Methods that another researcher could reproduce"],"assignment":"Draft Background + Methods of your abstract"},{"n":7,"t":"Abstract Writing — Results & Conclusion","topics":["Reporting results clearly with effect sizes and p-values","Conclusions that match the data","Limitations section"],"assignment":"Complete draft abstract — full IMRAD"},{"n":8,"t":"Conference Submission Strategy","topics":["Identifying the right conference","Submission portals and deadlines","Writing a strong submission cover letter"],"assignment":"Submit abstract to a regional or national conference"},{"n":9,"t":"AMCAS Documentation","topics":["Writing about research activity for AMCAS","Quantifying contribution and impact","Authorship norms (ICMJE)"],"assignment":"Submit your AMCAS research activity writeup"},{"n":10,"t":"Poster Construction","topics":["Designing a clean academic poster","Effective figures and tables","Practicing the 3-minute pitch"],"assignment":"Submit a draft poster (PPTX or PDF)"},{"n":11,"t":"Mock Presentation & Mentor Feedback","topics":["Live mock-presentation session","Mentor + peer feedback","Revisions and Q&A handling"],"assignment":"Incorporate feedback and submit final poster"},{"n":12,"t":"Manuscript Pathway","topics":["From abstract to manuscript","Journal selection","Authorship + acknowledgments"],"assignment":"Submit a one-page manuscript outline for review"}];
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     let currentStudent = null;
+    let myTeam = null;
+    let courseMaterials = []; // from course_materials table
+    let mySubmissions = [];
+    let submissionType = 'individual';
 
     function showToast(type, msg) {
       const t = document.getElementById('toast');
@@ -289,13 +262,11 @@
       document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
       document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
       if (name === 'history') loadHistory();
+      if (name === 'weekly') renderWeeks();
     }
 
-    function countWords(s) {
-      const t = (s || '').trim();
-      if (!t) return 0;
-      return t.split(/\s+/).length;
-    }
+    function countWords(s) { const t = (s || '').trim(); return t ? t.split(/\s+/).length : 0; }
+    function escapeHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     async function loadCourse() {
       const { data: sess } = await sb.auth.getSession();
@@ -309,38 +280,159 @@
         window.location.href = '../dashboard.html'; return;
       }
       currentStudent = prof;
+
+      // Load my team (for group submissions)
+      try {
+        const { data: tm } = await sb.from('my_team').select('*').maybeSingle();
+        if (tm) myTeam = tm;
+      } catch(e) { /* my_team view may not exist for unassigned students */ }
+
+      // Load course_materials for this track
+      try {
+        const { data: mats } = await sb.rpc('list_course_materials', { p_track: TRACK_KEY });
+        if (Array.isArray(mats)) courseMaterials = mats;
+      } catch(e) {
+        // Fallback: direct query
+        const { data: mats } = await sb.from('course_materials').select('*').eq('track', TRACK_KEY).eq('is_published', true).order('week_number').order('display_order');
+        if (Array.isArray(mats)) courseMaterials = mats;
+      }
+
+      // Load my submissions (for progress + history + week-unlock logic)
+      const { data: subs } = await sb.from('my_submissions').select('*').order('submitted_at', { ascending: false });
+      if (Array.isArray(subs)) mySubmissions = subs;
+
+      // Populate week dropdown(s)
+      const weekDd1 = document.getElementById('weekNum');
+      const weekDd2 = document.getElementById('weekFilter');
+      WEEKS.forEach(w => {
+        const opt1 = document.createElement('option'); opt1.value = w.n; opt1.textContent = 'Week ' + w.n + ' — ' + w.t; weekDd1.appendChild(opt1);
+        const opt2 = document.createElement('option'); opt2.value = w.n; opt2.textContent = 'Week ' + w.n; weekDd2.appendChild(opt2);
+      });
+
+      updateProgress();
+      renderWeeks();
+
       document.getElementById('loading').style.display = 'none';
       document.getElementById('appWrapper').style.display = 'block';
 
-      // Handle hash routing for tabs (e.g., #assignment)
       if (window.location.hash) {
         const tab = window.location.hash.replace('#', '');
         if (['syllabus','weekly','assignment','questions','history'].includes(tab)) setActiveTab(tab);
       }
     }
 
-    async function loadHistory() {
-      const [subs, qs] = await Promise.all([
-        sb.from('assignment_submissions').select('*').order('submitted_at', { ascending: false }),
-        sb.from('student_questions').select('*').order('asked_at', { ascending: false })
-      ]);
-      const sl = document.getElementById('submissionsList');
-      if (!subs.data || subs.data.length === 0) sl.innerHTML = '<em style="color:var(--gray-600);">No submissions yet.</em>';
-      else sl.innerHTML = subs.data.map(s => {
-        const badge = `<span class="badge ${s.status}">${s.status}</span>`;
-        return `<div class="history-item"><div class="history-meta"><span><strong>Week ${s.week_number}</strong> · ${new Date(s.submitted_at).toLocaleString()}</span>${badge}</div><div class="history-content">${escapeHtml(s.content)}</div>${s.feedback ? `<div style="margin-top:0.75rem; padding:0.75rem 1rem; background:#f0f9f8; border-left:3px solid var(--teal-bright); border-radius:6px;"><strong>Mentor feedback:</strong><br>${escapeHtml(s.feedback)}</div>` : ''}</div>`;
+    function updateProgress() {
+      const completed = new Set(mySubmissions.filter(s => s.week_number).map(s => s.week_number)).size;
+      const pct = Math.round((completed / TOTAL_WEEKS) * 100);
+      const fill = document.getElementById('progressFill');
+      const meta = document.getElementById('progressMeta');
+      if (fill) fill.style.width = pct + '%';
+      if (meta) meta.textContent = completed + ' of ' + TOTAL_WEEKS + ' weeks complete · ' + pct + '%';
+    }
+
+    // A week is "unlocked" if it's week 1, OR you've submitted the previous week's assignment.
+    // Mentors can override by uploading materials early — published materials always show.
+    function isWeekUnlocked(weekNum) {
+      if (weekNum <= 1) return true;
+      const completedWeeks = new Set(mySubmissions.filter(s => s.week_number).map(s => s.week_number));
+      return completedWeeks.has(weekNum - 1);
+    }
+
+    function materialsForWeek(weekNum) {
+      return courseMaterials.filter(m => m.week_number === weekNum);
+    }
+
+    function renderWeeks() {
+      const container = document.getElementById('weeksContainer');
+      const filter = document.getElementById('weekFilter').value;
+      const completedWeeks = new Set(mySubmissions.filter(s => s.week_number).map(s => s.week_number));
+      const html = WEEKS.filter(w => filter === 'all' || String(w.n) === String(filter)).map(w => {
+        const unlocked = isWeekUnlocked(w.n);
+        const completed = completedWeeks.has(w.n);
+        const mats = materialsForWeek(w.n);
+        const video = mats.find(m => m.material_type === 'video');
+        const resources = mats.filter(m => m.material_type !== 'video');
+        const videoHtml = video
+          ? (video.external_url
+              ? '<div class="video-wrap"><iframe src="' + escapeHtml(toEmbed(video.external_url)) + '" title="' + escapeHtml(video.title) + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>'
+              : '<div class="video-wrap"><video controls src="' + escapeHtml(storageUrl(video.storage_path)) + '"></video></div>')
+          : '<div class="video-wrap"><div class="video-placeholder">🎥 Lecture video will appear here once your mentor publishes it.</div></div>';
+        const resourceHtml = resources.length
+          ? '<div class="resources">' + resources.map(r => {
+              const url = r.external_url || storageUrl(r.storage_path);
+              const icon = { slides:'📊', pdf:'📄', dataset:'📁', link:'🔗', syllabus:'📋', other:'📎' }[r.material_type] || '📎';
+              return '<a class="resource" href="' + escapeHtml(url) + '" target="_blank" rel="noopener"><span class="resource-icon">' + icon + '</span>' + escapeHtml(r.title) + '</a>';
+            }).join('') + '</div>'
+          : '<p style="color:var(--gray-400); font-size:0.88rem; margin-top:0.85rem;">No resources uploaded yet for this week.</p>';
+        const statusBadge = completed
+          ? '<span class="week-status-badge badge completed">✓ Submitted</span>'
+          : unlocked
+            ? '<span class="week-status-badge badge unlocked">Unlocked</span>'
+            : '<span class="week-status-badge badge locked">🔒 Locked</span>';
+        return '<div class="week-card ' + (unlocked ? '' : 'locked') + '">' +
+          '<div class="week-head"><div><span class="week-num ' + (unlocked ? '' : 'locked') + '">WEEK ' + w.n + '</span></div><div class="week-title">' + escapeHtml(w.t) + '</div>' + statusBadge + '</div>' +
+          (w.topics ? '<div class="week-topics"><strong style="color:var(--navy);">Topics</strong><ul>' + w.topics.map(t => '<li>' + escapeHtml(t) + '</li>').join('') + '</ul></div>' : '') +
+          videoHtml +
+          resourceHtml +
+          (w.assignment ? '<div class="week-assignment"><strong>Assignment:</strong> ' + escapeHtml(w.assignment) + '</div>' : '') +
+          '</div>';
       }).join('');
+      container.innerHTML = html || '<div class="section-card"><em>No weeks match this filter.</em></div>';
+    }
+
+    function toEmbed(url) {
+      if (!url) return url;
+      // YouTube watch → embed
+      const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+      if (yt) return 'https://www.youtube.com/embed/' + yt[1];
+      // Vimeo
+      const vm = url.match(/vimeo\.com\/(\d+)/);
+      if (vm) return 'https://player.vimeo.com/video/' + vm[1];
+      return url;
+    }
+    function storageUrl(p) {
+      if (!p) return '';
+      if (p.startsWith('http')) return p;
+      return SUPABASE_URL + '/storage/v1/object/public/course-materials/' + p.replace(/^\//, '');
+    }
+
+    async function loadHistory() {
+      const submissions = mySubmissions || [];
+      const sl = document.getElementById('submissionsList');
+      if (!submissions.length) sl.innerHTML = '<em style="color:var(--gray-600);">No submissions yet.</em>';
+      else sl.innerHTML = submissions.map(s => {
+        const badge = '<span class="badge ' + (s.status||'pending') + '">' + (s.status||'pending') + '</span>';
+        const typeBadge = '<span class="badge ' + (s.submission_type||'individual') + '">' + (s.submission_type||'individual') + '</span>';
+        const wk = s.week_number ? 'Week ' + s.week_number : 'No week';
+        return '<div class="history-item"><div class="history-meta"><span><strong>' + wk + '</strong> · ' + new Date(s.submitted_at).toLocaleString() + '</span>' + typeBadge + ' ' + badge + '</div><div class="history-content">' + escapeHtml(s.content||'') + '</div>' + (s.feedback ? '<div style="margin-top:0.75rem; padding:0.75rem 1rem; background:#f0f9f8; border-left:3px solid var(--teal-bright); border-radius:6px;"><strong>Mentor feedback:</strong><br>' + escapeHtml(s.feedback) + '</div>' : '') + '</div>';
+      }).join('');
+
+      const { data: qs } = await sb.from('student_questions').select('*').order('asked_at', { ascending: false });
       const ql = document.getElementById('questionsList');
-      if (!qs.data || qs.data.length === 0) ql.innerHTML = '<em style="color:var(--gray-600);">No questions asked yet.</em>';
-      else ql.innerHTML = qs.data.map(q => {
-        const badge = `<span class="badge ${q.status}">${q.status}</span>`;
-        return `<div class="history-item"><div class="history-meta"><span>${new Date(q.asked_at).toLocaleString()}</span>${badge}</div><div class="history-content">${escapeHtml(q.question)}</div>${q.answer ? `<div style="margin-top:0.75rem; padding:0.75rem 1rem; background:#f0f9f8; border-left:3px solid var(--teal-bright); border-radius:6px;"><strong>Answer:</strong><br>${escapeHtml(q.answer)}</div>` : ''}</div>`;
+      if (!qs || !qs.length) ql.innerHTML = '<em style="color:var(--gray-600);">No questions asked yet.</em>';
+      else ql.innerHTML = qs.map(q => {
+        const badge = '<span class="badge ' + (q.status||'pending') + '">' + (q.status||'pending') + '</span>';
+        return '<div class="history-item"><div class="history-meta"><span>' + new Date(q.asked_at).toLocaleString() + '</span>' + badge + '</div><div class="history-content">' + escapeHtml(q.question||'') + '</div>' + (q.answer ? '<div style="margin-top:0.75rem; padding:0.75rem 1rem; background:#f0f9f8; border-left:3px solid var(--teal-bright); border-radius:6px;"><strong>Answer:</strong><br>' + escapeHtml(q.answer) + '</div>' : '') + '</div>';
       }).join('');
     }
-    function escapeHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     function initListeners() {
       document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setActiveTab(b.dataset.tab)));
+      document.getElementById('weekFilter').addEventListener('change', renderWeeks);
+      document.querySelectorAll('.toggle-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          document.querySelectorAll('.toggle-btn').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+          submissionType = b.dataset.type;
+          const hint = document.getElementById('groupHint');
+          if (submissionType === 'group' && !myTeam) {
+            showToast('error', 'You are not assigned to a team yet. Stay on individual submission for now.');
+            document.querySelectorAll('.toggle-btn')[0].click();
+            return;
+          }
+          if (hint) hint.style.display = submissionType === 'group' ? 'block' : 'none';
+        });
+      });
 
       document.getElementById('content').addEventListener('input', (e) => {
         const w = countWords(e.target.value);
@@ -356,11 +448,24 @@
         if (countWords(content) > 1000) { showToast('error', 'Submission exceeds 1000-word limit.'); return; }
         if (!content) { showToast('error', 'Write your submission first.'); return; }
         const btn = document.getElementById('submitAssignBtn'); btn.disabled = true; btn.textContent = 'Submitting…';
-        const { error } = await sb.from('assignment_submissions').insert([{ student_id: currentStudent.id, week_number: week, content, status: 'submitted' }]);
+        const payload = {
+          student_id: currentStudent.id,
+          week_number: week,
+          content,
+          status: 'submitted',
+          submission_type: submissionType,
+          team_id: submissionType === 'group' && myTeam ? myTeam.team_id : null
+        };
+        const { error } = await sb.from('assignment_submissions').insert([payload]);
         btn.disabled = false; btn.textContent = 'Submit assignment';
         if (error) { showToast('error', error.message); return; }
-        showToast('success', 'Assignment submitted. Your mentor will review it shortly.');
-        document.getElementById('content').value = ''; document.getElementById('wordCount').textContent = '0 / 1000 words';
+        showToast('success', 'Assignment submitted. Your mentor will review shortly.');
+        document.getElementById('content').value = '';
+        document.getElementById('wordCount').textContent = '0 / 1000 words';
+        // Refresh local cache + progress + weeks
+        const { data: subs } = await sb.from('my_submissions').select('*').order('submitted_at', { ascending: false });
+        if (Array.isArray(subs)) mySubmissions = subs;
+        updateProgress(); renderWeeks();
       });
 
       document.getElementById('questionForm').addEventListener('submit', async (e) => {
