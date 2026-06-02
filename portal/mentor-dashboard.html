@@ -250,8 +250,8 @@
         return;
       }
       const { data, error } = await sb.from('assignment_submissions')
-        .select('id, student_profile_id, assignment_title, content, submitted_at, status, feedback, student_profiles(full_name, email)')
-        .in('student_profile_id', memberProfileIds)
+        .select('id, student_id, assignment_title, content, week_number, submitted_at, status, feedback, student_profiles(full_name, email)')
+        .in('student_id', memberProfileIds)
         .order('submitted_at', { ascending: false });
       if (error) { container.innerHTML = '<div class="empty">Error: ' + escapeHtml(error.message) + '</div>'; return; }
       if (!data || data.length === 0) {

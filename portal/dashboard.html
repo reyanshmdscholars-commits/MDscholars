@@ -221,14 +221,26 @@
       document.getElementById('acctFee').innerHTML = feeBadge;
       document.getElementById('statWeeks').textContent = trk.weeks;
 
-      // Progress: weeks elapsed since cohort start out of total weeks
-      const start = new Date(prof.cohort_start).getTime();
-      const now = Date.now();
-      const elapsedWeeks = Math.max(0, Math.floor((now - start) / (7 * 86400000)));
-      const currentWeek = Math.min(trk.weeks, elapsedWeeks + 1);
-      const pct = Math.min(100, Math.round((currentWeek / trk.weeks) * 100));
+      // Progress: prefer real submission-based progress from student_progress view;
+      // fall back to time-elapsed if the view is empty.
+      let pct = 0, progressLabel = '';
+      try {
+        const { data: sp } = await sb.from('student_progress').select('*').maybeSingle();
+        if (sp && sp.total_weeks) {
+          pct = Math.min(100, Math.round((sp.weeks_completed / sp.total_weeks) * 100));
+          progressLabel = sp.weeks_completed + ' of ' + sp.total_weeks + ' weeks complete · ' + pct + '%';
+        }
+      } catch(e) {}
+      if (!progressLabel) {
+        const start = new Date(prof.cohort_start).getTime();
+        const now = Date.now();
+        const elapsedWeeks = Math.max(0, Math.floor((now - start) / (7 * 86400000)));
+        const currentWeek = Math.min(trk.weeks, elapsedWeeks + 1);
+        pct = Math.min(100, Math.round((currentWeek / trk.weeks) * 100));
+        progressLabel = 'Week ' + currentWeek + ' of ' + trk.weeks + ' · ' + pct + '% through your cohort';
+      }
       document.getElementById('progressFill').style.width = pct + '%';
-      document.getElementById('progressText').textContent = 'Week ' + currentWeek + ' of ' + trk.weeks + ' · ' + pct + '% through your cohort';
+      document.getElementById('progressText').textContent = progressLabel;
 
       // Submissions + questions counts
       const [subs, qs] = await Promise.all([
