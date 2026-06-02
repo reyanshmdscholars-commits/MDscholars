@@ -179,7 +179,11 @@
     .team-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
   }
-</style>
+/* MDS-LOGO-FIX */
+    .nav-logo-icon { width: 42px !important; height: 42px !important; padding: 0; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; }
+    .nav-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+    .brand-icon img, .topbar-logo-icon img { width: 100% !important; height: 100% !important; object-fit: contain; display: block; }
+  </style>
 </head>
 <body>
 
@@ -251,7 +255,7 @@
       <div class="founder-portrait">
         <div class="portrait-inner">
           <div class="portrait-avatar">👨‍⚕️</div>
-          <p>Founder Photo<br>Coming Soon</p>
+          <p></p>
         </div>
         <div class="founder-tag">
           <strong>Dr. Satish Munigala</strong>
@@ -407,7 +411,7 @@
       </div>
     </div>
 
-    <p style="margin-top:2rem;font-size:0.85rem;color:var(--gray-400);max-width:720px;">Video slots are placeholders during early launch. Each card supports a YouTube/Vimeo embed or a self-hosted MP4. Final videos will be added as the team records intros — admins can swap embed URLs via the dashboard once configured.</p>
+    <p style="margin-top:2rem;font-size:0.85rem;color:var(--gray-400);max-width:720px;"> Each card supports a YouTube/Vimeo embed or a self-hosted MP4. Final videos will be added as the team records intros — admins can swap embed URLs via the dashboard once configured.</p>
   </div>
 </section>
 
