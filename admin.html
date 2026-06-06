@@ -278,6 +278,7 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'submissions')">📝 Submissions</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'questions')">💬 Q&amp;A</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'course-content')">🎓 Course Content</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'posters')">🖼️ Posters / Showcase</a>
           </div>
         </div>
 
@@ -677,6 +678,69 @@
             </table>
           </div>
 
+          <!-- POSTERS / SHOWCASE TAB -->
+          <div id="posters" class="content-section">
+            <div class="section-header">
+              <h2>Posters &amp; Showcase Gallery</h2>
+              <a href="showcase.html" target="_blank" class="btn-secondary" style="text-decoration:none;">↗ View public showcase</a>
+            </div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+              Upload posters, presentation photos, and conference shots from MD Scholars students. Anything uploaded here appears immediately on <code>showcase.html</code>. Toggle "Featured" to highlight items on the home page.
+            </p>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Upload a new poster / photo / video</h3>
+              <form id="posterForm" onsubmit="uploadPoster(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
+                  <input type="text" id="pTitle" required placeholder="e.g. Predictors of 30-day readmission in T2DM patients" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Student name</label>
+                  <input type="text" id="pStudent" placeholder="e.g. Reyansh Gupta" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Event / venue</label>
+                  <input type="text" id="pEvent" placeholder="e.g. AHA Scientific Sessions 2026" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Event date</label>
+                  <input type="date" id="pDate" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Track</label>
+                  <select id="pTrack" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
+                    <option value="">(any/none)</option>
+                    <option value="future-physician">Future Physician (HS)</option>
+                    <option value="pre-med">Pre-Med (College)</option>
+                    <option value="med-accelerator">Med Student Accelerator</option>
+                    <option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
+                    <option value="12month">12-Month Advanced</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">File (image or video) *</label>
+                  <input type="file" id="pFile" accept="image/*,video/*" required style="width:100%; padding:0.4rem; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Description (optional)</label>
+                  <textarea id="pDesc" rows="2" placeholder="Brief context — what the project was about, what they presented…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+                </div>
+                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+                  <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
+                    <input type="checkbox" id="pFeatured"> ⭐ Feature on home page
+                  </label>
+                  <button type="submit" id="pUploadBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer; margin-left:auto;">Upload</button>
+                </div>
+                <div id="pStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
+              </form>
+            </div>
+
+            <div id="postersGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1.2rem;">
+              <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:2rem;">Loading…</div>
+            </div>
+          </div>
+
         </div><!-- end dashboard-content -->
       </div><!-- end dashboard-main -->
     </div>
@@ -793,6 +857,130 @@
       else if (tabName === 'submissions') { loadSubmissions(); }
       else if (tabName === 'questions') { loadQuestions(); }
       else if (tabName === 'course-content') { loadCourseMaterials(); }
+      else if (tabName === 'posters') { loadPosters(); }
+    }
+
+    /* ─── Posters / Showcase Gallery ─── */
+    var allPosters = [];
+    async function loadPosters() {
+      try {
+        var res = await getDB().from('posters').select('*').order('created_at', { ascending: false });
+        if (res.error) throw res.error;
+        allPosters = res.data || [];
+        renderPostersGrid();
+      } catch(err) {
+        console.error('loadPosters err', err);
+        document.getElementById('postersGrid').innerHTML = '<div style="grid-column:1/-1; color:#dc2626; text-align:center; padding:1.5rem;">Could not load posters: ' + escHtml(err.message || String(err)) + '</div>';
+      }
+    }
+
+    function renderPostersGrid() {
+      var grid = document.getElementById('postersGrid');
+      if (!allPosters.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1; color:#94a3b8; text-align:center; padding:2rem;">No posters uploaded yet. Use the form above to add the first one.</div>';
+        return;
+      }
+      grid.innerHTML = allPosters.map(function(p) {
+        var mediaHtml;
+        if ((p.media_type || 'image') === 'video') {
+          mediaHtml = '<video src="' + escHtml(p.image_url || '') + '" controls style="width:100%; height:180px; object-fit:cover; background:#000;"></video>';
+        } else {
+          mediaHtml = '<img src="' + escHtml(p.image_url || '') + '" alt="' + escHtml(p.title || '') + '" style="width:100%; height:180px; object-fit:cover; background:#f4f6f8;">';
+        }
+        var meta = [];
+        if (p.student_name) meta.push(escHtml(p.student_name));
+        if (p.event_name) meta.push(escHtml(p.event_name));
+        if (p.event_date) meta.push(new Date(p.event_date).toLocaleDateString());
+        var featBadge = p.is_featured ? '<span style="position:absolute; top:8px; right:8px; background:#fef3c7; color:#92400e; font-size:0.7rem; font-weight:700; padding:3px 8px; border-radius:10px;">⭐ Featured</span>' : '';
+        return '<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; position:relative;">' +
+          featBadge +
+          mediaHtml +
+          '<div style="padding:0.85rem;">' +
+            '<h4 style="font-family:\'Playfair Display\',Georgia,serif; color:#001F3F; font-size:1rem; margin:0 0 0.4rem; line-height:1.25;">' + escHtml(p.title || 'Untitled') + '</h4>' +
+            '<div style="font-size:0.78rem; color:#64748b; margin-bottom:0.65rem;">' + meta.join(' · ') + '</div>' +
+            (p.description ? '<div style="font-size:0.85rem; color:#475569; margin-bottom:0.7rem; line-height:1.4;">' + escHtml((p.description||'').slice(0,140)) + ((p.description||'').length > 140 ? '…' : '') + '</div>' : '') +
+            '<div style="display:flex; gap:0.4rem; flex-wrap:wrap;">' +
+              '<button class="btn-sm" onclick="togglePosterFeatured(\'' + p.id + '\')" style="font-size:0.75rem;">' + (p.is_featured ? 'Unfeature' : '⭐ Feature') + '</button>' +
+              '<button class="btn-sm danger" onclick="deletePoster(\'' + p.id + '\')" style="font-size:0.75rem;">Delete</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    async function uploadPoster(e) {
+      e.preventDefault();
+      var btn = document.getElementById('pUploadBtn');
+      var status = document.getElementById('pStatus');
+      btn.disabled = true; btn.textContent = 'Uploading…';
+      function showStat(type, txt) {
+        status.style.display = 'block';
+        status.style.background = type === 'success' ? '#ecfdf5' : (type === 'error' ? '#fee2e2' : '#fef3c7');
+        status.style.color = type === 'success' ? '#065f46' : (type === 'error' ? '#991b1b' : '#92400e');
+        status.textContent = txt;
+      }
+      try {
+        var file = document.getElementById('pFile').files[0];
+        if (!file) throw new Error('Pick a file first.');
+        var ext = (file.name.split('.').pop() || 'bin').toLowerCase();
+        var path = 'posters/' + Date.now() + '-' + Math.random().toString(36).slice(2,10) + '.' + ext;
+        var up = await getDB().storage.from('posters').upload(path, file, { contentType: file.type, upsert: false });
+        if (up.error) throw up.error;
+        var pub = getDB().storage.from('posters').getPublicUrl(path);
+        var publicUrl = pub.data.publicUrl;
+        var isVideo = (file.type || '').indexOf('video') === 0;
+        var ins = await getDB().from('posters').insert({
+          title: document.getElementById('pTitle').value.trim(),
+          student_name: document.getElementById('pStudent').value.trim() || null,
+          event_name: document.getElementById('pEvent').value.trim() || null,
+          event_date: document.getElementById('pDate').value || null,
+          program_track: document.getElementById('pTrack').value || null,
+          description: document.getElementById('pDesc').value.trim() || null,
+          image_url: publicUrl,
+          storage_path: path,
+          media_type: isVideo ? 'video' : 'image',
+          is_approved: true,
+          is_featured: document.getElementById('pFeatured').checked
+        }).select().single();
+        if (ins.error) throw ins.error;
+        showStat('success', 'Uploaded! ' + ins.data.title);
+        document.getElementById('posterForm').reset();
+        loadPosters();
+      } catch(err) {
+        console.error('uploadPoster err', err);
+        showStat('error', 'Error: ' + (err.message || err));
+      } finally {
+        btn.disabled = false; btn.textContent = 'Upload';
+        setTimeout(function(){ status.style.display = 'none'; }, 5000);
+      }
+    }
+
+    async function togglePosterFeatured(id) {
+      var p = allPosters.find(function(x){ return x.id === id; });
+      if (!p) return;
+      try {
+        var u = await getDB().from('posters').update({ is_featured: !p.is_featured }).eq('id', id);
+        if (u.error) throw u.error;
+        p.is_featured = !p.is_featured;
+        renderPostersGrid();
+        showToast(p.is_featured ? 'Featured on home page' : 'Unfeatured', 'success');
+      } catch(err) { showToast('Update failed: ' + err.message, 'error'); }
+    }
+
+    async function deletePoster(id) {
+      var p = allPosters.find(function(x){ return x.id === id; });
+      if (!p) return;
+      if (!confirm('Delete poster "' + (p.title||'Untitled') + '"? This removes the file too.')) return;
+      try {
+        if (p.storage_path) {
+          await getDB().storage.from('posters').remove([p.storage_path]);
+        }
+        var d = await getDB().from('posters').delete().eq('id', id);
+        if (d.error) throw d.error;
+        allPosters = allPosters.filter(function(x){ return x.id !== id; });
+        renderPostersGrid();
+        showToast('Poster deleted', 'success');
+      } catch(err) { showToast('Delete failed: ' + err.message, 'error'); }
     }
 
     function goToTab(tabName) {
