@@ -702,14 +702,17 @@
                 e.preventDefault();
                 var id = (document.getElementById('cert-id').value || '').trim().toUpperCase();
                 if (!id) return;
-                // Format pre-check (kept friendly)
-                var match = id.match(/^MDS-(\d{4})-([A-Z]{2})-(\d{3,})$/);
-                if (!match) {
+                // Accept BOTH old 4-part format (MDS-YYYY-XX-NNN) and new 5-part format (MDS-SS-YYYY-XX-NNNN)
+                var matchNew = id.match(/^MDS-(SP|SU|FA)-(\d{4})-([A-Z]{2,3})-(\d{3,})$/);
+                var matchOld = id.match(/^MDS-(\d{4})-([A-Z]{2})-(\d{3,})$/);
+                if (!matchNew && !matchOld) {
                     result.style.borderColor = '#ef4444';
                     result.style.color = '#ef4444';
-                    result.innerHTML = '<strong>Invalid Certificate ID format.</strong><br><span style="font-size:0.9rem;">Expected format: MDS-YYYY-XX-NNN (e.g. MDS-2026-HS-001)</span>';
+                    result.innerHTML = '<strong>Invalid Certificate ID format.</strong><br><span style="font-size:0.9rem;">Expected: MDS-&lt;Sem&gt;-&lt;Year&gt;-&lt;Track&gt;-&lt;Number&gt; (e.g. MDS-FA-2026-HS-0001)</span>';
                     return;
                 }
+                // Optional hash from URL — when a QR code is scanned the URL has &h=<hash>
+                var urlHash = (new URLSearchParams(location.search).get('h') || '').trim().toLowerCase();
                 result.style.borderColor = '#cbd5e1';
                 result.style.color = '#475569';
                 result.innerHTML = 'Looking up certificate…';
@@ -729,14 +732,37 @@
                     }
                     var c = res.data;
                     var revoked = c.status && c.status !== 'active';
+                    // Tamper check: if URL has a hash, it MUST match the database hash
+                    var tampered = false;
+                    if (urlHash && c.verify_hash && urlHash !== (c.verify_hash || '').toLowerCase()) {
+                        tampered = true;
+                    }
+                    if (tampered) {
+                        result.style.borderColor = '#ef4444';
+                        result.style.color = '#001F3F';
+                        result.innerHTML =
+                            '<div style="text-align:left;">' +
+                            '<p style="color:#ef4444;font-weight:700;font-size:1.05rem;margin-bottom:0.75rem;">⚠ Tampered or modified certificate.</p>' +
+                            '<p style="font-size:0.92rem;color:#475569;margin-bottom:0.75rem;">A certificate with this ID exists in our records, but the scanned QR code does not match what we issued. This often means the certificate file was edited after issuance. The information below is what we actually issued:</p>' +
+                            '<p style="margin-bottom:0.5rem;"><strong>Recipient (on file):</strong> ' + esc(c.recipient_name) + '</p>' +
+                            '<p style="margin-bottom:0.5rem;"><strong>Program (on file):</strong> ' + esc(TRACK_LABELS[c.program_track] || c.program_track) + '</p>' +
+                            '<p style="margin-bottom:0.5rem;"><strong>Issued (on file):</strong> ' + fmtDate(c.completion_date || c.issued_at) + '</p>' +
+                            '<p style="margin-bottom:0.5rem;"><strong>Certificate ID:</strong> ' + esc(c.cert_id) + '</p>' +
+                            '<p style="margin-top:1rem;font-size:0.9rem;">If you suspect fraud, please email <a href="mailto:contact@mdscholars.com" style="color:#0d9488;">contact@mdscholars.com</a>.</p>' +
+                            '</div>';
+                        return;
+                    }
                     result.style.borderColor = revoked ? '#ef4444' : '#14b8a6';
                     result.style.color = '#001F3F';
                     var trackLabel = TRACK_LABELS[c.program_track] || c.program_track || '';
+                    var verifiedBadge = revoked
+                          ? '<p style="color:#ef4444;font-weight:700;margin-bottom:0.75rem;">⚠ This certificate has been revoked.</p>'
+                          : (urlHash
+                              ? '<p style="color:#14b8a6;font-weight:700;margin-bottom:0.75rem;">✓ Authentic — QR code matches our records.</p>'
+                              : '<p style="color:#14b8a6;font-weight:700;margin-bottom:0.75rem;">✓ Certificate ID found in our records.</p>');
                     result.innerHTML =
                         '<div style="text-align:left;">' +
-                        (revoked
-                          ? '<p style="color:#ef4444;font-weight:700;margin-bottom:0.75rem;">⚠ This certificate has been revoked.</p>'
-                          : '<p style="color:#14b8a6;font-weight:700;margin-bottom:0.75rem;">✓ Authentic — certificate verified.</p>') +
+                        verifiedBadge +
                         '<p style="margin-bottom:0.5rem;"><strong>Recipient:</strong> ' + esc(c.recipient_name) + '</p>' +
                         '<p style="margin-bottom:0.5rem;"><strong>Program:</strong> ' + esc(trackLabel) + '</p>' +
                         (c.cohort_label ? '<p style="margin-bottom:0.5rem;"><strong>Cohort:</strong> ' + esc(c.cohort_label) + '</p>' : '') +
@@ -744,6 +770,7 @@
                         '<p style="margin-bottom:0.5rem;"><strong>Certificate ID:</strong> ' + esc(c.cert_id) + '</p>' +
                         (revoked ? '' :
                             '<p style="margin-top:1rem;"><a href="portal/certificate.html?id=' + encodeURIComponent(c.cert_id) + '" target="_blank" style="background:#14b8a6;color:#fff;padding:0.6rem 1.2rem;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block;">View certificate →</a></p>') +
+                        (!urlHash && !revoked ? '<p style="margin-top:0.75rem;font-size:0.78rem;color:#94a3b8;">Tip: Scan the QR code on the certificate PDF for a tamper-proof verification.</p>' : '') +
                         '</div>';
                 } catch (err) {
                     result.style.borderColor = '#ef4444';
@@ -751,7 +778,7 @@
                     result.innerHTML = '<strong>Verification unavailable.</strong><br><span style="font-size:0.9rem;">' + esc(err && err.message || 'Please try again later.') + '</span>';
                 }
             });
-            // Pre-fill from ?id= URL parameter
+            // Pre-fill from ?id= URL parameter (QR codes also include &h=<hash>)
             var pre = new URLSearchParams(location.search).get('id');
             if (pre) {
                 document.getElementById('cert-id').value = pre.trim().toUpperCase();
