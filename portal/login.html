@@ -102,11 +102,29 @@
       const accessP = sb.from('student_access').select('is_active, days_remaining, full_name').maybeSingle();
       const profileP = sb.from('student_profiles').select('fee_status, application_id, dropped_at, drop_reason').maybeSingle();
       const [accessRes, profileRes] = await Promise.all([accessP, profileP]);
+      // If we have an application_id, also check whether the applicant is a minor and whether parental consent has been signed.
+      let consent = null;
+      let application = null;
+      if (profileRes.data && profileRes.data.application_id) {
+        const appP = sb.from('applications')
+          .select('date_of_birth, program_track, applicant_role, education_level, parent_email')
+          .eq('id', profileRes.data.application_id)
+          .maybeSingle();
+        const conP = sb.from('parental_consents')
+          .select('status, signed_at')
+          .eq('application_id', profileRes.data.application_id)
+          .maybeSingle();
+        const [appRes, conRes] = await Promise.all([appP, conP]);
+        application = appRes.data;
+        consent = conRes.data;
+      }
       return {
         access: accessRes.data,
         accessErr: accessRes.error,
         profile: profileRes.data,
         profileErr: profileRes.error,
+        application: application,
+        consent: consent,
       };
     }
 
@@ -122,12 +140,36 @@
       return !!(profile && profile.dropped_at);
     }
 
+    function isMinorApplicant(application) {
+      if (!application) return false;
+      const dob = application.date_of_birth ? new Date(application.date_of_birth) : null;
+      let age = null;
+      if (dob && !isNaN(dob.getTime())) {
+        const now = new Date();
+        age = now.getFullYear() - dob.getFullYear();
+        const m = now.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+      }
+      const role = (application.applicant_role || '').toLowerCase();
+      const edu = (application.education_level || '').toLowerCase();
+      return (age !== null && age < 18) ||
+             application.program_track === 'future-physician' ||
+             role === 'hs' ||
+             edu.indexOf('high school') !== -1 ||
+             edu.indexOf('hs') !== -1;
+    }
+
+    function hasParentalConsent(consent) {
+      return !!(consent && (consent.status === 'signed' || consent.signed_at));
+    }
+
     function initListeners() {
       // If already signed in AND has a student profile that's active AND paid/free, send straight to dashboard.
       sb.auth.getSession().then(async ({ data }) => {
         if (data.session) {
           const r = await loadAccessAndFee();
-          if (r.access && r.access.is_active && isPaidOrFree(r.profile)) {
+          const consentOk = !isMinorApplicant(r.application) || hasParentalConsent(r.consent);
+          if (r.access && r.access.is_active && isPaidOrFree(r.profile) && consentOk) {
             window.location.href = 'dashboard.html';
           }
         }
@@ -164,6 +206,13 @@
         if (isDropped(r.profile)) {
           await sb.auth.signOut();
           showMsg('error', 'This account has been withdrawn from the program. If you believe this is in error, please email support@mdscholars.com.');
+          btn.disabled = false; btn.textContent = 'Sign in →';
+          return;
+        }
+        // Gate: minors must have a signed parental consent on file before portal access
+        if (isMinorApplicant(r.application) && !hasParentalConsent(r.consent)) {
+          await sb.auth.signOut();
+          showMsg('error', 'Parental consent is required before portal access for students under 18. Please ask your parent or guardian to check their email for the consent form we sent (or email support@mdscholars.com to have it re-sent).');
           btn.disabled = false; btn.textContent = 'Sign in →';
           return;
         }
