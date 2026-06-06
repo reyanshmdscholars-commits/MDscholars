@@ -535,26 +535,33 @@
         <div class="verify-card">
             <div class="format-guide">
                 <h3>Certificate ID Format</h3>
+                <p style="text-align:center; color:#666; font-size:0.95rem; margin-bottom:1rem;">Every MD Scholars certificate uses a unique five-part ID: <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-&lt;Sem&gt;-&lt;Year&gt;-&lt;Track&gt;-&lt;Number&gt;</code></p>
                 <div class="format-breakdown">
                     <div class="format-item">
                         <div class="format-label">MDS</div>
                         <div class="format-value">MD Scholars</div>
                     </div>
                     <div class="format-item">
+                        <div class="format-label">SP / SU / FA</div>
+                        <div class="format-value">Semester*</div>
+                    </div>
+                    <div class="format-item">
                         <div class="format-label">2026</div>
                         <div class="format-value">Year</div>
                     </div>
                     <div class="format-item">
-                        <div class="format-label">HS/PM/MS/RF</div>
-                        <div class="format-value">Track*</div>
+                        <div class="format-label">HS / PM / MS / RF / AHS / APM</div>
+                        <div class="format-value">Track**</div>
                     </div>
                     <div class="format-item">
-                        <div class="format-label">001</div>
-                        <div class="format-value">Number</div>
+                        <div class="format-label">0001</div>
+                        <div class="format-value">Sequential #</div>
                     </div>
                 </div>
-                <div style="font-size: 0.8rem; color: #999; margin-top: 1rem;">
-                    *HS = High School, PM = Pre-Med, MS = Medical Student, RF = Resident/Fellow
+                <div style="font-size: 0.85rem; color: #555; margin-top: 1rem; line-height:1.6;">
+                    <strong>*Semester:</strong> SP = Spring · SU = Summer · FA = Fall<br>
+                    <strong>**Track:</strong> HS = High School · PM = Pre-Med (College) · MS = Medical School · RF = Resident / IMG / Fellowship · AHS = 12-Month Advanced High School · APM = 12-Month Advanced Pre-Med · INS = Institutional Program<br>
+                    <strong>Example:</strong> <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-FA-2026-HS-0001</code> = the first High School Track graduate from Fall 2026.
                 </div>
             </div>
 
@@ -562,7 +569,7 @@
                 <div class="form-group">
                     <label for="cert-id">Certificate ID</label>
                     <div class="input-wrapper">
-                        <input type="text" id="cert-id" name="cert-id" placeholder="e.g. MDS-2026-HS-001" required>
+                        <input type="text" id="cert-id" name="cert-id" placeholder="e.g. MDS-FA-2026-HS-0001" required>
                         <button type="submit" class="verify-btn">Verify Certificate</button>
                     </div>
                 </div>
