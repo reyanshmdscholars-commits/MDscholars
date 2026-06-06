@@ -135,6 +135,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
   var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.zJYG-NgNyTRk-IbE-jK0AwO0VfuNTwTaECiy1V4Lrkk';
@@ -239,7 +240,8 @@
               '<div class="verify-line">' +
                 '<span class="cert-id-chip">ID: ' + escapeHtml(c.cert_id) + '</span>' +
               '</div>' +
-              '<div style="margin-top:6px;font-size:0.72rem;">Verify authenticity at<br><strong>mdscholars.com/verify.html</strong></div>' +
+              '<div id="qrWrap" style="margin-top:8px; display:flex; justify-content:flex-end;"></div>' +
+              '<div style="margin-top:6px;font-size:0.7rem; text-align:right;">Scan QR or verify at<br><strong>mdscholars.com/verify.html</strong></div>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -247,6 +249,26 @@
 
     document.getElementById('content').innerHTML = html;
     document.title = 'Certificate — ' + c.recipient_name + ' (' + c.cert_id + ')';
+    renderQR(c);
+  }
+
+  function renderQR(c) {
+    try {
+      if (typeof qrcode !== 'function') return;
+      // Verify URL embeds cert_id + verify_hash so the QR proves authenticity
+      var verifyUrl = 'https://mdscholars.com/verify.html?id=' + encodeURIComponent(c.cert_id) +
+                      (c.verify_hash ? '&h=' + encodeURIComponent(c.verify_hash) : '');
+      var qr = qrcode(0, 'M');
+      qr.addData(verifyUrl);
+      qr.make();
+      var svg = qr.createSvgTag({ cellSize: 3, margin: 1, scalable: true });
+      var wrap = document.getElementById('qrWrap');
+      if (wrap) {
+        wrap.innerHTML = svg;
+        var svgEl = wrap.querySelector('svg');
+        if (svgEl) { svgEl.setAttribute('width', '92'); svgEl.setAttribute('height', '92'); svgEl.style.borderRadius = '4px'; svgEl.style.background = '#fff'; svgEl.style.padding = '4px'; svgEl.style.border = '1px solid #e0dbd0'; }
+      }
+    } catch(e) { console.warn('QR render failed', e); }
   }
 
   function escapeHtml(s) {
