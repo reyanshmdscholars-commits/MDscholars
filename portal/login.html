@@ -100,7 +100,7 @@
     // Check both the access view AND the underlying student_profiles row for fee_status.
     async function loadAccessAndFee() {
       const accessP = sb.from('student_access').select('is_active, days_remaining, full_name').maybeSingle();
-      const profileP = sb.from('student_profiles').select('fee_status, application_id').maybeSingle();
+      const profileP = sb.from('student_profiles').select('fee_status, application_id, dropped_at, drop_reason').maybeSingle();
       const [accessRes, profileRes] = await Promise.all([accessP, profileP]);
       return {
         access: accessRes.data,
@@ -111,10 +111,15 @@
     }
 
     function isPaidOrFree(profile) {
-      // profile.fee_status: 'paid' | 'unpaid' | 'free' | null
+      // profile.fee_status: 'paid' | 'unpaid' | 'free' | 'dropped' | null
       if (!profile) return false;
+      if (profile.dropped_at) return false;       // dropped students can't log in
       const s = (profile.fee_status || '').toLowerCase();
       return s === 'paid' || s === 'free';
+    }
+
+    function isDropped(profile) {
+      return !!(profile && profile.dropped_at);
     }
 
     function initListeners() {
@@ -152,6 +157,13 @@
         if (!r.access.is_active) {
           await sb.auth.signOut();
           showMsg('error', 'Your course access has ended. Please contact support@mdscholars.com if you need an extension.');
+          btn.disabled = false; btn.textContent = 'Sign in →';
+          return;
+        }
+        // Gate: dropped students can't log in
+        if (isDropped(r.profile)) {
+          await sb.auth.signOut();
+          showMsg('error', 'This account has been withdrawn from the program. If you believe this is in error, please email support@mdscholars.com.');
           btn.disabled = false; btn.textContent = 'Sign in →';
           return;
         }
