@@ -1343,16 +1343,16 @@
         var profileRes = await getDB().from('student_profiles').select('id').eq('application_id', appId).maybeSingle();
         var studentProfileId = profileRes && profileRes.data ? profileRes.data.id : null;
 
-        // Generate the next cert_id using the RPC.
-        // The function signature is next_cert_id(p_track, p_term, p_year).
+        // Generate the next cert_id using the generate_student_id RPC.
+        // generate_student_id(p_term, p_year, p_track) returns "MDS-<Sem>-<Year>-<Track>-<NNNN>"
         var yr = new Date().getFullYear();
         var now = new Date();
         var m = now.getMonth() + 1;
         var term = (m >= 1 && m <= 4) ? 'spring' : (m >= 5 && m <= 8) ? 'summer' : 'fall';
-        var rpc = await getDB().rpc('next_cert_id', {
-          p_track: app.program_track || 'future-physician',
+        var rpc = await getDB().rpc('generate_student_id', {
           p_term: term,
-          p_year: yr
+          p_year: yr,
+          p_track: app.program_track || 'future-physician'
         });
         if (rpc.error) throw rpc.error;
         var certId = rpc.data;
