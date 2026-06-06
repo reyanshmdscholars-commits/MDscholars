@@ -407,11 +407,12 @@
                   <th>Track</th>
                   <th>Date Applied</th>
                   <th>Payment Status</th>
+                  <th>Parental Consent</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="students-tbody">
-                <tr><td colspan="5" class="empty-state">Loading students...</td></tr>
+                <tr><td colspan="6" class="empty-state">Loading students...</td></tr>
               </tbody>
             </table>
           </div>
@@ -821,6 +822,26 @@
         var res = await getDB().from('applications').select('*').order('created_at', { ascending: false });
         if (res.error) throw res.error;
         allApplications = res.data || [];
+        // Also load parental_consents and attach to each application as ._consent
+        try {
+          var consRes = await getDB().from('parental_consents').select('application_id, status, signed_at, parent_name');
+          var consByApp = {};
+          (consRes.data || []).forEach(function(c){ consByApp[c.application_id] = c; });
+          allApplications = allApplications.map(function(a){
+            a._consent = consByApp[a.id] || null;
+            // Heuristic: minor if HS track, age<18, or hs role/eduLevel
+            var dob = a.date_of_birth ? new Date(a.date_of_birth) : null;
+            var age = (dob && !isNaN(dob.getTime())) ? Math.floor((Date.now() - dob.getTime()) / (365.25*24*3600*1000)) : null;
+            var role = (a.applicant_role || '').toLowerCase();
+            var edu = (a.education_level || '').toLowerCase();
+            a._isMinor = (age !== null && age < 18) ||
+                         a.program_track === 'future-physician' ||
+                         role === 'hs' ||
+                         edu.indexOf('high school') !== -1 ||
+                         edu.indexOf('hs') !== -1;
+            return a;
+          });
+        } catch(e){ console.warn('Could not load parental_consents:', e); }
       } catch(err) {
         console.error('Error loading applications:', err);
         showToast('Error loading applications', 'error');
@@ -1189,7 +1210,7 @@
       }
       var tbody = document.getElementById('students-tbody');
       if (students.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No accepted students yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No accepted students yet.</td></tr>';
         return;
       }
       tbody.innerHTML = students.map(function(app) {
@@ -1199,6 +1220,22 @@
         var classes = { paid: 'status-enrolled', unpaid: 'status-due', free: 'status-accepted' };
         var label = labels[status] || status;
         var cls = classes[status] || 'status-due';
+        // Consent badge
+        var consentCell = '';
+        if (!app._isMinor) {
+          consentCell = '<span class="status-badge status-read" title="Adult applicant — consent not required">— N/A</span>';
+        } else if (app._consent && (app._consent.status === 'signed' || app._consent.signed_at)) {
+          var sd = app._consent.signed_at ? new Date(app._consent.signed_at).toLocaleDateString() : '';
+          consentCell = '<span class="status-badge status-enrolled" title="Signed ' + sd + ' by ' + escHtml(app._consent.parent_name || '') + '">✓ Signed</span>';
+        } else {
+          var hasParentEmail = !!(app.parent_email && app.parent_email.indexOf('@') !== -1);
+          consentCell = '<span class="status-badge status-due">⏳ Pending</span>';
+          if (hasParentEmail) {
+            consentCell += '<br><button class="btn-sm" style="margin-top:6px;font-size:0.72rem;background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="resendConsentEmail(\'' + app.id + '\')">Resend email</button>';
+          } else {
+            consentCell += '<br><small style="color:#dc2626;font-size:0.7rem;">No parent email on file</small>';
+          }
+        }
         var actions = '';
         if (status !== 'paid') actions += '<button class="btn-sm success" onclick="setPaymentStatus(\'' + app.id + '\',\'paid\')">Mark Paid</button>';
         if (status !== 'unpaid') actions += '<button class="btn-sm warning" onclick="setPaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Unpaid</button>';
@@ -1210,12 +1247,38 @@
           '<td>' + escHtml(app.program_track||'—') + '</td>' +
           '<td>' + date + '</td>' +
           '<td><span class="status-badge ' + cls + '">' + label + '</span></td>' +
+          '<td>' + consentCell + '</td>' +
           '<td><div class="action-buttons">' +
             '<button class="btn-sm" onclick="viewApplication(\'' + app.id + '\')">View</button>' +
             actions +
           '</div></td>' +
         '</tr>';
       }).join('');
+    }
+
+    /* ─── Resend parental consent email ─── */
+    async function resendConsentEmail(appId) {
+      var app = allApplications.find(function(a){ return a.id === appId; });
+      if (!app) return;
+      if (!app.parent_email) { showToast('No parent email on file', 'error'); return; }
+      if (!confirm('Send a fresh parental-consent email to ' + app.parent_email + '?')) return;
+      try {
+        var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+        var r = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-application-confirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + anonKey, 'apikey': anonKey },
+          body: JSON.stringify({ record: app })
+        });
+        var j = await r.json();
+        if (j && j.parentConsent && j.parentConsent.id) {
+          showToast('Parental consent email sent to ' + app.parent_email, 'success');
+        } else {
+          showToast('Email fired (check logs if no delivery): ' + JSON.stringify(j).slice(0,120), 'warning');
+        }
+      } catch(err) {
+        console.error(err);
+        showToast('Error sending consent email', 'error');
+      }
     }
 
     async function setPaymentStatus(appId, newStatus) {
