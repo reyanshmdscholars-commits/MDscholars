@@ -59,7 +59,8 @@
     }
     .topbar-left { display: flex; align-items: center; gap: 1.5rem; }
     .topbar-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: #f8f5ef; }
-    .topbar-logo-icon { font-size: 1.5rem; }
+    .topbar-logo-icon { width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.08); border-radius: 10px; padding: 4px; }
+    .topbar-logo-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .topbar-logo-text strong { font-size: 1.1rem; color: #14b8a6; }
     .topbar-divider { width: 1px; height: 30px; background-color: rgba(255,255,255,0.2); }
     .topbar-label { font-size: 0.95rem; color: #f8f5ef; }
@@ -1342,9 +1343,17 @@
         var profileRes = await getDB().from('student_profiles').select('id').eq('application_id', appId).maybeSingle();
         var studentProfileId = profileRes && profileRes.data ? profileRes.data.id : null;
 
-        // Generate the next cert_id using the RPC
+        // Generate the next cert_id using the RPC.
+        // The function signature is next_cert_id(p_track, p_term, p_year).
         var yr = new Date().getFullYear();
-        var rpc = await getDB().rpc('next_cert_id', { track: app.program_track || 'future-physician', yr: yr });
+        var now = new Date();
+        var m = now.getMonth() + 1;
+        var term = (m >= 1 && m <= 4) ? 'spring' : (m >= 5 && m <= 8) ? 'summer' : 'fall';
+        var rpc = await getDB().rpc('next_cert_id', {
+          p_track: app.program_track || 'future-physician',
+          p_term: term,
+          p_year: yr
+        });
         if (rpc.error) throw rpc.error;
         var certId = rpc.data;
         var trackLabels = {
@@ -1370,11 +1379,12 @@
 
         showToast('Certificate ' + certId + ' issued', 'success');
 
-        // Fire-and-forget email via Edge Function
+        // Fire-and-forget email via Edge Function (authenticated)
         try {
+          var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
           await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-certificate-issued', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + anonKey, 'apikey': anonKey },
             body: JSON.stringify({ record: insert.data, application: app })
           });
         } catch (e) { console.warn('certificate email failed', e); }
