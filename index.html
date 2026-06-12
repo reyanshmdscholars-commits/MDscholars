@@ -550,7 +550,7 @@
       <a href="for-institutions.html">For Institutions</a>
       <a href="about.html">About</a>
       <a href="testimonials.html">Testimonials</a>
-      <a href="showcase.html">Showcase</a>
+      <a href="showcase.html">Showcase Your Research</a>
       <a href="additional-services.html">Services</a>
       <a href="apply.html" class="nav-cta">Apply Now →</a>
     </div>
@@ -608,8 +608,8 @@
 
 <!-- FLASH NEWS STRIP — admin-configurable via Supabase (announcements table). Falls back to static markers below. -->
 <div id="flashNewsContainer" style="background:linear-gradient(90deg, #c9a84c 0%, #d4b85a 100%); padding:0.85rem 1.5rem; color:#001F3F; position:relative; overflow:hidden;">
-  <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; justify-content:center; font-size:0.95rem; font-weight:500;">
-    <span style="display:inline-flex; align-items:center; gap:0.45rem; background:rgba(0,31,63,0.12); padding:0.3rem 0.85rem; border-radius:99px; font-size:0.78rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">📢 What's New</span>
+  <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; justify-content:center; font-size:0.95rem; font-weight:500; text-align:center;">
+    <span id="flashEmoji" style="display:inline-flex; align-items:center; gap:0.45rem; background:rgba(0,31,63,0.12); padding:0.3rem 0.85rem; border-radius:99px; font-size:0.78rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">📢 What's New</span>
     <span id="flashNewsBody">
       <strong>Now accepting Fall 2026 applications</strong> · <a href="enroll.html" style="color:#001F3F; font-weight:700; text-decoration:underline;">$150 early-bird discount</a> for pay-in-full enrollments · Live info sessions monthly — <a href="contact.html" style="color:#001F3F; font-weight:700; text-decoration:underline;">request an invite</a>
     </span>
@@ -617,16 +617,33 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-// Try to load live announcements from Supabase; fall back to static markers above.
+// Try to load live announcement from Supabase; fall back to static markers above.
 (async () => {
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   try {
     if (!window.supabase) return;
     const sb = window.supabase.createClient(
       'https://nygeinaoevzyptkgchqb.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ'
     );
-    const { data } = await sb.from('announcements').select('body_html').eq('is_active', true).order('display_order').limit(1).maybeSingle();
-    if (data && data.body_html) document.getElementById('flashNewsBody').innerHTML = data.body_html;
+    const { data } = await sb.from('announcements')
+      .select('emoji, title, body, link_text, link_url')
+      .eq('is_active', true)
+      .eq('show_on_home', true)
+      .order('priority', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (data) {
+      if (data.emoji) document.getElementById('flashEmoji').textContent = data.emoji + ' What\'s New';
+      let html = '';
+      if (data.title) html += '<strong>' + esc(data.title) + '</strong>';
+      if (data.body) html += (html ? ' · ' : '') + esc(data.body);
+      if (data.link_url && data.link_text) {
+        html += (html ? ' · ' : '') + '<a href="' + esc(data.link_url) + '" target="_blank" rel="noopener" style="color:#001F3F; font-weight:700; text-decoration:underline;">' + esc(data.link_text) + ' →</a>';
+      }
+      if (html) document.getElementById('flashNewsBody').innerHTML = html;
+    }
   } catch (_e) { /* keep static fallback */ }
 })();
 </script>
