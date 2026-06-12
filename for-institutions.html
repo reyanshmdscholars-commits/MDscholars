@@ -381,11 +381,14 @@
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="main-nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
       <div class="nav-logo-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-      <div class="nav-logo-text"><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+      <div class="nav-logo-text">
+        <strong>MD Scholars</strong>
+        <span>Research Mentorship</span>
+      </div>
     </a>
     <div class="nav-links">
       <a href="index.html">Home</a>
@@ -395,13 +398,14 @@
           <a href="high-school.html"><span>🎓</span> High School</a>
           <a href="college.html"><span>📚</span> College / Pre-Med</a>
           <a href="medical-student.html"><span>🩺</span> Medical Student</a>
-          <a href="resident-fellow.html"><span>🔬</span> Resident &amp; Fellow</a>
+          <a href="resident-fellow.html"><span>🔬</span> Resident & Fellow</a>
           <a href="twelve-month.html"><span>📅</span> 12-Month Advanced Track</a>
         </div>
       </div>
-      <a href="for-institutions.html" class="active">For Institutions</a>
+      <a href="for-institutions.html">For Institutions</a>
       <a href="about.html">About</a>
       <a href="testimonials.html">Testimonials</a>
+      <a href="showcase.html">Showcase Your Research</a>
       <a href="additional-services.html">Services</a>
       <a href="apply.html" class="nav-cta">Apply Now →</a>
     </div>
@@ -413,8 +417,8 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <h1>Partnering With Institutions That Shape the Future of Medicine</h1>
-    <p class="hero-sub">MD Scholars partners with schools, universities, and training programs to deliver structured research mentorship at scale — with flexible enrollment options and institutional support.</p>
+    <h1 id="inst-hero-headline">Partnering With Institutions That Shape the Future of Medicine</h1>
+    <p class="hero-sub" id="inst-hero-subhead">MD Scholars partners with schools, universities, and training programs to deliver structured research mentorship at scale — with flexible enrollment options and institutional support.</p>
   </div>
 </section>
 
@@ -423,7 +427,19 @@
   <div class="container">
     <h2 class="section-title">Partnership Options</h2>
     <div class="partnerships-intro">
-      <p>We work with institutions across the medical education spectrum. Whether you're looking for cohort-based training, one-time workshops, or research symposiums, we offer customizable solutions.</p>
+      <p id="inst-feature-copy">We work with institutions across the medical education spectrum. Whether you're looking for cohort-based training, one-time workshops, or research symposiums, we offer customizable solutions.</p>
+    </div>
+
+    <!-- Partner logos (admin-uploaded; hidden until at least one logo exists) -->
+    <div id="inst-logos-wrap" style="display:none; margin:2rem 0 1rem;">
+      <h3 style="text-align:center; color:#001F3F; font-family:'Playfair Display',serif; font-size:1.15rem; margin-bottom:1rem;">Trusted by</h3>
+      <div id="inst-logos" style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:2rem;"></div>
+    </div>
+
+    <!-- Featured testimonial (admin-editable; hidden if blank) -->
+    <div id="inst-testimonial-wrap" style="display:none; max-width:780px; margin:2.5rem auto 1rem; padding:1.5rem 1.75rem; background:#f8f5ef; border-left:4px solid #c9a84c; border-radius:8px;">
+      <p id="inst-testimonial" style="font-size:1.05rem; line-height:1.65; color:#001F3F; font-style:italic; margin-bottom:0.6rem;"></p>
+      <p id="inst-testimonial-attr" style="font-size:0.88rem; color:#475569; font-weight:600;"></p>
     </div>
     <div class="partnerships-grid">
       <div class="partnership-card">
@@ -717,6 +733,44 @@
   }
 </script>
 
+<!-- Live admin-editable content (site_content + institution_logos) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(async function() {
+  function esc(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  try {
+    if (!window.supabase) return;
+    const sb = window.supabase.createClient(
+      'https://nygeinaoevzyptkgchqb.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ'
+    );
+    // Live text content
+    const KEYS = ['institutions_hero_headline','institutions_hero_subhead','institutions_feature_copy','institutions_testimonial','institutions_testimonial_attr'];
+    const sc = await sb.from('site_content').select('*').in('key', KEYS);
+    const map = {};
+    (sc.data || []).forEach(r => { if (r.value && r.value.trim()) map[r.key] = r.value.trim(); });
+    if (map.institutions_hero_headline) document.getElementById('inst-hero-headline').textContent = map.institutions_hero_headline;
+    if (map.institutions_hero_subhead)  document.getElementById('inst-hero-subhead').textContent = map.institutions_hero_subhead;
+    if (map.institutions_feature_copy)  document.getElementById('inst-feature-copy').textContent = map.institutions_feature_copy;
+    if (map.institutions_testimonial) {
+      document.getElementById('inst-testimonial').textContent = '"' + map.institutions_testimonial + '"';
+      if (map.institutions_testimonial_attr) document.getElementById('inst-testimonial-attr').textContent = map.institutions_testimonial_attr;
+      document.getElementById('inst-testimonial-wrap').style.display = 'block';
+    }
+    // Partner logos
+    const logos = await sb.from('institution_logos').select('id,name,image_url,website_url').eq('is_active', true).order('sort_order',{ascending:true});
+    if (logos.data && logos.data.length) {
+      document.getElementById('inst-logos-wrap').style.display = 'block';
+      document.getElementById('inst-logos').innerHTML = logos.data.map(l => {
+        const img = `<img src="${esc(l.image_url)}" alt="${esc(l.name)}" title="${esc(l.name)}" style="max-height:60px; max-width:160px; object-fit:contain; filter:grayscale(0.4); opacity:0.85; transition:all 0.2s;" onmouseover="this.style.filter='none';this.style.opacity='1';" onmouseout="this.style.filter='grayscale(0.4)';this.style.opacity='0.85';">`;
+        return l.website_url
+          ? `<a href="${esc(l.website_url)}" target="_blank" rel="noopener">${img}</a>`
+          : img;
+      }).join('');
+    }
+  } catch (e) { /* keep static fallback */ }
+})();
+</script>
 <script src="chatbot-widget.js" defer></script>
 </body>
 </html>
