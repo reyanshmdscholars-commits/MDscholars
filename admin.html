@@ -279,6 +279,9 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'questions')">💬 Q&amp;A</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'course-content')">🎓 Course Content</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'posters')">🖼️ Posters / Showcase</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'announcements')">📣 Announcements</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'institutions-content')">🏛️ Institutions Page</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'standalone')">📚 Standalone Courses</a>
           </div>
         </div>
 
@@ -741,6 +744,216 @@
             </div>
           </div>
 
+          <!-- ANNOUNCEMENTS TAB -->
+          <div id="announcements" class="content-section">
+            <div class="section-header"><h2>Announcements</h2></div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+              Manage the <strong>Flash News strip</strong> on the home page. The active announcement with the highest priority is shown. You can include a sign-up button with any URL (Google Form, Zoom registration, etc.).
+            </p>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="annFormTitle">Add a new announcement</h3>
+              <form id="annForm" onsubmit="saveAnnouncement(event)" style="display:grid; grid-template-columns:1fr 2fr; gap:1rem;">
+                <input type="hidden" id="annId">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Emoji</label>
+                  <input type="text" id="annEmoji" placeholder="📢" maxlength="4" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
+                  <input type="text" id="annTitle" required placeholder="e.g. Live Info Session — Sat, Jul 12 at 11am CT" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Body (short — appears after title with a dot)</label>
+                  <input type="text" id="annBody" placeholder="e.g. Q&amp;A with Dr. Munigala + sample syllabus walkthrough" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Link text (sign-up button)</label>
+                  <input type="text" id="annLinkText" placeholder="e.g. Register here" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Link URL</label>
+                  <input type="url" id="annLinkUrl" placeholder="https://forms.google.com/…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Priority (higher = shown first)</label>
+                  <input type="number" id="annPriority" value="0" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Status</label>
+                  <div style="display:flex; gap:1rem; align-items:center; padding:0.6rem 0;">
+                    <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="annIsActive" checked> Active</label>
+                    <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="annShowHome" checked> Show on home</label>
+                  </div>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Starts at (optional)</label>
+                  <input type="datetime-local" id="annStartsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Ends at (optional)</label>
+                  <input type="datetime-local" id="annEndsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+                  <button type="submit" id="annSubmitBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Save</button>
+                  <button type="button" onclick="resetAnnouncementForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Reset</button>
+                  <div id="annStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
+                </div>
+              </form>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr><th>Emoji</th><th>Title</th><th>Body</th><th>Link</th><th>Priority</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="announcements-tbody">
+                <tr><td colspan="7" class="empty-state">Loading announcements…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- INSTITUTIONS CONTENT TAB -->
+          <div id="institutions-content" class="content-section">
+            <div class="section-header"><h2>Institutions Page — Content &amp; Logos</h2><a href="for-institutions.html" target="_blank" class="btn-secondary" style="text-decoration:none;">↗ View page</a></div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+              Edit the text on <code>for-institutions.html</code> and upload partner logos that will appear on the page. Changes go live instantly.
+            </p>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Page text (saved to site_content)</h3>
+              <form id="instContentForm" onsubmit="saveInstitutionContent(event)" style="display:grid; gap:1rem;">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero headline</label>
+                  <input type="text" id="instHeroHeadline" placeholder="Partner with MD Scholars" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero subhead</label>
+                  <textarea id="instHeroSubhead" rows="2" placeholder="Bring physician-led research mentorship to your students…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Feature paragraph (under "Why partner with us")</label>
+                  <textarea id="instFeatureCopy" rows="4" placeholder="Your value prop, capabilities, customization, outcomes…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Featured testimonial</label>
+                  <textarea id="instTestimonial" rows="3" placeholder="Quote from a partner institution…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Testimonial attribution</label>
+                  <input type="text" id="instTestimonialAttr" placeholder="— Dr. Jane Doe, Vanderbilt School of Medicine" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="display:flex; gap:1rem; align-items:center;">
+                  <button type="submit" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Save page text</button>
+                  <div id="instContentStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
+                </div>
+              </form>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Partner logos</h3>
+              <form id="logoForm" onsubmit="uploadLogo(event)" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.25rem;">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Institution name *</label>
+                  <input type="text" id="logoName" required placeholder="Washington University" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Logo image *</label>
+                  <input type="file" id="logoFile" accept="image/*" required style="width:100%; padding:0.35rem; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Website (optional)</label>
+                  <input type="url" id="logoUrl" placeholder="https://institution.edu" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <button type="submit" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.55rem 1.2rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Upload logo</button>
+                </div>
+              </form>
+              <div id="logosGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1rem;">
+                <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">Loading logos…</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STANDALONE COURSES TAB -->
+          <div id="standalone" class="content-section">
+            <div class="section-header"><h2>Standalone Courses</h2><a href="standalone-courses.html" target="_blank" class="btn-secondary" style="text-decoration:none;">↗ View public page</a></div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+              Manage à la carte courses listed on <code>standalone-courses.html</code>. Use "Coming Soon" while you're still building it — students can browse but won't see a checkout button.
+            </p>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="saFormTitle">Add a new standalone course</h3>
+              <form id="saForm" onsubmit="saveStandaloneCourse(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <input type="hidden" id="saId">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
+                  <input type="text" id="saTitle" required placeholder="IRB Submission Masterclass" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Slug (URL-friendly id)</label>
+                  <input type="text" id="saSlug" placeholder="irb-submission-masterclass" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Subtitle</label>
+                  <input type="text" id="saSubtitle" placeholder="Submit your first IRB in under a week" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Description</label>
+                  <textarea id="saDescription" rows="3" placeholder="Step-by-step walkthrough of the IRB submission process, with downloadable templates…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Duration</label>
+                  <input type="text" id="saDuration" placeholder="90 min" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Level</label>
+                  <select id="saLevel" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
+                    <option value="">(any)</option>
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Category</label>
+                  <select id="saCategory" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
+                    <option value="">(none)</option>
+                    <option>IRB</option>
+                    <option>Statistics</option>
+                    <option>Writing</option>
+                    <option>Study Design</option>
+                    <option>Career</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Price (USD, 0 for free)</label>
+                  <input type="number" id="saPrice" min="0" step="1" value="0" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Thumbnail (optional)</label>
+                  <input type="file" id="saThumb" accept="image/*" style="width:100%; padding:0.35rem; font-family:inherit;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Preview video URL (optional)</label>
+                  <input type="url" id="saPreviewUrl" placeholder="https://youtube.com/…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+                </div>
+                <div style="grid-column:1/-1; display:flex; gap:1.5rem; align-items:center; padding:0.6rem 0;">
+                  <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="saIsPublished" checked> Published (visible on site)</label>
+                  <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="saIsComingSoon" checked> Show as "Coming Soon"</label>
+                </div>
+                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+                  <button type="submit" id="saSubmitBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Save course</button>
+                  <button type="button" onclick="resetStandaloneForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Reset</button>
+                  <div id="saStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
+                </div>
+              </form>
+            </div>
+
+            <div id="saGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.2rem;">
+              <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">Loading…</div>
+            </div>
+          </div>
+
         </div><!-- end dashboard-content -->
       </div><!-- end dashboard-main -->
     </div>
@@ -858,6 +1071,303 @@
       else if (tabName === 'questions') { loadQuestions(); }
       else if (tabName === 'course-content') { loadCourseMaterials(); }
       else if (tabName === 'posters') { loadPosters(); }
+      else if (tabName === 'announcements') { loadAnnouncements(); }
+      else if (tabName === 'institutions-content') { loadInstitutionContent(); loadLogos(); }
+      else if (tabName === 'standalone') { loadStandaloneCourses(); }
+    }
+
+    /* ─── Announcements ─── */
+    var allAnnouncements = [];
+    async function loadAnnouncements() {
+      try {
+        var res = await getDB().from('announcements').select('*').order('priority',{ascending:false}).order('created_at',{ascending:false});
+        if (res.error) throw res.error;
+        allAnnouncements = res.data || [];
+        renderAnnouncementsTable();
+      } catch(err) { console.error(err); showToast('Error loading announcements: '+(err.message||err),'error'); }
+    }
+    function renderAnnouncementsTable() {
+      var tbody = document.getElementById('announcements-tbody');
+      if (!allAnnouncements.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No announcements yet. Create the first one above.</td></tr>'; return; }
+      tbody.innerHTML = allAnnouncements.map(function(a){
+        var status = a.is_active ? '<span class="status-badge status-enrolled">Active</span>' : '<span class="status-badge status-due">Inactive</span>';
+        var showHome = a.show_on_home ? ' · 🏠 home' : '';
+        var link = a.link_url ? '<a href="'+escHtml(a.link_url)+'" target="_blank">'+escHtml(a.link_text||'link')+'</a>' : '—';
+        return '<tr>' +
+          '<td style="font-size:1.3rem;">'+escHtml(a.emoji||'📢')+'</td>' +
+          '<td><strong>'+escHtml(a.title||'')+'</strong></td>' +
+          '<td><small>'+escHtml((a.body||'').slice(0,80))+(a.body&&a.body.length>80?'…':'')+'</small></td>' +
+          '<td>'+link+'</td>' +
+          '<td>'+(a.priority||0)+'</td>' +
+          '<td>'+status+showHome+'</td>' +
+          '<td><div class="action-buttons">' +
+            '<button class="btn-sm" onclick="editAnnouncement(\''+a.id+'\')">Edit</button>' +
+            '<button class="btn-sm '+(a.is_active?'warning':'success')+'" onclick="toggleAnnouncementActive(\''+a.id+'\')">'+(a.is_active?'Disable':'Enable')+'</button>' +
+            '<button class="btn-sm danger" onclick="deleteAnnouncement(\''+a.id+'\')">Delete</button>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+    function resetAnnouncementForm(){
+      document.getElementById('annId').value='';
+      document.getElementById('annEmoji').value='';
+      document.getElementById('annTitle').value='';
+      document.getElementById('annBody').value='';
+      document.getElementById('annLinkText').value='';
+      document.getElementById('annLinkUrl').value='';
+      document.getElementById('annPriority').value='0';
+      document.getElementById('annIsActive').checked=true;
+      document.getElementById('annShowHome').checked=true;
+      document.getElementById('annStartsAt').value='';
+      document.getElementById('annEndsAt').value='';
+      document.getElementById('annFormTitle').textContent='Add a new announcement';
+    }
+    function editAnnouncement(id){
+      var a = allAnnouncements.find(function(x){return x.id===id;}); if(!a) return;
+      document.getElementById('annId').value=a.id;
+      document.getElementById('annEmoji').value=a.emoji||'';
+      document.getElementById('annTitle').value=a.title||'';
+      document.getElementById('annBody').value=a.body||'';
+      document.getElementById('annLinkText').value=a.link_text||'';
+      document.getElementById('annLinkUrl').value=a.link_url||'';
+      document.getElementById('annPriority').value=a.priority||0;
+      document.getElementById('annIsActive').checked=!!a.is_active;
+      document.getElementById('annShowHome').checked=!!a.show_on_home;
+      document.getElementById('annStartsAt').value = a.starts_at ? new Date(a.starts_at).toISOString().slice(0,16) : '';
+      document.getElementById('annEndsAt').value = a.ends_at ? new Date(a.ends_at).toISOString().slice(0,16) : '';
+      document.getElementById('annFormTitle').textContent='Edit announcement';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    async function saveAnnouncement(e){
+      e.preventDefault();
+      var btn=document.getElementById('annSubmitBtn'); btn.disabled=true; btn.textContent='Saving…';
+      try{
+        var payload = {
+          emoji: document.getElementById('annEmoji').value.trim() || '📢',
+          title: document.getElementById('annTitle').value.trim(),
+          body: document.getElementById('annBody').value.trim() || null,
+          link_text: document.getElementById('annLinkText').value.trim() || null,
+          link_url: document.getElementById('annLinkUrl').value.trim() || null,
+          priority: parseInt(document.getElementById('annPriority').value||'0',10),
+          is_active: document.getElementById('annIsActive').checked,
+          show_on_home: document.getElementById('annShowHome').checked,
+          starts_at: document.getElementById('annStartsAt').value || null,
+          ends_at: document.getElementById('annEndsAt').value || null,
+        };
+        var id = document.getElementById('annId').value;
+        var res = id
+          ? await getDB().from('announcements').update(payload).eq('id', id).select().single()
+          : await getDB().from('announcements').insert(payload).select().single();
+        if (res.error) throw res.error;
+        showToast('Announcement saved','success');
+        resetAnnouncementForm();
+        loadAnnouncements();
+      }catch(err){ console.error(err); showToast('Error: '+(err.message||err),'error'); }
+      finally{ btn.disabled=false; btn.textContent='Save'; }
+    }
+    async function toggleAnnouncementActive(id){
+      var a = allAnnouncements.find(function(x){return x.id===id;}); if(!a) return;
+      try { await getDB().from('announcements').update({is_active:!a.is_active}).eq('id',id); loadAnnouncements(); showToast('Updated','success'); }
+      catch(err){ showToast('Error: '+err.message,'error'); }
+    }
+    async function deleteAnnouncement(id){
+      if(!confirm('Delete this announcement?')) return;
+      try{ await getDB().from('announcements').delete().eq('id',id); loadAnnouncements(); showToast('Deleted','success'); }
+      catch(err){ showToast('Error: '+err.message,'error'); }
+    }
+
+    /* ─── Institutions content + logos ─── */
+    var SC_KEYS = ['institutions_hero_headline','institutions_hero_subhead','institutions_feature_copy','institutions_testimonial','institutions_testimonial_attr'];
+    async function loadInstitutionContent(){
+      try{
+        var res = await getDB().from('site_content').select('*').in('key', SC_KEYS);
+        if(res.error) throw res.error;
+        var map = {};
+        (res.data||[]).forEach(function(r){ map[r.key]=r.value; });
+        document.getElementById('instHeroHeadline').value = map['institutions_hero_headline']||'';
+        document.getElementById('instHeroSubhead').value = map['institutions_hero_subhead']||'';
+        document.getElementById('instFeatureCopy').value = map['institutions_feature_copy']||'';
+        document.getElementById('instTestimonial').value = map['institutions_testimonial']||'';
+        document.getElementById('instTestimonialAttr').value = map['institutions_testimonial_attr']||'';
+      }catch(err){ console.error(err); }
+    }
+    async function saveInstitutionContent(e){
+      e.preventDefault();
+      var payload = [
+        { key:'institutions_hero_headline', value: document.getElementById('instHeroHeadline').value },
+        { key:'institutions_hero_subhead', value: document.getElementById('instHeroSubhead').value },
+        { key:'institutions_feature_copy', value: document.getElementById('instFeatureCopy').value },
+        { key:'institutions_testimonial', value: document.getElementById('instTestimonial').value },
+        { key:'institutions_testimonial_attr', value: document.getElementById('instTestimonialAttr').value },
+      ];
+      try{
+        var res = await getDB().from('site_content').upsert(payload, { onConflict:'key' });
+        if(res.error) throw res.error;
+        var s = document.getElementById('instContentStatus');
+        s.textContent='Saved.'; s.style.background='#ecfdf5'; s.style.color='#065f46'; s.style.display='inline-block';
+        setTimeout(function(){ s.style.display='none'; }, 3000);
+      }catch(err){ showToast('Error: '+(err.message||err),'error'); }
+    }
+    var allLogos=[];
+    async function loadLogos(){
+      try{
+        var res = await getDB().from('institution_logos').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+        if(res.error) throw res.error;
+        allLogos = res.data||[];
+        var grid = document.getElementById('logosGrid');
+        if(!allLogos.length){ grid.innerHTML='<div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">No logos uploaded yet.</div>'; return; }
+        grid.innerHTML = allLogos.map(function(l){
+          return '<div style="background:#fff; border:1px solid #e0dbd0; border-radius:8px; padding:0.8rem; text-align:center;">' +
+            '<img src="'+escHtml(l.image_url)+'" alt="'+escHtml(l.name)+'" style="max-width:100%; height:64px; object-fit:contain; margin-bottom:0.5rem;">' +
+            '<div style="font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.4rem;">'+escHtml(l.name)+'</div>' +
+            '<button class="btn-sm danger" onclick="deleteLogo(\''+l.id+'\')" style="font-size:0.75rem;">Remove</button>' +
+          '</div>';
+        }).join('');
+      }catch(err){ console.error(err); }
+    }
+    async function uploadLogo(e){
+      e.preventDefault();
+      try{
+        var file = document.getElementById('logoFile').files[0];
+        if(!file) return;
+        var ext = (file.name.split('.').pop()||'png').toLowerCase();
+        var path = 'logos/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+        var up = await getDB().storage.from('institution-logos').upload(path, file, { contentType:file.type });
+        if(up.error) throw up.error;
+        var url = getDB().storage.from('institution-logos').getPublicUrl(path).data.publicUrl;
+        var ins = await getDB().from('institution_logos').insert({
+          name: document.getElementById('logoName').value.trim(),
+          image_url: url,
+          storage_path: path,
+          website_url: document.getElementById('logoUrl').value.trim()||null,
+          is_active: true,
+        });
+        if(ins.error) throw ins.error;
+        document.getElementById('logoForm').reset();
+        loadLogos();
+        showToast('Logo uploaded','success');
+      }catch(err){ showToast('Error: '+(err.message||err),'error'); }
+    }
+    async function deleteLogo(id){
+      var l = allLogos.find(function(x){return x.id===id;}); if(!l) return;
+      if(!confirm('Remove '+l.name+'?')) return;
+      try{
+        if(l.storage_path) await getDB().storage.from('institution-logos').remove([l.storage_path]);
+        await getDB().from('institution_logos').delete().eq('id',id);
+        loadLogos();
+        showToast('Logo removed','success');
+      }catch(err){ showToast('Error: '+err.message,'error'); }
+    }
+
+    /* ─── Standalone Courses ─── */
+    var allStandaloneCourses=[];
+    async function loadStandaloneCourses(){
+      try{
+        var res = await getDB().from('standalone_courses').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+        if(res.error) throw res.error;
+        allStandaloneCourses = res.data||[];
+        renderStandaloneGrid();
+      }catch(err){ console.error(err); }
+    }
+    function renderStandaloneGrid(){
+      var grid = document.getElementById('saGrid');
+      if(!allStandaloneCourses.length){ grid.innerHTML='<div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:2rem;">No standalone courses yet. Create the first one above.</div>'; return; }
+      grid.innerHTML = allStandaloneCourses.map(function(c){
+        var thumb = c.thumbnail_url ? '<img src="'+escHtml(c.thumbnail_url)+'" style="width:100%; height:140px; object-fit:cover; background:#f4f6f8;">' : '<div style="height:140px; background:#f4f6f8; display:flex; align-items:center; justify-content:center; font-size:2rem;">📘</div>';
+        var badges='';
+        if(c.is_coming_soon) badges += '<span style="background:#f3e8ff; color:#6b21a8; font-size:0.7rem; padding:2px 7px; border-radius:8px; font-weight:600;">Coming Soon</span> ';
+        if(!c.is_published) badges += '<span style="background:#fee2e2; color:#991b1b; font-size:0.7rem; padding:2px 7px; border-radius:8px; font-weight:600;">Hidden</span> ';
+        var price = (c.price_cents||0)===0 ? 'Free' : '$'+(c.price_cents/100).toFixed(0);
+        return '<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; overflow:hidden;">' +
+          thumb +
+          '<div style="padding:0.8rem 1rem 1rem;">' +
+            '<div style="margin-bottom:0.4rem;">'+badges+'</div>' +
+            '<h4 style="font-family:\'Playfair Display\',Georgia,serif; color:#001F3F; font-size:0.98rem; margin-bottom:0.4rem;">'+escHtml(c.title||'Untitled')+'</h4>' +
+            (c.subtitle ? '<div style="font-size:0.78rem; color:#64748b; margin-bottom:0.55rem;">'+escHtml(c.subtitle)+'</div>' : '') +
+            '<div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">' +
+              '<div style="font-weight:700; color:#001F3F;">'+price+'</div>' +
+              '<div style="display:flex; gap:0.3rem;">' +
+                '<button class="btn-sm" onclick="editStandaloneCourse(\''+c.id+'\')" style="font-size:0.72rem;">Edit</button>' +
+                '<button class="btn-sm danger" onclick="deleteStandaloneCourse(\''+c.id+'\')" style="font-size:0.72rem;">Delete</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+    function resetStandaloneForm(){
+      ['saId','saTitle','saSlug','saSubtitle','saDescription','saDuration','saLevel','saCategory','saPreviewUrl'].forEach(function(k){
+        var el=document.getElementById(k); if(el) el.value='';
+      });
+      document.getElementById('saPrice').value='0';
+      document.getElementById('saIsPublished').checked=true;
+      document.getElementById('saIsComingSoon').checked=true;
+      document.getElementById('saFormTitle').textContent='Add a new standalone course';
+    }
+    function editStandaloneCourse(id){
+      var c = allStandaloneCourses.find(function(x){return x.id===id;}); if(!c) return;
+      document.getElementById('saId').value=c.id;
+      document.getElementById('saTitle').value=c.title||'';
+      document.getElementById('saSlug').value=c.slug||'';
+      document.getElementById('saSubtitle').value=c.subtitle||'';
+      document.getElementById('saDescription').value=c.description||'';
+      document.getElementById('saDuration').value=c.duration||'';
+      document.getElementById('saLevel').value=c.level||'';
+      document.getElementById('saCategory').value=c.category||'';
+      document.getElementById('saPrice').value=(c.price_cents||0)/100;
+      document.getElementById('saPreviewUrl').value=c.preview_video_url||'';
+      document.getElementById('saIsPublished').checked=!!c.is_published;
+      document.getElementById('saIsComingSoon').checked=!!c.is_coming_soon;
+      document.getElementById('saFormTitle').textContent='Edit course';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    async function saveStandaloneCourse(e){
+      e.preventDefault();
+      var btn=document.getElementById('saSubmitBtn'); btn.disabled=true; btn.textContent='Saving…';
+      try{
+        var thumbFile = document.getElementById('saThumb').files[0];
+        var thumbUrl = null, thumbPath = null;
+        if (thumbFile) {
+          var ext = (thumbFile.name.split('.').pop()||'jpg').toLowerCase();
+          thumbPath = 'thumbs/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+          var up = await getDB().storage.from('standalone-courses').upload(thumbPath, thumbFile, { contentType: thumbFile.type });
+          if (up.error) throw up.error;
+          thumbUrl = getDB().storage.from('standalone-courses').getPublicUrl(thumbPath).data.publicUrl;
+        }
+        var payload = {
+          title: document.getElementById('saTitle').value.trim(),
+          slug: document.getElementById('saSlug').value.trim() || null,
+          subtitle: document.getElementById('saSubtitle').value.trim() || null,
+          description: document.getElementById('saDescription').value.trim() || null,
+          duration: document.getElementById('saDuration').value.trim() || null,
+          level: document.getElementById('saLevel').value || null,
+          category: document.getElementById('saCategory').value || null,
+          price_cents: Math.round(parseFloat(document.getElementById('saPrice').value||'0')*100),
+          preview_video_url: document.getElementById('saPreviewUrl').value.trim() || null,
+          is_published: document.getElementById('saIsPublished').checked,
+          is_coming_soon: document.getElementById('saIsComingSoon').checked,
+        };
+        if (thumbUrl) { payload.thumbnail_url = thumbUrl; payload.storage_path = thumbPath; }
+        var id = document.getElementById('saId').value;
+        var res = id
+          ? await getDB().from('standalone_courses').update(payload).eq('id', id).select().single()
+          : await getDB().from('standalone_courses').insert(payload).select().single();
+        if (res.error) throw res.error;
+        showToast('Course saved','success');
+        resetStandaloneForm();
+        loadStandaloneCourses();
+      }catch(err){ console.error(err); showToast('Error: '+(err.message||err),'error'); }
+      finally{ btn.disabled=false; btn.textContent='Save course'; }
+    }
+    async function deleteStandaloneCourse(id){
+      var c = allStandaloneCourses.find(function(x){return x.id===id;}); if(!c) return;
+      if(!confirm('Delete "'+(c.title||'course')+'"?')) return;
+      try{
+        if(c.storage_path) await getDB().storage.from('standalone-courses').remove([c.storage_path]);
+        await getDB().from('standalone_courses').delete().eq('id',id);
+        loadStandaloneCourses();
+        showToast('Deleted','success');
+      }catch(err){ showToast('Error: '+err.message,'error'); }
     }
 
     /* ─── Posters / Showcase Gallery ─── */
@@ -1428,6 +1938,7 @@
         if (status !== 'paid') actions += '<button class="btn-sm success" onclick="setPaymentStatus(\'' + app.id + '\',\'paid\')">Mark Paid</button>';
         if (status !== 'unpaid') actions += '<button class="btn-sm warning" onclick="setPaymentStatus(\'' + app.id + '\',\'unpaid\')">Mark Unpaid</button>';
         if (status !== 'free') actions += '<button class="btn-sm" style="background:#ddd6fe;color:#5b21b6;border-color:#c4b5fd;" onclick="setPaymentStatus(\'' + app.id + '\',\'free\')">Mark Free</button>';
+        actions += '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="viewAsStudent(\'' + app.id + '\')">View as student</button>';
         actions += '<button class="btn-sm" style="background:#fef3c7;color:#92400e;border-color:#fcd34d;" onclick="issueCertificate(\'' + app.id + '\')">Issue Certificate</button>';
         actions += '<button class="btn-sm" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;" onclick="dropStudent(\'' + app.id + '\')">Drop Student</button>';
         return '<tr>' +
@@ -1577,6 +2088,101 @@
       } catch (err) {
         console.error(err);
         showToast('Drop failed: ' + (err.message || err), 'error');
+      }
+    }
+
+    /* ─── View as Student (read-only impersonation modal) ─── */
+    async function viewAsStudent(appId) {
+      var app = allApplications.find(function(a){return a.id===appId;});
+      if (!app) { showToast('Application not found','error'); return; }
+      var modal = document.getElementById('viewAsStudentModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'viewAsStudentModal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = '<div class="modal" style="max-width:1000px;"><div class="modal-header"><h3 id="vasTitle">View as student</h3><button class="modal-close" onclick="closeModal(\'viewAsStudentModal\')">✕</button></div><div class="modal-body" id="vasBody" style="min-height:400px;"></div></div>';
+        document.body.appendChild(modal);
+      }
+      modal.classList.add('open');
+      modal.style.display='flex';
+      document.getElementById('vasTitle').textContent = 'View as: ' + (app.first_name||'') + ' ' + (app.last_name||'') + ' (' + (app.email||'') + ')';
+      var body = document.getElementById('vasBody');
+      body.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">Loading student view…</div>';
+      try {
+        // Load student profile, certificates, submissions, materials
+        var profRes = await getDB().from('student_profiles').select('*').eq('application_id', appId).maybeSingle();
+        var profile = profRes.data;
+        var sp_id = profile ? profile.id : null;
+        var certsP = sp_id ? getDB().from('certificates').select('*').eq('student_profile_id', sp_id).order('issued_at',{ascending:false}) : Promise.resolve({data:[]});
+        var subsP = sp_id ? getDB().from('assignment_submissions').select('*').eq('student_profile_id', sp_id).order('submitted_at',{ascending:false}) : Promise.resolve({data:[]});
+        var matsP = getDB().from('course_materials').select('*').eq('program_track', app.program_track||'').order('week_number',{ascending:true});
+        var consP = getDB().from('parental_consents').select('*').eq('application_id', appId).maybeSingle();
+        var results = await Promise.all([certsP, subsP, matsP, consP]);
+        var certs = results[0].data||[];
+        var subs = results[1].data||[];
+        var mats = results[2].data||[];
+        var consent = results[3].data;
+
+        var progress = (mats.length && sp_id) ? Math.round((subs.length / mats.length) * 100) : 0;
+        if (progress > 100) progress = 100;
+
+        var html = '';
+        html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">';
+        html += '<div style="background:#f8f5ef; border-radius:8px; padding:1rem;"><div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; font-weight:600;">Track</div><div style="font-size:1.05rem; color:#001F3F; font-weight:700; margin-top:0.25rem;">' + escHtml(app.program_track||'—') + '</div></div>';
+        html += '<div style="background:#f8f5ef; border-radius:8px; padding:1rem;"><div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; font-weight:600;">Fee status</div><div style="font-size:1.05rem; color:#001F3F; font-weight:700; margin-top:0.25rem;">' + escHtml(profile ? (profile.fee_status||'unpaid') : 'no profile') + '</div></div>';
+        html += '<div style="background:#f8f5ef; border-radius:8px; padding:1rem;"><div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; font-weight:600;">Course expires</div><div style="font-size:1.05rem; color:#001F3F; font-weight:700; margin-top:0.25rem;">' + (profile && profile.course_expires_at ? new Date(profile.course_expires_at).toLocaleDateString() : '—') + '</div></div>';
+        html += '<div style="background:#f8f5ef; border-radius:8px; padding:1rem;"><div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; font-weight:600;">Progress</div><div style="font-size:1.05rem; color:#001F3F; font-weight:700; margin-top:0.25rem;">' + progress + '% &nbsp; (' + subs.length + ' / ' + mats.length + ')</div><div style="background:#e2e8f0; border-radius:3px; height:6px; margin-top:6px;"><div style="background:#14b8a6; height:100%; width:' + progress + '%; border-radius:3px;"></div></div></div>';
+        html += '</div>';
+
+        // Parental consent
+        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1rem 0 0.5rem;">Parental consent</h4>';
+        if (consent && (consent.status==='signed' || consent.signed_at)) {
+          html += '<div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:0.85rem; color:#065f46; font-size:0.92rem;">✓ Signed ' + (consent.signed_at ? new Date(consent.signed_at).toLocaleString() : '') + ' by ' + escHtml(consent.parent_name||'') + '</div>';
+        } else {
+          var isMinor = app.program_track === 'future-physician' || (app.applicant_role||'').toLowerCase() === 'hs';
+          html += '<div style="background:#fef3c7; border:1px solid #fcd34d; border-radius:8px; padding:0.85rem; color:#92400e; font-size:0.92rem;">' + (isMinor ? '⏳ Pending — parent has not signed' : '— Not required (adult applicant)') + '</div>';
+        }
+
+        // Certificates
+        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Certificates</h4>';
+        if (certs.length) {
+          html += '<div style="display:grid; gap:0.55rem;">';
+          certs.forEach(function(c){
+            html += '<div style="background:#fff; border:1px solid #e0dbd0; border-radius:6px; padding:0.65rem 0.85rem; display:flex; justify-content:space-between; align-items:center;"><div><strong>' + escHtml(c.cert_id) + '</strong> · <small>' + escHtml(c.status||'') + ' · issued ' + (c.issued_at ? new Date(c.issued_at).toLocaleDateString() : '') + '</small></div><a href="portal/certificate.html?id=' + encodeURIComponent(c.cert_id) + '" target="_blank" style="font-size:0.82rem; color:#0d9488; font-weight:600;">View →</a></div>';
+          });
+          html += '</div>';
+        } else {
+          html += '<div style="color:#94a3b8; font-size:0.9rem;">No certificates issued yet.</div>';
+        }
+
+        // Materials + submissions snapshot
+        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Course materials &amp; submissions</h4>';
+        if (mats.length) {
+          html += '<div style="display:grid; gap:0.4rem; max-height:280px; overflow-y:auto;">';
+          mats.forEach(function(m){
+            var sub = subs.find(function(s){ return s.week_number === m.week_number; });
+            var status = sub ? '<span style="color:#065f46; font-weight:600;">✓ Submitted</span>' : '<span style="color:#94a3b8;">— Not submitted</span>';
+            html += '<div style="background:#fff; border:1px solid #e0dbd0; border-radius:6px; padding:0.55rem 0.8rem; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem;"><div><strong>Week ' + (m.week_number||'?') + ':</strong> ' + escHtml(m.title||'') + '</div>' + status + '</div>';
+          });
+          html += '</div>';
+        } else {
+          html += '<div style="color:#94a3b8; font-size:0.9rem;">No materials uploaded for this track yet.</div>';
+        }
+
+        // Quick links
+        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Quick links (open in a new tab as anonymous viewer)</h4>';
+        html += '<div style="display:flex; gap:0.5rem; flex-wrap:wrap;">';
+        html += '<a href="portal/login.html" target="_blank" class="btn-sm" style="background:#dbeafe; color:#1e40af; border-color:#93c5fd; text-decoration:none;">Portal login page</a>';
+        var trackToPage = { 'future-physician':'portal/courses/future-physician.html', 'pre-med':'portal/courses/pre-med.html', 'med-accelerator':'portal/courses/med-accelerator.html', 'resident-accelerator':'portal/courses/resident-accelerator.html', '12month':'portal/courses/twelve-month.html' };
+        var trackPage = trackToPage[app.program_track];
+        if (trackPage) html += '<a href="' + trackPage + '" target="_blank" class="btn-sm" style="background:#dbeafe; color:#1e40af; border-color:#93c5fd; text-decoration:none;">Track curriculum page</a>';
+        html += '</div>';
+        html += '<p style="margin-top:1rem; font-size:0.8rem; color:#64748b;">Note: this is a <strong>read-only summary</strong> of what the student has in their account. To see the live portal as they see it, the student needs to log in with their credentials.</p>';
+
+        body.innerHTML = html;
+      } catch (err) {
+        console.error(err);
+        body.innerHTML = '<div style="color:#dc2626; padding:1rem;">Could not load student view: ' + escHtml(err.message||String(err)) + '</div>';
       }
     }
 
