@@ -232,14 +232,14 @@
       <p class="login-card-subtitle">This area is restricted to authorized MD Scholars staff only.</p>
       <form class="login-form" id="loginForm">
         <div class="form-group">
-          <label for="loginUser">Username</label>
-          <input type="text" id="loginUser" name="loginUser" required placeholder="Enter username">
+          <label for="loginUser">Email</label>
+          <input type="email" id="loginUser" name="loginUser" required placeholder="admin@mdscholars.com" autocomplete="email">
         </div>
         <div class="form-group">
           <label for="loginPass">Password</label>
-          <input type="password" id="loginPass" name="loginPass" required placeholder="Enter password">
+          <input type="password" id="loginPass" name="loginPass" required placeholder="Enter password" autocomplete="current-password">
         </div>
-        <button type="submit" class="login-button">Login to Admin Panel</button>
+        <button type="submit" class="login-button" id="loginSubmitBtn">Sign in</button>
       </form>
       <div class="login-card-notice">For security reasons, this access is limited to authorized personnel.</div>
     </div>
@@ -1044,7 +1044,7 @@
       if (!_db) {
         _db = window.supabase.createClient(
           'https://nygeinaoevzyptkgchqb.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDY1Njk5OCwiZXhwIjoyMDkwMjMyOTk4fQ.H_4VhvT8ENyuuH16aK0dGvjQvlz4v97XJpAbtmUHibc'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ'
         );
       }
       return _db;
@@ -1059,18 +1059,53 @@
     var allQuestions    = [];
     var studentLookup   = {};
 
-    /* ─── Login ─── */
+    /* ─── Login (real Supabase Auth + admin_users allowlist) ─── */
+    async function checkIsAdmin() {
+      try {
+        var db = getDB();
+        var { data: sess } = await db.auth.getSession();
+        if (!sess || !sess.session) return false;
+        // is_admin() RPC checks the admin_users allowlist (SECURITY DEFINER)
+        var res = await db.rpc('is_admin');
+        return res.data === true;
+      } catch (e) { console.warn('checkIsAdmin', e); return false; }
+    }
+
+    async function enterDashboard() {
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('dashboardWrapper').classList.add('active');
+      loadAllData();
+    }
+
     function initAdminListeners() {
-      document.getElementById('loginForm').addEventListener('submit', function(e) {
+      // If a session is already present and the user is admin, skip login.
+      (async function() {
+        if (await checkIsAdmin()) enterDashboard();
+      })();
+
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        var u = document.getElementById('loginUser').value;
-        var p = document.getElementById('loginPass').value;
-        if (u === '1234' && p === '1234') {
-          document.getElementById('loginContainer').style.display = 'none';
-          document.getElementById('dashboardWrapper').classList.add('active');
-          loadAllData();
-        } else {
-          showToast('Invalid credentials', 'error');
+        var btn = document.getElementById('loginSubmitBtn');
+        var email = document.getElementById('loginUser').value.trim();
+        var password = document.getElementById('loginPass').value;
+        if (!email || !password) { showToast('Enter email and password', 'error'); return; }
+        btn.disabled = true; var origLabel = btn.textContent; btn.textContent = 'Signing in…';
+        try {
+          var db = getDB();
+          var res = await db.auth.signInWithPassword({ email: email, password: password });
+          if (res.error) throw res.error;
+          // Gate: must be in admin_users allowlist
+          var admin = await checkIsAdmin();
+          if (!admin) {
+            await db.auth.signOut();
+            showToast('This account is not authorized as an admin.', 'error');
+            return;
+          }
+          enterDashboard();
+        } catch (err) {
+          showToast(err.message || 'Sign-in failed', 'error');
+        } finally {
+          btn.disabled = false; btn.textContent = origLabel;
         }
       });
       document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
@@ -1085,7 +1120,8 @@
       initAdminListeners();
     }
 
-    function handleLogout() {
+    async function handleLogout() {
+      try { await getDB().auth.signOut(); } catch(e){}
       document.getElementById('dashboardWrapper').classList.remove('active');
       document.getElementById('loginContainer').style.display = 'flex';
       document.getElementById('loginUser').value = '';
@@ -2765,84 +2801,29 @@
     async function provisionTestStudents() {
       var el = document.getElementById('tsProvisionStatus');
       el.innerHTML = 'Working…';
-      // Requires service_role — reuse the client's key by pulling it from getDB().
-      // We call the Supabase Admin API directly.
-      var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
-      // Pull key from the client's internal auth headers
-      var key = null;
       try {
-        // supabase-js exposes it here in v2
-        key = getDB().supabaseKey || (getDB().rest && getDB().rest.headers && getDB().rest.headers.apikey);
-      } catch(e){}
-      if (!key) {
-        // Fallback: re-read our known service_role from the top of the file (safe within admin)
-        key = document.body.getAttribute('data-sr-key') || null;
+        var db = getDB();
+        var sess = (await db.auth.getSession()).data.session;
+        if (!sess) throw new Error('Not signed in');
+        var resp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/create-test-students', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess.access_token,
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ'
+          },
+          body: JSON.stringify({})
+        });
+        var body = await resp.json();
+        if (!resp.ok) throw new Error(body.error || 'Provision failed');
+        var lines = (body.results || []).map(function(r){
+          return (r.ok ? '✅ ' : '❌ ') + r.email + (r.note ? ' — ' + r.note : '') + (r.error ? ' — ' + r.error : '');
+        });
+        el.innerHTML = lines.join('<br>') || 'No results returned';
+        showToast('Test student provisioning complete', 'success');
+      } catch (err) {
+        el.innerHTML = '<span style="color:#b91c1c;">Error: ' + (err.message || err) + '</span>';
       }
-      if (!key) {
-        el.innerHTML = '<span style="color:#b91c1c;">No admin key found in client. Cannot provision automatically.</span>';
-        return;
-      }
-
-      var db = getDB();
-      var results = [];
-      for (var i = 0; i < TEST_STUDENT_TRACKS.length; i++) {
-        var t = TEST_STUDENT_TRACKS[i];
-        try {
-          // 1) Try to create the auth user (idempotent — 422 if exists)
-          var createResp = await fetch(SUPABASE_URL + '/auth/v1/admin/users', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': key,
-              'Authorization': 'Bearer ' + key
-            },
-            body: JSON.stringify({
-              email: t.email,
-              password: TEST_STUDENT_PASSWORD,
-              email_confirm: true,
-              user_metadata: { is_test_student: true, name: t.name, track: t.key }
-            })
-          });
-          var userId = null;
-          if (createResp.ok) {
-            var j = await createResp.json();
-            userId = j.id;
-          } else if (createResp.status === 422) {
-            // User exists — look it up
-            var lookup = await fetch(SUPABASE_URL + '/auth/v1/admin/users?email=' + encodeURIComponent(t.email), {
-              headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
-            });
-            var lj = await lookup.json();
-            var u = (lj.users || []).find(function(x){ return x.email === t.email; });
-            userId = u && u.id;
-          } else {
-            var err = await createResp.text();
-            throw new Error('auth create failed: ' + err.slice(0,120));
-          }
-          if (!userId) throw new Error('no user id returned');
-
-          // 2) Upsert student_profile
-          var profile = {
-            user_id: userId,
-            email: t.email,
-            full_name: t.name,
-            program_track: t.key,
-            student_id: t.studentId,
-            payment_status: 'free',
-            application_status: 'accepted',
-            consent_required: false,
-            consent_status: 'not_required'
-          };
-          var up = await db.from('student_profiles').upsert(profile, { onConflict: 'email' });
-          if (up.error) throw up.error;
-
-          results.push('✅ ' + t.name);
-        } catch (err) {
-          results.push('❌ ' + t.name + ': ' + (err.message || err));
-        }
-      }
-      el.innerHTML = results.join('<br>');
-      showToast('Test student provisioning complete', 'success');
     }
 
     function enterTestStudentView() {
