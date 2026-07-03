@@ -1044,7 +1044,7 @@
       if (!_db) {
         _db = window.supabase.createClient(
           'https://nygeinaoevzyptkgchqb.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ'
+          'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
         );
       }
       return _db;
@@ -2049,7 +2049,7 @@
       if (!app.parent_email) { showToast('No parent email on file', 'error'); return; }
       if (!confirm('Send a fresh parental-consent email to ' + app.parent_email + '?')) return;
       try {
-        var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+        var anonKey = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
         var r = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-application-confirmation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + anonKey, 'apikey': anonKey },
@@ -2085,7 +2085,7 @@
         if (newStatus === 'paid' && prev !== 'paid') {
           try {
             var app = allApplications.find(function(a){return a.id===appId;}) || {};
-            var _anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+            var _anon = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
             await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-payment-confirmation', {
               method: 'POST',
               headers: {
@@ -2330,7 +2330,7 @@
 
         // Fire-and-forget email via Edge Function (authenticated)
         try {
-          var anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+          var anonKey = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
           await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-certificate-issued', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + anonKey, 'apikey': anonKey },
@@ -2810,7 +2810,7 @@
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + sess.access_token,
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ'
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
           },
           body: JSON.stringify({})
         });
