@@ -164,9 +164,37 @@
     }
 
     function initListeners() {
+      // ── TEST STUDENT AUTO-LOGIN ──
+      // Admin panel opens login.html?testmode=1&e=<test-student-email>. We sign in with the
+      // shared internal password and land on the dashboard with a banner. Real students
+      // never hit this branch because their emails never match the test-*@mdscholars.com pattern.
+      (async function testModeAutoLogin() {
+        try {
+          const params = new URLSearchParams(location.search);
+          if (params.get('testmode') !== '1') return;
+          const email = (params.get('e') || '').trim();
+          if (!email.startsWith('test-') || !email.endsWith('@mdscholars.com')) return;
+          showMsg('info', 'Entering Test Student View as ' + email + '…');
+          // If a different user is already signed in, sign them out first
+          const { data: s } = await sb.auth.getSession();
+          if (s.session && s.session.user.email !== email) {
+            await sb.auth.signOut();
+          }
+          const { error } = await sb.auth.signInWithPassword({ email, password: 'MDScholarsTest2026!' });
+          if (error) { showMsg('error', 'Test login failed: ' + error.message); return; }
+          // Skip the fee/access gates for test students — they're always active
+          window.location.href = 'dashboard.html';
+        } catch (e) { console.error('test-mode auto-login error', e); }
+      })();
+
       // If already signed in AND has a student profile that's active AND paid/free, send straight to dashboard.
       sb.auth.getSession().then(async ({ data }) => {
         if (data.session) {
+          // Test students bypass all gates
+          if (data.session.user.email && data.session.user.email.startsWith('test-') && data.session.user.email.endsWith('@mdscholars.com')) {
+            window.location.href = 'dashboard.html';
+            return;
+          }
           const r = await loadAccessAndFee();
           const consentOk = !isMinorApplicant(r.application) || hasParentalConsent(r.consent);
           if (r.access && r.access.is_active && isPaidOrFree(r.profile) && consentOk) {
