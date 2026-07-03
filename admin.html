@@ -1998,9 +1998,14 @@
         if (newStatus === 'paid' && prev !== 'paid') {
           try {
             var app = allApplications.find(function(a){return a.id===appId;}) || {};
+            var _anon = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
             await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-payment-confirmation', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + _anon,
+                'apikey': _anon
+              },
               body: JSON.stringify({ record: app })
             });
             showToast('Payment confirmation email sent', 'success');
