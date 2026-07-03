@@ -4,7 +4,7 @@
   window.__mdsChatbotLoaded = true;
 
   var ENDPOINT = 'https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/chatbot-answer';
-  var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2VpbmFvZXZ6eXB0a2djaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2NTY5OTgsImV4cCI6MjA5MDIzMjk5OH0.73LgchISCs4puQJ1-RKIjepKZeZKXTzopkV-8L8btWQ';
+  var ANON_KEY = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
 
   var SUGGESTIONS = [
     'How much is the High School track?',
