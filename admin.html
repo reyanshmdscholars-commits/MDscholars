@@ -282,6 +282,7 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'announcements')">📣 Announcements</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'institutions-content')">🏛️ Institutions Page</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'standalone')">📚 Standalone Courses</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'test-view')">🎭 Test Student View</a>
           </div>
         </div>
 
@@ -954,6 +955,55 @@
             </div>
           </div>
 
+          <!-- TEST STUDENT VIEW TAB -->
+          <div id="test-view" class="content-section">
+            <div class="section-header">
+              <h2>🎭 Test Student View <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Canvas-style impersonation for testing</span></h2>
+            </div>
+            <p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
+              Log in as a generic Test Student to walk through the portal exactly as a real student would.
+              Any submissions or actions made in this view are flagged <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">is_test_data = true</code>
+              and never affect real reporting. Use the <strong>Reset</strong> button to wipe all test activity in one click.
+            </p>
+
+            <!-- Provisioning -->
+            <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
+              <h3 style="margin-top:0;">1. Provision Test Students</h3>
+              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">One-time setup. Creates five auth users (one per track), each with a paid student_profile.
+                Idempotent — safe to click again; existing users are skipped.</p>
+              <div id="tsProvisionStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">Loading status…</div>
+              <button class="btn-primary" onclick="provisionTestStudents()">Provision / Refresh Test Students</button>
+            </div>
+
+            <!-- Enter View -->
+            <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #c9a84c;">
+              <h3 style="margin-top:0;">2. Enter Student View</h3>
+              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Pick a track and open the portal in a new tab, already signed in as that track's test student.
+                A yellow banner at the top will remind you you're in test mode.</p>
+              <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Track</label>
+                  <select id="tsTrackPick" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:260px;">
+                    <option value="future-physician">🎓 High School — Future Physician</option>
+                    <option value="pre-med">📚 College / Pre-Med</option>
+                    <option value="med-accelerator">🩺 Medical Student</option>
+                    <option value="resident-accelerator">🔬 Resident &amp; Fellow</option>
+                    <option value="12month">📅 12-Month Advanced</option>
+                  </select>
+                </div>
+                <button class="btn-primary" onclick="enterTestStudentView()">🎭 Enter Student View →</button>
+              </div>
+            </div>
+
+            <!-- Reset -->
+            <div class="card" style="border-left:4px solid #dc2626;">
+              <h3 style="margin-top:0;">3. Reset Test Data</h3>
+              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Deletes every row across submissions, questions, and certificates where <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">is_test_data = true</code>. Real student data is untouched.</p>
+              <div id="tsResetStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">—</div>
+              <button class="btn-secondary" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca;" onclick="resetTestStudentData()">🗑️ Clear all test data</button>
+            </div>
+          </div>
+
         </div><!-- end dashboard-content -->
       </div><!-- end dashboard-main -->
     </div>
@@ -1074,6 +1124,7 @@
       else if (tabName === 'announcements') { loadAnnouncements(); }
       else if (tabName === 'institutions-content') { loadInstitutionContent(); loadLogos(); }
       else if (tabName === 'standalone') { loadStandaloneCourses(); }
+      else if (tabName === 'test-view') { loadTestStudentStatus(); }
     }
 
     /* ─── Announcements ─── */
@@ -2681,6 +2732,159 @@
         }
       });
     });
+
+    /* ─── Test Student View (Canvas-style, fully interactive) ─── */
+    var TEST_STUDENT_TRACKS = [
+      { key:'future-physician',     email:'test-highschool@mdscholars.com', name:'Test Student — High School',       studentId:'MDS-TEST-2026-HS-01' },
+      { key:'pre-med',              email:'test-college@mdscholars.com',    name:'Test Student — College',           studentId:'MDS-TEST-2026-COL-01' },
+      { key:'med-accelerator',      email:'test-med@mdscholars.com',        name:'Test Student — Medical',           studentId:'MDS-TEST-2026-MED-01' },
+      { key:'resident-accelerator', email:'test-resident@mdscholars.com',   name:'Test Student — Resident',          studentId:'MDS-TEST-2026-RES-01' },
+      { key:'12month',              email:'test-12month@mdscholars.com',    name:'Test Student — 12-Month Advanced', studentId:'MDS-TEST-2026-12MO-01' }
+    ];
+    var TEST_STUDENT_PASSWORD = 'MDScholarsTest2026!';
+
+    async function loadTestStudentStatus() {
+      var el = document.getElementById('tsProvisionStatus');
+      if (!el) return;
+      try {
+        var db = getDB();
+        var emails = TEST_STUDENT_TRACKS.map(function(t){ return t.email; });
+        var res = await db.from('student_profiles').select('user_id, email, program_track').in('email', emails);
+        var existing = (res.data || []).map(function(r){ return r.email; });
+        var missing  = emails.filter(function(e){ return existing.indexOf(e) === -1; });
+        if (missing.length === 0) {
+          el.innerHTML = '<span style="color:#059669;">✅ All 5 test students exist and are ready.</span>';
+        } else {
+          el.innerHTML = '<span style="color:#b45309;">⚠️ Missing profiles: ' + missing.length + '/5 — click Provision to create.</span>';
+        }
+      } catch (err) {
+        el.innerHTML = '<span style="color:#b91c1c;">Error checking status: ' + (err.message || err) + '</span>';
+      }
+    }
+
+    async function provisionTestStudents() {
+      var el = document.getElementById('tsProvisionStatus');
+      el.innerHTML = 'Working…';
+      // Requires service_role — reuse the client's key by pulling it from getDB().
+      // We call the Supabase Admin API directly.
+      var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+      // Pull key from the client's internal auth headers
+      var key = null;
+      try {
+        // supabase-js exposes it here in v2
+        key = getDB().supabaseKey || (getDB().rest && getDB().rest.headers && getDB().rest.headers.apikey);
+      } catch(e){}
+      if (!key) {
+        // Fallback: re-read our known service_role from the top of the file (safe within admin)
+        key = document.body.getAttribute('data-sr-key') || null;
+      }
+      if (!key) {
+        el.innerHTML = '<span style="color:#b91c1c;">No admin key found in client. Cannot provision automatically.</span>';
+        return;
+      }
+
+      var db = getDB();
+      var results = [];
+      for (var i = 0; i < TEST_STUDENT_TRACKS.length; i++) {
+        var t = TEST_STUDENT_TRACKS[i];
+        try {
+          // 1) Try to create the auth user (idempotent — 422 if exists)
+          var createResp = await fetch(SUPABASE_URL + '/auth/v1/admin/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': key,
+              'Authorization': 'Bearer ' + key
+            },
+            body: JSON.stringify({
+              email: t.email,
+              password: TEST_STUDENT_PASSWORD,
+              email_confirm: true,
+              user_metadata: { is_test_student: true, name: t.name, track: t.key }
+            })
+          });
+          var userId = null;
+          if (createResp.ok) {
+            var j = await createResp.json();
+            userId = j.id;
+          } else if (createResp.status === 422) {
+            // User exists — look it up
+            var lookup = await fetch(SUPABASE_URL + '/auth/v1/admin/users?email=' + encodeURIComponent(t.email), {
+              headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+            });
+            var lj = await lookup.json();
+            var u = (lj.users || []).find(function(x){ return x.email === t.email; });
+            userId = u && u.id;
+          } else {
+            var err = await createResp.text();
+            throw new Error('auth create failed: ' + err.slice(0,120));
+          }
+          if (!userId) throw new Error('no user id returned');
+
+          // 2) Upsert student_profile
+          var profile = {
+            user_id: userId,
+            email: t.email,
+            full_name: t.name,
+            program_track: t.key,
+            student_id: t.studentId,
+            payment_status: 'free',
+            application_status: 'accepted',
+            consent_required: false,
+            consent_status: 'not_required'
+          };
+          var up = await db.from('student_profiles').upsert(profile, { onConflict: 'email' });
+          if (up.error) throw up.error;
+
+          results.push('✅ ' + t.name);
+        } catch (err) {
+          results.push('❌ ' + t.name + ': ' + (err.message || err));
+        }
+      }
+      el.innerHTML = results.join('<br>');
+      showToast('Test student provisioning complete', 'success');
+    }
+
+    function enterTestStudentView() {
+      var trackKey = document.getElementById('tsTrackPick').value;
+      var t = TEST_STUDENT_TRACKS.find(function(x){ return x.key === trackKey; });
+      if (!t) { showToast('Pick a track first', 'error'); return; }
+      // Open a new tab that will auto-login as this test student and land on dashboard.
+      var url = 'portal/login.html?testmode=1&e=' + encodeURIComponent(t.email);
+      window.open(url, '_blank');
+    }
+
+    async function resetTestStudentData() {
+      if (!confirm('Delete every submission, question, and certificate belonging to a test-*@mdscholars.com student? Real student data is untouched.')) return;
+      var el = document.getElementById('tsResetStatus');
+      el.textContent = 'Working…';
+      try {
+        var db = getDB();
+        // Find test student profile IDs
+        var profs = await db.from('student_profiles').select('id').ilike('email', 'test-%@mdscholars.com');
+        if (profs.error) throw profs.error;
+        var profIds = (profs.data || []).map(function(r){ return r.id; });
+        if (profIds.length === 0) {
+          el.innerHTML = '<span style="color:#b45309;">No test student profiles found — nothing to reset.</span>';
+          return;
+        }
+        var deleted = { sub:0, q:0, cert:0 };
+        var r1 = await db.from('assignment_submissions').delete().in('student_profile_id', profIds).select('id');
+        if (!r1.error) deleted.sub = (r1.data || []).length;
+        var r2 = await db.from('student_questions').delete().in('student_profile_id', profIds).select('id');
+        if (!r2.error) deleted.q = (r2.data || []).length;
+        var r3 = await db.from('certificates').delete().in('student_profile_id', profIds).select('id');
+        if (!r3.error) deleted.cert = (r3.data || []).length;
+        // Also clear any flag-based rows just in case
+        await db.from('assignment_submissions').delete().eq('is_test_data', true);
+        await db.from('student_questions').delete().eq('is_test_data', true);
+        await db.from('certificates').delete().eq('is_test_data', true);
+        el.innerHTML = '<span style="color:#059669;">✅ Cleared ' + deleted.sub + ' submissions, ' + deleted.q + ' questions, ' + deleted.cert + ' certificates for ' + profIds.length + ' test profile(s).</span>';
+        showToast('Test data reset', 'success');
+      } catch (err) {
+        el.innerHTML = '<span style="color:#b91c1c;">Error: ' + (err.message || err) + '</span>';
+      }
+    }
   </script>
 </body>
 </html>
