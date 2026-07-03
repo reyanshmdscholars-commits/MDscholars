@@ -442,53 +442,80 @@
     <p style="text-align:center; margin-top:1.5rem; color:#475569; font-size:0.92rem;">Full payment instructions are emailed once your application is accepted. Questions: <a href="mailto:support@mdscholars.com" style="color:#0d9488;">support@mdscholars.com</a> (Subject: <strong>Billing</strong>)</p>
   </div>
 </section>
-  <footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
-          <div class="nav-logo-icon" style="width:42px;height:42px;background:rgba(255,255,255,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-          <div class="nav-logo-text">
-            <strong style="font-family:'Playfair Display',serif;font-size:1.1rem;color:white;">MD Scholars</strong>
-            <span style="font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal-light);">Research Mentorship</span>
-          </div>
+  <style>
+  footer.rich-ft { background:#001F3F; color:rgba(255,255,255,0.75); padding:3.5rem 1.5rem 1.5rem; margin-top:4rem; font-family:'DM Sans','Inter',-apple-system,Segoe UI,Arial,sans-serif; }
+  footer.rich-ft .ft-container { max-width:1200px; margin:0 auto; }
+  footer.rich-ft .ft-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1.4fr; gap:2.5rem; margin-bottom:2rem; }
+  footer.rich-ft .ft-brand p { font-size:0.88rem; line-height:1.55; margin:0 0 0.8rem; }
+  footer.rich-ft .ft-brand .ft-loc { font-size:0.78rem; opacity:0.6; margin:0; }
+  footer.rich-ft .ft-logo { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.9rem; }
+  footer.rich-ft .ft-logo-icon { width:40px; height:40px; background:rgba(255,255,255,0.08); border-radius:8px; padding:4px; }
+  footer.rich-ft .ft-logo-icon img { width:100%; height:100%; object-fit:contain; display:block; }
+  footer.rich-ft .ft-logo strong { color:#fff; font-family:'Playfair Display',serif; font-size:1.05rem; display:block; line-height:1.15; }
+  footer.rich-ft .ft-logo span { font-size:0.78rem; opacity:0.75; }
+  footer.rich-ft h4 { color:#c9a84c; font-family:'Playfair Display',serif; font-size:0.95rem; margin:0 0 0.9rem; letter-spacing:0.02em; font-weight:700; }
+  footer.rich-ft a { display:block; color:rgba(255,255,255,0.75); font-size:0.85rem; padding:0.2rem 0; text-decoration:none; transition:color 0.15s; }
+  footer.rich-ft a:hover { color:#0d9488; text-decoration:none; }
+  footer.rich-ft .ft-contact a { padding:0.35rem 0; color:rgba(255,255,255,0.85); }
+  footer.rich-ft .ft-contact a small { display:block; opacity:0.6; font-size:0.75rem; font-weight:400; }
+  footer.rich-ft .ft-bottom { border-top:1px solid rgba(255,255,255,0.12); padding-top:1.2rem; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; font-size:0.8rem; }
+  footer.rich-ft .ft-bottom p { margin:0; opacity:0.7; }
+  footer.rich-ft .ft-bottom .ft-legal { display:flex; gap:1.2rem; flex-wrap:wrap; }
+  footer.rich-ft .ft-bottom .ft-legal a { display:inline; padding:0; font-size:0.8rem; }
+  @media (max-width: 960px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr 1fr; gap:2rem; } }
+  @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
+</style>
+<footer class="rich-ft">
+  <div class="ft-container">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="ft-logo">
+          <div class="ft-logo-icon"><img src="logo.png" alt="MD Scholars logo"></div>
+          <div><strong>MD Scholars</strong><span>Research Mentorship</span></div>
         </div>
-        <p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+        <p>Physician-led research mentorship for every stage of the medical pathway &mdash; from high school to fellowship.</p>
+        <p class="ft-loc">MD Scholars LLC &middot; St. Louis, MO</p>
       </div>
-      <div class="footer-col">
+      <div>
         <h4>Programs</h4>
-        <a href="high-school.html">High School Track</a>
-        <a href="college.html">Pre-Med Track</a>
-        <a href="medical-student.html">Medical Student Track</a>
-        <a href="resident-fellow.html">Resident &amp; Fellow Track</a>
-        <a href="twelve-month.html">12-Month Advanced Track</a>
-        <a href="for-institutions.html">Institutional Program</a>
+        <a href="high-school.html">High School</a>
+        <a href="college.html">College / Pre-Med</a>
+        <a href="medical-student.html">Medical Student</a>
+        <a href="resident-fellow.html">Resident &amp; Fellow</a>
+        <a href="twelve-month.html">12-Month Advanced</a>
+        <a href="standalone-courses.html">Standalone Courses</a>
+        <a href="for-institutions.html">For Institutions</a>
       </div>
-      <div class="footer-col">
-        <h4>Organization</h4>
-        <a href="about.html">About the Founder</a>
+      <div>
+        <h4>About</h4>
+        <a href="about.html">Our Team</a>
+        <a href="testimonials.html">Testimonials</a>
+        <a href="showcase.html">Showcase Your Research</a>
+        <a href="additional-services.html">Additional Services</a>
+        <a href="faqs.html">FAQs</a>
+      </div>
+      <div>
+        <h4>Student</h4>
         <a href="apply.html">Apply Now</a>
         <a href="enroll.html">Enroll &amp; Tuition</a>
-        <a href="contact.html">Contact Us</a>
+        <a href="portal/login.html">Student Portal Login</a>
         <a href="verify.html">Verify Certificate</a>
+        <a href="contact.html">Contact Us</a>
       </div>
-      <div class="footer-col">
-        <h4>Get in touch</h4>
-        <a href="mailto:contact@mdscholars.com">contact@mdscholars.com<br><small style="opacity:.7;">General inquiries</small></a>
-        <a href="mailto:team@mdscholars.com">team@mdscholars.com<br><small style="opacity:.7;">Partnerships &amp; outreach</small></a>
-        <a href="mailto:support@mdscholars.com">support@mdscholars.com<br><small style="opacity:.7;">Enrolled-student support<br>Subject: Billing or Education</small></a>
+      <div class="ft-contact">
+        <h4>Get in Touch</h4>
+        <a href="mailto:contact@mdscholars.com">contact@mdscholars.com<small>General inquiries</small></a>
+        <a href="mailto:team@mdscholars.com">team@mdscholars.com<small>Partnerships &amp; outreach</small></a>
+        <a href="mailto:support@mdscholars.com">support@mdscholars.com<small>Enrolled student support</small></a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2026 MD Scholars. All rights reserved. Physician-led • Small cohorts • Ethical authorship.</p>
-      <div class="footer-links">
-        <a href="verify.html">Verify Certificate</a>
-        <a href="contact.html">Contact</a>
+    <div class="ft-bottom">
+      <p>&copy; 2026 MD Scholars LLC. All rights reserved. Physician-led &middot; Small cohorts &middot; Ethical authorship.</p>
+      <div class="ft-legal">
         <a href="privacy.html">Privacy</a>
         <a href="terms.html">Terms</a>
         <a href="authorship.html">Authorship</a>
         <a href="faqs.html">FAQs</a>
-        
       </div>
     </div>
   </div>
