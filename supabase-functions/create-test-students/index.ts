@@ -64,9 +64,10 @@ serve(async (req) => {
 
         // student_profiles real columns: auth_user_id, email, full_name, program_track,
         // student_id, fee_status, cohort_start, course_expires_at
+        // No unique constraint on the schema currently — do manual SELECT + INSERT / UPDATE.
         const nowIso = new Date().toISOString();
         const expiresIso = new Date(Date.now() + 365 * 86400 * 1000).toISOString();
-        const { error: pe } = await admin.from("student_profiles").upsert({
+        const profileData = {
           auth_user_id: uid,
           email: t.email,
           full_name: t.name,
@@ -75,8 +76,24 @@ serve(async (req) => {
           fee_status: "free",
           cohort_start: nowIso,
           course_expires_at: expiresIso,
-        }, { onConflict: "auth_user_id" });
-        if (pe) throw pe;
+        };
+        const { data: existingProf } = await admin
+          .from("student_profiles")
+          .select("id")
+          .eq("auth_user_id", uid)
+          .maybeSingle();
+        if (existingProf?.id) {
+          const { error: ue } = await admin
+            .from("student_profiles")
+            .update(profileData)
+            .eq("id", existingProf.id);
+          if (ue) throw ue;
+        } else {
+          const { error: ie } = await admin
+            .from("student_profiles")
+            .insert(profileData);
+          if (ie) throw ie;
+        }
 
         results.push({ email: t.email, ok: true, note: existing ? "refreshed" : "created" });
       } catch (e: any) {
