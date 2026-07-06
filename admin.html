@@ -666,7 +666,7 @@
                   <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
                     <input type="checkbox" id="cmPublish" checked> Publish to students immediately
                   </label>
-                  <button type="submit" id="cmUploadBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer; margin-left:auto;">Upload material</button>
+                  <button type="submit" id="cmUploadBtn" class="btn-primary">Upload material</button>
                 </div>
                 <div id="cmStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
               </form>
@@ -757,7 +757,7 @@
                   <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
                     <input type="checkbox" id="pFeatured"> ⭐ Feature on home page
                   </label>
-                  <button type="submit" id="pUploadBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer; margin-left:auto;">Upload</button>
+                  <button type="submit" id="pUploadBtn" class="btn-primary">Upload</button>
                 </div>
                 <div id="pStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
               </form>
@@ -819,7 +819,7 @@
                   <input type="datetime-local" id="annEndsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
                 </div>
                 <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
-                  <button type="submit" id="annSubmitBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Save</button>
+                  <button type="submit" id="annSubmitBtn" class="btn-primary">Save</button>
                   <button type="button" onclick="resetAnnouncementForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Reset</button>
                   <div id="annStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
                 </div>
@@ -867,7 +867,7 @@
                   <input type="text" id="instTestimonialAttr" placeholder="— Dr. Jane Doe, Vanderbilt School of Medicine" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
                 </div>
                 <div style="display:flex; gap:1rem; align-items:center;">
-                  <button type="submit" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Save page text</button>
+                  <button type="submit" class="btn-primary">Save page text</button>
                   <div id="instContentStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
                 </div>
               </form>
@@ -889,7 +889,7 @@
                   <input type="url" id="logoUrl" placeholder="https://institution.edu" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
                 </div>
                 <div style="grid-column:1/-1;">
-                  <button type="submit" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.55rem 1.2rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Upload logo</button>
+                  <button type="submit" class="btn-primary">Upload logo</button>
                 </div>
               </form>
               <div id="logosGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1rem;">
@@ -966,7 +966,7 @@
                   <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="saIsComingSoon" checked> Show as "Coming Soon"</label>
                 </div>
                 <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
-                  <button type="submit" id="saSubmitBtn" style="background:linear-gradient(135deg,#0d9488,#14b8a6); color:white; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Save course</button>
+                  <button type="submit" id="saSubmitBtn" class="btn-primary">Save course</button>
                   <button type="button" onclick="resetStandaloneForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Reset</button>
                   <div id="saStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
                 </div>
