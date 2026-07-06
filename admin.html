@@ -105,6 +105,25 @@
     .action-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
     .action-card p { font-size: 0.85rem; color: #666; }
 
+    /* Card — canonical card style used by Test Student View, Manage Admins, and every new admin panel section */
+    .card {
+      background-color: white;
+      border: 1px solid #e0dbd0;
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 2px 8px rgba(0, 31, 63, 0.06);
+    }
+    .card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #001F3F; margin: 0 0 0.5rem; }
+    .card p { color: #475569; line-height: 1.55; }
+    .card code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 0.88em;
+      color: #001F3F;
+    }
+
     /* Table Controls */
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
     .table-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap; }
@@ -975,7 +994,7 @@
               <h3 style="margin-top:0;">1. Provision Test Students</h3>
               <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">One-time setup. Creates five auth users (one per track), each with a paid student_profile.
                 Idempotent — safe to click again; existing users are skipped.</p>
-              <div id="tsProvisionStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">Loading status…</div>
+              <div id="tsProvisionStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem; min-height:1rem;">Click Provision to check current status.</div>
               <button class="btn-primary" onclick="provisionTestStudents()">Provision / Refresh Test Students</button>
             </div>
 
@@ -1003,7 +1022,7 @@
             <div class="card" style="border-left:4px solid #dc2626;">
               <h3 style="margin-top:0;">3. Reset Test Data</h3>
               <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Deletes every row across submissions, questions, and certificates where <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">is_test_data = true</code>. Real student data is untouched.</p>
-              <div id="tsResetStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">—</div>
+              <div id="tsResetStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem; min-height:1rem;"></div>
               <button class="btn-secondary" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca;" onclick="resetTestStudentData()">🗑️ Clear all test data</button>
             </div>
           </div>
