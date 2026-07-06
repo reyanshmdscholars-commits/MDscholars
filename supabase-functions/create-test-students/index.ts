@@ -75,7 +75,7 @@ serve(async (req) => {
           fee_status: "free",
           cohort_start: nowIso,
           course_expires_at: expiresIso,
-        }, { onConflict: "email" });
+        }, { onConflict: "auth_user_id" });
         if (pe) throw pe;
 
         results.push({ email: t.email, ok: true, note: existing ? "refreshed" : "created" });
