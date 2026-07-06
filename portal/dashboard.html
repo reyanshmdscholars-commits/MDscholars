@@ -212,6 +212,17 @@
     }
 
     async function loadDashboard() {
+      try {
+        await _loadDashboard();
+      } catch (e) {
+        console.error('loadDashboard failed', e);
+        document.getElementById('loading').innerHTML =
+          '<p style="color:#dc2626; padding:1rem;">Failed to load dashboard: ' + (e.message || String(e)) +
+          '</p><p style="text-align:center;"><a href="login.html" style="color:#0d9488;">Return to sign-in</a></p>';
+      }
+    }
+
+    async function _loadDashboard() {
       const { data: sess } = await sb.auth.getSession();
       if (!sess?.session) { window.location.href = 'login.html'; return; }
 
@@ -294,13 +305,20 @@
       document.getElementById('progressFill').style.width = pct + '%';
       document.getElementById('progressText').textContent = progressLabel;
 
-      // Submissions + questions counts
-      const [subs, qs] = await Promise.all([
-        sb.from('assignment_submissions').select('id', { count: 'exact', head: true }),
-        sb.from('student_questions').select('id', { count: 'exact', head: true })
-      ]);
-      document.getElementById('statSubmitted').textContent = subs.count ?? 0;
-      document.getElementById('statQuestions').textContent = qs.count ?? 0;
+      // Submissions + questions counts (defensive — RLS on group-submission tables can
+      // occasionally throw; failing here should NOT block the dashboard from rendering)
+      try {
+        const [subs, qs] = await Promise.all([
+          sb.from('assignment_submissions').select('id', { count: 'exact', head: true }),
+          sb.from('student_questions').select('id', { count: 'exact', head: true })
+        ]);
+        document.getElementById('statSubmitted').textContent = subs.count ?? 0;
+        document.getElementById('statQuestions').textContent = qs.count ?? 0;
+      } catch (e) {
+        console.warn('Stats query failed:', e);
+        document.getElementById('statSubmitted').textContent = 0;
+        document.getElementById('statQuestions').textContent = 0;
+      }
 
       document.getElementById('loading').style.display = 'none';
       document.getElementById('appWrapper').style.display = 'block';
