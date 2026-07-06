@@ -236,7 +236,7 @@
           await sb.auth.signOut(); window.location.href = 'login.html'; return;
         }
         // Compose a synthetic student_access row so downstream code works unchanged
-        var prof = {
+        const syntheticProf = {
           full_name: tprof.full_name,
           program_track: tprof.program_track,
           student_id: tprof.student_id,
@@ -247,7 +247,7 @@
           cohort_start: new Date().toISOString(),
           course_expires_at: new Date(Date.now() + 90*86400*1000).toISOString()
         };
-        return renderDashboard(prof);
+        return renderDashboard(syntheticProf);
       }
 
       const { data: prof, error } = await sb.from('student_access').select('*').maybeSingle();
