@@ -62,16 +62,19 @@ serve(async (req) => {
           await admin.auth.admin.updateUserById(uid, { password: PWD, email_confirm: true });
         }
 
+        // student_profiles real columns: auth_user_id, email, full_name, program_track,
+        // student_id, fee_status, cohort_start, course_expires_at
+        const nowIso = new Date().toISOString();
+        const expiresIso = new Date(Date.now() + 365 * 86400 * 1000).toISOString();
         const { error: pe } = await admin.from("student_profiles").upsert({
-          user_id: uid,
+          auth_user_id: uid,
           email: t.email,
           full_name: t.name,
           program_track: t.key,
           student_id: t.student_id,
-          payment_status: "free",
-          application_status: "accepted",
-          consent_required: false,
-          consent_status: "not_required",
+          fee_status: "free",
+          cohort_start: nowIso,
+          course_expires_at: expiresIso,
         }, { onConflict: "email" });
         if (pe) throw pe;
 
