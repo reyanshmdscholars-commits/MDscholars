@@ -219,7 +219,7 @@
       if (isTestStudentEmail(sess.session.user.email)) {
         injectTestStudentBanner(sess.session.user.email);
         const uid = sess.session.user.id;
-        const { data: tprof } = await sb.from('student_profiles').select('*').eq('user_id', uid).maybeSingle();
+        const { data: tprof } = await sb.from('student_profiles').select('*').eq('auth_user_id', uid).maybeSingle();
         if (!tprof) {
           alert('Test student profile missing. Provision from admin.');
           await sb.auth.signOut(); window.location.href = 'login.html'; return;
