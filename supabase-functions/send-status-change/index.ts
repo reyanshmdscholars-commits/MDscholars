@@ -149,7 +149,10 @@ serve(async (req) => {
       return new Response(JSON.stringify({ skipped: "status unchanged" }), { status: 200 });
     }
     const trackLabel = TRACK_LABELS[String(row.program_track)] ?? String(row.program_track ?? "MD Scholars");
-    const firstName = String(row.first_name ?? "there");
+    // Derive first name from whatever the payload actually sent
+    const rowFullName = String(row.full_name ?? row.name ?? "").trim();
+    const derivedFirst = rowFullName ? rowFullName.split(/\s+/)[0] : "";
+    const firstName = String(row.first_name || derivedFirst || "there");
 
     let subject = "";
     let html = "";
