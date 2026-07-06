@@ -241,6 +241,9 @@
         </div>
         <button type="submit" class="login-button" id="loginSubmitBtn">Sign in</button>
       </form>
+      <div style="text-align:center; margin-top:1rem;">
+        <a href="#" id="forgotAdminPass" style="color:#0d9488; font-size:0.85rem; text-decoration:none;">Forgot password?</a>
+      </div>
       <div class="login-card-notice">For security reasons, this access is limited to authorized personnel.</div>
     </div>
   </div>
@@ -283,6 +286,7 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'institutions-content')">🏛️ Institutions Page</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'standalone')">📚 Standalone Courses</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'test-view')">🎭 Test Student View</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'manage-admins')">🔐 Manage Admins</a>
           </div>
         </div>
 
@@ -1004,6 +1008,45 @@
             </div>
           </div>
 
+          <!-- MANAGE ADMINS TAB -->
+          <div id="manage-admins" class="content-section">
+            <div class="section-header">
+              <h2>🔐 Manage Admins <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Anyone in this list can sign in to admin.html</span></h2>
+            </div>
+            <p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
+              Add or remove admin users. To promote someone to admin, they first need a Supabase Auth account — apply through the site, sign up for the portal,
+              or use the "Invite a new admin" flow below to send them a Supabase magic-link signup. Their email then gets added to the <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">admin_users</code> allowlist.
+            </p>
+
+            <!-- Add admin -->
+            <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
+              <h3 style="margin-top:0;">Add / promote an admin</h3>
+              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">
+                Enter an email that already has a Supabase Auth account (any student, mentor, or new signup). We look up the auth user and add them to <code>admin_users</code>.
+                If the email has no account yet, click <strong>Invite</strong> — we send them a magic-link signup, then you can promote them once they've signed up.
+              </p>
+              <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
+                <div style="flex:1; min-width:260px;">
+                  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Email</label>
+                  <input type="email" id="newAdminEmail" placeholder="jane@mdscholars.com" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Display name (optional)</label>
+                  <input type="text" id="newAdminName" placeholder="Jane Smith" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:180px;">
+                </div>
+                <button class="btn-primary" onclick="promoteAdmin()">Promote to Admin</button>
+                <button class="btn-secondary" onclick="inviteAdmin()">Invite (magic link)</button>
+              </div>
+              <div id="addAdminStatus" style="font-size:0.9rem; color:#475569; margin-top:0.75rem;"></div>
+            </div>
+
+            <!-- Current admins -->
+            <div class="card">
+              <h3 style="margin-top:0;">Current admins</h3>
+              <div id="adminsList" style="margin-top:1rem;">Loading…</div>
+            </div>
+          </div>
+
         </div><!-- end dashboard-content -->
       </div><!-- end dashboard-main -->
     </div>
@@ -1113,6 +1156,22 @@
           if (e.target === overlay) overlay.classList.remove('active');
         });
       });
+
+      var fp = document.getElementById('forgotAdminPass');
+      if (fp) fp.addEventListener('click', async function(e) {
+        e.preventDefault();
+        var email = (document.getElementById('loginUser').value || '').trim();
+        if (!email) { showToast('Enter your email above first, then click Forgot password.', 'error'); return; }
+        try {
+          var res = await getDB().auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/portal/set-password.html'
+          });
+          if (res.error) throw res.error;
+          showToast('Password reset link sent to ' + email, 'success');
+        } catch (err) {
+          showToast('Failed: ' + (err.message || err), 'error');
+        }
+      });
     }
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initAdminListeners);
@@ -1161,6 +1220,7 @@
       else if (tabName === 'institutions-content') { loadInstitutionContent(); loadLogos(); }
       else if (tabName === 'standalone') { loadStandaloneCourses(); }
       else if (tabName === 'test-view') { loadTestStudentStatus(); }
+      else if (tabName === 'manage-admins') { loadAdmins(); }
     }
 
     /* ─── Announcements ─── */
@@ -2833,6 +2893,121 @@
       // Open a new tab that will auto-login as this test student and land on dashboard.
       var url = 'portal/login.html?testmode=1&e=' + encodeURIComponent(t.email);
       window.open(url, '_blank');
+    }
+
+    /* ─── Manage Admins ─── */
+    async function loadAdmins() {
+      var el = document.getElementById('adminsList');
+      if (!el) return;
+      el.innerHTML = 'Loading…';
+      try {
+        var res = await getDB().from('admin_users').select('email, name, created_at').order('created_at', { ascending: true });
+        if (res.error) throw res.error;
+        var rows = res.data || [];
+        if (rows.length === 0) {
+          el.innerHTML = '<em style="color:#94a3b8;">No admins configured. You will be locked out on next login.</em>';
+          return;
+        }
+        var html = '<table style="width:100%; border-collapse:collapse;">' +
+          '<thead><tr style="background:#f8fafc; text-align:left;">' +
+            '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Email</th>' +
+            '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Name</th>' +
+            '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Added</th>' +
+            '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;"></th>' +
+          '</tr></thead><tbody>';
+        rows.forEach(function(r) {
+          var when = r.created_at ? new Date(r.created_at).toLocaleDateString() : '—';
+          html += '<tr>' +
+            '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9;"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">' + escHtml(r.email) + '</code></td>' +
+            '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9;">' + escHtml(r.name || '—') + '</td>' +
+            '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9; color:#94a3b8; font-size:0.9rem;">' + when + '</td>' +
+            '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9; text-align:right;"><button class="btn-sm danger" onclick="removeAdmin(\'' + encodeURIComponent(r.email) + '\')" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca; padding:0.35rem 0.7rem; border-radius:4px; cursor:pointer; font-size:0.85rem;">Remove</button></td>' +
+          '</tr>';
+        });
+        html += '</tbody></table>';
+        el.innerHTML = html;
+      } catch (err) {
+        el.innerHTML = '<span style="color:#b91c1c;">Error loading admins: ' + (err.message || err) + '</span>';
+      }
+    }
+
+    async function promoteAdmin() {
+      var st = document.getElementById('addAdminStatus');
+      var email = (document.getElementById('newAdminEmail').value || '').trim().toLowerCase();
+      var name = (document.getElementById('newAdminName').value || '').trim();
+      if (!email) { st.innerHTML = '<span style="color:#b91c1c;">Enter an email</span>'; return; }
+      st.innerHTML = 'Looking up user…';
+      try {
+        // We need the auth user's UUID. Call an Edge Function that safely resolves it.
+        var sess = (await getDB().auth.getSession()).data.session;
+        if (!sess) throw new Error('Not signed in');
+        var resp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/manage-admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess.access_token,
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+          },
+          body: JSON.stringify({ action: 'promote', email: email, name: name })
+        });
+        var body = await resp.json();
+        if (!resp.ok) throw new Error(body.error || 'Failed');
+        st.innerHTML = '<span style="color:#059669;">✅ ' + escHtml(email) + ' is now an admin.</span>';
+        document.getElementById('newAdminEmail').value = '';
+        document.getElementById('newAdminName').value = '';
+        loadAdmins();
+      } catch (err) {
+        st.innerHTML = '<span style="color:#b91c1c;">Error: ' + escHtml(err.message || String(err)) + '</span>';
+      }
+    }
+
+    async function inviteAdmin() {
+      var st = document.getElementById('addAdminStatus');
+      var email = (document.getElementById('newAdminEmail').value || '').trim().toLowerCase();
+      var name = (document.getElementById('newAdminName').value || '').trim();
+      if (!email) { st.innerHTML = '<span style="color:#b91c1c;">Enter an email first</span>'; return; }
+      st.innerHTML = 'Sending magic-link invite…';
+      try {
+        var sess = (await getDB().auth.getSession()).data.session;
+        var resp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/manage-admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess.access_token,
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+          },
+          body: JSON.stringify({ action: 'invite', email: email, name: name })
+        });
+        var body = await resp.json();
+        if (!resp.ok) throw new Error(body.error || 'Failed');
+        st.innerHTML = '<span style="color:#059669;">✅ Invite sent to ' + escHtml(email) + '. They can accept and set a password; you can then promote them.</span>';
+        loadAdmins();
+      } catch (err) {
+        st.innerHTML = '<span style="color:#b91c1c;">Error: ' + escHtml(err.message || String(err)) + '</span>';
+      }
+    }
+
+    async function removeAdmin(encodedEmail) {
+      var email = decodeURIComponent(encodedEmail);
+      if (!confirm('Remove ' + email + ' from the admin allowlist? They will no longer be able to sign into admin.html.')) return;
+      try {
+        var sess = (await getDB().auth.getSession()).data.session;
+        var resp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/manage-admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess.access_token,
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+          },
+          body: JSON.stringify({ action: 'demote', email: email })
+        });
+        var body = await resp.json();
+        if (!resp.ok) throw new Error(body.error || 'Failed');
+        showToast('Removed', 'success');
+        loadAdmins();
+      } catch (err) {
+        alert('Error: ' + (err.message || err));
+      }
     }
 
     async function resetTestStudentData() {
