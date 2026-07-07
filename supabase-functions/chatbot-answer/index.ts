@@ -254,8 +254,14 @@ serve(async (req) => {
 
     const geminiData = await geminiRes.json();
     if (!geminiRes.ok) {
-      console.error("Gemini error", geminiData);
-      return new Response(JSON.stringify({ error: "AI service unavailable. Please try again or email contact@mdscholars.com." }), {
+      console.error("Gemini error", JSON.stringify(geminiData));
+      return new Response(JSON.stringify({
+        error: "AI service unavailable. Please try again or email contact@mdscholars.com.",
+        debug_status: geminiRes.status,
+        debug_message: geminiData?.error?.message ?? String(geminiData).slice(0, 200),
+        debug_code: geminiData?.error?.code,
+        debug_reason: geminiData?.error?.details?.[0]?.reason,
+      }), {
         status: 502,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
