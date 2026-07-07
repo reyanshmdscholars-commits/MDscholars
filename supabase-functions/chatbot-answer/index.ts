@@ -5,8 +5,14 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
-const GEMINI_MODEL = "gemini-flash-latest";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+// Try models in priority order. If the first is overloaded (503), fall through to the next.
+// gemini-2.5-flash and gemini-1.5-flash both have separate capacity pools from -latest.
+const GEMINI_MODELS = [
+  "gemini-2.5-flash",
+  "gemini-2.0-flash",
+  "gemini-flash-latest",
+  "gemini-1.5-flash",
+];
 
 const KNOWLEDGE_BASE = `
 # MD Scholars — What we do (KB, current as of 2026-07)
@@ -222,47 +228,73 @@ serve(async (req) => {
       parts: [{ text: String(h.text || "").slice(0, 2000) }],
     }));
 
-    const geminiRes = await fetch(GEMINI_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": GEMINI_API_KEY,
+    // Try each model in order. A 503 (model overloaded) or 429 (rate-limited) falls through to the next.
+    // Other errors bubble up.
+    const geminiPayload = {
+      systemInstruction: {
+        role: "system",
+        parts: [{ text: SYSTEM_PROMPT }],
       },
-      body: JSON.stringify({
-        systemInstruction: {
-          role: "system",
-          parts: [{ text: SYSTEM_PROMPT }],
-        },
-        contents: [
-          ...historyContents,
-          { role: "user", parts: [{ text: question }] },
-        ],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 800,
-          topP: 0.95,
-          topK: 40,
-        },
-        safetySettings: [
-          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-          { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-        ],
-      }),
-    });
+      contents: [
+        ...historyContents,
+        { role: "user", parts: [{ text: question }] },
+      ],
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 800,
+        topP: 0.95,
+        topK: 40,
+      },
+      safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+      ],
+    };
 
-    const geminiData = await geminiRes.json();
-    if (!geminiRes.ok) {
-      console.error("Gemini error", JSON.stringify(geminiData));
+    let geminiData: any = null;
+    let geminiRes: Response | null = null;
+    let lastError: any = null;
+    let usedModel = "";
+    for (const model of GEMINI_MODELS) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": GEMINI_API_KEY,
+        },
+        body: JSON.stringify(geminiPayload),
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        geminiRes = resp;
+        geminiData = data;
+        usedModel = model;
+        break;
+      }
+      // 503 = model overloaded, 429 = rate limited → try next model
+      if (resp.status === 503 || resp.status === 429) {
+        lastError = { status: resp.status, message: data?.error?.message, model };
+        continue;
+      }
+      // Other error — bubble up immediately
+      geminiRes = resp;
+      geminiData = data;
+      lastError = { status: resp.status, message: data?.error?.message, model };
+      break;
+    }
+
+    if (!geminiRes || !geminiRes.ok) {
+      console.error("Gemini all models failed", JSON.stringify(lastError));
+      // Give the user a warm, useful message rather than a raw error
       return new Response(JSON.stringify({
-        error: "AI service unavailable. Please try again or email contact@mdscholars.com.",
-        debug_status: geminiRes.status,
-        debug_message: geminiData?.error?.message ?? String(geminiData).slice(0, 200),
-        debug_code: geminiData?.error?.code,
-        debug_reason: geminiData?.error?.details?.[0]?.reason,
+        ok: true,
+        answer: "Our AI helper is a bit slow right now (Google's Gemini backend is temporarily overloaded — this happens sometimes). Try again in a minute, or email contact@mdscholars.com for anything time-sensitive. We usually reply within a few hours.",
+        remaining: rl.remaining,
       }), {
-        status: 502,
+        status: 200,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
