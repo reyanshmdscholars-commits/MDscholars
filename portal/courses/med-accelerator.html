@@ -282,7 +282,7 @@
 
       // Load my team (for group submissions)
       try {
-        const { data: tm } = await sb.from('my_team').select('*').maybeSingle();
+        const { data: tm } = await sb.from('my_team').select('*').limit(1);
         if (tm) myTeam = tm;
       } catch(e) { /* my_team view may not exist for unassigned students */ }
 
