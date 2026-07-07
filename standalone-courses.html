@@ -280,7 +280,7 @@
       if (c.level) meta.push(`<span class="meta-pill">${esc(c.level)}</span>`);
       if (c.category) meta.push(`<span class="meta-pill">${esc(c.category)}</span>`);
       const cta = c.is_coming_soon
-        ? `<button class="cta disabled" disabled>Notify me</button>`
+        ? `<a class="cta" href="mailto:contact@mdscholars.com?subject=Notify%20me%3A%20${encodeURIComponent(c.title||'Standalone course')}">Notify me →</a>`
         : `<a class="cta" href="contact.html?course=${encodeURIComponent(c.slug||c.id)}">Enroll</a>`;
       return `<article class="card">
         ${badge}
