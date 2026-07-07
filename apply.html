@@ -1495,8 +1495,15 @@
         const acceptanceCheck = document.getElementById('acceptanceCheck').checked;
         const consentCheck = document.getElementById('consentCheck').checked;
 
-        if (!termsCheck || !privacyCheck || !authorshipCheck || !accuracyCheck || !acceptanceCheck || !consentCheck) {
-          showError('termsCheck', 'All six agreements must be accepted before submitting');
+        const missing = [];
+        if (!termsCheck) missing.push('termsCheck');
+        if (!privacyCheck) missing.push('privacyCheck');
+        if (!authorshipCheck) missing.push('authorshipCheck');
+        if (!accuracyCheck) missing.push('accuracyCheck');
+        if (!acceptanceCheck) missing.push('acceptanceCheck');
+        if (!consentCheck) missing.push('consentCheck');
+        if (missing.length > 0) {
+          missing.forEach(id => showError(id, 'Required — please check this box'));
           isValid = false;
         }
       }
