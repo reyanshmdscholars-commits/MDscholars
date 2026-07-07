@@ -289,6 +289,12 @@
       var res = await db.from('certificates').select('*').eq('cert_id', code).eq('status', 'active').maybeSingle();
       if (res.error) { renderError('Unable to look up this certificate. Please try again later.', code); return; }
       if (!res.data) { renderError('No active certificate found with this ID. The certificate may have been revoked or the ID may be incorrect.', code); return; }
+      // Tamper check: if the URL contains ?h= but it doesn't match our stored hash, refuse to render
+      var urlHash = new URLSearchParams(location.search).get('h');
+      if (urlHash && res.data.verify_hash && urlHash !== res.data.verify_hash) {
+        renderError('This link has been tampered with — the verification hash does not match. Please verify authenticity via the certificate ID at mdscholars.com/verify.html.', code);
+        return;
+      }
       renderCertificate(res.data);
     } catch (err) {
       renderError('An unexpected error occurred while loading this certificate.', code);
