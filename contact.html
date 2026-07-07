@@ -720,12 +720,13 @@
                     const email = document.getElementById('email').value;
                     const subject = document.getElementById('subject').value;
                     const message = document.getElementById('message').value;
+                    const phone = document.getElementById('phone')?.value || '';
 
                     const { error } = await sb
                         .from('contacts')
                         .insert([{
                             name,
-                            email,
+                            email, phone,
                             subject,
                             message,
                             status: 'unread'
