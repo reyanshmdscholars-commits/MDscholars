@@ -2129,9 +2129,10 @@
       if (!confirm('Send a fresh parental-consent email to ' + app.parent_email + '?')) return;
       try {
         var anonKey = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
+        var _sess1 = (await getDB().auth.getSession()).data.session;
         var r = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-application-confirmation', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + anonKey, 'apikey': anonKey },
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_sess1 ? _sess1.access_token : anonKey), 'apikey': anonKey },
           body: JSON.stringify({ record: app })
         });
         var j = await r.json();
@@ -2165,11 +2166,12 @@
           try {
             var app = allApplications.find(function(a){return a.id===appId;}) || {};
             var _anon = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
+            var _sess2 = (await getDB().auth.getSession()).data.session;
             await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-payment-confirmation', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + _anon,
+                'Authorization': 'Bearer ' + (_sess2 ? _sess2.access_token : _anon),
                 'apikey': _anon
               },
               body: JSON.stringify({ record: app })
@@ -2285,8 +2287,8 @@
         var profile = profRes.data;
         var sp_id = profile ? profile.id : null;
         var certsP = sp_id ? getDB().from('certificates').select('*').eq('student_profile_id', sp_id).order('issued_at',{ascending:false}) : Promise.resolve({data:[]});
-        var subsP = sp_id ? getDB().from('assignment_submissions').select('*').eq('student_profile_id', sp_id).order('submitted_at',{ascending:false}) : Promise.resolve({data:[]});
-        var matsP = getDB().from('course_materials').select('*').eq('program_track', app.program_track||'').order('week_number',{ascending:true});
+        var subsP = sp_id ? getDB().from('assignment_submissions').select('*').eq('student_id', sp_id).order('submitted_at',{ascending:false}) : Promise.resolve({data:[]});
+        var matsP = getDB().from('course_materials').select('*').eq('track', app.program_track||'').order('week_number',{ascending:true});
         var consP = getDB().from('parental_consents').select('*').eq('application_id', appId).maybeSingle();
         var results = await Promise.all([certsP, subsP, matsP, consP]);
         var certs = results[0].data||[];
@@ -2410,9 +2412,11 @@
         // Fire-and-forget email via Edge Function (authenticated)
         try {
           var anonKey = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
+          var _sess3 = (await getDB().auth.getSession()).data.session;
           await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-certificate-issued', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + anonKey, 'apikey': anonKey },
+            headers: { 'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + (_sess3 ? _sess3.access_token : anonKey), 'apikey': anonKey },
             body: JSON.stringify({ record: insert.data, application: app })
           });
         } catch (e) { console.warn('certificate email failed', e); }
@@ -3044,11 +3048,11 @@
           return;
         }
         var deleted = { sub:0, q:0, cert:0 };
-        var r1 = await db.from('assignment_submissions').delete().in('student_profile_id', profIds).select('id');
+        var r1 = await db.from('assignment_submissions').delete().in('student_id', profIds).select('id');
         if (!r1.error) deleted.sub = (r1.data || []).length;
-        var r2 = await db.from('student_questions').delete().in('student_profile_id', profIds).select('id');
+        var r2 = await db.from('student_questions').delete().in('student_id', profIds).select('id');
         if (!r2.error) deleted.q = (r2.data || []).length;
-        var r3 = await db.from('certificates').delete().in('student_profile_id', profIds).select('id');
+        var r3 = await db.from('certificates').delete().in('student_id', profIds).select('id');
         if (!r3.error) deleted.cert = (r3.data || []).length;
         // Also clear any flag-based rows just in case
         await db.from('assignment_submissions').delete().eq('is_test_data', true);
