@@ -499,31 +499,33 @@
   </div>
 </section>
 
-<!-- ENDORSEMENTS -->
+<!-- DESIGNED FOR (replaces placeholder logos until real endorsements land) -->
 <section class="endorsements">
   <div class="container">
     <div class="endorsements-header">
-      <h2 class="section-title">Trusted by Leading Institutions</h2>
-      <p>MD Scholars is endorsed and utilized by medical schools, residency programs, and academic medical centers across the country.</p>
+      <h2 class="section-title">Designed for Schools, Universities, Residency Programs &amp; Medical Education Teams</h2>
+      <p>MD Scholars partners with institutions across the physician-training continuum. Real partner logos will appear here as endorsements come online — verified partners only.</p>
     </div>
-    <div class="endorsement-grid">
-      <div class="endorsement-placeholder">
-        <p>Institution Logo</p>
+    <div style="max-width:960px; margin:1.5rem auto 0; display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
+      <div style="background:#f8f5ef; border:1px solid #e2e8f0; border-radius:10px; padding:1.1rem 1rem; text-align:center;">
+        <div style="font-size:1.35rem; margin-bottom:0.35rem;">🎓</div>
+        <div style="font-family:'Playfair Display',serif; color:#001F3F; font-weight:600; font-size:1rem;">High Schools</div>
+        <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">Pre-med enrichment</div>
       </div>
-      <div class="endorsement-placeholder">
-        <p>Institution Logo</p>
+      <div style="background:#f8f5ef; border:1px solid #e2e8f0; border-radius:10px; padding:1.1rem 1rem; text-align:center;">
+        <div style="font-size:1.35rem; margin-bottom:0.35rem;">🏛️</div>
+        <div style="font-family:'Playfair Display',serif; color:#001F3F; font-weight:600; font-size:1rem;">Universities</div>
+        <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">Pre-med / research clubs</div>
       </div>
-      <div class="endorsement-placeholder">
-        <p>Institution Logo</p>
+      <div style="background:#f8f5ef; border:1px solid #e2e8f0; border-radius:10px; padding:1.1rem 1rem; text-align:center;">
+        <div style="font-size:1.35rem; margin-bottom:0.35rem;">⚕️</div>
+        <div style="font-family:'Playfair Display',serif; color:#001F3F; font-weight:600; font-size:1rem;">Medical Schools</div>
+        <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">Scholarly-concentration support</div>
       </div>
-      <div class="endorsement-placeholder">
-        <p>Institution Logo</p>
-      </div>
-      <div class="endorsement-placeholder">
-        <p>Institution Logo</p>
-      </div>
-      <div class="endorsement-placeholder">
-        <p>Institution Logo</p>
+      <div style="background:#f8f5ef; border:1px solid #e2e8f0; border-radius:10px; padding:1.1rem 1rem; text-align:center;">
+        <div style="font-size:1.35rem; margin-bottom:0.35rem;">🏥</div>
+        <div style="font-family:'Playfair Display',serif; color:#001F3F; font-weight:600; font-size:1rem;">Residency Programs</div>
+        <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">Resident research pipeline</div>
       </div>
     </div>
   </div>
@@ -578,6 +580,17 @@
               <option value="residency">Residency Program</option>
               <option value="fellowship">Fellowship Program</option>
               <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="partnership-type">Preferred Partnership Type</label>
+            <select id="partnership-type">
+              <option value="">Select or leave blank if not sure...</option>
+              <option value="cohort">Cohort program (recurring student cohorts)</option>
+              <option value="workshop">One-time workshop</option>
+              <option value="symposium">Research symposium / grand rounds</option>
+              <option value="faculty-dev">Faculty development</option>
+              <option value="not-sure">Not sure — need guidance</option>
             </select>
           </div>
           <div class="form-group">
@@ -734,8 +747,19 @@
         const email = document.getElementById('contact-email').value;
         const phone = document.getElementById('contact-phone').value;
         const institution_type = document.getElementById('inst-type').value;
+        const partnership_type = document.getElementById('partnership-type').value;
         const student_count = document.getElementById('num-students').value;
-        const message = document.getElementById('message').value;
+        const user_message = document.getElementById('message').value;
+        const partnership_labels = {
+          'cohort': 'Cohort program (recurring student cohorts)',
+          'workshop': 'One-time workshop',
+          'symposium': 'Research symposium / grand rounds',
+          'faculty-dev': 'Faculty development',
+          'not-sure': 'Not sure — need guidance'
+        };
+        const message = partnership_type
+          ? `Preferred partnership: ${partnership_labels[partnership_type] || partnership_type}\n\n${user_message}`
+          : user_message;
 
         const { error } = await sb
           .from('institution_inquiries')
