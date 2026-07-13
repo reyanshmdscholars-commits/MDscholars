@@ -290,8 +290,8 @@
         return;
       }
       const { data, error } = await sb.from('student_questions')
-        .select('id, student_profile_id, question, answer, asked_at, answered_at, status, student_profiles(full_name, email)')
-        .in('student_profile_id', memberProfileIds)
+        .select('id, student_id, question, answer, asked_at, answered_at, status, student_profiles(full_name, email)')
+        .in('student_id', memberProfileIds)
         .order('asked_at', { ascending: false });
       if (error) { container.innerHTML = '<div class="empty">Error: ' + escapeHtml(error.message) + '</div>'; return; }
       if (!data || data.length === 0) {
