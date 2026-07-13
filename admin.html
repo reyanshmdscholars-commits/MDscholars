@@ -1333,12 +1333,12 @@
     }
     async function toggleAnnouncementActive(id){
       var a = allAnnouncements.find(function(x){return x.id===id;}); if(!a) return;
-      try { await getDB().from('announcements').update({is_active:!a.is_active}).eq('id',id); loadAnnouncements(); showToast('Updated','success'); }
+      try { var r = await getDB().from('announcements').update({is_active:!a.is_active}).eq('id',id); if(r.error) throw r.error; loadAnnouncements(); showToast('Updated','success'); }
       catch(err){ showToast('Error: '+err.message,'error'); }
     }
     async function deleteAnnouncement(id){
       if(!confirm('Delete this announcement?')) return;
-      try{ await getDB().from('announcements').delete().eq('id',id); loadAnnouncements(); showToast('Deleted','success'); }
+      try{ var r = await getDB().from('announcements').delete().eq('id',id); if(r.error) throw r.error; loadAnnouncements(); showToast('Deleted','success'); }
       catch(err){ showToast('Error: '+err.message,'error'); }
     }
 
@@ -2130,9 +2130,10 @@
       try {
         var anonKey = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
         var _sess1 = (await getDB().auth.getSession()).data.session;
+        if (!_sess1) throw new Error('Admin session expired — please sign back in.');
         var r = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-application-confirmation', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_sess1 ? _sess1.access_token : anonKey), 'apikey': anonKey },
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _sess1.access_token, 'apikey': anonKey },
           body: JSON.stringify({ record: app })
         });
         var j = await r.json();
@@ -2167,16 +2168,18 @@
             var app = allApplications.find(function(a){return a.id===appId;}) || {};
             var _anon = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
             var _sess2 = (await getDB().auth.getSession()).data.session;
-            await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-payment-confirmation', {
+            if (!_sess2) { console.warn('No admin session; skipping payment email trigger.'); return; }
+            var r = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-payment-confirmation', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + (_sess2 ? _sess2.access_token : _anon),
+                'Authorization': 'Bearer ' + _sess2.access_token,
                 'apikey': _anon
               },
               body: JSON.stringify({ record: app })
             });
-            showToast('Payment confirmation email sent', 'success');
+            if (!r.ok) { console.warn('Payment email failed:', r.status); showToast('Payment email failed (see console)', 'warning'); }
+            else { showToast('Payment confirmation email sent', 'success'); }
           } catch (e) { console.warn('payment email failed', e); }
         }
       } catch(err) {
@@ -2413,12 +2416,16 @@
         try {
           var anonKey = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
           var _sess3 = (await getDB().auth.getSession()).data.session;
-          await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-certificate-issued', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + (_sess3 ? _sess3.access_token : anonKey), 'apikey': anonKey },
-            body: JSON.stringify({ record: insert.data, application: app })
-          });
+          if (!_sess3) { console.warn('No admin session; skipping certificate email trigger.'); }
+          else {
+            var certR = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-certificate-issued', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + _sess3.access_token, 'apikey': anonKey },
+              body: JSON.stringify({ record: insert.data, application: app })
+            });
+            if (!certR.ok) { console.warn('Certificate email failed:', certR.status); }
+          }
         } catch (e) { console.warn('certificate email failed', e); }
 
         // Open the certificate in a new tab
@@ -2487,7 +2494,8 @@
 
     async function markContactRead(id) {
       try {
-        await getDB().from('contacts').update({ status: 'read' }).eq('id', id);
+        var r = await getDB().from('contacts').update({ status: 'read' }).eq('id', id);
+        if (r.error) throw r.error;
         allContacts = allContacts.map(function(c){ return c.id===id ? Object.assign({},c,{status:'read'}) : c; });
         renderContactsTable();
         updateDashboardStats();
@@ -2496,7 +2504,8 @@
 
     async function markContactUnread(id) {
       try {
-        await getDB().from('contacts').update({ status: 'unread' }).eq('id', id);
+        var r = await getDB().from('contacts').update({ status: 'unread' }).eq('id', id);
+        if (r.error) throw r.error;
         allContacts = allContacts.map(function(c){ return c.id===id ? Object.assign({},c,{status:'unread'}) : c; });
         renderContactsTable();
         updateDashboardStats();
@@ -2605,7 +2614,8 @@
 
     async function approveFeedback(id) {
       try {
-        await getDB().from('feedback').update({ approved: true }).eq('id', id);
+        var r = await getDB().from('feedback').update({ approved: true }).eq('id', id);
+        if (r.error) throw r.error;
         allFeedback = allFeedback.map(function(f){ return f.id===id ? Object.assign({},f,{approved:true}) : f; });
         renderFeedbackTable();
         showToast('Feedback approved', 'success');
@@ -2614,7 +2624,8 @@
 
     async function unapproveFeedback(id) {
       try {
-        await getDB().from('feedback').update({ approved: false }).eq('id', id);
+        var r = await getDB().from('feedback').update({ approved: false }).eq('id', id);
+        if (r.error) throw r.error;
         allFeedback = allFeedback.map(function(f){ return f.id===id ? Object.assign({},f,{approved:false}) : f; });
         renderFeedbackTable();
         showToast('Feedback unapproved', 'success');
