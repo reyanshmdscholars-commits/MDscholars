@@ -148,7 +148,7 @@
               Submit an assignment <span class="badge info">Open →</span>
             </a>
             <a id="askQuestionLink" class="list-item" href="#" style="text-decoration:none; color:inherit;">
-              Ask a question <span class="badge info">Open →</span>
+              Ask a question <span id="newAnswersBadge" class="badge info">Open →</span>
             </a>
             <a class="list-item" href="mailto:support@mdscholars.com?subject=Education%20—%20" style="text-decoration:none; color:inherit;">
               Email support <span class="badge info">→</span>
@@ -334,6 +334,29 @@
         document.getElementById('statSubmitted').textContent = 0;
         document.getElementById('statQuestions').textContent = 0;
       }
+
+      // "New answers" badge — count answers received since student last visited the dashboard
+      try {
+        const lastSeen = localStorage.getItem('mds_answers_last_seen') || '1970-01-01T00:00:00Z';
+        const ansRows = await sb.from('student_questions')
+          .select('id, answered_at')
+          .not('answered_at', 'is', null)
+          .gt('answered_at', lastSeen);
+        const newAnswers = (ansRows.data || []).length;
+        const badge = document.getElementById('newAnswersBadge');
+        if (badge) {
+          if (newAnswers > 0) {
+            badge.textContent = newAnswers + ' new ' + (newAnswers === 1 ? 'answer' : 'answers') + ' →';
+            badge.className = 'badge success';
+            badge.style.animation = 'pulse 2s ease-in-out infinite';
+          } else {
+            badge.textContent = 'Open →';
+            badge.className = 'badge info';
+          }
+        }
+        // Update the "last seen" mark now that they've viewed the dashboard
+        localStorage.setItem('mds_answers_last_seen', new Date().toISOString());
+      } catch (e) { console.warn('new-answers badge failed:', e); }
 
       document.getElementById('loading').style.display = 'none';
       document.getElementById('appWrapper').style.display = 'block';
