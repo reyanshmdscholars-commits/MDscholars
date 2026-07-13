@@ -250,16 +250,29 @@
         return renderDashboard(syntheticProf);
       }
 
-      const { data: prof, error } = await sb.from('student_access').select('*').maybeSingle();
+      const uid = sess.session.user.id;
+      const { data: prof, error } = await sb.from('student_access')
+        .select('*').eq('auth_user_id', uid).maybeSingle();
       if (error || !prof) {
-        alert('Your account is not provisioned. Please contact contact@mdscholars.com.');
-        await sb.auth.signOut(); window.location.href = 'login.html'; return;
+        showFatalCard('Account not ready', 'Your student account has not been fully provisioned yet. Please email <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a> and we will resolve it within one business day.');
+        return;
       }
       if (!prof.is_active) {
-        alert('Your course access has ended.');
-        await sb.auth.signOut(); window.location.href = 'login.html'; return;
+        showFatalCard('Access ended', 'Your course access has ended. If you believe this is a mistake, please email <a href="mailto:support@mdscholars.com">support@mdscholars.com</a>.');
+        await sb.auth.signOut();
+        return;
       }
       renderDashboard(prof);
+    }
+
+    // Non-blocking "we can't render your dashboard" card that replaces alert() + auto-logout.
+    function showFatalCard(title, htmlMsg) {
+      const el = document.getElementById('loading') || document.body;
+      el.innerHTML = '<div style="max-width:600px; margin:4rem auto; padding:2rem; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.08); text-align:center; font-family:\'DM Sans\',-apple-system,Segoe UI,Arial,sans-serif;">' +
+        '<h2 style="color:#001F3F; margin-bottom:1rem; font-family:\'Playfair Display\',serif;">' + title + '</h2>' +
+        '<p style="color:#475569; line-height:1.6;">' + htmlMsg + '</p>' +
+        '<div style="margin-top:1.5rem;"><a href="login.html" style="color:#0d9488; font-weight:600; text-decoration:none;">← Back to sign in</a></div>' +
+        '</div>';
     }
 
     async function renderDashboard(prof) {
@@ -308,11 +321,13 @@
       // Submissions + questions counts (defensive — RLS on group-submission tables can
       // occasionally throw; failing here should NOT block the dashboard from rendering)
       try {
-        const [subs, qs] = await Promise.all([
-          sb.from('assignment_submissions').select('id', { count: 'exact', head: true }),
+        const [subsRows, qs] = await Promise.all([
+          sb.from('assignment_submissions').select('week_number'),
           sb.from('student_questions').select('id', { count: 'exact', head: true })
         ]);
-        document.getElementById('statSubmitted').textContent = subs.count ?? 0;
+        // Count DISTINCT weeks with a submission — multiple submissions per week shouldn't inflate progress
+        const uniqueWeeks = new Set((subsRows.data || []).map(r => r.week_number).filter(w => w !== null && w !== undefined)).size;
+        document.getElementById('statSubmitted').textContent = uniqueWeeks;
         document.getElementById('statQuestions').textContent = qs.count ?? 0;
       } catch (e) {
         console.warn('Stats query failed:', e);
