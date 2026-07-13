@@ -317,9 +317,33 @@
 
     async function saveAnswer(id) {
       const ans = document.getElementById('ans-' + id).value.trim();
+      if (!ans) { toast('Please write an answer first', 'error'); return; }
+      // Detect NULL -> NOT NULL so we only email on first answer
+      const prior = await sb.from('student_questions').select('answered_at').eq('id', id).maybeSingle();
+      const wasUnanswered = !prior.data?.answered_at;
       const { error } = await sb.from('student_questions').update({ answer: ans, status: 'answered', answered_at: new Date().toISOString() }).eq('id', id);
       if (error) { toast('Save failed: ' + error.message, 'error'); return; }
-      toast('Answer posted', 'success');
+      // Fire email to the student
+      if (wasUnanswered) {
+        try {
+          const sess = (await sb.auth.getSession()).data.session;
+          if (sess) {
+            const qaResp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-question-answered', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + sess.access_token,
+                'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+              },
+              body: JSON.stringify({ question_id: id })
+            });
+            if (!qaResp.ok) console.warn('question-answered email failed:', qaResp.status);
+          }
+        } catch (e) { console.warn('question-answered email error', e); }
+        toast('Answer posted + student notified by email', 'success');
+      } else {
+        toast('Answer updated', 'success');
+      }
       loadQuestions();
     }
 
