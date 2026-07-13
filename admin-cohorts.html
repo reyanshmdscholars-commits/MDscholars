@@ -97,10 +97,11 @@
 <div id="loginGate" class="login-gate">
   <div class="login-card">
     <h2>Cohorts & Mentors</h2>
-    <p style="text-align:center;color:#666;font-size:0.85rem;margin-bottom:1rem;">Restricted access</p>
-    <input type="text" id="loginUser" placeholder="Username">
-    <input type="password" id="loginPass" placeholder="Password">
+    <p style="text-align:center;color:#666;font-size:0.85rem;margin-bottom:1rem;">Admin sign-in required</p>
+    <input type="email" id="loginUser" placeholder="admin email">
+    <input type="password" id="loginPass" placeholder="password">
     <button onclick="tryLogin()">Sign in</button>
+    <p style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:0.75rem;">This dashboard uses the same admin account as <a href="admin.html" style="color:#0d9488;">admin.html</a>.</p>
   </div>
 </div>
 
@@ -208,15 +209,46 @@
   let ungrouped = [];
   let currentSessionId = null;
 
-  function tryLogin() {
-    const u = document.getElementById('loginUser').value;
-    const p = document.getElementById('loginPass').value;
-    if (u === '1234' && p === '1234') {
+  async function checkIsAdmin() {
+    try {
+      const d = getDB();
+      const { data: s } = await d.auth.getSession();
+      if (!s || !s.session) return false;
+      const res = await d.rpc('is_admin');
+      return res.data === true;
+    } catch(e) { return false; }
+  }
+
+  async function tryLogin() {
+    const email = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value;
+    if (!email || !password) { toast('Enter your admin email and password.', 'error'); return; }
+    try {
+      const d = getDB();
+      const res = await d.auth.signInWithPassword({ email, password });
+      if (res.error) throw res.error;
+      const isAdmin = await checkIsAdmin();
+      if (!isAdmin) {
+        await d.auth.signOut();
+        toast('This account is not authorized as an admin.', 'error');
+        return;
+      }
       document.getElementById('loginGate').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       loadAll();
-    } else { toast('Invalid credentials', 'error'); }
+    } catch(err) {
+      toast('Sign-in failed: ' + (err.message || err), 'error');
+    }
   }
+
+  // Auto-enter if already signed in as admin
+  (async function() {
+    if (await checkIsAdmin()) {
+      document.getElementById('loginGate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll();
+    }
+  })();
   function toast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.className = 'toast ' + (type || '');
