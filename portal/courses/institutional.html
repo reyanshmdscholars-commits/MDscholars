@@ -268,9 +268,19 @@
     async function loadCourse() {
       const { data: sess } = await sb.auth.getSession();
       if (!sess?.session) { window.location.href = '../login.html'; return; }
-      const { data: prof, error } = await sb.from('student_access').select('*').maybeSingle();
+      const uid = sess.session.user.id;
+      // Explicit filter (defense-in-depth beyond RLS)
+      const { data: prof, error } = await sb.from('student_access')
+        .select('*').eq('auth_user_id', uid).maybeSingle();
       if (error || !prof || !prof.is_active) {
         alert('Your access is not active.'); await sb.auth.signOut(); window.location.href = '../login.html'; return;
+      }
+      // Additional gate: fee_status must be paid/free AND not dropped (mirrors login.html)
+      const { data: sp } = await sb.from('student_profiles')
+        .select('fee_status, dropped_at, application_id').eq('auth_user_id', uid).maybeSingle();
+      if (!sp || sp.dropped_at || !['paid','free'].includes((sp.fee_status || '').toLowerCase())) {
+        alert('Your access is on hold. Please contact support@mdscholars.com.');
+        await sb.auth.signOut(); window.location.href = '../login.html'; return;
       }
       if (prof.program_track !== TRACK_KEY) {
         alert("This page is for the " + TRACK_KEY + " track. You're enrolled in: " + prof.program_track + ". Redirecting to your dashboard.");
@@ -281,7 +291,7 @@
       // Load my team (for group submissions)
       try {
         const { data: tm } = await sb.from('my_team').select('*').limit(1);
-        if (tm) myTeam = tm;
+        myTeam = (tm && tm[0]) ? tm[0] : null;
       } catch(e) { /* my_team view may not exist for unassigned students */ }
 
       // Load course_materials for this track
