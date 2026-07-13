@@ -94,6 +94,15 @@
               <option value="other">Other</option>
             </select>
           </div>
+          <div class="field" id="relationshipOtherWrap" style="display:none;">
+            <label class="required" for="relationshipOther">Please specify your relationship</label>
+            <input type="text" id="relationshipOther" placeholder="e.g. Foster Parent, Court-appointed Guardian" maxlength="120">
+          </div>
+          <!-- Honeypot (invisible to humans, bots will fill) -->
+          <div style="position:absolute; left:-9999px; height:0; overflow:hidden;" aria-hidden="true">
+            <label for="hp_website">Do not fill this field</label>
+            <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
+          </div>
         </div>
 
         <!-- Child info -->
@@ -173,17 +182,32 @@
       }
       const fromEmail = params.get('email');
       if (fromEmail) document.getElementById('parentEmail').value = fromEmail;
+      const applicationIdParam = params.get('app') || params.get('application_id') || null;
       document.getElementById('signedDateDisplay').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+      // Show/hide "Other" free-text on relationship change
+      document.getElementById('relationship').addEventListener('change', (e) => {
+        document.getElementById('relationshipOtherWrap').style.display = e.target.value === 'other' ? 'block' : 'none';
+      });
 
       document.getElementById('consentForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.textContent = 'Submitting…';
 
+        // Honeypot check — bots fill this; humans don't see it
+        const honeypot = (document.getElementById('hp_website').value || '').trim();
+        if (honeypot) {
+          // Silently accept and drop — bot doesn't know it failed
+          document.getElementById('formWrapper').style.display = 'none';
+          document.getElementById('successPanel').classList.add('show');
+          return;
+        }
+
         const parent_name = document.getElementById('parentName').value.trim();
         const parent_email = document.getElementById('parentEmail').value.trim().toLowerCase();
         const parent_phone = document.getElementById('parentPhone').value.trim() || null;
-        const relationship = document.getElementById('relationship').value;
+        let relationship = document.getElementById('relationship').value;
         const child_first_name = document.getElementById('childFirst').value.trim();
         const child_last_name = document.getElementById('childLast').value.trim();
         const child_dob = document.getElementById('childDob').value;
@@ -192,6 +216,39 @@
         const agree_program = document.getElementById('agreeProgram').checked;
         const agree_communications = document.getElementById('agreeCommunications').checked;
         const agree_authorship = document.getElementById('agreeAuthorship').checked;
+
+        // "Other" relationship needs free-text explanation
+        if (relationship === 'other') {
+          const other = (document.getElementById('relationshipOther').value || '').trim();
+          if (!other) {
+            showMsg('error', 'Please specify your relationship to the student.');
+            btn.disabled = false; btn.textContent = 'Submit signed consent →';
+            return;
+          }
+          relationship = 'other:' + other.slice(0, 100);
+        }
+
+        // Age check — parental consent is only needed for minors under 18
+        if (!child_dob) {
+          showMsg('error', "Please enter the student's date of birth.");
+          btn.disabled = false; btn.textContent = 'Submit signed consent →';
+          return;
+        }
+        const dob = new Date(child_dob);
+        const now = new Date();
+        let age = now.getFullYear() - dob.getFullYear();
+        const mDiff = now.getMonth() - dob.getMonth();
+        if (mDiff < 0 || (mDiff === 0 && now.getDate() < dob.getDate())) age--;
+        if (isNaN(age) || age < 0 || age > 130) {
+          showMsg('error', 'Please enter a valid date of birth for the student.');
+          btn.disabled = false; btn.textContent = 'Submit signed consent →';
+          return;
+        }
+        if (age >= 18) {
+          showMsg('error', "Parental consent is only required for students under 18. Based on the date of birth you entered, the student is " + age + " years old and can sign their own agreements. If this is a mistake, please double-check the date.");
+          btn.disabled = false; btn.textContent = 'Submit signed consent →';
+          return;
+        }
 
         // Sanity check: signature must match parent name (case-insensitive)
         if (signature_typed.toLowerCase().replace(/\s+/g,' ') !== parent_name.toLowerCase().replace(/\s+/g,' ')) {
@@ -205,12 +262,37 @@
           return;
         }
 
-        const { error } = await sb.from('parental_consents').insert([{
+        // Dedupe: check for an existing signed consent for the same parent+child combo
+        try {
+          const existing = await sb.from('parental_consents')
+            .select('id, status, signed_at')
+            .eq('parent_email', parent_email)
+            .eq('child_dob', child_dob)
+            .ilike('child_first_name', child_first_name)
+            .ilike('child_last_name', child_last_name)
+            .eq('status', 'signed')
+            .limit(1);
+          if (existing.data && existing.data.length > 0) {
+            document.getElementById('formWrapper').style.display = 'none';
+            document.getElementById('successPanel').classList.add('show');
+            document.getElementById('successChildName').textContent = child_first_name + ' ' + child_last_name;
+            document.getElementById('successEmail').textContent = parent_email;
+            // Add a subtle "we already have this on file" hint
+            const p = document.querySelector('#successPanel p');
+            if (p) p.innerHTML = 'Consent for <strong id="successChildName">' + child_first_name + ' ' + child_last_name + '</strong> is already on file — no need to sign again. Confirmation was sent to <strong>' + parent_email + '</strong>.';
+            return;
+          }
+        } catch (dedupeErr) { /* non-fatal — proceed to insert */ }
+
+        const insertRow = {
           parent_name, parent_email, parent_phone, relationship,
           child_first_name, child_last_name, child_dob,
           agree_program, agree_communications, agree_authorship,
           signature_typed, status: 'signed'
-        }]);
+        };
+        if (applicationIdParam) insertRow.application_id = applicationIdParam;
+
+        const { error } = await sb.from('parental_consents').insert([insertRow]);
 
         if (error) {
           showMsg('error', 'Could not submit: ' + error.message);
