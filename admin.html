@@ -1902,12 +1902,34 @@
       var answer = document.getElementById('answerInput').value.trim();
       if (!answer) { showToast('Please write an answer first', 'error'); return; }
       try {
+        // Check whether this question is currently unanswered — only fire email on NULL -> NOT NULL
+        var wasUnanswered = !allQuestions.find(function(q){ return q.id === id && q.answered_at; });
         var res = await getDB().from('student_questions').update({ answer: answer, status: 'answered', answered_at: new Date().toISOString() }).eq('id', id);
         if (res.error) throw res.error;
-        allQuestions = allQuestions.map(function(q){ return q.id === id ? Object.assign({}, q, { answer: answer, status: 'answered' }) : q; });
+        allQuestions = allQuestions.map(function(q){ return q.id === id ? Object.assign({}, q, { answer: answer, status: 'answered', answered_at: new Date().toISOString() }) : q; });
         renderQuestionsTable();
         closeModal('msgModal');
-        showToast('Answer saved — student can now see it in their portal', 'success');
+        // Fire email notification to the student — only for first-time answer
+        if (wasUnanswered) {
+          try {
+            var _sessQA = (await getDB().auth.getSession()).data.session;
+            if (_sessQA) {
+              var qaResp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-question-answered', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + _sessQA.access_token,
+                  'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+                },
+                body: JSON.stringify({ question_id: id })
+              });
+              if (!qaResp.ok) console.warn('Question-answered email failed:', qaResp.status);
+            }
+          } catch (e) { console.warn('question-answered email error', e); }
+          showToast('Answer saved + student notified by email', 'success');
+        } else {
+          showToast('Answer updated (student was previously notified)', 'success');
+        }
       } catch(err) { console.error(err); showToast('Error saving answer', 'error'); }
     }
 
