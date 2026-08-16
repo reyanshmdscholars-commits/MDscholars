@@ -123,7 +123,12 @@
   .team-avatar { letter-spacing: 0.02em; font-weight: 600; }
   .team-card { background: var(--white); border-radius: 16px; padding: 2rem; border: 1px solid var(--gray-200); transition: all 0.25s; text-align: center; }
   .team-card:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,31,63,0.1); border-color: rgba(13,148,136,0.25); }
-  .team-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; }
+  .team-avatar { width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; overflow: hidden; color: white; }
+  .team-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .team-card details { margin-top: 0.75rem; text-align: left; font-size: 0.85rem; color: var(--gray-600); }
+  .team-card details summary { cursor: pointer; color: var(--teal); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .team-card details p { font-size: 0.88rem; line-height: 1.6; margin-top: 0.75rem; text-align: left; }
+  .team-card details a { color: var(--teal-bright); text-decoration: none; font-weight: 600; }
   .team-card h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; }
   .team-card .role { font-size: 0.78rem; color: var(--teal); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
   .team-card p { font-size: 0.85rem; color: var(--gray-600); line-height: 1.55; }
@@ -259,11 +264,8 @@
   <div class="container">
     <div class="founder-grid">
       <div class="founder-portrait">
-        <div class="portrait-inner">
-          <div class="portrait-avatar">👨‍⚕️</div>
-          <p></p>
-        </div>
-        <div class="founder-tag">
+        <img src="faculty/munigala.jpg" alt="Dr. Satish Munigala" style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0; border-radius:20px;">
+        <div class="founder-tag" style="z-index:2;">
           <strong>Dr. Satish Munigala</strong>
           <span>MBBS, MPH, PhD — Founder, MD Scholars</span>
         </div>
@@ -431,12 +433,52 @@
     <h3 class="team-subhead">Faculty Mentors</h3>
     <div class="team-grid">
       <div class="team-card"><div class="team-avatar">AG</div><h4>Dr. Ashutosh Gupta, MD</h4><div class="role">Faculty Mentor · Gastroenterology</div><p>Medical City Healthcare · Plano, Texas</p></div>
+
+      <div class="team-card">
+        <div class="team-avatar"><img src="faculty/goli.jpg" alt="Dr. Veeraindar Goli"></div>
+        <h4>Dr. Veeraindar Goli, MD</h4>
+        <div class="role">Faculty Mentor · Psychiatry &amp; Behavioral Sciences</div>
+        <p>Professor Emeritus<br>Duke University School of Medicine</p>
+        <details>
+          <summary>Read bio</summary>
+          <p>Dr. Veeraindar Goli is Professor Emeritus of Psychiatry and Behavioral Sciences at Duke University School of Medicine, with extensive experience in adult and geriatric psychiatry, chronic pain management, and anxiety disorders. Throughout his academic career, Dr. Goli has contributed to clinical research, multidisciplinary patient care, and the evaluation of innovative approaches to complex psychiatric and chronic pain conditions. As an MD Scholars mentor, he brings decades of academic and clinical experience to guide students interested in medicine, psychiatry, behavioral health, and clinical research.</p>
+          <p><strong>Areas of expertise:</strong> Adult and geriatric psychiatry · Chronic pain evaluation and management · OCD and related disorders · Anxiety disorders and depression · Behavioral health · Clinical research and mentorship.</p>
+          <p><a href="https://psychiatry.duke.edu/profile/veeraindar-goli" target="_blank" rel="noopener">Duke faculty profile →</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Veeraindar+Goli" target="_blank" rel="noopener">PubMed publications →</a></p>
+        </details>
+      </div>
+
       <div class="team-card"><div class="team-avatar">KK</div><h4>Dr. Krishna Chaitanya Kottapalli, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>Fort Memorial Hospital · Fort Atkinson, Wisconsin</p></div>
       <div class="team-card"><div class="team-avatar">CR</div><h4>Dr. Chaitanya Reddy, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>University of Colorado Health · Aurora, Colorado</p></div>
       <div class="team-card"><div class="team-avatar">DB</div><h4>Dr. Dinesh Belani, MD</h4><div class="role">Faculty Mentor · Critical Care, Sleep &amp; Pulmonary Medicine</div><p>Aurora Healthcare · Milwaukee, Wisconsin</p></div>
       <div class="team-card"><div class="team-avatar">JP</div><h4>Dr. Jose Antony Paul, MD</h4><div class="role">Faculty Mentor · Critical Care, Pulmonary &amp; Interventional Pulmonary Medicine</div><p>Northside Hospital · Canton, GA</p></div>
-      <div class="team-card"><div class="team-avatar">RA</div><h4>Dr. Raman Anam, MD</h4><div class="role">Faculty Mentor · Nephrology &amp; Internal Medicine</div><p>Assistant Professor of Clinical Internal Medicine<br>Ochsner LSU Health · Shreveport, Louisiana</p></div>
-      <div class="team-card"><div class="team-avatar">SS</div><h4>Dr. Sandeep R. Sasidharan, MD</h4><div class="role">Faculty Mentor · Nephrology, Critical Care &amp; Internal Medicine</div><p>Clinical Assistant Professor<br>University of Florida · Jacksonville, FL</p></div>
+
+      <div class="team-card">
+        <div class="team-avatar"><img src="faculty/anam.jpg" alt="Dr. Raman Anam"></div>
+        <h4>Dr. Raman Anam, MD</h4>
+        <div class="role">Faculty Mentor · Nephrology &amp; Internal Medicine</div>
+        <p>Assistant Professor of Clinical Internal Medicine<br>Ochsner LSU Health · Shreveport, Louisiana</p>
+        <details>
+          <summary>Read bio</summary>
+          <p>In 2024, Dr. Anam joined Ochsner LSU Health Shreveport, driven by a keen interest in academics. With extensive research experience focused on patient education, he has published more than 20 manuscripts, garnering over 350 citations by 2023 and a book chapter. His current interests include glomerular pathology and hypertension, with a specific focus on medical education, particularly online education.</p>
+          <p><strong>Areas of expertise:</strong> Nephrology · Interventional Nephrology · Glomerular diseases · Internal Medicine.</p>
+          <p><a href="http://lsuhs.edu/departments/school-of-medicine/nephrology/faculty" target="_blank" rel="noopener">LSUHS Nephrology faculty →</a></p>
+        </details>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar"><img src="faculty/sasidharan.jpg" alt="Dr. Sandeep R. Sasidharan"></div>
+        <h4>Dr. Sandeep R. Sasidharan, MD</h4>
+        <div class="role">Faculty Mentor · Nephrology, Critical Care &amp; Internal Medicine</div>
+        <p>Clinical Assistant Professor<br>University of Florida · Jacksonville, FL</p>
+        <details>
+          <summary>Read bio</summary>
+          <p>Sandeep Sasidharan, MD, is an Assistant Professor of Pulmonary Critical Care and Internal Medicine at the University of Florida School of Medicine in Jacksonville, and is triple board-certified by the ABIM in Internal Medicine, Nephrology, and Critical Care Medicine. He trained at Saint Vincent Hospital in Worcester, MA, and at SUNY Downstate, where he served as Chief Nephrology Fellow. He has published peer-reviewed work spanning nephrology, critical care, and general internal medicine, along with more than 40 abstracts presented at ASN, ATS, CHEST, SCCM, and ACP.</p>
+          <p>A dedicated educator and mentor to students, residents, and fellows, and a recipient of the Resident Advocate of the Year and EPIC Success awards for patient safety and quality improvement, he guides trainees through case-based and quality-improvement research, from question design to publication.</p>
+          <p><strong>Areas of expertise:</strong> Nephrology / Critical Care, specializing in extracorporeal modalities.</p>
+          <p><a href="https://ufhealthjax.org/doctors/sandeep-r-sasidharan/bio" target="_blank" rel="noopener">UF Health Jacksonville profile →</a></p>
+        </details>
+      </div>
+
       <div class="team-card"><div class="team-avatar">NS</div><h4>Dr. Nauman Siddique, MD, MPH</h4><div class="role">Faculty Mentor · Hematology &amp; Oncology Medicine</div><p>University of Florida · Jacksonville, FL</p></div>
       <div class="team-card"><div class="team-avatar">NK</div><h4>Dr. Naveen Krishna, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>Qualis Hospitalist Group · Saint Louis, Missouri</p></div>
       <div class="team-card"><div class="team-avatar">SH</div><h4>Dr. Susheela Hadigal, MD</h4><div class="role">Faculty Mentor · Critical Care, Sleep &amp; Pulmonary Medicine</div><p>University of Florida · Gainesville, FL</p></div>
@@ -444,14 +486,47 @@
 
     <h3 class="team-subhead">Research Advisors</h3>
     <div class="team-grid">
-      <div class="team-card"><div class="team-avatar">DvS</div><h4>Dr. Divya Subramaniam, PhD, MPH</h4><div class="role">Research Advisor</div><p>Health services research &amp; epidemiology</p></div>
-      <div class="team-card"><div class="team-avatar">DpS</div><h4>Dr. Dipti Subramaniam, PhD, MPH</h4><div class="role">Research Advisor</div><p>Health services research &amp; epidemiology</p></div>
+      <div class="team-card">
+        <div class="team-avatar">DvS</div>
+        <h4>Dr. Divya Subramaniam, PhD, MPH</h4>
+        <div class="role">Director of Scientific Communication &amp; Publications</div>
+        <p>Patient-centered outcomes research · qualitative methodology · scientific communications</p>
+        <details>
+          <summary>Read bio</summary>
+          <p>Dr. Subramaniam is a research scientist and scientific communications leader with 12 years of experience designing, conducting, and translating complex health research into actionable evidence for patients, clinicians, payers, and regulators. She specializes in patient-centered outcomes research, qualitative research methodology, and translating research findings into compelling scientific narratives.</p>
+          <p>Throughout her career, Dr. Subramaniam has led rigorous research across oncology, chronic disease, palliative care, and vaccines. She has authored and co-authored 32+ peer-reviewed publications and led 70+ scientific presentations at major conferences. Her work demonstrates a deep commitment to incorporating patient voice into research and drug development through qualitative methods including concept elicitation, cognitive interviews, and focus groups.</p>
+          <p>As a former Associate Professor, Dr. Subramaniam directed a portfolio of 15–20 concurrent research projects while mentoring 20+ junior researchers and graduate students. She built and scaled six graduate programs in health data science and health outcomes research, generating $5.6M in revenue. She currently operates a consulting practice advising pharmaceutical and biotech sponsors on patient-centered research strategy and scientific communications.</p>
+          <p>When she's not working on research, Dr. Subramaniam loves reading, traveling, and adventuring with her English Pointer, Benson.</p>
+        </details>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar"><img src="faculty/dipti.jpg" alt="Dr. Dipti P. Subramaniam"></div>
+        <h4>Dr. Dipti P. Subramaniam, PhD, MPH</h4>
+        <div class="role">Scientific Research Advisor</div>
+        <p>Associate Medical Director, IntegrityCE · HEOR/RWE · scientific publications</p>
+        <details>
+          <summary>Read bio</summary>
+          <p>Dr. Dipti P. Subramaniam is a PhD-trained public health scientist and health outcomes researcher with more than 10 years of experience in academia, research, curriculum development, and scientific communication. She currently serves as an Associate Medical Director at IntegrityCE, LLC, where she applies her expertise in HEOR/RWE, scientific publications, and adult learning to the development of evidence-based continuing medical education programs.</p>
+          <p>Prior to joining IntegrityCE, she spent nearly a decade as a professor, where she led research and curriculum initiatives and developed research programs for medical students, providing learners with hands-on experience in research methodology and scientific writing. Throughout her academic career, she mentored learners across the training continuum, from undergraduate and medical students to graduate students, postdoctoral researchers, and clinical faculty.</p>
+          <p>Her scholarship spans oncology, chronic diseases, women's health, and vaccination behavior, with more than 20 peer-reviewed publications and presentations at national scientific meetings. She is also an active peer reviewer, Special Topics Editor at Frontiers, and a member of the American Medical Writers Association.</p>
+        </details>
+      </div>
     </div>
 
     <h3 class="team-subhead">Student Ambassadors</h3>
     <div class="team-grid">
       <div class="team-card"><div class="team-avatar">RG</div><h4>Reyansh Gupta</h4><div class="role">Student Ambassador</div><p>Outreach &amp; cohort support</p></div>
-      <div class="team-card"><div class="team-avatar">AG</div><h4>Arna Gowda</h4><div class="role">Student Ambassador</div><p>Outreach &amp; cohort support</p></div>
+      <div class="team-card">
+        <div class="team-avatar">AG</div>
+        <h4>Arna Gowda</h4>
+        <div class="role">Student Ambassador</div>
+        <p>Georgetown University · Neurobiology, Pre-Med</p>
+        <details>
+          <summary>Read bio</summary>
+          <p>I am a recent graduate of Georgetown University, where I majored in Neurobiology and minored in Psychology on the pre-medical track. I began my journey as a scientist on Dr. Munigala's project, and progressed to do research in cognitive science, stroke rehabilitation, and primary care clinical research throughout my undergraduate career. I am currently working in Emergency Medicine as a technician, volunteering as an EMT, scribing, and working in EM research. In my free time, I enjoy cooking, staying fit, and watercolor painting.</p>
+        </details>
+      </div>
     </div>
   </div>
 </section>
