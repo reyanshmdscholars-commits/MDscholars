@@ -583,10 +583,11 @@
             </div>
             <div class="table-controls">
               <div class="filters">
-                <select class="search-input" id="filterQuestionStatus" onchange="renderQuestionsTable()" style="max-width:180px;">
+                <select class="search-input" id="filterQuestionStatus" onchange="renderQuestionsTable()" style="max-width:220px;">
                   <option value="">All statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="answered">Answered</option>
+                  <option value="auto-answered">⚠️ AI answered — needs mentor review</option>
+                  <option value="pending">Pending (no answer yet)</option>
+                  <option value="answered">Answered (mentor-approved)</option>
                 </select>
                 <input type="text" class="search-input" id="searchQuestions" placeholder="Search by student or question..." oninput="renderQuestionsTable()">
               </div>
@@ -1871,9 +1872,31 @@
       var tbody = document.getElementById('questions-tbody');
       if (!tbody) return;
       if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No questions found.</td></tr>'; return; }
+      // Sort so auto-answered (needs review) rises to the top, then pending, then answered
+      filtered.sort(function(a, b) {
+        var rank = { 'auto-answered': 0, 'pending': 1, 'answered': 2 };
+        var ra = rank[a.status] ?? 3, rb = rank[b.status] ?? 3;
+        if (ra !== rb) return ra - rb;
+        return new Date(b.asked_at || 0) - new Date(a.asked_at || 0);
+      });
       tbody.innerHTML = filtered.map(function(q) {
         var student = studentLookup[q.student_id] || {};
-        var statusBadge = '<span class="status-badge status-' + (q.status === 'answered' ? 'accepted' : 'pending') + '">' + q.status + '</span>';
+        var statusBadge;
+        var actionLabel;
+        var actionClass;
+        if (q.status === 'auto-answered') {
+          statusBadge = '<span class="status-badge" style="background:#fef3c7;color:#78350f;border:1px solid #f59e0b;">⚠️ AI — review</span>';
+          actionLabel = 'Review AI answer';
+          actionClass = 'success';
+        } else if (q.status === 'answered') {
+          statusBadge = '<span class="status-badge status-accepted">answered</span>';
+          actionLabel = 'View';
+          actionClass = '';
+        } else {
+          statusBadge = '<span class="status-badge status-pending">pending</span>';
+          actionLabel = 'Answer';
+          actionClass = 'success';
+        }
         var preview = (q.question || '').slice(0, 120) + ((q.question || '').length > 120 ? '…' : '');
         return '<tr>' +
           '<td><strong>' + escHtml(student.full_name || '—') + '</strong><br><small style="color:#999;">' + escHtml(student.email || '') + '</small></td>' +
@@ -1882,7 +1905,7 @@
           '<td>' + (q.asked_at ? new Date(q.asked_at).toLocaleDateString() : '—') + '</td>' +
           '<td>' + statusBadge + '</td>' +
           '<td><div class="action-buttons">' +
-            '<button class="btn-sm ' + (q.status === 'pending' ? 'success' : '') + '" onclick="viewQuestion(\'' + q.id + '\')">' + (q.status === 'pending' ? 'Answer' : 'View') + '</button>' +
+            '<button class="btn-sm ' + actionClass + '" onclick="viewQuestion(\'' + q.id + '\')">' + actionLabel + '</button>' +
           '</div></td>' +
         '</tr>';
       }).join('');
@@ -1892,7 +1915,11 @@
       var q = allQuestions.find(function(x){ return x.id === id; });
       if (!q) return;
       var student = studentLookup[q.student_id] || {};
+      var isAI = q.status === 'auto-answered';
       document.getElementById('msgModalTitle').textContent = 'Question from ' + (student.full_name || 'Student');
+      var aiBanner = isAI
+        ? '<div style="margin:1rem 0; padding:0.9rem 1rem; background:#fef3c7; border-left:4px solid #f59e0b; border-radius:6px;"><strong style="color:#78350f;">⚠️ AI Auto-Answer Draft</strong><br><span style="color:#78350f; font-size:0.9rem;">Our AI answered this question from the knowledge base. The student has NOT been emailed yet — that only happens when you Approve or Edit + Send below. Verdict: ' + escHtml(q.auto_answer_verdict || '—') + '</span></div>'
+        : '';
       document.getElementById('msgModalBody').innerHTML =
         '<div class="detail-grid">' +
           dItem('Student', student.full_name) +
@@ -1901,28 +1928,50 @@
           dItem('Asked', q.asked_at ? new Date(q.asked_at).toLocaleString() : '—') +
           dItem('Status', q.status) +
         '</div>' +
+        aiBanner +
         '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Question</label>' +
         '<div class="message-box" style="white-space:pre-wrap;">' + escHtml(q.question || '') + '</div></div>' +
-        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Your Answer</label>' +
-        '<textarea id="answerInput" style="width:100%; min-height:140px; padding:0.75rem; border:1px solid #e2e8f0; border-radius:6px; font-family:inherit; font-size:0.95rem; margin-top:0.5rem;" placeholder="Write your answer to the student here...">' + escHtml(q.answer || '') + '</textarea></div>';
-      document.getElementById('msgModalActions').innerHTML =
-        '<button class="btn-primary" onclick="saveQuestionAnswer(\'' + q.id + '\')">Save Answer &amp; Mark Answered</button>';
+        '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">' + (isAI ? 'AI Draft Answer (edit if needed)' : 'Your Answer') + '</label>' +
+        '<textarea id="answerInput" style="width:100%; min-height:160px; padding:0.75rem; border:1px solid ' + (isAI ? '#f59e0b' : '#e2e8f0') + '; border-radius:6px; font-family:inherit; font-size:0.95rem; margin-top:0.5rem;" placeholder="Write your answer to the student here...">' + escHtml(q.answer || '') + '</textarea></div>';
+      if (isAI) {
+        document.getElementById('msgModalActions').innerHTML =
+          '<button class="btn-primary" onclick="saveQuestionAnswer(\'' + q.id + '\')" style="background:#059669;">✓ Approve &amp; Send to Student</button>' +
+          '<button class="btn-secondary" onclick="rejectAiAnswer(\'' + q.id + '\')" style="background:#dc2626;color:#fff;">✕ Discard AI answer</button>';
+      } else {
+        document.getElementById('msgModalActions').innerHTML =
+          '<button class="btn-primary" onclick="saveQuestionAnswer(\'' + q.id + '\')">Save Answer &amp; Mark Answered</button>';
+      }
       openModal('msgModal');
+    }
+
+    // Reject the AI answer — clear it and reset to pending so mentor can write from scratch later
+    async function rejectAiAnswer(id) {
+      if (!confirm('Discard the AI draft and reset this question to pending? The student has not been emailed.')) return;
+      try {
+        var res = await getDB().from('student_questions').update({ answer: null, status: 'pending', answered_at: null }).eq('id', id);
+        if (res.error) throw res.error;
+        allQuestions = allQuestions.map(function(q){ return q.id === id ? Object.assign({}, q, { answer: null, status: 'pending', answered_at: null }) : q; });
+        renderQuestionsTable();
+        closeModal('msgModal');
+        showToast('AI draft discarded — question is back to pending.', 'success');
+      } catch(err) { showToast('Error: ' + err.message, 'error'); }
     }
 
     async function saveQuestionAnswer(id) {
       var answer = document.getElementById('answerInput').value.trim();
       if (!answer) { showToast('Please write an answer first', 'error'); return; }
       try {
-        // Check whether this question is currently unanswered — only fire email on NULL -> NOT NULL
-        var wasUnanswered = !allQuestions.find(function(q){ return q.id === id && q.answered_at; });
+        // Fire email whenever a question transitions INTO status='answered' (from pending or auto-answered).
+        // Both cases represent "mentor has now signed off on the answer" — student should be notified.
+        var priorStatus = (allQuestions.find(function(q){ return q.id === id; }) || {}).status;
+        var shouldEmail = priorStatus !== 'answered';
         var res = await getDB().from('student_questions').update({ answer: answer, status: 'answered', answered_at: new Date().toISOString() }).eq('id', id);
         if (res.error) throw res.error;
         allQuestions = allQuestions.map(function(q){ return q.id === id ? Object.assign({}, q, { answer: answer, status: 'answered', answered_at: new Date().toISOString() }) : q; });
         renderQuestionsTable();
         closeModal('msgModal');
-        // Fire email notification to the student — only for first-time answer
-        if (wasUnanswered) {
+        // Fire email notification to the student — on first-time mentor answer OR when overriding an AI draft
+        if (shouldEmail) {
           try {
             var _sessQA = (await getDB().auth.getSession()).data.session;
             if (_sessQA) {
