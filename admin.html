@@ -2225,9 +2225,8 @@
     var togglePaymentStatus = setPaymentStatus;
 
     /* ─── Log a bank deposit (auto-match + mark paid) ─── */
-    // The shared secret is the same BANK_WEBHOOK_TOKEN set in Supabase secrets.
-    // This page lives behind the admin login (1234/1234), so the token is fine to keep client-side.
-    var BANK_WEBHOOK_TOKEN = '876cd5014f3982a9c43a2b541229db9f2de93e9a6af926b6';
+    // The BANK_WEBHOOK_TOKEN is now server-side only; admin.html calls log-bank-deposit
+    // (admin-JWT-gated wrapper) instead of hitting the raw webhook with a hardcoded token.
 
     async function logBankDeposit() {
       var btn = document.getElementById('logDepositBtn');
@@ -2236,9 +2235,15 @@
       if (!body) { showToast('Paste the bank email body first', 'error'); return; }
       btn.disabled = true; btn.textContent = 'Matching…'; statusEl.textContent = '';
       try {
-        var res = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/bank-deposit-webhook?token=' + encodeURIComponent(BANK_WEBHOOK_TOKEN), {
+        var _sessBank = (await getDB().auth.getSession()).data.session;
+        if (!_sessBank) { showToast('Admin session expired — please sign in again.', 'error'); btn.disabled = false; btn.textContent = 'Auto-match & mark paid →'; return; }
+        var res = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/log-bank-deposit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + _sessBank.access_token,
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+          },
           body: JSON.stringify({ text: body, subject: 'Manual deposit logged from admin' })
         });
         var data = await res.json();
