@@ -171,6 +171,13 @@
           </div>
         </div>
       </div>
+
+      <!-- MY Q&A -->
+      <div class="card" style="margin-top:2rem;">
+        <h2><span class="icon">💬</span> My Questions &amp; Answers</h2>
+        <p style="color:var(--gray-600); font-size:0.92rem; margin-bottom:1rem;">Everything you've asked and every answer you've received, in one place. Ask new questions from your <a id="askInThreadLink" href="#" style="color:var(--teal-bright); font-weight:600;">course page</a>.</p>
+        <div id="qaList" style="display:flex; flex-direction:column; gap:1rem;"><em style="color:var(--gray-600);">Loading…</em></div>
+      </div>
     </div>
   </div>
 
@@ -335,28 +342,69 @@
         document.getElementById('statQuestions').textContent = 0;
       }
 
-      // "New answers" badge — count answers received since student last visited the dashboard
+      // "New answers" badge + full Q&A list on dashboard
       try {
         const lastSeen = localStorage.getItem('mds_answers_last_seen') || '1970-01-01T00:00:00Z';
-        const ansRows = await sb.from('student_questions')
-          .select('id, answered_at')
-          .not('answered_at', 'is', null)
-          .gt('answered_at', lastSeen);
-        const newAnswers = (ansRows.data || []).length;
+        // Full list of questions + answers for the "My Q&A" panel
+        const qaRes = await sb.from('student_questions')
+          .select('id, question, answer, status, asked_at, answered_at')
+          .order('asked_at', { ascending: false })
+          .limit(30);
+        const rows = qaRes.data || [];
+        const answered = rows.filter(r => r.answered_at);
+        const newSince = answered.filter(r => new Date(r.answered_at) > new Date(lastSeen)).length;
+
         const badge = document.getElementById('newAnswersBadge');
         if (badge) {
-          if (newAnswers > 0) {
-            badge.textContent = newAnswers + ' new ' + (newAnswers === 1 ? 'answer' : 'answers') + ' →';
+          if (newSince > 0) {
+            badge.textContent = newSince + ' new ' + (newSince === 1 ? 'answer' : 'answers') + ' →';
             badge.className = 'badge success';
-            badge.style.animation = 'pulse 2s ease-in-out infinite';
           } else {
             badge.textContent = 'Open →';
             badge.className = 'badge info';
           }
         }
-        // Update the "last seen" mark now that they've viewed the dashboard
+        // Course page deep link for "ask in thread"
+        const askInThread = document.getElementById('askInThreadLink');
+        if (askInThread) askInThread.href = 'courses/' + trk.file + '#questions';
+
+        // Render the Q&A list
+        const qaList = document.getElementById('qaList');
+        if (qaList) {
+          if (!rows.length) {
+            qaList.innerHTML = '<em style="color:var(--gray-600);">No questions yet — ask your first one from your <a href="courses/' + trk.file + '#questions" style="color:var(--teal-bright); font-weight:600;">course page</a>.</em>';
+          } else {
+            const esc = (s) => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            qaList.innerHTML = rows.map(r => {
+              const isAi = r.status === 'auto-answered';
+              const pillBg = isAi ? '#fef3c7' : (r.status === 'answered' ? '#d1fae5' : '#fef2f2');
+              const pillFg = isAi ? '#78350f' : (r.status === 'answered' ? '#065f46' : '#7c2d12');
+              const pillLabel = isAi ? 'AI initial — mentor reviewing' : (r.status === 'answered' ? 'Answered by mentor' : 'Pending');
+              const answerHeader = isAi
+                ? 'AI Initial Answer <span style="color:#78350f; font-weight:400; font-size:0.82rem;">(your mentor is reviewing — they may reply with a corrected answer)</span>'
+                : 'Answer';
+              const answerBg = isAi ? '#fef3c7' : '#f0f9f8';
+              const answerBorder = isAi ? '#f59e0b' : 'var(--teal-bright)';
+              return '<div style="border:1px solid #e2e8f0; border-radius:10px; padding:1rem 1.25rem; background:#fff;">' +
+                '<div style="display:flex; justify-content:space-between; align-items:start; gap:0.75rem; margin-bottom:0.5rem;">' +
+                  '<div style="font-size:0.82rem; color:var(--gray-600);">' + new Date(r.asked_at).toLocaleString() + '</div>' +
+                  '<span style="background:' + pillBg + '; color:' + pillFg + '; padding:2px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; white-space:nowrap;">' + pillLabel + '</span>' +
+                '</div>' +
+                '<div style="font-size:0.95rem; color:var(--text); line-height:1.55; white-space:pre-wrap;"><strong>Q:</strong> ' + esc(r.question) + '</div>' +
+                (r.answer
+                  ? '<div style="margin-top:0.75rem; padding:0.85rem 1rem; background:' + answerBg + '; border-left:3px solid ' + answerBorder + '; border-radius:6px;"><strong>' + answerHeader + ':</strong><br><span style="white-space:pre-wrap;">' + esc(r.answer) + '</span></div>'
+                  : '<div style="margin-top:0.75rem; padding:0.6rem 1rem; background:#fef2f2; border-left:3px solid #dc2626; border-radius:6px; color:#7c2d12; font-size:0.9rem;">Waiting on your mentor. Usually within 2 business days.</div>') +
+                '</div>';
+            }).join('');
+          }
+        }
+        // Update "last seen" now that they've viewed the dashboard
         localStorage.setItem('mds_answers_last_seen', new Date().toISOString());
-      } catch (e) { console.warn('new-answers badge failed:', e); }
+      } catch (e) {
+        console.warn('Q&A panel failed:', e);
+        const qaList = document.getElementById('qaList');
+        if (qaList) qaList.innerHTML = '<em style="color:var(--gray-600);">Could not load Q&A right now.</em>';
+      }
 
       document.getElementById('loading').style.display = 'none';
       document.getElementById('appWrapper').style.display = 'block';
