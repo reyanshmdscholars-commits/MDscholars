@@ -134,16 +134,20 @@
         }
 
         .nav-cta {
-            background-color: #c9a84c;
-            color: #001F3F;
-            padding: 0.6rem 1.2rem;
-            border-radius: 0.4rem;
+            background: linear-gradient(135deg, #134E4A, #0d9488) !important;
+            color: #fff !important;
+            padding: 0.55rem 1.2rem;
+            border-radius: 8px;
             font-weight: 600;
+            box-shadow: 0 4px 15px rgba(13,148,136,0.35);
+            transition: all 0.2s;
         }
 
         .nav-cta:hover {
-            background-color: #e6c85a;
-            color: #001F3F;
+            background: linear-gradient(135deg, #0d9488, #134E4A) !important;
+            color: #fff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(13,148,136,0.45);
         }
 
         /* Hero Section */
@@ -181,44 +185,130 @@
             font-size: 0.95rem;
         }
 
-        /* Testimonials Grid */
+        /* Testimonials — spotlight carousel */
         .testimonials-section {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 3rem auto;
             padding: 0 1.5rem;
         }
 
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+        .carousel-wrap {
+            position: relative;
+            padding: 0 3.5rem;
+            min-height: 320px;
+        }
+
+        .carousel-viewport {
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            pointer-events: none;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
         }
 
         .testimonial-card {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            background: linear-gradient(180deg, #ffffff, #fbfaf6);
+            padding: 2.5rem 2.5rem 2rem;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 31, 63, 0.09);
+            border: 1px solid #ede8df;
         }
 
         .quote-icon {
-            font-size: 2.5rem;
-            color: #c9a84c;
+            font-size: 3rem;
+            line-height: 1;
+            color: #0d9488;
             margin-bottom: 1rem;
+            font-family: 'Playfair Display', Georgia, serif;
         }
 
         .testimonial-text {
             font-style: italic;
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
+            color: #334155;
+            margin-bottom: 1.75rem;
+            line-height: 1.75;
+            font-size: 1.05rem;
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #ede8df;
+            color: #001F3F;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+            z-index: 3;
+        }
+        .carousel-arrow:hover {
+            background: #0d9488;
+            color: #fff;
+            transform: translateY(-50%) scale(1.05);
+        }
+        .carousel-arrow:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .carousel-arrow.prev { left: 0; }
+        .carousel-arrow.next { right: 0; }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.75rem;
+            flex-wrap: wrap;
+        }
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.2s;
+        }
+        .carousel-dot.active {
+            background: #0d9488;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .carousel-counter {
+            text-align: center;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 640px) {
+            .carousel-wrap { padding: 0 0.5rem; }
+            .carousel-arrow { width: 36px; height: 36px; font-size: 1.1rem; }
+            .testimonial-card { padding: 1.75rem 1.5rem 1.5rem; }
         }
 
         .testimonial-meta {
@@ -527,8 +617,13 @@
         }
 
         .btn-primary {
-            background-color: #c9a84c;
-            color: #001F3F;
+            background: linear-gradient(135deg, #134E4A, #0d9488);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0d9488, #134E4A);
+            transform: translateY(-1px);
         }
 
         .btn-primary:hover {
@@ -666,19 +761,27 @@
     </section>
 
     <section class="testimonials-section">
-        <div class="testimonials-grid" id="testimonials-grid">
-            <div class="testimonial-card" data-placeholder="true">
-                <div class="quote-icon">"</div>
-                <p class="testimonial-text">Loading testimonials…</p>
-                <div class="testimonial-meta">
-                    <div class="testimonial-author">
-                        <div class="testimonial-name">MD Scholars</div>
-                        <span class="track-badge">All Tracks</span>
+        <div class="carousel-wrap" id="carousel-wrap">
+            <button class="carousel-arrow prev" id="carouselPrev" aria-label="Previous testimonial">‹</button>
+            <div class="carousel-viewport" id="testimonials-grid">
+                <div class="carousel-slide active">
+                    <div class="testimonial-card">
+                        <div class="quote-icon">"</div>
+                        <p class="testimonial-text">Loading testimonials…</p>
+                        <div class="testimonial-meta">
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">MD Scholars</div>
+                                <span class="track-badge">All Tracks</span>
+                            </div>
+                            <div class="star-rating">★★★★★</div>
+                        </div>
                     </div>
-                    <div class="star-rating">★★★★★</div>
                 </div>
             </div>
+            <button class="carousel-arrow next" id="carouselNext" aria-label="Next testimonial">›</button>
         </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+        <div class="carousel-counter" id="carouselCounter"></div>
     </section>
 
     <section class="outcomes-section">
@@ -911,22 +1014,35 @@
             return String(s == null ? '' : s)
                 .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
-        function renderTestimonials(rows) {
-            const grid = document.getElementById('testimonials-grid');
-            if (!grid) return;
-            if (!rows || rows.length === 0) {
-                grid.innerHTML = '<div class="testimonial-card" style="grid-column:1/-1;text-align:center;">' +
+        // ── Spotlight carousel state
+        let carouselIndex = 0;
+        let carouselRows = [];
+        let carouselAutoTimer = null;
+
+        function renderCarouselSlides() {
+            const viewport = document.getElementById('testimonials-grid');
+            const dotsEl = document.getElementById('carouselDots');
+            const counterEl = document.getElementById('carouselCounter');
+            if (!viewport) return;
+            if (!carouselRows.length) {
+                viewport.innerHTML = '<div class="carousel-slide active">' +
+                    '<div class="testimonial-card" style="text-align:center;">' +
                     '<div class="quote-icon">"</div>' +
                     '<p class="testimonial-text">Testimonials from our first cohorts coming soon — we\'re just getting started!</p>' +
                     '<div class="testimonial-meta"><div class="testimonial-author"><div class="testimonial-name">MD Scholars</div><span class="track-badge">Coming Soon</span></div><div class="star-rating">★★★★★</div></div>' +
-                    '</div>';
+                    '</div></div>';
+                if (dotsEl) dotsEl.innerHTML = '';
+                if (counterEl) counterEl.textContent = '';
+                document.getElementById('carouselPrev').disabled = true;
+                document.getElementById('carouselNext').disabled = true;
                 return;
             }
-            grid.innerHTML = rows.map(function(r) {
+            viewport.innerHTML = carouselRows.map(function(r, i) {
                 const rating = Math.max(0, Math.min(5, parseInt(r.rating, 10) || 5));
                 const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
                 const trackLabel = PROGRAM_LABELS[r.program] || r.program || 'Scholar';
-                return '<div class="testimonial-card">' +
+                return '<div class="carousel-slide' + (i === carouselIndex ? ' active' : '') + '" data-idx="' + i + '">' +
+                    '<div class="testimonial-card">' +
                     '<div class="quote-icon">"</div>' +
                     '<p class="testimonial-text">' + escapeHtml(r.message) + '</p>' +
                     '<div class="testimonial-meta">' +
@@ -936,9 +1052,70 @@
                         '</div>' +
                         '<div class="star-rating">' + stars + '</div>' +
                     '</div>' +
-                '</div>';
+                    '</div></div>';
             }).join('');
+            // Dots (cap at 12 to avoid clutter — show counter for the rest)
+            if (dotsEl) {
+                if (carouselRows.length <= 12) {
+                    dotsEl.innerHTML = carouselRows.map(function(_, i) {
+                        return '<button class="carousel-dot' + (i === carouselIndex ? ' active' : '') + '" data-goto="' + i + '" aria-label="Go to testimonial ' + (i+1) + '"></button>';
+                    }).join('');
+                    dotsEl.querySelectorAll('.carousel-dot').forEach(function(d) {
+                        d.addEventListener('click', function() { goToSlide(parseInt(d.dataset.goto, 10)); });
+                    });
+                } else {
+                    dotsEl.innerHTML = '';
+                }
+            }
+            if (counterEl) counterEl.textContent = (carouselIndex + 1) + ' of ' + carouselRows.length;
+            document.getElementById('carouselPrev').disabled = false;
+            document.getElementById('carouselNext').disabled = false;
         }
+
+        function goToSlide(newIdx) {
+            if (!carouselRows.length) return;
+            const n = carouselRows.length;
+            carouselIndex = ((newIdx % n) + n) % n;
+            renderCarouselSlides();
+            resetAutoAdvance();
+        }
+
+        function nextSlide() { goToSlide(carouselIndex + 1); }
+        function prevSlide() { goToSlide(carouselIndex - 1); }
+
+        function resetAutoAdvance() {
+            if (carouselAutoTimer) clearInterval(carouselAutoTimer);
+            if (carouselRows.length > 1) {
+                carouselAutoTimer = setInterval(nextSlide, 9000);
+            }
+        }
+
+        function initCarouselControls() {
+            document.getElementById('carouselPrev').addEventListener('click', prevSlide);
+            document.getElementById('carouselNext').addEventListener('click', nextSlide);
+            // Pause auto-advance on hover
+            const wrap = document.getElementById('carousel-wrap');
+            if (wrap) {
+                wrap.addEventListener('mouseenter', function() { if (carouselAutoTimer) { clearInterval(carouselAutoTimer); carouselAutoTimer = null; } });
+                wrap.addEventListener('mouseleave', resetAutoAdvance);
+            }
+            // Keyboard arrows
+            document.addEventListener('keydown', function(e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+        }
+
+        function renderTestimonials(rows) {
+            carouselRows = rows || [];
+            carouselIndex = 0;
+            renderCarouselSlides();
+            resetAutoAdvance();
+        }
+
+        document.addEventListener('DOMContentLoaded', initCarouselControls);
+        if (document.readyState !== 'loading') initCarouselControls();
         (async function loadTestimonials() {
             try {
                 const { data, error } = await sb
