@@ -1823,12 +1823,24 @@
         '</div>' +
         '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Student Submission</label>' +
         '<div class="message-box" style="white-space:pre-wrap;">' + escHtml(s.content || '') + '</div></div>' +
+        (s.attachment_url ? '<div style="margin-top:1rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Attachment</label><div style="margin-top:0.5rem;"><button class="btn-primary" onclick="downloadSubmissionFile(\'' + escHtml(s.attachment_url) + '\', \'' + escHtml(s.attachment_name || 'attachment') + '\')" style="font-size:0.9rem;">📎 Download ' + escHtml(s.attachment_name || 'attachment') + '</button>' + (s.attachment_size_bytes ? ' <span style="color:#666; font-size:0.85rem;">(' + Math.round(s.attachment_size_bytes/1024) + ' KB)</span>' : '') + '</div></div>' : '') +
         '<div style="margin-top:1.5rem;"><label style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:#999;font-weight:600;">Mentor Feedback</label>' +
         '<textarea id="feedbackInput" style="width:100%; min-height:120px; padding:0.75rem; border:1px solid #e2e8f0; border-radius:6px; font-family:inherit; font-size:0.95rem; margin-top:0.5rem;" placeholder="Write feedback for the student here...">' + escHtml(s.feedback || '') + '</textarea></div>';
       document.getElementById('msgModalActions').innerHTML =
         '<button class="btn-primary" onclick="saveSubmissionReview(\'' + s.id + '\', \'reviewed\')">Save &amp; Mark Reviewed</button>' +
         '<button class="btn-secondary" onclick="saveSubmissionReview(\'' + s.id + '\', \'needs_revision\')">Save &amp; Request Revision</button>';
       openModal('msgModal');
+    }
+
+    // Download a submission's attachment via signed URL (admin has RLS read access)
+    async function downloadSubmissionFile(path, filename) {
+      try {
+        var sig = await getDB().storage.from('assignment-uploads').createSignedUrl(path, 300);
+        if (sig.error || !sig.data?.signedUrl) throw sig.error || new Error('no url');
+        // Open in a new tab — browser will download or preview
+        var a = document.createElement('a'); a.href = sig.data.signedUrl; a.download = filename || 'attachment'; a.target = '_blank'; a.rel = 'noopener';
+        document.body.appendChild(a); a.click(); a.remove();
+      } catch (err) { showToast('Download failed: ' + (err.message || err), 'error'); }
     }
 
     async function saveSubmissionReview(id, newStatus) {
