@@ -421,14 +421,14 @@
       const ql = document.getElementById('questionsList');
       if (!qs || !qs.length) ql.innerHTML = '<em style="color:var(--gray-600);">No questions asked yet.</em>';
       else ql.innerHTML = qs.map(q => {
-        const isAuto = q.status === 'auto-answered';
-        const badgeLabel = isAuto ? 'AI initial — mentor reviewing' : (q.status || 'pending');
-        const badgeClass = isAuto ? 'warning' : (q.status || 'pending');
-        const badge = '<span class="badge ' + badgeClass + '">' + badgeLabel + '</span>';
-        const answerHeader = isAuto ? 'AI Initial Answer <span style="color:#78350f; font-weight:400; font-size:0.85rem;">(your mentor is reviewing and may reply with a corrected answer)</span>' : 'Mentor Answer';
-        const answerBg = isAuto ? '#fef3c7' : '#f0f9f8';
-        const answerBorder = isAuto ? '#f59e0b' : 'var(--teal-bright)';
-        return '<div class="history-item"><div class="history-meta"><span>' + new Date(q.asked_at).toLocaleString() + '</span>' + badge + '</div><div class="history-content">' + escapeHtml(q.question||'') + '</div>' + (q.answer ? '<div style="margin-top:0.75rem; padding:0.75rem 1rem; background:' + answerBg + '; border-left:3px solid ' + answerBorder + '; border-radius:6px;"><strong>' + answerHeader + ':</strong><br>' + escapeHtml(q.answer) + '</div>' : '') + '</div>';
+        // Students only see the answer once a mentor has approved it (status = 'answered').
+        // Auto-answered drafts are hidden from students — they still look pending until mentor approval.
+        const isApproved = q.status === 'answered';
+        const badge = '<span class="badge ' + (isApproved ? 'answered' : 'pending') + '">' + (isApproved ? 'answered' : 'pending') + '</span>';
+        const answerBlock = isApproved && q.answer
+          ? '<div style="margin-top:0.75rem; padding:0.75rem 1rem; background:#f0f9f8; border-left:3px solid var(--teal-bright); border-radius:6px;"><strong>Mentor Answer:</strong><br>' + escapeHtml(q.answer) + '</div>'
+          : '';
+        return '<div class="history-item"><div class="history-meta"><span>' + new Date(q.asked_at).toLocaleString() + '</span>' + badge + '</div><div class="history-content">' + escapeHtml(q.question||'') + '</div>' + answerBlock + '</div>';
       }).join('');
     }
 
@@ -520,7 +520,6 @@
         if (ins.error) { btn.disabled = false; btn.textContent = 'Submit question'; showToast('error', ins.error.message); return; }
         const questionId = ins.data && ins.data.id;
         document.getElementById('qContent').value = '';
-        showToast('info', 'Question submitted — checking if we can answer instantly…');
         // Try instant AI-assistant reply (skips billing/refund/complaint content etc.)
         try {
           const sess = (await sb.auth.getSession()).data.session;
@@ -536,11 +535,9 @@
               body: JSON.stringify({ question_id: questionId })
             });
             const aa = await aaResp.json().catch(() => ({}));
-            if (aa && aa.handled && aa.answer) {
-              showToast('success', 'AI drafted an initial answer — your mentor will review and may follow up.');
-            } else {
-              showToast('success', 'Question submitted. Your mentor will reply within 2 business days.');
-            }
+            // Whether or not the AI drafted an answer for the mentor to review,
+            // the student sees the same message — no AI draft is exposed to them.
+            showToast('success', 'Question submitted. Your mentor will reply within 2 business days.');
           } else {
             showToast('success', 'Question submitted. Your mentor will reply within 2 business days.');
           }
