@@ -302,6 +302,7 @@
             <a href="#" class="nav-item" onclick="switchTab(event,'course-content')">🎓 Course Content</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'posters')">🖼️ Posters / Showcase</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'announcements')">📣 Announcements</a>
+            <a href="#" class="nav-item" onclick="switchTab(event,'webinars')">🎥 Webinars</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'institutions-content')">🏛️ Institutions Page</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'standalone')">📚 Standalone Courses</a>
             <a href="#" class="nav-item" onclick="switchTab(event,'test-view')">🎭 Test Student View</a>
@@ -766,6 +767,69 @@
 
             <div id="postersGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1.2rem;">
               <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:2rem;">Loading…</div>
+            </div>
+          </div>
+
+          <!-- WEBINARS TAB -->
+          <div id="webinars" class="content-section">
+            <div class="section-header"><h2>Webinars</h2></div>
+            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+              Create upcoming webinars (visitors register and get the join link) or add past sessions with a recording URL. Set date to future = <strong>upcoming</strong>; date to past = <strong>past session</strong>. Toggle "Published" to hide from the public page without deleting.
+            </p>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="webFormTitle">Add a new webinar</h3>
+              <form id="webForm" onsubmit="saveWebinar(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <input type="hidden" id="webId">
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Title *</label>
+                  <input type="text" id="webTitle" required placeholder="e.g. Research 101 for Pre-Med Students" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Scheduled date &amp; time (your local tz) *</label>
+                  <input type="datetime-local" id="webScheduled" required style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Duration (minutes)</label>
+                  <input type="number" id="webDuration" value="60" min="15" max="240" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Presenter</label>
+                  <input type="text" id="webPresenter" placeholder="Dr. Satish Munigala" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Join URL (Zoom / Meet)</label>
+                  <input type="url" id="webJoinUrl" placeholder="https://us06web.zoom.us/j/..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Recording URL (for past sessions)</label>
+                  <input type="url" id="webRecordingUrl" placeholder="https://youtube.com/watch?v=..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Description</label>
+                  <textarea id="webDescription" rows="3" placeholder="What will the session cover? Who is it for?" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; resize:vertical;"></textarea>
+                </div>
+                <div style="grid-column:1/-1; display:flex; align-items:center; gap:1rem;">
+                  <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#475569;">
+                    <input type="checkbox" id="webPublished" checked>
+                    <span>Published (visible on the public webinars page)</span>
+                  </label>
+                </div>
+                <div style="grid-column:1/-1; display:flex; gap:0.75rem;">
+                  <button type="submit" class="btn-primary">Save Webinar</button>
+                  <button type="button" class="btn-secondary" onclick="clearWebForm()">Clear form</button>
+                </div>
+              </form>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">All webinars</h3>
+              <div id="webinarsList"><em style="color:#94a3b8;">Loading…</em></div>
+            </div>
+
+            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-top:1.6rem;">
+              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
+              <div id="webRegList"><em style="color:#94a3b8;">Loading…</em></div>
             </div>
           </div>
 
@@ -1237,6 +1301,7 @@
       else if (tabName === 'course-content') { loadCourseMaterials(); }
       else if (tabName === 'posters') { loadPosters(); }
       else if (tabName === 'announcements') { loadAnnouncements(); }
+      else if (tabName === 'webinars') { loadWebinars(); loadWebRegistrations(); }
       else if (tabName === 'institutions-content') { loadInstitutionContent(); loadLogos(); }
       else if (tabName === 'standalone') { loadStandaloneCourses(); }
       else if (tabName === 'test-view') { loadTestStudentStatus(); }
@@ -1245,6 +1310,124 @@
 
     /* ─── Announcements ─── */
     var allAnnouncements = [];
+    /* ────────── WEBINARS ────────── */
+    var allWebinars = [];
+
+    async function loadWebinars() {
+      try {
+        var res = await getDB().from('webinars').select('*').order('scheduled_at', { ascending: false, nullsFirst: false });
+        if (res.error) throw res.error;
+        allWebinars = res.data || [];
+        renderWebinarsList();
+      } catch(err) { document.getElementById('webinarsList').innerHTML = '<em style="color:#dc2626;">Error: ' + escHtml(err.message||err) + '</em>'; }
+    }
+
+    function renderWebinarsList() {
+      var el = document.getElementById('webinarsList');
+      if (!allWebinars.length) { el.innerHTML = '<em style="color:#94a3b8;">No webinars yet. Add one using the form above.</em>'; return; }
+      var now = new Date();
+      el.innerHTML = '<div style="display:flex; flex-direction:column; gap:0.75rem;">' +
+        allWebinars.map(function(w) {
+          var scheduled = w.scheduled_at ? new Date(w.scheduled_at) : null;
+          var isPast = scheduled && scheduled < new Date(now.getTime() - 90*60*1000);
+          var statusBadge = w.is_published
+            ? (isPast ? '<span class="status-badge" style="background:#f1f5f9; color:#475569;">Past</span>'
+                      : '<span class="status-badge" style="background:#dcfce7; color:#065f46;">Upcoming</span>')
+            : '<span class="status-badge" style="background:#fee2e2; color:#7c2d12;">Hidden</span>';
+          return '<div style="border:1px solid #e2e8f0; border-radius:8px; padding:1rem 1.25rem; display:flex; justify-content:space-between; align-items:start; gap:1rem;">' +
+            '<div style="flex:1;">' +
+              '<div style="font-weight:700; color:#001F3F;">' + escHtml(w.title) + ' ' + statusBadge + '</div>' +
+              '<div style="font-size:0.85rem; color:#475569; margin-top:0.25rem;">' + (scheduled ? scheduled.toLocaleString() : 'No date set') + (w.duration_minutes ? ' · ' + w.duration_minutes + ' min' : '') + (w.presenter ? ' · ' + escHtml(w.presenter) : '') + '</div>' +
+              (w.join_url ? '<div style="font-size:0.82rem; color:#0d9488; margin-top:0.25rem; word-break:break-all;">Join: <a href="' + escHtml(w.join_url) + '" target="_blank" style="color:#0d9488;">' + escHtml(w.join_url) + '</a></div>' : '') +
+              (w.recording_url ? '<div style="font-size:0.82rem; color:#0d9488; margin-top:0.25rem; word-break:break-all;">Recording: <a href="' + escHtml(w.recording_url) + '" target="_blank" style="color:#0d9488;">' + escHtml(w.recording_url) + '</a></div>' : '') +
+            '</div>' +
+            '<div style="display:flex; flex-direction:column; gap:0.4rem;">' +
+              '<button class="btn-sm" onclick="editWebinar(\'' + w.id + '\')" style="background:#134E4A; color:#fff;">Edit</button>' +
+              '<button class="btn-sm" onclick="deleteWebinar(\'' + w.id + '\')" style="background:#dc2626; color:#fff;">Delete</button>' +
+            '</div>' +
+          '</div>';
+        }).join('') + '</div>';
+    }
+
+    function editWebinar(id) {
+      var w = allWebinars.find(function(x){return x.id === id;});
+      if (!w) return;
+      document.getElementById('webFormTitle').textContent = 'Edit webinar';
+      document.getElementById('webId').value = w.id;
+      document.getElementById('webTitle').value = w.title || '';
+      document.getElementById('webScheduled').value = w.scheduled_at ? new Date(w.scheduled_at).toISOString().slice(0,16) : '';
+      document.getElementById('webDuration').value = w.duration_minutes || 60;
+      document.getElementById('webPresenter').value = w.presenter || '';
+      document.getElementById('webJoinUrl').value = w.join_url || '';
+      document.getElementById('webRecordingUrl').value = w.recording_url || '';
+      document.getElementById('webDescription').value = w.description || '';
+      document.getElementById('webPublished').checked = w.is_published !== false;
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function clearWebForm() {
+      document.getElementById('webFormTitle').textContent = 'Add a new webinar';
+      document.getElementById('webForm').reset();
+      document.getElementById('webId').value = '';
+      document.getElementById('webPublished').checked = true;
+      document.getElementById('webDuration').value = 60;
+    }
+
+    async function saveWebinar(e) {
+      e.preventDefault();
+      var id = document.getElementById('webId').value;
+      var payload = {
+        title: document.getElementById('webTitle').value.trim(),
+        scheduled_at: document.getElementById('webScheduled').value ? new Date(document.getElementById('webScheduled').value).toISOString() : null,
+        duration_minutes: parseInt(document.getElementById('webDuration').value, 10) || 60,
+        presenter: document.getElementById('webPresenter').value.trim() || null,
+        join_url: document.getElementById('webJoinUrl').value.trim() || null,
+        recording_url: document.getElementById('webRecordingUrl').value.trim() || null,
+        description: document.getElementById('webDescription').value.trim() || null,
+        is_published: document.getElementById('webPublished').checked,
+        updated_at: new Date().toISOString()
+      };
+      try {
+        var res = id
+          ? await getDB().from('webinars').update(payload).eq('id', id).select().single()
+          : await getDB().from('webinars').insert([payload]).select().single();
+        if (res.error) throw res.error;
+        showToast(id ? 'Webinar updated' : 'Webinar added', 'success');
+        clearWebForm();
+        loadWebinars();
+      } catch(err) { showToast('Error: ' + (err.message||err), 'error'); }
+    }
+
+    async function deleteWebinar(id) {
+      if (!confirm('Delete this webinar? Registrations for it will also be deleted.')) return;
+      try {
+        var res = await getDB().from('webinars').delete().eq('id', id);
+        if (res.error) throw res.error;
+        showToast('Webinar deleted', 'success');
+        loadWebinars();
+      } catch(err) { showToast('Error: ' + (err.message||err), 'error'); }
+    }
+
+    async function loadWebRegistrations() {
+      try {
+        var res = await getDB().from('webinar_registrations').select('*, webinar:webinars(title)').order('created_at', { ascending: false }).limit(50);
+        if (res.error) throw res.error;
+        var rows = res.data || [];
+        var el = document.getElementById('webRegList');
+        if (!rows.length) { el.innerHTML = '<em style="color:#94a3b8;">No registrations yet.</em>'; return; }
+        el.innerHTML = '<table class="data-table" style="width:100%;"><thead><tr><th>When</th><th>Webinar</th><th>Name</th><th>Email</th><th>Stage</th></tr></thead><tbody>' +
+          rows.map(function(r) {
+            return '<tr>' +
+              '<td style="font-size:0.85rem;">' + new Date(r.created_at).toLocaleString() + '</td>' +
+              '<td>' + escHtml((r.webinar && r.webinar.title) || '—') + '</td>' +
+              '<td>' + escHtml(r.name) + '</td>' +
+              '<td>' + escHtml(r.email) + '</td>' +
+              '<td>' + escHtml(r.stage || '—') + '</td>' +
+            '</tr>';
+          }).join('') + '</tbody></table>';
+      } catch(err) { document.getElementById('webRegList').innerHTML = '<em style="color:#dc2626;">Error: ' + escHtml(err.message||err) + '</em>'; }
+    }
+
     async function loadAnnouncements() {
       try {
         var res = await getDB().from('announcements').select('*').order('priority',{ascending:false}).order('created_at',{ascending:false});
