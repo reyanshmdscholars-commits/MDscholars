@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>Cohorts & Mentors — MD Scholars Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<title>Cohorts &amp; Mentors — MD Scholars Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --navy: #001F3F; --teal: #134E4A; --teal-bright: #0d9488; --teal-light: #14b8a6;
@@ -90,110 +91,106 @@
   .login-card input { width: 100%; padding: 0.7rem 1rem; border: 1px solid var(--gray-200); border-radius: 6px; margin-bottom: 0.75rem; font-family: inherit; }
   .login-card button { width: 100%; padding: 0.85rem; background: var(--teal-bright); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
 </style>
+  <style id="mds-lucide-style">
+.mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
+.mds-lu:last-child { margin-right: 0; }
+.feature-icon .mds-lu, .service-icon .mds-lu, .stat-icon .mds-lu,
+.card-icon .mds-lu, .program-icon .mds-lu, .step-icon .mds-lu,
+.trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu,
+.tab-icon .mds-lu, .nav-item-icon .mds-lu { width: 60%; height: 60%; margin: 0; stroke-width: 1.5; }
+</style>
 </head>
 <body>
-
 <!-- Login gate -->
-<div id="loginGate" class="login-gate">
-  <div class="login-card">
-    <h2>Cohorts & Mentors</h2>
-    <p style="text-align:center;color:#666;font-size:0.85rem;margin-bottom:1rem;">Admin sign-in required</p>
-    <input type="email" id="loginUser" placeholder="admin email">
-    <input type="password" id="loginPass" placeholder="password">
-    <button onclick="tryLogin()">Sign in</button>
-    <p style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:0.75rem;">This dashboard uses the same admin account as <a href="admin.html" style="color:#0d9488;">admin.html</a>.</p>
-  </div>
+<div class="login-gate" id="loginGate">
+<div class="login-card">
+<h2>Cohorts &amp; Mentors</h2>
+<p style="text-align:center;color:#666;font-size:0.85rem;margin-bottom:1rem;">Admin sign-in required</p>
+<input id="loginUser" placeholder="admin email" type="email"/>
+<input id="loginPass" placeholder="password" type="password"/>
+<button onclick="tryLogin()">Sign in</button>
+<p style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:0.75rem;">This dashboard uses the same admin account as <a href="admin.html" style="color:#0d9488;">admin.html</a>.</p>
 </div>
-
+</div>
 <div id="dashboard" style="display:none;">
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-      <div class="brand-text"><strong>MD Scholars</strong><br><span>Admin · Cohorts</span></div>
-    </div>
-    <div class="actions">
-      <a href="admin.html">← Back to main admin</a>
-      <button class="btn btn-sm" onclick="loadAll()">↻ Refresh</button>
-    </div>
-  </div>
-
-  <div class="container">
-    <h1>Cohorts &amp; Mentors</h1>
-    <p class="subtitle">Manage sessions, invite mentors, and organize student teams.</p>
-
-    <div class="session-bar">
-      <label for="sessionSelect">Active session view:</label>
-      <select id="sessionSelect" onchange="onSessionChange()"></select>
-      <span class="pill pill-active" id="sessionStatus">—</span>
-      <button class="btn btn-sm" onclick="makeActive()">Make this the active session</button>
-      <button class="btn btn-sm btn-ghost" onclick="showNewSessionForm()">+ New session</button>
-    </div>
-
-    <div class="tabs">
-      <button class="active" data-tab="teams">Teams</button>
-      <button data-tab="mentors">Mentors</button>
-      <button data-tab="sessions">Sessions</button>
-    </div>
-
-    <!-- TEAMS PANEL -->
-    <div class="panel active" id="panel-teams">
-      <div class="card">
-        <h2>
-          <span>Teams in this session</span>
-          <div style="display:flex;gap:0.5rem;">
-            <button class="btn btn-sm btn-ghost" onclick="loadTeams()">Refresh</button>
-            <button class="btn btn-big" onclick="autoGroup()">⚡ Auto-group remaining students</button>
-          </div>
-        </h2>
-        <p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">Auto-grouping creates teams of ~5 from accepted students who aren't already in a team. HS pairs with undergrad and Med pairs with Resident if too few remain in a bucket.</p>
-        <div id="teamsContainer">
-          <div class="empty"><div class="icon">⏳</div>Loading…</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Ungrouped accepted students</h2>
-        <p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">Accepted students in this session not yet in a team.</p>
-        <div id="ungroupedContainer"></div>
-      </div>
-    </div>
-
-    <!-- MENTORS PANEL -->
-    <div class="panel" id="panel-mentors">
-      <div class="card">
-        <h2>Invite a new mentor</h2>
-        <p style="font-size:0.88rem;color:#666;margin-bottom:1rem;">The mentor will receive an email with a link to set their password and access the mentor portal.</p>
-        <div class="form-row">
-          <div><label>Full name *</label><input id="inv_name" type="text" placeholder="Dr. Jane Smith"></div>
-          <div><label>Email *</label><input id="inv_email" type="email" placeholder="jane@example.com"></div>
-          <div><label>Specialty</label><input id="inv_specialty" type="text" placeholder="Internal Medicine"></div>
-        </div>
-        <div class="form-row"><div style="grid-column:1/-1;"><label>Short bio (optional)</label><textarea id="inv_bio" rows="2" style="resize:vertical;"></textarea></div></div>
-        <button class="btn" onclick="inviteMentor()">Send invite</button>
-      </div>
-
-      <div class="card">
-        <h2>All mentors</h2>
-        <div id="mentorsContainer">
-          <div class="empty"><div class="icon">⏳</div>Loading…</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SESSIONS PANEL -->
-    <div class="panel" id="panel-sessions">
-      <div class="card">
-        <h2>All sessions</h2>
-        <div id="sessionsContainer">
-          <div class="empty"><div class="icon">⏳</div>Loading…</div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="brand-text"><strong>MD Scholars</strong><br/><span>Admin · Cohorts</span></div>
 </div>
-
-<div id="toast" class="toast"></div>
-
+<div class="actions">
+<a href="admin.html">← Back to main admin</a>
+<button class="btn btn-sm" onclick="loadAll()">↻ Refresh</button>
+</div>
+</div>
+<div class="container">
+<h1>Cohorts &amp; Mentors</h1>
+<p class="subtitle">Manage sessions, invite mentors, and organize student teams.</p>
+<div class="session-bar">
+<label for="sessionSelect">Active session view:</label>
+<select id="sessionSelect" onchange="onSessionChange()"></select>
+<span class="pill pill-active" id="sessionStatus">—</span>
+<button class="btn btn-sm" onclick="makeActive()">Make this the active session</button>
+<button class="btn btn-sm btn-ghost" onclick="showNewSessionForm()">+ New session</button>
+</div>
+<div class="tabs">
+<button class="active" data-tab="teams">Teams</button>
+<button data-tab="mentors">Mentors</button>
+<button data-tab="sessions">Sessions</button>
+</div>
+<!-- TEAMS PANEL -->
+<div class="panel active" id="panel-teams">
+<div class="card">
+<h2>
+<span>Teams in this session</span>
+<div style="display:flex;gap:0.5rem;">
+<button class="btn btn-sm btn-ghost" onclick="loadTeams()">Refresh</button>
+<button class="btn btn-big" onclick="autoGroup()"><i class="mds-lu" data-lucide="zap"></i> Auto-group remaining students</button>
+</div>
+</h2>
+<p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">Auto-grouping creates teams of ~5 from accepted students who aren't already in a team. HS pairs with undergrad and Med pairs with Resident if too few remain in a bucket.</p>
+<div id="teamsContainer">
+<div class="empty"><div class="icon">⏳</div>Loading…</div>
+</div>
+</div>
+<div class="card">
+<h2>Ungrouped accepted students</h2>
+<p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">Accepted students in this session not yet in a team.</p>
+<div id="ungroupedContainer"></div>
+</div>
+</div>
+<!-- MENTORS PANEL -->
+<div class="panel" id="panel-mentors">
+<div class="card">
+<h2>Invite a new mentor</h2>
+<p style="font-size:0.88rem;color:#666;margin-bottom:1rem;">The mentor will receive an email with a link to set their password and access the mentor portal.</p>
+<div class="form-row">
+<div><label>Full name *</label><input id="inv_name" placeholder="Dr. Jane Smith" type="text"/></div>
+<div><label>Email *</label><input id="inv_email" placeholder="jane@example.com" type="email"/></div>
+<div><label>Specialty</label><input id="inv_specialty" placeholder="Internal Medicine" type="text"/></div>
+</div>
+<div class="form-row"><div style="grid-column:1/-1;"><label>Short bio (optional)</label><textarea id="inv_bio" rows="2" style="resize:vertical;"></textarea></div></div>
+<button class="btn" onclick="inviteMentor()">Send invite</button>
+</div>
+<div class="card">
+<h2>All mentors</h2>
+<div id="mentorsContainer">
+<div class="empty"><div class="icon">⏳</div>Loading…</div>
+</div>
+</div>
+</div>
+<!-- SESSIONS PANEL -->
+<div class="panel" id="panel-sessions">
+<div class="card">
+<h2>All sessions</h2>
+<div id="sessionsContainer">
+<div class="empty"><div class="icon">⏳</div>Loading…</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
   // Service role key — same pattern as admin.html. KEEP THIS PAGE BEHIND THE LOGIN GATE.
@@ -524,6 +521,15 @@
       document.getElementById('panel-' + b.dataset.tab).classList.add('active');
     });
   });
+</script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script id="mds-lucide-init">
+(function(){
+  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.mdsRefreshIcons = init;
+})();
 </script>
 </body>
 </html>
