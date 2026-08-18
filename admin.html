@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Force browsers to always re-validate this page so admin updates appear without a hard refresh. -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>MD Scholars Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- Force browsers to always re-validate this page so admin updates appear without a hard refresh. -->
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<title>MD Scholars Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background-color: #f8f5ef; color: #333; }
     h1,h2,h3,h4,h5,h6 { font-family: 'Newsreader', serif; color: #001F3F; }
@@ -240,931 +241,895 @@
       .detail-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <style id="mds-lucide-style">
+.mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
+.mds-lu:last-child { margin-right: 0; }
+.feature-icon .mds-lu, .service-icon .mds-lu, .stat-icon .mds-lu,
+.card-icon .mds-lu, .program-icon .mds-lu, .step-icon .mds-lu,
+.trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu,
+.tab-icon .mds-lu, .nav-item-icon .mds-lu { width: 60%; height: 60%; margin: 0; stroke-width: 1.5; }
+</style>
 </head>
 <body>
+<!-- LOGIN SCREEN -->
+<div class="login-container" id="loginContainer">
+<div class="login-card">
+<div class="login-card-logo"><i class="mds-lu" data-lucide="plus"></i></div>
+<h1>Admin Access</h1>
+<p class="login-card-subtitle">This area is restricted to authorized MD Scholars staff only.</p>
+<form class="login-form" id="loginForm">
+<div class="form-group">
+<label for="loginUser">Email</label>
+<input autocomplete="email" id="loginUser" name="loginUser" placeholder="admin@mdscholars.com" required="" type="email"/>
+</div>
+<div class="form-group">
+<label for="loginPass">Password</label>
+<input autocomplete="current-password" id="loginPass" name="loginPass" placeholder="Enter password" required="" type="password"/>
+</div>
+<button class="login-button" id="loginSubmitBtn" type="submit">Sign in</button>
+</form>
+<div style="text-align:center; margin-top:1rem;">
+<a href="#" id="forgotAdminPass" style="color:#0d9488; font-size:0.85rem; text-decoration:none;">Forgot password?</a>
+</div>
+<div class="login-card-notice">For security reasons, this access is limited to authorized personnel.</div>
+</div>
+</div>
+<!-- DASHBOARD -->
+<div class="dashboard-wrapper" id="dashboardWrapper">
+<div style="width: 100%; display: flex; flex-direction: column;">
+<!-- Top Bar -->
+<div class="dashboard-topbar">
+<div class="topbar-left">
+<a class="topbar-logo" href="index.html">
+<div class="topbar-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="topbar-logo-text"><strong>MD Scholars</strong></div>
+</a>
+<div class="topbar-divider"></div>
+<div class="topbar-label">Admin Panel</div>
+</div>
+<button class="logout-button" onclick="loadAllData()" style="margin-right:0.5rem;">↻ Refresh data</button>
+<button class="logout-button" onclick="handleLogout()">Logout</button>
+</div>
+<!-- Main Layout -->
+<div class="dashboard-main">
+<!-- Sidebar -->
+<div class="dashboard-sidebar">
+<div class="sidebar-nav">
+<a class="nav-item active" href="#" onclick="switchTab(event,'overview')"><i class="mds-lu" data-lucide="bar-chart-3"></i> Dashboard</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'applications')"><i class="mds-lu" data-lucide="clipboard-list"></i> Applications</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'students')"><i class="mds-lu" data-lucide="users"></i> Students</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'contacts')"><i class="mds-lu" data-lucide="mail"></i> Messages</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'inquiries')"><i class="mds-lu" data-lucide="school"></i> Institutions</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'feedback')">⭐ Feedback</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'submissions')"><i class="mds-lu" data-lucide="pencil-line"></i> Submissions</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'questions')"><i class="mds-lu" data-lucide="message-circle"></i> Q&amp;A</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'course-content')"><i class="mds-lu" data-lucide="graduation-cap"></i> Course Content</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'posters')"><i class="mds-lu" data-lucide="image"></i> Posters / Showcase</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'announcements')"><i class="mds-lu" data-lucide="megaphone"></i> Announcements</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'webinars')"><i class="mds-lu" data-lucide="video"></i> Webinars</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'institutions-content')"><i class="mds-lu" data-lucide="landmark"></i> Institutions Page</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'standalone')"><i class="mds-lu" data-lucide="book-open"></i> Standalone Courses</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'test-view')"><i class="mds-lu" data-lucide="drama"></i> Test Student View</a>
+<a class="nav-item" href="#" onclick="switchTab(event,'manage-admins')"><i class="mds-lu" data-lucide="lock"></i> Manage Admins</a>
+</div>
+</div>
+<!-- Content -->
+<div class="dashboard-content">
+<!-- OVERVIEW TAB -->
+<div class="content-section active" id="overview">
+<h2 style="margin-bottom: 2rem;">Dashboard Overview</h2>
+<div class="stats-row">
+<div class="stat-card">
+<div class="stat-label">Total Applications</div>
+<div class="stat-value" id="stat-total">—</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Pending Review</div>
+<div class="stat-value" id="stat-pending">—</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Accepted</div>
+<div class="stat-value" id="stat-accepted">—</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">New Messages</div>
+<div class="stat-value" id="stat-messages">—</div>
+</div>
+</div>
+<h3 style="margin-bottom: 1.5rem;">Quick Actions</h3>
+<div class="quick-actions">
+<div class="action-card" onclick="goToTab('applications')">
+<h3><i class="mds-lu" data-lucide="clipboard-list"></i> Review Applications</h3>
+<p>View and manage all pending applications</p>
+</div>
+<div class="action-card" onclick="goToTab('contacts')">
+<h3><i class="mds-lu" data-lucide="mail"></i> Check Messages</h3>
+<p>View new contact form submissions</p>
+</div>
+<div class="action-card" onclick="goToTab('students')">
+<h3><i class="mds-lu" data-lucide="users"></i> Manage Students</h3>
+<p>View enrolled and accepted students</p>
+</div>
+<div class="action-card" onclick="window.location.href='admin-cohorts.html'" style="background:linear-gradient(135deg,#001F3F,#0d9488);color:#fff;border-color:transparent;">
+<h3 style="color:#fff;"><i class="mds-lu" data-lucide="target"></i> Cohorts &amp; Mentors</h3>
+<p style="color:rgba(255,255,255,0.8);">Manage sessions, invite mentors, organize teams</p>
+</div>
+<div class="action-card" onclick="exportApplicationsCSV()">
+<h3><i class="mds-lu" data-lucide="download"></i> Export Data</h3>
+<p>Download all applications as CSV</p>
+</div>
+</div>
+</div>
+<!-- APPLICATIONS TAB -->
+<div class="content-section" id="applications">
+<div class="section-header">
+<h2>Applications</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportApplicationsCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<div class="table-controls">
+<div class="filters">
+<select class="filter-select" id="filterTrack" onchange="renderApplicationsTable()">
+<option value="">All Tracks</option>
+<option value="High School">High School</option>
+<option value="College / Pre-Med">College / Pre-Med</option>
+<option value="Medical Student">Medical Student</option>
+<option value="Resident &amp; Fellow">Resident &amp; Fellow</option>
+</select>
+<select class="filter-select" id="filterStatus" onchange="renderApplicationsTable()">
+<option value="">All Statuses</option>
+<option value="pending">Pending</option>
+<option value="accepted">Accepted</option>
+<option value="waitlisted">Waitlisted</option>
+<option value="rejected">Rejected</option>
+</select>
+<input class="search-input" id="searchApps" oninput="renderApplicationsTable()" placeholder="Search by name or email..." type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Track</th>
+<th>Date Applied</th>
+<th>Education</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="apps-tbody">
+<tr><td class="empty-state" colspan="6">Loading applications...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- STUDENTS TAB -->
+<div class="content-section" id="students">
+<div class="section-header">
+<h2>Enrolled Students</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportStudentsCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<!-- Bank deposit auto-match panel -->
+<div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fcd34d;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;">
+<h3 style="margin:0 0 0.4rem;color:#78350f;display:flex;align-items:center;gap:0.5rem;"><i class="mds-lu" data-lucide="dollar-sign"></i> Log a bank deposit (auto-match to applicant)</h3>
+<p style="margin:0 0 0.85rem;font-size:0.9rem;color:#7c2d12;">Paste the full CommunityAmerica deposit-alert email body below. The system will detect the amount, match the applicant by name/email/UUID, flip them to <strong>paid</strong>, sync their student profile, and auto-send the payment confirmation email.</p>
+<textarea id="bankDepositBody" placeholder="Paste the bank deposit email here. e.g.:
 
-  <!-- LOGIN SCREEN -->
-  <div class="login-container" id="loginContainer">
-    <div class="login-card">
-      <div class="login-card-logo">⚕️</div>
-      <h1>Admin Access</h1>
-      <p class="login-card-subtitle">This area is restricted to authorized MD Scholars staff only.</p>
-      <form class="login-form" id="loginForm">
-        <div class="form-group">
-          <label for="loginUser">Email</label>
-          <input type="email" id="loginUser" name="loginUser" required placeholder="admin@mdscholars.com" autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label for="loginPass">Password</label>
-          <input type="password" id="loginPass" name="loginPass" required placeholder="Enter password" autocomplete="current-password">
-        </div>
-        <button type="submit" class="login-button" id="loginSubmitBtn">Sign in</button>
-      </form>
-      <div style="text-align:center; margin-top:1rem;">
-        <a href="#" id="forgotAdminPass" style="color:#0d9488; font-size:0.85rem; text-decoration:none;">Forgot password?</a>
-      </div>
-      <div class="login-card-notice">For security reasons, this access is limited to authorized personnel.</div>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div class="dashboard-wrapper" id="dashboardWrapper">
-    <div style="width: 100%; display: flex; flex-direction: column;">
-
-      <!-- Top Bar -->
-      <div class="dashboard-topbar">
-        <div class="topbar-left">
-          <a href="index.html" class="topbar-logo">
-            <div class="topbar-logo-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-            <div class="topbar-logo-text"><strong>MD Scholars</strong></div>
-          </a>
-          <div class="topbar-divider"></div>
-          <div class="topbar-label">Admin Panel</div>
-        </div>
-        <button class="logout-button" onclick="loadAllData()" style="margin-right:0.5rem;">↻ Refresh data</button>
-        <button class="logout-button" onclick="handleLogout()">Logout</button>
-      </div>
-
-      <!-- Main Layout -->
-      <div class="dashboard-main">
-
-        <!-- Sidebar -->
-        <div class="dashboard-sidebar">
-          <div class="sidebar-nav">
-            <a href="#" class="nav-item active" onclick="switchTab(event,'overview')">📊 Dashboard</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'applications')">📋 Applications</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'students')">👥 Students</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'contacts')">✉️ Messages</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'inquiries')">🏫 Institutions</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'feedback')">⭐ Feedback</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'submissions')">📝 Submissions</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'questions')">💬 Q&amp;A</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'course-content')">🎓 Course Content</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'posters')">🖼️ Posters / Showcase</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'announcements')">📣 Announcements</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'webinars')">🎥 Webinars</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'institutions-content')">🏛️ Institutions Page</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'standalone')">📚 Standalone Courses</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'test-view')">🎭 Test Student View</a>
-            <a href="#" class="nav-item" onclick="switchTab(event,'manage-admins')">🔐 Manage Admins</a>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="dashboard-content">
-
-          <!-- OVERVIEW TAB -->
-          <div id="overview" class="content-section active">
-            <h2 style="margin-bottom: 2rem;">Dashboard Overview</h2>
-            <div class="stats-row">
-              <div class="stat-card">
-                <div class="stat-label">Total Applications</div>
-                <div class="stat-value" id="stat-total">—</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-label">Pending Review</div>
-                <div class="stat-value" id="stat-pending">—</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-label">Accepted</div>
-                <div class="stat-value" id="stat-accepted">—</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-label">New Messages</div>
-                <div class="stat-value" id="stat-messages">—</div>
-              </div>
-            </div>
-            <h3 style="margin-bottom: 1.5rem;">Quick Actions</h3>
-            <div class="quick-actions">
-              <div class="action-card" onclick="goToTab('applications')">
-                <h3>📋 Review Applications</h3>
-                <p>View and manage all pending applications</p>
-              </div>
-              <div class="action-card" onclick="goToTab('contacts')">
-                <h3>✉️ Check Messages</h3>
-                <p>View new contact form submissions</p>
-              </div>
-              <div class="action-card" onclick="goToTab('students')">
-                <h3>👥 Manage Students</h3>
-                <p>View enrolled and accepted students</p>
-              </div>
-              <div class="action-card" onclick="window.location.href='admin-cohorts.html'" style="background:linear-gradient(135deg,#001F3F,#0d9488);color:#fff;border-color:transparent;">
-                <h3 style="color:#fff;">🎯 Cohorts &amp; Mentors</h3>
-                <p style="color:rgba(255,255,255,0.8);">Manage sessions, invite mentors, organize teams</p>
-              </div>
-              <div class="action-card" onclick="exportApplicationsCSV()">
-                <h3>📥 Export Data</h3>
-                <p>Download all applications as CSV</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- APPLICATIONS TAB -->
-          <div id="applications" class="content-section">
-            <div class="section-header">
-              <h2>Applications</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportApplicationsCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-            <div class="table-controls">
-              <div class="filters">
-                <select class="filter-select" id="filterTrack" onchange="renderApplicationsTable()">
-                  <option value="">All Tracks</option>
-                  <option value="High School">High School</option>
-                  <option value="College / Pre-Med">College / Pre-Med</option>
-                  <option value="Medical Student">Medical Student</option>
-                  <option value="Resident & Fellow">Resident &amp; Fellow</option>
-                </select>
-                <select class="filter-select" id="filterStatus" onchange="renderApplicationsTable()">
-                  <option value="">All Statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="accepted">Accepted</option>
-                  <option value="waitlisted">Waitlisted</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-                <input type="text" class="search-input" id="searchApps" placeholder="Search by name or email..." oninput="renderApplicationsTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Track</th>
-                  <th>Date Applied</th>
-                  <th>Education</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="apps-tbody">
-                <tr><td colspan="6" class="empty-state">Loading applications...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- STUDENTS TAB -->
-          <div id="students" class="content-section">
-            <div class="section-header">
-              <h2>Enrolled Students</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportStudentsCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-
-            <!-- Bank deposit auto-match panel -->
-            <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fcd34d;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;">
-              <h3 style="margin:0 0 0.4rem;color:#78350f;display:flex;align-items:center;gap:0.5rem;">💰 Log a bank deposit (auto-match to applicant)</h3>
-              <p style="margin:0 0 0.85rem;font-size:0.9rem;color:#7c2d12;">Paste the full CommunityAmerica deposit-alert email body below. The system will detect the amount, match the applicant by name/email/UUID, flip them to <strong>paid</strong>, sync their student profile, and auto-send the payment confirmation email.</p>
-              <textarea id="bankDepositBody" placeholder="Paste the bank deposit email here. e.g.:&#10;&#10;A deposit of $1,250.00 has been credited to account ****9488.&#10;Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 0.85rem;border:1px solid #e0dbd0;border-radius:6px;font-family:inherit;font-size:0.9rem;resize:vertical;"></textarea>
-              <div style="display:flex;gap:0.6rem;align-items:center;margin-top:0.6rem;">
-                <button class="btn-sm success" onclick="logBankDeposit()" id="logDepositBtn" style="background:#10b981;color:#fff;font-weight:600;padding:0.55rem 1rem;border-radius:6px;border:none;cursor:pointer;font-size:0.9rem;">Auto-match &amp; mark paid →</button>
-                <button class="btn-sm" onclick="document.getElementById('bankDepositBody').value=''" style="background:#fff;color:#78350f;border:1px solid #fcd34d;font-weight:600;padding:0.55rem 1rem;border-radius:6px;cursor:pointer;font-size:0.9rem;">Clear</button>
-                <span id="logDepositStatus" style="font-size:0.85rem;color:#7c2d12;"></span>
-              </div>
-            </div>
-
-            <div class="table-controls">
-              <div class="filters">
-                <input type="text" class="search-input" id="searchStudents" placeholder="Search by name..." oninput="renderStudentsTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Track</th>
-                  <th>Date Applied</th>
-                  <th>Payment Status</th>
-                  <th>Parental Consent</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="students-tbody">
-                <tr><td colspan="6" class="empty-state">Loading students...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- CONTACTS TAB -->
-          <div id="contacts" class="content-section">
-            <div class="section-header">
-              <h2>Contact Messages</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportContactsCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-            <div class="table-controls">
-              <div class="filters">
-                <select class="filter-select" id="filterContactStatus" onchange="renderContactsTable()">
-                  <option value="">All</option>
-                  <option value="unread">Unread</option>
-                  <option value="read">Read</option>
-                </select>
-                <input type="text" class="search-input" id="searchContacts" placeholder="Search by name or email..." oninput="renderContactsTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Subject</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="contacts-tbody">
-                <tr><td colspan="6" class="empty-state">Loading messages...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- INSTITUTIONS TAB -->
-          <div id="inquiries" class="content-section">
-            <div class="section-header">
-              <h2>Institution Inquiries</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportInquiriesCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-            <div class="table-controls">
-              <div class="filters">
-                <input type="text" class="search-input" id="searchInquiries" placeholder="Search by institution or contact..." oninput="renderInquiriesTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Institution</th>
-                  <th>Contact</th>
-                  <th>Email</th>
-                  <th>Type</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="inquiries-tbody">
-                <tr><td colspan="7" class="empty-state">Loading inquiries...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- FEEDBACK TAB -->
-          <div id="feedback" class="content-section">
-            <div class="section-header">
-              <h2>Feedback &amp; Testimonials</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportFeedbackCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Program</th>
-                  <th>Rating</th>
-                  <th>Date</th>
-                  <th>Approved</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="feedback-tbody">
-                <tr><td colspan="6" class="empty-state">Loading feedback...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- PAYMENTS TAB -->
-          <div id="submissions" class="content-section">
-            <div class="section-header">
-              <h2>Student Assignment Submissions</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportSubmissionsCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-            <div class="table-controls">
-              <div class="filters">
-                <select class="search-input" id="filterSubmissionStatus" onchange="renderSubmissionsTable()" style="max-width:180px;">
-                  <option value="">All statuses</option>
-                  <option value="submitted">Submitted</option>
-                  <option value="reviewed">Reviewed</option>
-                  <option value="needs_revision">Needs revision</option>
-                </select>
-                <input type="text" class="search-input" id="searchSubmissions" placeholder="Search by student name..." oninput="renderSubmissionsTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Track</th>
-                  <th>Week</th>
-                  <th>Words</th>
-                  <th>Submitted</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="submissions-tbody">
-                <tr><td colspan="7" class="empty-state">Loading submissions...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Q&A TAB -->
-          <div id="questions" class="content-section">
-            <div class="section-header">
-              <h2>Student Questions</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="exportQuestionsCSV()">📥 Export CSV</button>
-              </div>
-            </div>
-            <div class="table-controls">
-              <div class="filters">
-                <select class="search-input" id="filterQuestionStatus" onchange="renderQuestionsTable()" style="max-width:220px;">
-                  <option value="">All statuses</option>
-                  <option value="auto-answered">⚠️ AI answered — needs mentor review</option>
-                  <option value="pending">Pending (no answer yet)</option>
-                  <option value="answered">Answered (mentor-approved)</option>
-                </select>
-                <input type="text" class="search-input" id="searchQuestions" placeholder="Search by student or question..." oninput="renderQuestionsTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Track</th>
-                  <th>Question (preview)</th>
-                  <th>Asked</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="questions-tbody">
-                <tr><td colspan="6" class="empty-state">Loading questions...</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- COURSE CONTENT TAB -->
-          <div id="course-content" class="content-section">
-            <div class="section-header">
-              <h2>Course Content</h2>
-              <div class="button-group">
-                <button class="btn-secondary" onclick="loadCourseMaterials()">🔄 Refresh</button>
-              </div>
-            </div>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem;">
-              <h3 style="margin-bottom:0.85rem; font-family:'Newsreader',serif; color:#001F3F;">Upload a course material</h3>
-              <p style="color:#555; font-size:0.92rem; margin-bottom:1rem;">Upload videos, slides, PDFs, datasets, or external links for any track and any week. Materials are visible immediately to students enrolled in that track unless you uncheck "Publish".</p>
-              <form id="materialUploadForm" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; align-items:end;">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Track</label>
-                  <select id="cmTrack" required style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                    <option value="future-physician">Future Physician (HS)</option>
-                    <option value="pre-med">Pre-Med (College)</option>
-                    <option value="med-accelerator">Med Student Accelerator</option>
-                    <option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
-                    <option value="12month">12-Month Track</option>
-                    <option value="institutional">Institutional</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Week #</label>
-                  <input type="number" id="cmWeek" min="0" max="52" placeholder="e.g. 1" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                  <small style="color:#888; font-size:0.78rem;">Leave blank for "all weeks" / syllabus</small>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Type</label>
-                  <select id="cmType" required style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                    <option value="video">Video</option>
-                    <option value="slides">Slides</option>
-                    <option value="pdf">PDF</option>
-                    <option value="dataset">Dataset</option>
-                    <option value="link">External link</option>
-                    <option value="syllabus">Syllabus</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title</label>
-                  <input type="text" id="cmTitle" required placeholder="e.g. Week 1 Lecture — Introduction to Health Research" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">File (or leave blank if using external link)</label>
-                  <input type="file" id="cmFile" accept="video/*,.pdf,.ppt,.pptx,.csv,.xlsx,.docx,.zip,image/*" style="width:100%; padding:0.4rem; font-family:inherit;">
-                  <small style="color:#888; font-size:0.78rem;">Uploads go to the <code>course-materials</code> Supabase Storage bucket (public).</small>
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">OR External URL (YouTube / Vimeo / Drive / etc.)</label>
-                  <input type="url" id="cmExternalUrl" placeholder="https://www.youtube.com/watch?v=…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
-                  <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
-                    <input type="checkbox" id="cmPublish" checked> Publish to students immediately
+A deposit of $1,250.00 has been credited to account ****9488.
+Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 0.85rem;border:1px solid #e0dbd0;border-radius:6px;font-family:inherit;font-size:0.9rem;resize:vertical;"></textarea>
+<div style="display:flex;gap:0.6rem;align-items:center;margin-top:0.6rem;">
+<button class="btn-sm success" id="logDepositBtn" onclick="logBankDeposit()" style="background:#10b981;color:#fff;font-weight:600;padding:0.55rem 1rem;border-radius:6px;border:none;cursor:pointer;font-size:0.9rem;">Auto-match &amp; mark paid →</button>
+<button class="btn-sm" onclick="document.getElementById('bankDepositBody').value=''" style="background:#fff;color:#78350f;border:1px solid #fcd34d;font-weight:600;padding:0.55rem 1rem;border-radius:6px;cursor:pointer;font-size:0.9rem;">Clear</button>
+<span id="logDepositStatus" style="font-size:0.85rem;color:#7c2d12;"></span>
+</div>
+</div>
+<div class="table-controls">
+<div class="filters">
+<input class="search-input" id="searchStudents" oninput="renderStudentsTable()" placeholder="Search by name..." type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Track</th>
+<th>Date Applied</th>
+<th>Payment Status</th>
+<th>Parental Consent</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="students-tbody">
+<tr><td class="empty-state" colspan="6">Loading students...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- CONTACTS TAB -->
+<div class="content-section" id="contacts">
+<div class="section-header">
+<h2>Contact Messages</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportContactsCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<div class="table-controls">
+<div class="filters">
+<select class="filter-select" id="filterContactStatus" onchange="renderContactsTable()">
+<option value="">All</option>
+<option value="unread">Unread</option>
+<option value="read">Read</option>
+</select>
+<input class="search-input" id="searchContacts" oninput="renderContactsTable()" placeholder="Search by name or email..." type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Subject</th>
+<th>Date</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="contacts-tbody">
+<tr><td class="empty-state" colspan="6">Loading messages...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- INSTITUTIONS TAB -->
+<div class="content-section" id="inquiries">
+<div class="section-header">
+<h2>Institution Inquiries</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportInquiriesCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<div class="table-controls">
+<div class="filters">
+<input class="search-input" id="searchInquiries" oninput="renderInquiriesTable()" placeholder="Search by institution or contact..." type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Institution</th>
+<th>Contact</th>
+<th>Email</th>
+<th>Type</th>
+<th>Date</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="inquiries-tbody">
+<tr><td class="empty-state" colspan="7">Loading inquiries...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- FEEDBACK TAB -->
+<div class="content-section" id="feedback">
+<div class="section-header">
+<h2>Feedback &amp; Testimonials</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportFeedbackCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Program</th>
+<th>Rating</th>
+<th>Date</th>
+<th>Approved</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="feedback-tbody">
+<tr><td class="empty-state" colspan="6">Loading feedback...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- PAYMENTS TAB -->
+<div class="content-section" id="submissions">
+<div class="section-header">
+<h2>Student Assignment Submissions</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportSubmissionsCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<div class="table-controls">
+<div class="filters">
+<select class="search-input" id="filterSubmissionStatus" onchange="renderSubmissionsTable()" style="max-width:180px;">
+<option value="">All statuses</option>
+<option value="submitted">Submitted</option>
+<option value="reviewed">Reviewed</option>
+<option value="needs_revision">Needs revision</option>
+</select>
+<input class="search-input" id="searchSubmissions" oninput="renderSubmissionsTable()" placeholder="Search by student name..." type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Student</th>
+<th>Track</th>
+<th>Week</th>
+<th>Words</th>
+<th>Submitted</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="submissions-tbody">
+<tr><td class="empty-state" colspan="7">Loading submissions...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- Q&A TAB -->
+<div class="content-section" id="questions">
+<div class="section-header">
+<h2>Student Questions</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="exportQuestionsCSV()"><i class="mds-lu" data-lucide="download"></i> Export CSV</button>
+</div>
+</div>
+<div class="table-controls">
+<div class="filters">
+<select class="search-input" id="filterQuestionStatus" onchange="renderQuestionsTable()" style="max-width:220px;">
+<option value="">All statuses</option>
+<option value="auto-answered"><i class="mds-lu" data-lucide="alert-triangle"></i> AI answered — needs mentor review</option>
+<option value="pending">Pending (no answer yet)</option>
+<option value="answered">Answered (mentor-approved)</option>
+</select>
+<input class="search-input" id="searchQuestions" oninput="renderQuestionsTable()" placeholder="Search by student or question..." type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Student</th>
+<th>Track</th>
+<th>Question (preview)</th>
+<th>Asked</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="questions-tbody">
+<tr><td class="empty-state" colspan="6">Loading questions...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- COURSE CONTENT TAB -->
+<div class="content-section" id="course-content">
+<div class="section-header">
+<h2>Course Content</h2>
+<div class="button-group">
+<button class="btn-secondary" onclick="loadCourseMaterials()"><i class="mds-lu" data-lucide="refresh-cw"></i> Refresh</button>
+</div>
+</div>
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem;">
+<h3 style="margin-bottom:0.85rem; font-family:'Newsreader',serif; color:#001F3F;">Upload a course material</h3>
+<p style="color:#555; font-size:0.92rem; margin-bottom:1rem;">Upload videos, slides, PDFs, datasets, or external links for any track and any week. Materials are visible immediately to students enrolled in that track unless you uncheck "Publish".</p>
+<form id="materialUploadForm" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; align-items:end;">
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Track</label>
+<select id="cmTrack" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+<option value="future-physician">Future Physician (HS)</option>
+<option value="pre-med">Pre-Med (College)</option>
+<option value="med-accelerator">Med Student Accelerator</option>
+<option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
+<option value="12month">12-Month Track</option>
+<option value="institutional">Institutional</option>
+</select>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Week #</label>
+<input id="cmWeek" max="52" min="0" placeholder="e.g. 1" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="number"/>
+<small style="color:#888; font-size:0.78rem;">Leave blank for "all weeks" / syllabus</small>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Type</label>
+<select id="cmType" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
+<option value="video">Video</option>
+<option value="slides">Slides</option>
+<option value="pdf">PDF</option>
+<option value="dataset">Dataset</option>
+<option value="link">External link</option>
+<option value="syllabus">Syllabus</option>
+<option value="other">Other</option>
+</select>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title</label>
+<input id="cmTitle" placeholder="e.g. Week 1 Lecture — Introduction to Health Research" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">File (or leave blank if using external link)</label>
+<input accept="video/*,.pdf,.ppt,.pptx,.csv,.xlsx,.docx,.zip,image/*" id="cmFile" style="width:100%; padding:0.4rem; font-family:inherit;" type="file"/>
+<small style="color:#888; font-size:0.78rem;">Uploads go to the <code>course-materials</code> Supabase Storage bucket (public).</small>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">OR External URL (YouTube / Vimeo / Drive / etc.)</label>
+<input id="cmExternalUrl" placeholder="https://www.youtube.com/watch?v=…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="url"/>
+</div>
+<div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+<label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
+<input checked="" id="cmPublish" type="checkbox"/> Publish to students immediately
                   </label>
-                  <button type="submit" id="cmUploadBtn" class="btn-primary">Upload material</button>
-                </div>
-                <div id="cmStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
-              </form>
-            </div>
-
-            <div class="table-controls">
-              <div class="filters">
-                <select class="search-input" id="filterCmTrack" onchange="renderCourseMaterialsTable()" style="max-width:220px;">
-                  <option value="">All tracks</option>
-                  <option value="future-physician">Future Physician (HS)</option>
-                  <option value="pre-med">Pre-Med (College)</option>
-                  <option value="med-accelerator">Med Student Accelerator</option>
-                  <option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
-                  <option value="12month">12-Month Track</option>
-                  <option value="institutional">Institutional</option>
-                </select>
-                <input type="text" class="search-input" id="searchCm" placeholder="Search by title…" oninput="renderCourseMaterialsTable()">
-              </div>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Track</th>
-                  <th>Week</th>
-                  <th>Type</th>
-                  <th>Title</th>
-                  <th>Source</th>
-                  <th>Published</th>
-                  <th>Uploaded</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="course-materials-tbody">
-                <tr><td colspan="8" class="empty-state">Loading materials…</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- POSTERS / SHOWCASE TAB -->
-          <div id="posters" class="content-section">
-            <div class="section-header">
-              <h2>Posters &amp; Showcase Gallery</h2>
-              <a href="showcase.html" target="_blank" class="btn-secondary" style="text-decoration:none;">↗ View public showcase</a>
-            </div>
-            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+<button class="btn-primary" id="cmUploadBtn" type="submit">Upload material</button>
+</div>
+<div id="cmStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
+</form>
+</div>
+<div class="table-controls">
+<div class="filters">
+<select class="search-input" id="filterCmTrack" onchange="renderCourseMaterialsTable()" style="max-width:220px;">
+<option value="">All tracks</option>
+<option value="future-physician">Future Physician (HS)</option>
+<option value="pre-med">Pre-Med (College)</option>
+<option value="med-accelerator">Med Student Accelerator</option>
+<option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
+<option value="12month">12-Month Track</option>
+<option value="institutional">Institutional</option>
+</select>
+<input class="search-input" id="searchCm" oninput="renderCourseMaterialsTable()" placeholder="Search by title…" type="text"/>
+</div>
+</div>
+<table class="data-table">
+<thead>
+<tr>
+<th>Track</th>
+<th>Week</th>
+<th>Type</th>
+<th>Title</th>
+<th>Source</th>
+<th>Published</th>
+<th>Uploaded</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="course-materials-tbody">
+<tr><td class="empty-state" colspan="8">Loading materials…</td></tr>
+</tbody>
+</table>
+</div>
+<!-- POSTERS / SHOWCASE TAB -->
+<div class="content-section" id="posters">
+<div class="section-header">
+<h2>Posters &amp; Showcase Gallery</h2>
+<a class="btn-secondary" href="showcase.html" style="text-decoration:none;" target="_blank">↗ View public showcase</a>
+</div>
+<p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
               Upload posters, presentation photos, and conference shots from MD Scholars students. Anything uploaded here appears immediately on <code>showcase.html</code>. Toggle "Featured" to highlight items on the home page.
             </p>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Upload a new poster / photo / video</h3>
-              <form id="posterForm" onsubmit="uploadPoster(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
-                  <input type="text" id="pTitle" required placeholder="e.g. Predictors of 30-day readmission in T2DM patients" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Student name</label>
-                  <input type="text" id="pStudent" placeholder="e.g. Reyansh Gupta" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Event / venue</label>
-                  <input type="text" id="pEvent" placeholder="e.g. AHA Scientific Sessions 2026" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Event date</label>
-                  <input type="date" id="pDate" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Track</label>
-                  <select id="pTrack" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
-                    <option value="">(any/none)</option>
-                    <option value="future-physician">Future Physician (HS)</option>
-                    <option value="pre-med">Pre-Med (College)</option>
-                    <option value="med-accelerator">Med Student Accelerator</option>
-                    <option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
-                    <option value="12month">12-Month Advanced</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">File (image or video) *</label>
-                  <input type="file" id="pFile" accept="image/*,video/*" required style="width:100%; padding:0.4rem; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Description (optional)</label>
-                  <textarea id="pDesc" rows="2" placeholder="Brief context — what the project was about, what they presented…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
-                </div>
-                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
-                  <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
-                    <input type="checkbox" id="pFeatured"> ⭐ Feature on home page
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+<h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Upload a new poster / photo / video</h3>
+<form id="posterForm" onsubmit="uploadPoster(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
+<input id="pTitle" placeholder="e.g. Predictors of 30-day readmission in T2DM patients" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Student name</label>
+<input id="pStudent" placeholder="e.g. Reyansh Gupta" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Event / venue</label>
+<input id="pEvent" placeholder="e.g. AHA Scientific Sessions 2026" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Event date</label>
+<input id="pDate" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="date"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Track</label>
+<select id="pTrack" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
+<option value="">(any/none)</option>
+<option value="future-physician">Future Physician (HS)</option>
+<option value="pre-med">Pre-Med (College)</option>
+<option value="med-accelerator">Med Student Accelerator</option>
+<option value="resident-accelerator">Resident &amp; Fellow Accelerator</option>
+<option value="12month">12-Month Advanced</option>
+</select>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">File (image or video) *</label>
+<input accept="image/*,video/*" id="pFile" required="" style="width:100%; padding:0.4rem; font-family:inherit;" type="file"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Description (optional)</label>
+<textarea id="pDesc" placeholder="Brief context — what the project was about, what they presented…" rows="2" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+</div>
+<div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+<label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#001F3F;">
+<input id="pFeatured" type="checkbox"/> ⭐ Feature on home page
                   </label>
-                  <button type="submit" id="pUploadBtn" class="btn-primary">Upload</button>
-                </div>
-                <div id="pStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
-              </form>
-            </div>
-
-            <div id="postersGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1.2rem;">
-              <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:2rem;">Loading…</div>
-            </div>
-          </div>
-
-          <!-- WEBINARS TAB -->
-          <div id="webinars" class="content-section">
-            <div class="section-header"><h2>Webinars</h2></div>
-            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+<button class="btn-primary" id="pUploadBtn" type="submit">Upload</button>
+</div>
+<div id="pStatus" style="grid-column:1/-1; font-size:0.9rem; padding:0.65rem 0.85rem; border-radius:6px; display:none;"></div>
+</form>
+</div>
+<div id="postersGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1.2rem;">
+<div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:2rem;">Loading…</div>
+</div>
+</div>
+<!-- WEBINARS TAB -->
+<div class="content-section" id="webinars">
+<div class="section-header"><h2>Webinars</h2></div>
+<p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
               Create upcoming webinars (visitors register and get the join link) or add past sessions with a recording URL. Set date to future = <strong>upcoming</strong>; date to past = <strong>past session</strong>. Toggle "Published" to hide from the public page without deleting.
             </p>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="webFormTitle">Add a new webinar</h3>
-              <form id="webForm" onsubmit="saveWebinar(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <input type="hidden" id="webId">
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Title *</label>
-                  <input type="text" id="webTitle" required placeholder="e.g. Research 101 for Pre-Med Students" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Scheduled date &amp; time (your local tz) *</label>
-                  <input type="datetime-local" id="webScheduled" required style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Duration (minutes)</label>
-                  <input type="number" id="webDuration" value="60" min="15" max="240" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Presenter</label>
-                  <input type="text" id="webPresenter" placeholder="Dr. Satish Munigala" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Join URL (Zoom / Meet)</label>
-                  <input type="url" id="webJoinUrl" placeholder="https://us06web.zoom.us/j/..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Recording URL (for past sessions)</label>
-                  <input type="url" id="webRecordingUrl" placeholder="https://youtube.com/watch?v=..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Description</label>
-                  <textarea id="webDescription" rows="3" placeholder="What will the session cover? Who is it for?" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; resize:vertical;"></textarea>
-                </div>
-                <div style="grid-column:1/-1; display:flex; align-items:center; gap:1rem;">
-                  <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#475569;">
-                    <input type="checkbox" id="webPublished" checked>
-                    <span>Published (visible on the public webinars page)</span>
-                  </label>
-                </div>
-                <div style="grid-column:1/-1; display:flex; gap:0.75rem;">
-                  <button type="submit" class="btn-primary">Save Webinar</button>
-                  <button type="button" class="btn-secondary" onclick="clearWebForm()">Clear form</button>
-                </div>
-              </form>
-            </div>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">All webinars</h3>
-              <div id="webinarsList"><em style="color:#94a3b8;">Loading…</em></div>
-            </div>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-top:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
-              <div id="webRegList"><em style="color:#94a3b8;">Loading…</em></div>
-            </div>
-          </div>
-
-          <!-- ANNOUNCEMENTS TAB -->
-          <div id="announcements" class="content-section">
-            <div class="section-header"><h2>Announcements</h2></div>
-            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+<h3 id="webFormTitle" style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Add a new webinar</h3>
+<form id="webForm" onsubmit="saveWebinar(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+<input id="webId" type="hidden"/>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Title *</label>
+<input id="webTitle" placeholder="e.g. Research 101 for Pre-Med Students" required="" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Scheduled date &amp; time (your local tz) *</label>
+<input id="webScheduled" required="" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="datetime-local"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Duration (minutes)</label>
+<input id="webDuration" max="240" min="15" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="number" value="60"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Presenter</label>
+<input id="webPresenter" placeholder="Dr. Satish Munigala" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Join URL (Zoom / Meet)</label>
+<input id="webJoinUrl" placeholder="https://us06web.zoom.us/j/..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="url"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Recording URL (for past sessions)</label>
+<input id="webRecordingUrl" placeholder="https://youtube.com/watch?v=..." style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="url"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; font-weight:600; color:#001F3F; margin-bottom:0.4rem;">Description</label>
+<textarea id="webDescription" placeholder="What will the session cover? Who is it for?" rows="3" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; resize:vertical;"></textarea>
+</div>
+<div style="grid-column:1/-1; display:flex; align-items:center; gap:1rem;">
+<label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; color:#475569;">
+<input checked="" id="webPublished" type="checkbox"/>
+<span>Published (visible on the public webinars page)</span>
+</label>
+</div>
+<div style="grid-column:1/-1; display:flex; gap:0.75rem;">
+<button class="btn-primary" type="submit">Save Webinar</button>
+<button class="btn-secondary" onclick="clearWebForm()" type="button">Clear form</button>
+</div>
+</form>
+</div>
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
+<h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">All webinars</h3>
+<div id="webinarsList"><em style="color:#94a3b8;">Loading…</em></div>
+</div>
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-top:1.6rem;">
+<h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
+<div id="webRegList"><em style="color:#94a3b8;">Loading…</em></div>
+</div>
+</div>
+<!-- ANNOUNCEMENTS TAB -->
+<div class="content-section" id="announcements">
+<div class="section-header"><h2>Announcements</h2></div>
+<p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
               Manage the <strong>Flash News strip</strong> on the home page. The active announcement with the highest priority is shown. You can include a sign-up button with any URL (Google Form, Zoom registration, etc.).
             </p>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="annFormTitle">Add a new announcement</h3>
-              <form id="annForm" onsubmit="saveAnnouncement(event)" style="display:grid; grid-template-columns:1fr 2fr; gap:1rem;">
-                <input type="hidden" id="annId">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Emoji</label>
-                  <input type="text" id="annEmoji" placeholder="📢" maxlength="4" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
-                  <input type="text" id="annTitle" required placeholder="e.g. Live Info Session — Sat, Jul 12 at 11am CT" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Body (short — appears after title with a dot)</label>
-                  <input type="text" id="annBody" placeholder="e.g. Q&amp;A with Dr. Munigala + sample syllabus walkthrough" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Link text (sign-up button)</label>
-                  <input type="text" id="annLinkText" placeholder="e.g. Register here" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Link URL</label>
-                  <input type="url" id="annLinkUrl" placeholder="https://forms.google.com/…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Priority (higher = shown first)</label>
-                  <input type="number" id="annPriority" value="0" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Status</label>
-                  <div style="display:flex; gap:1rem; align-items:center; padding:0.6rem 0;">
-                    <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="annIsActive" checked> Active</label>
-                    <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="annShowHome" checked> Show on home</label>
-                  </div>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Starts at (optional)</label>
-                  <input type="datetime-local" id="annStartsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Ends at (optional)</label>
-                  <input type="datetime-local" id="annEndsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
-                  <button type="submit" id="annSubmitBtn" class="btn-primary">Save</button>
-                  <button type="button" onclick="resetAnnouncementForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Reset</button>
-                  <div id="annStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
-                </div>
-              </form>
-            </div>
-
-            <table class="data-table">
-              <thead>
-                <tr><th>Emoji</th><th>Title</th><th>Body</th><th>Link</th><th>Priority</th><th>Status</th><th>Actions</th></tr>
-              </thead>
-              <tbody id="announcements-tbody">
-                <tr><td colspan="7" class="empty-state">Loading announcements…</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- INSTITUTIONS CONTENT TAB -->
-          <div id="institutions-content" class="content-section">
-            <div class="section-header"><h2>Institutions Page — Content &amp; Logos</h2><a href="for-institutions.html" target="_blank" class="btn-secondary" style="text-decoration:none;">↗ View page</a></div>
-            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+<h3 id="annFormTitle" style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Add a new announcement</h3>
+<form id="annForm" onsubmit="saveAnnouncement(event)" style="display:grid; grid-template-columns:1fr 2fr; gap:1rem;">
+<input id="annId" type="hidden"/>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Emoji</label>
+<input id="annEmoji" maxlength="4" placeholder="📢" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
+<input id="annTitle" placeholder="e.g. Live Info Session — Sat, Jul 12 at 11am CT" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Body (short — appears after title with a dot)</label>
+<input id="annBody" placeholder="e.g. Q&amp;A with Dr. Munigala + sample syllabus walkthrough" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Link text (sign-up button)</label>
+<input id="annLinkText" placeholder="e.g. Register here" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Link URL</label>
+<input id="annLinkUrl" placeholder="https://forms.google.com/…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="url"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Priority (higher = shown first)</label>
+<input id="annPriority" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="number" value="0"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Status</label>
+<div style="display:flex; gap:1rem; align-items:center; padding:0.6rem 0;">
+<label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input checked="" id="annIsActive" type="checkbox"/> Active</label>
+<label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input checked="" id="annShowHome" type="checkbox"/> Show on home</label>
+</div>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Starts at (optional)</label>
+<input id="annStartsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="datetime-local"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Ends at (optional)</label>
+<input id="annEndsAt" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="datetime-local"/>
+</div>
+<div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+<button class="btn-primary" id="annSubmitBtn" type="submit">Save</button>
+<button onclick="resetAnnouncementForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;" type="button">Reset</button>
+<div id="annStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
+</div>
+</form>
+</div>
+<table class="data-table">
+<thead>
+<tr><th>Emoji</th><th>Title</th><th>Body</th><th>Link</th><th>Priority</th><th>Status</th><th>Actions</th></tr>
+</thead>
+<tbody id="announcements-tbody">
+<tr><td class="empty-state" colspan="7">Loading announcements…</td></tr>
+</tbody>
+</table>
+</div>
+<!-- INSTITUTIONS CONTENT TAB -->
+<div class="content-section" id="institutions-content">
+<div class="section-header"><h2>Institutions Page — Content &amp; Logos</h2><a class="btn-secondary" href="for-institutions.html" style="text-decoration:none;" target="_blank">↗ View page</a></div>
+<p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
               Edit the text on <code>for-institutions.html</code> and upload partner logos that will appear on the page. Changes go live instantly.
             </p>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Page text (saved to site_content)</h3>
-              <form id="instContentForm" onsubmit="saveInstitutionContent(event)" style="display:grid; gap:1rem;">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero headline</label>
-                  <input type="text" id="instHeroHeadline" placeholder="Partner with MD Scholars" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero subhead</label>
-                  <textarea id="instHeroSubhead" rows="2" placeholder="Bring physician-led research mentorship to your students…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Feature paragraph (under "Why partner with us")</label>
-                  <textarea id="instFeatureCopy" rows="4" placeholder="Your value prop, capabilities, customization, outcomes…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Featured testimonial</label>
-                  <textarea id="instTestimonial" rows="3" placeholder="Quote from a partner institution…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Testimonial attribution</label>
-                  <input type="text" id="instTestimonialAttr" placeholder="— Dr. Jane Doe, Vanderbilt School of Medicine" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="display:flex; gap:1rem; align-items:center;">
-                  <button type="submit" class="btn-primary">Save page text</button>
-                  <div id="instContentStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
-                </div>
-              </form>
-            </div>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Partner logos</h3>
-              <form id="logoForm" onsubmit="uploadLogo(event)" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.25rem;">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Institution name *</label>
-                  <input type="text" id="logoName" required placeholder="Washington University" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Logo image *</label>
-                  <input type="file" id="logoFile" accept="image/*" required style="width:100%; padding:0.35rem; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Website (optional)</label>
-                  <input type="url" id="logoUrl" placeholder="https://institution.edu" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <button type="submit" class="btn-primary">Upload logo</button>
-                </div>
-              </form>
-              <div id="logosGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1rem;">
-                <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">Loading logos…</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- STANDALONE COURSES TAB -->
-          <div id="standalone" class="content-section">
-            <div class="section-header"><h2>Standalone Courses</h2><a href="standalone-courses.html" target="_blank" class="btn-secondary" style="text-decoration:none;">↗ View public page</a></div>
-            <p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+<h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Page text (saved to site_content)</h3>
+<form id="instContentForm" onsubmit="saveInstitutionContent(event)" style="display:grid; gap:1rem;">
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero headline</label>
+<input id="instHeroHeadline" placeholder="Partner with MD Scholars" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero subhead</label>
+<textarea id="instHeroSubhead" placeholder="Bring physician-led research mentorship to your students…" rows="2" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Feature paragraph (under "Why partner with us")</label>
+<textarea id="instFeatureCopy" placeholder="Your value prop, capabilities, customization, outcomes…" rows="4" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Featured testimonial</label>
+<textarea id="instTestimonial" placeholder="Quote from a partner institution…" rows="3" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Testimonial attribution</label>
+<input id="instTestimonialAttr" placeholder="— Dr. Jane Doe, Vanderbilt School of Medicine" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div style="display:flex; gap:1rem; align-items:center;">
+<button class="btn-primary" type="submit">Save page text</button>
+<div id="instContentStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
+</div>
+</form>
+</div>
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
+<h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Partner logos</h3>
+<form id="logoForm" onsubmit="uploadLogo(event)" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.25rem;">
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Institution name *</label>
+<input id="logoName" placeholder="Washington University" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Logo image *</label>
+<input accept="image/*" id="logoFile" required="" style="width:100%; padding:0.35rem; font-family:inherit;" type="file"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Website (optional)</label>
+<input id="logoUrl" placeholder="https://institution.edu" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="url"/>
+</div>
+<div style="grid-column:1/-1;">
+<button class="btn-primary" type="submit">Upload logo</button>
+</div>
+</form>
+<div id="logosGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1rem;">
+<div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">Loading logos…</div>
+</div>
+</div>
+</div>
+<!-- STANDALONE COURSES TAB -->
+<div class="content-section" id="standalone">
+<div class="section-header"><h2>Standalone Courses</h2><a class="btn-secondary" href="standalone-courses.html" style="text-decoration:none;" target="_blank">↗ View public page</a></div>
+<p style="color:#475569; font-size:0.95rem; margin-bottom:1.5rem;">
               Manage à la carte courses listed on <code>standalone-courses.html</code>. Use "Coming Soon" while you're still building it — students can browse but won't see a checkout button.
             </p>
-
-            <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="saFormTitle">Add a new standalone course</h3>
-              <form id="saForm" onsubmit="saveStandaloneCourse(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <input type="hidden" id="saId">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
-                  <input type="text" id="saTitle" required placeholder="IRB Submission Masterclass" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Slug (URL-friendly id)</label>
-                  <input type="text" id="saSlug" placeholder="irb-submission-masterclass" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Subtitle</label>
-                  <input type="text" id="saSubtitle" placeholder="Submit your first IRB in under a week" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Description</label>
-                  <textarea id="saDescription" rows="3" placeholder="Step-by-step walkthrough of the IRB submission process, with downloadable templates…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Duration</label>
-                  <input type="text" id="saDuration" placeholder="90 min" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Level</label>
-                  <select id="saLevel" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
-                    <option value="">(any)</option>
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Category</label>
-                  <select id="saCategory" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
-                    <option value="">(none)</option>
-                    <option>IRB</option>
-                    <option>Statistics</option>
-                    <option>Writing</option>
-                    <option>Study Design</option>
-                    <option>Career</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Price (USD, 0 for free)</label>
-                  <input type="number" id="saPrice" min="0" step="1" value="0" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Thumbnail (optional)</label>
-                  <input type="file" id="saThumb" accept="image/*" style="width:100%; padding:0.35rem; font-family:inherit;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Preview video URL (optional)</label>
-                  <input type="url" id="saPreviewUrl" placeholder="https://youtube.com/…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;">
-                </div>
-                <div style="grid-column:1/-1; display:flex; gap:1.5rem; align-items:center; padding:0.6rem 0;">
-                  <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="saIsPublished" checked> Published (visible on site)</label>
-                  <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input type="checkbox" id="saIsComingSoon" checked> Show as "Coming Soon"</label>
-                </div>
-                <div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
-                  <button type="submit" id="saSubmitBtn" class="btn-primary">Save course</button>
-                  <button type="button" onclick="resetStandaloneForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;">Reset</button>
-                  <div id="saStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
-                </div>
-              </form>
-            </div>
-
-            <div id="saGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.2rem;">
-              <div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">Loading…</div>
-            </div>
-          </div>
-
-          <!-- TEST STUDENT VIEW TAB -->
-          <div id="test-view" class="content-section">
-            <div class="section-header">
-              <h2>🎭 Test Student View <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Canvas-style impersonation for testing</span></h2>
-            </div>
-            <p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
+<div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
+<h3 id="saFormTitle" style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Add a new standalone course</h3>
+<form id="saForm" onsubmit="saveStandaloneCourse(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+<input id="saId" type="hidden"/>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
+<input id="saTitle" placeholder="IRB Submission Masterclass" required="" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Slug (URL-friendly id)</label>
+<input id="saSlug" placeholder="irb-submission-masterclass" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Subtitle</label>
+<input id="saSubtitle" placeholder="Submit your first IRB in under a week" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div style="grid-column:1/-1;">
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Description</label>
+<textarea id="saDescription" placeholder="Step-by-step walkthrough of the IRB submission process, with downloadable templates…" rows="3" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; resize:vertical;"></textarea>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Duration</label>
+<input id="saDuration" placeholder="90 min" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="text"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Level</label>
+<select id="saLevel" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
+<option value="">(any)</option>
+<option>Beginner</option>
+<option>Intermediate</option>
+<option>Advanced</option>
+</select>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Category</label>
+<select id="saCategory" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit; background:white;">
+<option value="">(none)</option>
+<option>IRB</option>
+<option>Statistics</option>
+<option>Writing</option>
+<option>Study Design</option>
+<option>Career</option>
+</select>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Price (USD, 0 for free)</label>
+<input id="saPrice" min="0" step="1" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="number" value="0"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Thumbnail (optional)</label>
+<input accept="image/*" id="saThumb" style="width:100%; padding:0.35rem; font-family:inherit;" type="file"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Preview video URL (optional)</label>
+<input id="saPreviewUrl" placeholder="https://youtube.com/…" style="width:100%; padding:0.6rem; border:1px solid #e0dbd0; border-radius:6px; font-family:inherit;" type="url"/>
+</div>
+<div style="grid-column:1/-1; display:flex; gap:1.5rem; align-items:center; padding:0.6rem 0;">
+<label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input checked="" id="saIsPublished" type="checkbox"/> Published (visible on site)</label>
+<label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem;"><input checked="" id="saIsComingSoon" type="checkbox"/> Show as "Coming Soon"</label>
+</div>
+<div style="grid-column:1/-1; display:flex; gap:1rem; align-items:center;">
+<button class="btn-primary" id="saSubmitBtn" type="submit">Save course</button>
+<button onclick="resetStandaloneForm()" style="background:#f1f5f9; color:#475569; padding:0.65rem 1.3rem; border:0; border-radius:6px; font-family:inherit; font-weight:600; cursor:pointer;" type="button">Reset</button>
+<div id="saStatus" style="font-size:0.9rem; padding:0.35rem 0.7rem; border-radius:4px; display:none;"></div>
+</div>
+</form>
+</div>
+<div id="saGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.2rem;">
+<div style="grid-column:1/-1; text-align:center; color:#94a3b8; padding:1.5rem;">Loading…</div>
+</div>
+</div>
+<!-- TEST STUDENT VIEW TAB -->
+<div class="content-section" id="test-view">
+<div class="section-header">
+<h2><i class="mds-lu" data-lucide="drama"></i> Test Student View <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Canvas-style impersonation for testing</span></h2>
+</div>
+<p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
               Log in as a generic Test Student to walk through the portal exactly as a real student would.
               Any submissions or actions made in this view are flagged <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">is_test_data = true</code>
               and never affect real reporting. Use the <strong>Reset</strong> button to wipe all test activity in one click.
             </p>
-
-            <!-- Provisioning -->
-            <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
-              <h3 style="margin-top:0;">1. Provision Test Students</h3>
-              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">One-time setup. Creates five auth users (one per track), each with a paid student_profile.
+<!-- Provisioning -->
+<div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
+<h3 style="margin-top:0;">1. Provision Test Students</h3>
+<p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">One-time setup. Creates five auth users (one per track), each with a paid student_profile.
                 Idempotent — safe to click again; existing users are skipped.</p>
-              <div id="tsProvisionStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem; min-height:1rem;">Click Provision to check current status.</div>
-              <button class="btn-primary" onclick="provisionTestStudents()">Provision / Refresh Test Students</button>
-            </div>
-
-            <!-- Enter View -->
-            <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #c9a84c;">
-              <h3 style="margin-top:0;">2. Enter Student View</h3>
-              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Pick a track and open the portal in a new tab, already signed in as that track's test student.
+<div id="tsProvisionStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem; min-height:1rem;">Click Provision to check current status.</div>
+<button class="btn-primary" onclick="provisionTestStudents()">Provision / Refresh Test Students</button>
+</div>
+<!-- Enter View -->
+<div class="card" style="margin-bottom:1.5rem; border-left:4px solid #c9a84c;">
+<h3 style="margin-top:0;">2. Enter Student View</h3>
+<p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Pick a track and open the portal in a new tab, already signed in as that track's test student.
                 A yellow banner at the top will remind you you're in test mode.</p>
-              <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Track</label>
-                  <select id="tsTrackPick" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:260px;">
-                    <option value="future-physician">🎓 High School — Future Physician</option>
-                    <option value="pre-med">📚 College / Pre-Med</option>
-                    <option value="med-accelerator">🩺 Medical Student</option>
-                    <option value="resident-accelerator">🔬 Resident &amp; Fellow</option>
-                    <option value="12month">📅 12-Month Advanced</option>
-                  </select>
-                </div>
-                <button class="btn-primary" onclick="enterTestStudentView()">🎭 Enter Student View →</button>
-              </div>
-            </div>
-
-            <!-- Reset -->
-            <div class="card" style="border-left:4px solid #dc2626;">
-              <h3 style="margin-top:0;">3. Reset Test Data</h3>
-              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Deletes every row across submissions, questions, and certificates where <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">is_test_data = true</code>. Real student data is untouched.</p>
-              <div id="tsResetStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem; min-height:1rem;"></div>
-              <button class="btn-secondary" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca;" onclick="resetTestStudentData()">🗑️ Clear all test data</button>
-            </div>
-          </div>
-
-          <!-- MANAGE ADMINS TAB -->
-          <div id="manage-admins" class="content-section">
-            <div class="section-header">
-              <h2>🔐 Manage Admins <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Anyone in this list can sign in to admin.html</span></h2>
-            </div>
-            <p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
+<div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
+<div>
+<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Track</label>
+<select id="tsTrackPick" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:260px;">
+<option value="future-physician"><i class="mds-lu" data-lucide="graduation-cap"></i> High School — Future Physician</option>
+<option value="pre-med"><i class="mds-lu" data-lucide="book-open"></i> College / Pre-Med</option>
+<option value="med-accelerator"><i class="mds-lu" data-lucide="stethoscope"></i> Medical Student</option>
+<option value="resident-accelerator"><i class="mds-lu" data-lucide="microscope"></i> Resident &amp; Fellow</option>
+<option value="12month"><i class="mds-lu" data-lucide="calendar"></i> 12-Month Advanced</option>
+</select>
+</div>
+<button class="btn-primary" onclick="enterTestStudentView()"><i class="mds-lu" data-lucide="drama"></i> Enter Student View →</button>
+</div>
+</div>
+<!-- Reset -->
+<div class="card" style="border-left:4px solid #dc2626;">
+<h3 style="margin-top:0;">3. Reset Test Data</h3>
+<p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">Deletes every row across submissions, questions, and certificates where <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">is_test_data = true</code>. Real student data is untouched.</p>
+<div id="tsResetStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem; min-height:1rem;"></div>
+<button class="btn-secondary" onclick="resetTestStudentData()" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca;"><i class="mds-lu" data-lucide="trash-2"></i> Clear all test data</button>
+</div>
+</div>
+<!-- MANAGE ADMINS TAB -->
+<div class="content-section" id="manage-admins">
+<div class="section-header">
+<h2><i class="mds-lu" data-lucide="lock"></i> Manage Admins <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Anyone in this list can sign in to admin.html</span></h2>
+</div>
+<p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
               Add or remove admin users. To promote someone to admin, they first need a Supabase Auth account — apply through the site, sign up for the portal,
               or use the "Invite a new admin" flow below to send them a Supabase magic-link signup. Their email then gets added to the <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">admin_users</code> allowlist.
             </p>
-
-            <!-- Add admin -->
-            <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
-              <h3 style="margin-top:0;">Add / promote an admin</h3>
-              <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">
+<!-- Add admin -->
+<div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
+<h3 style="margin-top:0;">Add / promote an admin</h3>
+<p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">
                 Enter an email that already has a Supabase Auth account (any student, mentor, or new signup). We look up the auth user and add them to <code>admin_users</code>.
                 If the email has no account yet, click <strong>Invite</strong> — we send them a magic-link signup, then you can promote them once they've signed up.
               </p>
-              <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
-                <div style="flex:1; min-width:260px;">
-                  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Email</label>
-                  <input type="email" id="newAdminEmail" placeholder="jane@mdscholars.com" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;">
-                </div>
-                <div>
-                  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Display name (optional)</label>
-                  <input type="text" id="newAdminName" placeholder="Jane Smith" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:180px;">
-                </div>
-                <button class="btn-primary" onclick="promoteAdmin()">Promote to Admin</button>
-                <button class="btn-secondary" onclick="inviteAdmin()">Invite (magic link)</button>
-              </div>
-              <div id="addAdminStatus" style="font-size:0.9rem; color:#475569; margin-top:0.75rem;"></div>
-            </div>
-
-            <!-- Current admins -->
-            <div class="card">
-              <h3 style="margin-top:0;">Current admins</h3>
-              <div id="adminsList" style="margin-top:1rem;">Loading…</div>
-            </div>
-          </div>
-
-        </div><!-- end dashboard-content -->
-      </div><!-- end dashboard-main -->
-    </div>
-  </div><!-- end dashboard-wrapper -->
-
-  <!-- APPLICATION DETAIL MODAL -->
-  <div class="modal-overlay" id="appModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="appModalTitle">Application Details</h3>
-        <button class="modal-close" onclick="closeModal('appModal')">✕</button>
-      </div>
-      <div class="modal-body" id="appModalBody"></div>
-      <div class="modal-actions" id="appModalActions"></div>
-    </div>
-  </div>
-
-  <!-- CONTACT/MESSAGE MODAL -->
-  <div class="modal-overlay" id="msgModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="msgModalTitle">Message</h3>
-        <button class="modal-close" onclick="closeModal('msgModal')">✕</button>
-      </div>
-      <div class="modal-body" id="msgModalBody"></div>
-      <div class="modal-actions" id="msgModalActions"></div>
-    </div>
-  </div>
-
-  <!-- TOAST -->
-  <div id="toast" style="display:none; position:fixed; bottom:2rem; right:2rem; padding:1rem 1.5rem; border-radius:6px; z-index:10000; font-weight:600; max-width:300px; box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script>
+<div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
+<div style="flex:1; min-width:260px;">
+<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Email</label>
+<input id="newAdminEmail" placeholder="jane@mdscholars.com" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="email"/>
+</div>
+<div>
+<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Display name (optional)</label>
+<input id="newAdminName" placeholder="Jane Smith" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:180px;" type="text"/>
+</div>
+<button class="btn-primary" onclick="promoteAdmin()">Promote to Admin</button>
+<button class="btn-secondary" onclick="inviteAdmin()">Invite (magic link)</button>
+</div>
+<div id="addAdminStatus" style="font-size:0.9rem; color:#475569; margin-top:0.75rem;"></div>
+</div>
+<!-- Current admins -->
+<div class="card">
+<h3 style="margin-top:0;">Current admins</h3>
+<div id="adminsList" style="margin-top:1rem;">Loading…</div>
+</div>
+</div>
+</div><!-- end dashboard-content -->
+</div><!-- end dashboard-main -->
+</div>
+</div><!-- end dashboard-wrapper -->
+<!-- APPLICATION DETAIL MODAL -->
+<div class="modal-overlay" id="appModal">
+<div class="modal">
+<div class="modal-header">
+<h3 id="appModalTitle">Application Details</h3>
+<button class="modal-close" onclick="closeModal('appModal')">✕</button>
+</div>
+<div class="modal-body" id="appModalBody"></div>
+<div class="modal-actions" id="appModalActions"></div>
+</div>
+</div>
+<!-- CONTACT/MESSAGE MODAL -->
+<div class="modal-overlay" id="msgModal">
+<div class="modal">
+<div class="modal-header">
+<h3 id="msgModalTitle">Message</h3>
+<button class="modal-close" onclick="closeModal('msgModal')">✕</button>
+</div>
+<div class="modal-body" id="msgModalBody"></div>
+<div class="modal-actions" id="msgModalActions"></div>
+</div>
+</div>
+<!-- TOAST -->
+<div id="toast" style="display:none; position:fixed; bottom:2rem; right:2rem; padding:1rem 1.5rem; border-radius:6px; z-index:10000; font-weight:600; max-width:300px; box-shadow:0 4px 12px rgba(0,0,0,0.15);"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
     /* ─── Supabase ─── */
     var _db = null;
     function getDB() {
@@ -3348,5 +3313,14 @@
       }
     }
   </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script id="mds-lucide-init">
+(function(){
+  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.mdsRefreshIcons = init;
+})();
+</script>
 </body>
 </html>
