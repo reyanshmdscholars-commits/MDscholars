@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — MD Scholars</title>
+<meta name="description" content="The page you're looking for doesn't exist. Head back to MD Scholars.">
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<meta name="theme-color" content="#001F3F">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --navy: #001F3F; --teal: #0d9488; --cream: #f8f5ef; --gold: #c9a84c; --text: #0f172a; --muted: #475569; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    background: var(--navy);
+    padding: 1.25rem 2rem;
+  }
+  header .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  header .logo-mark {
+    width: 42px; height: 42px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  header .logo-mark img { width: 100%; height: 100%; object-fit: contain; }
+  header .logo-text {
+    font-family: 'Newsreader', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+  .wrap {
+    max-width: 640px;
+    text-align: center;
+  }
+  .num {
+    font-family: 'Newsreader', serif;
+    font-size: clamp(6rem, 18vw, 12rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--navy);
+    font-variation-settings: "opsz" 72;
+    letter-spacing: -0.04em;
+    position: relative;
+    display: inline-block;
+  }
+  .num::after {
+    content: '';
+    display: block;
+    width: 60px; height: 2px;
+    background: var(--gold);
+    margin: 1rem auto 0;
+  }
+  .headline {
+    font-family: 'Newsreader', serif;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 1.5rem;
+    line-height: 1.25;
+    font-variation-settings: "opsz" 60;
+  }
+  .sub {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 480px;
+    margin-left: auto; margin-right: auto;
+  }
+  .cta-row {
+    margin-top: 2rem;
+    display: inline-flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+  .btn-primary { background: var(--teal); color: #fff; border: 1px solid var(--teal); }
+  .btn-primary:hover { background: #0f766e; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--navy); border: 1px solid var(--navy); }
+  .btn-ghost:hover { background: var(--navy); color: #fff; }
+  .quick-links {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e6e2d8;
+    text-align: left;
+  }
+  .quick-links h3 {
+    font-family: 'Newsreader', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  .quick-links ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .quick-links a {
+    color: var(--navy);
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 3px;
+    transition: background 0.15s;
+    display: block;
+  }
+  .quick-links a:hover {
+    background: #fff;
+    color: var(--teal);
+  }
+  footer {
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">
+    <span class="logo-mark"><img src="/logo.png" alt="MD Scholars"></span>
+    <span class="logo-text">MD Scholars</span>
+  </a>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="num">404</div>
+    <h1 class="headline">This page has wandered off the path.</h1>
+    <p class="sub">The link you followed may be broken, or the page may have been moved. Head back to the homepage, or jump straight to a section below.</p>
+
+    <div class="cta-row">
+      <a href="/" class="btn btn-primary">← Back to home</a>
+      <a href="/contact.html" class="btn btn-ghost">Contact us</a>
+    </div>
+
+    <div class="quick-links">
+      <h3>Popular pages</h3>
+      <ul>
+        <li><a href="/programs.html">Programs</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/apply.html">Apply</a></li>
+        <li><a href="/webinars.html">Free Webinar</a></li>
+        <li><a href="/testimonials.html">Testimonials</a></li>
+        <li><a href="/faqs.html">FAQs</a></li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Still lost? Email <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a> and we'll help.
+</footer>
+
+</body>
+</html>
