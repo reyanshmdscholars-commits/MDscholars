@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Certificate - MD Scholars</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Certificate - MD Scholars</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -664,8 +665,7 @@
   .mds-marquee span { font-family: 'Newsreader', Georgia, serif; color: var(--mds-navy); font-size: 1.05rem; opacity: 0.8; }
   @keyframes mds-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 </style>
-
-<script id="mds-canonical-motion" defer>
+<script defer="" id="mds-canonical-motion">
 (function() {
   function init() {
     // Nav shrink on scroll
@@ -749,148 +749,149 @@
   else init();
 })();
 </script>
+  <style id="mds-lucide-style">
+/* Lucide icon defaults — sized to text, aligned to baseline */
+.mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
+.mds-lu:last-child { margin-right: 0; }
+/* Larger icons inside decorative circles (feature cards, etc.) */
+.feature-icon .mds-lu, .service-icon .mds-lu, .stat-icon .mds-lu,
+.card-icon .mds-lu, .program-icon .mds-lu, .step-icon .mds-lu,
+.trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu {
+  width: 60%; height: 60%; margin: 0; stroke-width: 1.5;
+}
+</style>
 </head>
 <body>
-    <nav id="main-nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <div class="nav-logo-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-      <div class="nav-logo-text">
-        <strong>MD Scholars</strong>
-        <span>Research Mentorship</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <div class="nav-dropdown">
-        <a href="programs.html">Programs</a>
-        <div class="dropdown-menu">
-          <a href="high-school.html">High School</a>
-          <a href="college.html">College / Pre-Med</a>
-          <a href="medical-student.html">Medical Student</a>
-          <a href="resident-fellow.html">Resident & Fellow</a>
-          <a href="twelve-month.html">12-Month Advanced Track</a>
-        </div>
-      </div>
-            <a href="webinars.html">Free Webinar</a>
-      <a href="about.html">About</a>
-      <a href="testimonials.html">Testimonials</a>
-      <a href="showcase.html">Showcase Your Research</a>
-      <a href="additional-services.html">Services</a>
-      <a href="faqs.html">FAQs</a>
-      <a href="apply.html" class="nav-cta">Apply Now →</a>
-    </div>
-  </div>
+<nav id="main-nav">
+<div class="nav-inner">
+<a class="nav-logo" href="index.html">
+<div class="nav-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="nav-logo-text">
+<strong>MD Scholars</strong>
+<span>Research Mentorship</span>
+</div>
+</a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<div class="nav-dropdown">
+<a href="programs.html">Programs</a>
+<div class="dropdown-menu">
+<a href="high-school.html">High School</a>
+<a href="college.html">College / Pre-Med</a>
+<a href="medical-student.html">Medical Student</a>
+<a href="resident-fellow.html">Resident &amp; Fellow</a>
+<a href="twelve-month.html">12-Month Advanced Track</a>
+</div>
+</div>
+<a href="webinars.html">Free Webinar</a>
+<a href="about.html">About</a>
+<a href="testimonials.html">Testimonials</a>
+<a href="showcase.html">Showcase Your Research</a>
+<a href="additional-services.html">Services</a>
+<a href="faqs.html">FAQs</a>
+<a class="nav-cta" href="apply.html">Apply Now →</a>
+</div>
+</div>
 </nav>
-
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Verify a Certificate</h1>
-            <p>Enter a certificate ID to confirm its authenticity</p>
-        </div>
-    </section>
-
-    <section class="verify-section">
-        <div class="verify-card">
-            <div class="format-guide">
-                <h3>Certificate ID Format</h3>
-                <p style="text-align:center; color:#666; font-size:0.95rem; margin-bottom:1rem;">Every MD Scholars certificate uses a unique five-part ID: <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-&lt;Sem&gt;-&lt;Year&gt;-&lt;Track&gt;-&lt;Number&gt;</code></p>
-                <div class="format-breakdown">
-                    <div class="format-item">
-                        <div class="format-label">MDS</div>
-                        <div class="format-value">MD Scholars</div>
-                    </div>
-                    <div class="format-item">
-                        <div class="format-label">SP / SU / FA</div>
-                        <div class="format-value">Semester*</div>
-                    </div>
-                    <div class="format-item">
-                        <div class="format-label">2026</div>
-                        <div class="format-value">Year</div>
-                    </div>
-                    <div class="format-item">
-                        <div class="format-label">HS / PM / MS / RF / AHS / APM</div>
-                        <div class="format-value">Track**</div>
-                    </div>
-                    <div class="format-item">
-                        <div class="format-label">0001</div>
-                        <div class="format-value">Sequential #</div>
-                    </div>
+<section class="hero">
+<div class="hero-content">
+<h1>Verify a Certificate</h1>
+<p>Enter a certificate ID to confirm its authenticity</p>
+</div>
+</section>
+<section class="verify-section">
+<div class="verify-card">
+<div class="format-guide">
+<h3>Certificate ID Format</h3>
+<p style="text-align:center; color:#666; font-size:0.95rem; margin-bottom:1rem;">Every MD Scholars certificate uses a unique five-part ID: <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-&lt;Sem&gt;-&lt;Year&gt;-&lt;Track&gt;-&lt;Number&gt;</code></p>
+<div class="format-breakdown">
+<div class="format-item">
+<div class="format-label">MDS</div>
+<div class="format-value">MD Scholars</div>
+</div>
+<div class="format-item">
+<div class="format-label">SP / SU / FA</div>
+<div class="format-value">Semester*</div>
+</div>
+<div class="format-item">
+<div class="format-label">2026</div>
+<div class="format-value">Year</div>
+</div>
+<div class="format-item">
+<div class="format-label">HS / PM / MS / RF / AHS / APM</div>
+<div class="format-value">Track**</div>
+</div>
+<div class="format-item">
+<div class="format-label">0001</div>
+<div class="format-value">Sequential #</div>
+</div>
+</div>
+<div style="font-size: 0.85rem; color: #555; margin-top: 1rem; line-height:1.6;">
+<strong>*Semester:</strong> SP = Spring · SU = Summer · FA = Fall<br/>
+<strong>**Track:</strong> HS = High School · PM = Pre-Med (College) · MS = Medical School · RF = Resident / IMG / Fellowship · AHS = 12-Month Advanced High School · APM = 12-Month Advanced Pre-Med · INS = Institutional Program<br/>
+<strong>Example:</strong> <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-FA-2026-HS-0001</code> = the first High School Track graduate from Fall 2026.
                 </div>
-                <div style="font-size: 0.85rem; color: #555; margin-top: 1rem; line-height:1.6;">
-                    <strong>*Semester:</strong> SP = Spring · SU = Summer · FA = Fall<br>
-                    <strong>**Track:</strong> HS = High School · PM = Pre-Med (College) · MS = Medical School · RF = Resident / IMG / Fellowship · AHS = 12-Month Advanced High School · APM = 12-Month Advanced Pre-Med · INS = Institutional Program<br>
-                    <strong>Example:</strong> <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-FA-2026-HS-0001</code> = the first High School Track graduate from Fall 2026.
-                </div>
-            </div>
-
-            <form id="verifyForm">
-                <div class="form-group">
-                    <label for="cert-id">Certificate ID</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="cert-id" name="cert-id" placeholder="e.g. MDS-FA-2026-HS-0001" required>
-                        <button type="submit" class="verify-btn">Verify Certificate</button>
-                    </div>
-                </div>
-            </form>
-
-            <div class="result-placeholder" id="verifyResult">
+</div>
+<form id="verifyForm">
+<div class="form-group">
+<label for="cert-id">Certificate ID</label>
+<div class="input-wrapper">
+<input id="cert-id" name="cert-id" placeholder="e.g. MDS-FA-2026-HS-0001" required="" type="text"/>
+<button class="verify-btn" type="submit">Verify Certificate</button>
+</div>
+</div>
+</form>
+<div class="result-placeholder" id="verifyResult">
                 Certificate details will appear here
             </div>
-        </div>
-
-        <div class="certificate-details">
-            <h2>What a Valid Certificate Shows</h2>
-            <div class="details-grid">
-                <div class="detail-item">
-                    <div class="detail-label">Scholar Name</div>
-                    <div class="detail-value">Full Name</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Program Track</div>
-                    <div class="detail-value">High School / Pre-Med / Medical Student / Resident & Fellow</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Completion Date</div>
-                    <div class="detail-value">MM/DD/YYYY</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Certificate Status</div>
-                    <div class="detail-value" style="color: #14b8a6;">✓ VALID</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="about-section">
-        <h2>About Our Certificates</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">👨‍⚕️</div>
-                <h3>Physician-Led Verification</h3>
-                <p>Each certificate is issued by our team of experienced physician mentors, ensuring credibility and prestige in your credentials.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">✍️</div>
-                <h3>ICMJE-Compliant</h3>
-                <p>Our certificates meet International Committee of Medical Journal Editors standards, recognized across academic medical institutions.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3>Tamper-Proof ID</h3>
-                <p>Each certificate includes a unique, secure ID that can be verified against our database, preventing fraud and ensuring authenticity.</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="verification-note">
-        <p><strong>For employers or institutions verifying student credentials,</strong></p>
-        <p>please contact <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></p>
-    </div>
-
-    <style>
+</div>
+<div class="certificate-details">
+<h2>What a Valid Certificate Shows</h2>
+<div class="details-grid">
+<div class="detail-item">
+<div class="detail-label">Scholar Name</div>
+<div class="detail-value">Full Name</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Program Track</div>
+<div class="detail-value">High School / Pre-Med / Medical Student / Resident &amp; Fellow</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Completion Date</div>
+<div class="detail-value">MM/DD/YYYY</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Certificate Status</div>
+<div class="detail-value" style="color: #14b8a6;">✓ VALID</div>
+</div>
+</div>
+</div>
+</section>
+<section class="about-section">
+<h2>About Our Certificates</h2>
+<div class="features-grid">
+<div class="feature-card">
+<div class="feature-icon"><i class="mds-lu" data-lucide="user"></i><i class="mds-lu" data-lucide="plus"></i></div>
+<h3>Physician-Led Verification</h3>
+<p>Each certificate is issued by our team of experienced physician mentors, ensuring credibility and prestige in your credentials.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon"><i class="mds-lu" data-lucide="edit-3"></i></div>
+<h3>ICMJE-Compliant</h3>
+<p>Our certificates meet International Committee of Medical Journal Editors standards, recognized across academic medical institutions.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon"><i class="mds-lu" data-lucide="lock"></i></div>
+<h3>Tamper-Proof ID</h3>
+<p>Each certificate includes a unique, secure ID that can be verified against our database, preventing fraud and ensuring authenticity.</p>
+</div>
+</div>
+</section>
+<div class="verification-note">
+<p><strong>For employers or institutions verifying student credentials,</strong></p>
+<p>please contact <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></p>
+</div>
+<style>
   footer.rich-ft { background:#001F3F; color:rgba(255,255,255,0.75); padding:3.5rem 1.5rem 1.5rem; margin-top:4rem; font-family:'Inter','Inter',-apple-system,Segoe UI,Arial,sans-serif; }
   footer.rich-ft .ft-container { max-width:1200px; margin:0 auto; }
   footer.rich-ft .ft-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1.4fr; gap:2.5rem; margin-bottom:2rem; }
@@ -914,64 +915,63 @@
   @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
 </style>
 <footer class="rich-ft">
-  <div class="ft-container">
-    <div class="ft-grid">
-      <div class="ft-brand">
-        <div class="ft-logo">
-          <div class="ft-logo-icon"><img src="logo.png" alt="MD Scholars logo"></div>
-          <div><strong>MD Scholars</strong><span>Research Mentorship</span></div>
-        </div>
-        <p>Physician-led research mentorship for every stage of the medical pathway &mdash; from high school to fellowship.</p>
-        <p class="ft-loc">MD Scholars LLC &middot; St. Louis, MO</p>
-      </div>
-      <div>
-        <h4>Programs</h4>
-        <a href="high-school.html">High School</a>
-        <a href="college.html">College / Pre-Med</a>
-        <a href="medical-student.html">Medical Student</a>
-        <a href="resident-fellow.html">Resident &amp; Fellow</a>
-        <a href="twelve-month.html">12-Month Advanced</a>
-        <a href="standalone-courses.html">Standalone Courses</a>
-        <a href="webinars.html">Webinars</a>
-        <a href="for-institutions.html">For Institutions</a>
-      </div>
-      <div>
-        <h4>About</h4>
-        <a href="about.html">Our Team</a>
-        <a href="testimonials.html">Testimonials</a>
-        <a href="showcase.html">Showcase Your Research</a>
-        <a href="additional-services.html">Additional Services</a>
-        <a href="faqs.html">FAQs</a>
-      </div>
-      <div>
-        <h4>Student</h4>
-        <a href="apply.html">Apply Now</a>
-        <a href="enroll.html">Enroll &amp; Tuition</a>
-        <a href="portal/login.html">Student Portal Login</a>
-        <a href="verify.html">Verify Certificate</a>
-        <a href="contact.html">Contact Us</a>
-      </div>
-      <div class="ft-contact">
-        <h4>Get in Touch</h4>
-        <a href="mailto:contact@mdscholars.com">contact@mdscholars.com<small>General inquiries</small></a>
-        <a href="mailto:team@mdscholars.com">team@mdscholars.com<small>Partnerships &amp; outreach</small></a>
-        <a href="mailto:support@mdscholars.com">support@mdscholars.com<small>Enrolled student support</small></a>
-      </div>
-    </div>
-    <div class="ft-bottom">
-      <p>&copy; 2026 MD Scholars LLC. All rights reserved. Physician-led &middot; Small cohorts &middot; Ethical authorship.</p>
-      <div class="ft-legal">
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-        <a href="authorship.html">Authorship</a>
-        <a href="faqs.html">FAQs</a>
-      </div>
-    </div>
-  </div>
+<div class="ft-container">
+<div class="ft-grid">
+<div class="ft-brand">
+<div class="ft-logo">
+<div class="ft-logo-icon"><img alt="MD Scholars logo" src="logo.png"/></div>
+<div><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+</div>
+<p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+<p class="ft-loc">MD Scholars LLC · St. Louis, MO</p>
+</div>
+<div>
+<h4>Programs</h4>
+<a href="high-school.html">High School</a>
+<a href="college.html">College / Pre-Med</a>
+<a href="medical-student.html">Medical Student</a>
+<a href="resident-fellow.html">Resident &amp; Fellow</a>
+<a href="twelve-month.html">12-Month Advanced</a>
+<a href="standalone-courses.html">Standalone Courses</a>
+<a href="webinars.html">Webinars</a>
+<a href="for-institutions.html">For Institutions</a>
+</div>
+<div>
+<h4>About</h4>
+<a href="about.html">Our Team</a>
+<a href="testimonials.html">Testimonials</a>
+<a href="showcase.html">Showcase Your Research</a>
+<a href="additional-services.html">Additional Services</a>
+<a href="faqs.html">FAQs</a>
+</div>
+<div>
+<h4>Student</h4>
+<a href="apply.html">Apply Now</a>
+<a href="enroll.html">Enroll &amp; Tuition</a>
+<a href="portal/login.html">Student Portal Login</a>
+<a href="verify.html">Verify Certificate</a>
+<a href="contact.html">Contact Us</a>
+</div>
+<div class="ft-contact">
+<h4>Get in Touch</h4>
+<a href="mailto:contact@mdscholars.com">contact@mdscholars.com<small>General inquiries</small></a>
+<a href="mailto:team@mdscholars.com">team@mdscholars.com<small>Partnerships &amp; outreach</small></a>
+<a href="mailto:support@mdscholars.com">support@mdscholars.com<small>Enrolled student support</small></a>
+</div>
+</div>
+<div class="ft-bottom">
+<p>© 2026 MD Scholars LLC. All rights reserved. Physician-led · Small cohorts · Ethical authorship.</p>
+<div class="ft-legal">
+<a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+<a href="authorship.html">Authorship</a>
+<a href="faqs.html">FAQs</a>
+</div>
+</div>
+</div>
 </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
         var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
         var SUPABASE_ANON_KEY = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
         var TRACK_LABELS = {
@@ -1097,6 +1097,16 @@
             initVerifyListener();
         }
     </script>
-<script src="chatbot-widget.js" defer></script>
+<script defer="" src="chatbot-widget.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script id="mds-lucide-init">
+(function(){
+  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  // Re-run after any late DOM updates (e.g., dynamic content)
+  window.mdsRefreshIcons = init;
+})();
+</script>
 </body>
 </html>
