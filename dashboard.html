@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MD Scholars Student Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MD Scholars Student Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
     * {
       margin: 0;
       padding: 0;
@@ -680,342 +681,316 @@
       }
     }
   </style>
+  <style id="mds-lucide-style">
+/* Lucide icon defaults — sized to text, aligned to baseline */
+.mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
+.mds-lu:last-child { margin-right: 0; }
+/* Larger icons inside decorative circles (feature cards, etc.) */
+.feature-icon .mds-lu, .service-icon .mds-lu, .stat-icon .mds-lu,
+.card-icon .mds-lu, .program-icon .mds-lu, .step-icon .mds-lu,
+.trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu {
+  width: 60%; height: 60%; margin: 0; stroke-width: 1.5;
+}
+</style>
 </head>
 <body>
-  <!-- PAYWALL/ACCESS SCREEN -->
-  <div class="access-container" id="accessContainer">
-    <div class="access-card">
-      <div class="access-icon">🔒</div>
-      <h1>Student Dashboard</h1>
-      <p class="access-card-subtitle">This area is exclusively for enrolled MD Scholars students.</p>
-
-      <!-- Access Tabs -->
-      <div class="access-tabs">
-        <button class="access-tab-button active" onclick="switchAccessTab(event, 'login')">Log In</button>
-        <button class="access-tab-button" onclick="switchAccessTab(event, 'enroll')">Not Enrolled Yet?</button>
-      </div>
-
-      <!-- Login Tab -->
-      <div id="login" class="access-tab-content active">
-        <form class="access-form" onsubmit="handleDemoLogin(event)">
-          <div class="form-group">
-            <label for="login-email">Email Address</label>
-            <input type="email" id="login-email" name="email" required placeholder="student@email.com">
-          </div>
-
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" name="password" required placeholder="Enter your password">
-          </div>
-
-          <button type="submit" class="login-button">Log In to Dashboard</button>
-        </form>
-
-        <div class="access-message" style="margin-top: 1.5rem;">
-          <strong>Demo Access:</strong> Enter any email and password to view the student dashboard interface.
+<!-- PAYWALL/ACCESS SCREEN -->
+<div class="access-container" id="accessContainer">
+<div class="access-card">
+<div class="access-icon"><i class="mds-lu" data-lucide="lock"></i></div>
+<h1>Student Dashboard</h1>
+<p class="access-card-subtitle">This area is exclusively for enrolled MD Scholars students.</p>
+<!-- Access Tabs -->
+<div class="access-tabs">
+<button class="access-tab-button active" onclick="switchAccessTab(event, 'login')">Log In</button>
+<button class="access-tab-button" onclick="switchAccessTab(event, 'enroll')">Not Enrolled Yet?</button>
+</div>
+<!-- Login Tab -->
+<div class="access-tab-content active" id="login">
+<form class="access-form" onsubmit="handleDemoLogin(event)">
+<div class="form-group">
+<label for="login-email">Email Address</label>
+<input id="login-email" name="email" placeholder="student@email.com" required="" type="email"/>
+</div>
+<div class="form-group">
+<label for="login-password">Password</label>
+<input id="login-password" name="password" placeholder="Enter your password" required="" type="password"/>
+</div>
+<button class="login-button" type="submit">Log In to Dashboard</button>
+</form>
+<div class="access-message" style="margin-top: 1.5rem;">
+<strong>Demo Access:</strong> Enter any email and password to view the student dashboard interface.
         </div>
-      </div>
-
-      <!-- Enroll Tab -->
-      <div id="enroll" class="access-tab-content">
-        <div class="access-message">
-          <strong>Ready to join MD Scholars?</strong><br><br>
+</div>
+<!-- Enroll Tab -->
+<div class="access-tab-content" id="enroll">
+<div class="access-message">
+<strong>Ready to join MD Scholars?</strong><br/><br/>
           Start your research mentorship journey with our comprehensive programs. Visit our enrollment page to choose your program and secure your seat in the next cohort.
         </div>
-
-        <a href="apply.html" style="display: inline-block; margin-top: 1.5rem; background-color: #14b8a6; color: white; padding: 0.95rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#0d9488'" onmouseout="this.style.backgroundColor='#14b8a6'">
+<a href="apply.html" onmouseout="this.style.backgroundColor='#14b8a6'" onmouseover="this.style.backgroundColor='#0d9488'" style="display: inline-block; margin-top: 1.5rem; background-color: #14b8a6; color: white; padding: 0.95rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
           Apply Now →
         </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div class="dashboard-wrapper" id="dashboardWrapper">
-    <!-- Top Bar -->
-    <div class="dashboard-topbar">
-      <div class="topbar-left">
-        <a href="index.html" class="topbar-logo">
-          <div class="topbar-logo-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-          <div class="topbar-logo-text"><strong>MD Scholars</strong></div>
-        </a>
-      </div>
-
-      <div class="topbar-right">
-        <div>
-          <div class="welcome-text" style="font-size: 0.9rem; color: rgba(248, 245, 239, 0.7);">Welcome back,</div>
-          <div class="welcome-text" style="font-size: 1.05rem; font-weight: 600;">Sarah Chen</div>
-        </div>
-        <span class="track-badge">📚 Pre-Med Scholars</span>
-        <button class="logout-button" onclick="handleDemoLogout()">Logout</button>
-      </div>
-    </div>
-
-    <!-- Main Layout -->
-    <div class="dashboard-main">
-      <!-- Sidebar -->
-      <div class="dashboard-sidebar">
-        <div class="sidebar-nav">
-          <a onclick="switchDashboardTab(event, 'home')" class="active">🏠 Home</a>
-          <a onclick="switchDashboardTab(event, 'modules')">📖 Modules</a>
-          <a onclick="switchDashboardTab(event, 'assignments')">✓ Assignments</a>
-          <a onclick="switchDashboardTab(event, 'project')">🔬 Research Project</a>
-          <a onclick="switchDashboardTab(event, 'mentor')">👨‍🏫 Mentor Meetings</a>
-          <a onclick="switchDashboardTab(event, 'discussion')">💬 Discussion</a>
-          <a onclick="switchDashboardTab(event, 'certificates')">🏅 Certificates</a>
-        </div>
-      </div>
-
-      <!-- Content Area -->
-      <div class="dashboard-content">
-        <!-- HOME TAB -->
-        <div id="home" class="content-section active">
-          <!-- Welcome Card -->
-          <div class="welcome-card">
-            <h2>Welcome to MD Scholars, Sarah</h2>
-            <div class="welcome-info">
-              <div class="welcome-info-item">
-                <span class="welcome-label">Program</span>
-                <span class="welcome-value">Pre-Med Research Scholars</span>
-              </div>
-              <div class="welcome-info-item">
-                <span class="welcome-label">Cohort</span>
-                <span class="welcome-value">Spring 2026</span>
-              </div>
-              <div class="welcome-info-item">
-                <span class="welcome-label">Duration</span>
-                <span class="welcome-value">12 Weeks</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Program Progress -->
-          <div class="progress-card">
-            <h3>Program Progress</h3>
-            <div class="progress-bar-container">
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 0%;"></div>
-              </div>
-              <span class="progress-percent">0%</span>
-            </div>
-          </div>
-
-          <!-- Modules -->
-          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Course Modules</h3>
-          <div class="module-unlock-note">
+</div>
+</div>
+</div>
+<!-- DASHBOARD -->
+<div class="dashboard-wrapper" id="dashboardWrapper">
+<!-- Top Bar -->
+<div class="dashboard-topbar">
+<div class="topbar-left">
+<a class="topbar-logo" href="index.html">
+<div class="topbar-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="topbar-logo-text"><strong>MD Scholars</strong></div>
+</a>
+</div>
+<div class="topbar-right">
+<div>
+<div class="welcome-text" style="font-size: 0.9rem; color: rgba(248, 245, 239, 0.7);">Welcome back,</div>
+<div class="welcome-text" style="font-size: 1.05rem; font-weight: 600;">Sarah Chen</div>
+</div>
+<span class="track-badge"><i class="mds-lu" data-lucide="book-open"></i> Pre-Med Scholars</span>
+<button class="logout-button" onclick="handleDemoLogout()">Logout</button>
+</div>
+</div>
+<!-- Main Layout -->
+<div class="dashboard-main">
+<!-- Sidebar -->
+<div class="dashboard-sidebar">
+<div class="sidebar-nav">
+<a class="active" onclick="switchDashboardTab(event, 'home')"><i class="mds-lu" data-lucide="home"></i> Home</a>
+<a onclick="switchDashboardTab(event, 'modules')"><i class="mds-lu" data-lucide="book"></i> Modules</a>
+<a onclick="switchDashboardTab(event, 'assignments')">✓ Assignments</a>
+<a onclick="switchDashboardTab(event, 'project')"><i class="mds-lu" data-lucide="microscope"></i> Research Project</a>
+<a onclick="switchDashboardTab(event, 'mentor')"><i class="mds-lu" data-lucide="user"></i><i class="mds-lu" data-lucide="school"></i> Mentor Meetings</a>
+<a onclick="switchDashboardTab(event, 'discussion')"><i class="mds-lu" data-lucide="message-circle"></i> Discussion</a>
+<a onclick="switchDashboardTab(event, 'certificates')"><i class="mds-lu" data-lucide="award"></i> Certificates</a>
+</div>
+</div>
+<!-- Content Area -->
+<div class="dashboard-content">
+<!-- HOME TAB -->
+<div class="content-section active" id="home">
+<!-- Welcome Card -->
+<div class="welcome-card">
+<h2>Welcome to MD Scholars, Sarah</h2>
+<div class="welcome-info">
+<div class="welcome-info-item">
+<span class="welcome-label">Program</span>
+<span class="welcome-value">Pre-Med Research Scholars</span>
+</div>
+<div class="welcome-info-item">
+<span class="welcome-label">Cohort</span>
+<span class="welcome-value">Spring 2026</span>
+</div>
+<div class="welcome-info-item">
+<span class="welcome-label">Duration</span>
+<span class="welcome-value">12 Weeks</span>
+</div>
+</div>
+</div>
+<!-- Program Progress -->
+<div class="progress-card">
+<h3>Program Progress</h3>
+<div class="progress-bar-container">
+<div class="progress-bar">
+<div class="progress-fill" style="width: 0%;"></div>
+</div>
+<span class="progress-percent">0%</span>
+</div>
+</div>
+<!-- Modules -->
+<h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Course Modules</h3>
+<div class="module-unlock-note">
             Modules unlock on a weekly schedule starting on your cohort start date.
           </div>
-
-          <div class="modules-grid">
-            <div class="module-card locked">
-              <div class="module-number">Module 1</div>
-              <h4 class="module-title">Introduction to Biomedical Research</h4>
-              <span class="module-status locked">🔒 Locked</span>
-            </div>
-
-            <div class="module-card locked">
-              <div class="module-number">Module 2</div>
-              <h4 class="module-title">Literature Review Methods</h4>
-              <span class="module-status locked">🔒 Locked</span>
-            </div>
-
-            <div class="module-card locked">
-              <div class="module-number">Module 3</div>
-              <h4 class="module-title">Research Design & Methodology</h4>
-              <span class="module-status locked">🔒 Locked</span>
-            </div>
-
-            <div class="module-card locked">
-              <div class="module-number">Module 4</div>
-              <h4 class="module-title">Data Analysis & Statistics</h4>
-              <span class="module-status locked">🔒 Locked</span>
-            </div>
-
-            <div class="module-card locked">
-              <div class="module-number">Module 5</div>
-              <h4 class="module-title">Writing Research Abstracts</h4>
-              <span class="module-status locked">🔒 Locked</span>
-            </div>
-
-            <div class="module-card locked">
-              <div class="module-number">Module 6</div>
-              <h4 class="module-title">Presentation Skills & Conference Prep</h4>
-              <span class="module-status locked">🔒 Locked</span>
-            </div>
+<div class="modules-grid">
+<div class="module-card locked">
+<div class="module-number">Module 1</div>
+<h4 class="module-title">Introduction to Biomedical Research</h4>
+<span class="module-status locked"><i class="mds-lu" data-lucide="lock"></i> Locked</span>
+</div>
+<div class="module-card locked">
+<div class="module-number">Module 2</div>
+<h4 class="module-title">Literature Review Methods</h4>
+<span class="module-status locked"><i class="mds-lu" data-lucide="lock"></i> Locked</span>
+</div>
+<div class="module-card locked">
+<div class="module-number">Module 3</div>
+<h4 class="module-title">Research Design &amp; Methodology</h4>
+<span class="module-status locked"><i class="mds-lu" data-lucide="lock"></i> Locked</span>
+</div>
+<div class="module-card locked">
+<div class="module-number">Module 4</div>
+<h4 class="module-title">Data Analysis &amp; Statistics</h4>
+<span class="module-status locked"><i class="mds-lu" data-lucide="lock"></i> Locked</span>
+</div>
+<div class="module-card locked">
+<div class="module-number">Module 5</div>
+<h4 class="module-title">Writing Research Abstracts</h4>
+<span class="module-status locked"><i class="mds-lu" data-lucide="lock"></i> Locked</span>
+</div>
+<div class="module-card locked">
+<div class="module-number">Module 6</div>
+<h4 class="module-title">Presentation Skills &amp; Conference Prep</h4>
+<span class="module-status locked"><i class="mds-lu" data-lucide="lock"></i> Locked</span>
+</div>
+</div>
+<!-- Research Project -->
+<h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Your Research Project</h3>
+<div class="project-card">
+<div class="project-info">
+<div class="project-info-item">
+<span class="project-label">Project Title</span>
+<span class="project-value placeholder">TBD</span>
+</div>
+<div class="project-info-item">
+<span class="project-label">Assigned Mentor</span>
+<span class="project-value placeholder">TBD</span>
+</div>
+<div class="project-info-item">
+<span class="project-label">Project Deadline</span>
+<span class="project-value placeholder">TBD</span>
+</div>
+</div>
+</div>
+<!-- Assignments -->
+<h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Upcoming Assignments</h3>
+<div class="assignments-card">
+<div class="assignments-empty">
+<p>No assignments due yet. Check back soon!</p>
+</div>
+</div>
+<!-- Certificates -->
+<h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Your Certificates</h3>
+<div class="certificates-card">
+<div class="certificate-preview">
+<h4>Research Completion Certificate</h4>
+<p class="certificate-preview-text">Complete all modules to earn your certificate</p>
+</div>
+</div>
+</div>
+<!-- MODULES TAB -->
+<div class="content-section" id="modules">
+<h2 class="section-title">Course Modules</h2>
+<div class="unlock-message">
+<strong>Your cohort begins on March 17, 2026.</strong> Modules will unlock weekly on their scheduled release dates. All course content is locked until your cohort officially starts.
           </div>
-
-          <!-- Research Project -->
-          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Your Research Project</h3>
-          <div class="project-card">
-            <div class="project-info">
-              <div class="project-info-item">
-                <span class="project-label">Project Title</span>
-                <span class="project-value placeholder">TBD</span>
-              </div>
-              <div class="project-info-item">
-                <span class="project-label">Assigned Mentor</span>
-                <span class="project-value placeholder">TBD</span>
-              </div>
-              <div class="project-info-item">
-                <span class="project-label">Project Deadline</span>
-                <span class="project-value placeholder">TBD</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Assignments -->
-          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Upcoming Assignments</h3>
-          <div class="assignments-card">
-            <div class="assignments-empty">
-              <p>No assignments due yet. Check back soon!</p>
-            </div>
-          </div>
-
-          <!-- Certificates -->
-          <h3 style="margin-top: 2rem; margin-bottom: 1.5rem; color: #001F3F;">Your Certificates</h3>
-          <div class="certificates-card">
-            <div class="certificate-preview">
-              <h4>Research Completion Certificate</h4>
-              <p class="certificate-preview-text">Complete all modules to earn your certificate</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- MODULES TAB -->
-        <div id="modules" class="content-section">
-          <h2 class="section-title">Course Modules</h2>
-
-          <div class="unlock-message">
-            <strong>Your cohort begins on March 17, 2026.</strong> Modules will unlock weekly on their scheduled release dates. All course content is locked until your cohort officially starts.
-          </div>
-
-          <div class="modules-list">
-            <div class="module-list-item locked">
-              <div class="module-list-info">
-                <h4>Module 1: Introduction to Biomedical Research</h4>
-                <p class="module-list-desc">Unlock: Week 1 | Estimated Duration: 5 hours</p>
-              </div>
-              <div class="module-list-lock">🔒</div>
-            </div>
-
-            <div class="module-list-item locked">
-              <div class="module-list-info">
-                <h4>Module 2: Literature Review Methods</h4>
-                <p class="module-list-desc">Unlock: Week 2 | Estimated Duration: 6 hours</p>
-              </div>
-              <div class="module-list-lock">🔒</div>
-            </div>
-
-            <div class="module-list-item locked">
-              <div class="module-list-info">
-                <h4>Module 3: Research Design & Methodology</h4>
-                <p class="module-list-desc">Unlock: Week 3 | Estimated Duration: 7 hours</p>
-              </div>
-              <div class="module-list-lock">🔒</div>
-            </div>
-
-            <div class="module-list-item locked">
-              <div class="module-list-info">
-                <h4>Module 4: Data Analysis & Statistics</h4>
-                <p class="module-list-desc">Unlock: Week 4 | Estimated Duration: 8 hours</p>
-              </div>
-              <div class="module-list-lock">🔒</div>
-            </div>
-
-            <div class="module-list-item locked">
-              <div class="module-list-info">
-                <h4>Module 5: Writing Research Abstracts</h4>
-                <p class="module-list-desc">Unlock: Week 5 | Estimated Duration: 6 hours</p>
-              </div>
-              <div class="module-list-lock">🔒</div>
-            </div>
-
-            <div class="module-list-item locked">
-              <div class="module-list-info">
-                <h4>Module 6: Presentation Skills & Conference Prep</h4>
-                <p class="module-list-desc">Unlock: Week 6 | Estimated Duration: 7 hours</p>
-              </div>
-              <div class="module-list-lock">🔒</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ASSIGNMENTS TAB -->
-        <div id="assignments" class="content-section">
-          <h2 class="section-title">Assignments</h2>
-          <div class="assignments-card">
-            <div class="assignments-empty">
-              <p>No assignments yet. They will appear here as your modules unlock.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- PROJECT TAB -->
-        <div id="project" class="content-section">
-          <h2 class="section-title">Research Project</h2>
-          <div class="project-card">
-            <h3>Your Research Project</h3>
-            <div class="project-info">
-              <div class="project-info-item">
-                <span class="project-label">Project Title</span>
-                <span class="project-value placeholder">TBD — Will be assigned by your mentor</span>
-              </div>
-              <div class="project-info-item">
-                <span class="project-label">Research Focus</span>
-                <span class="project-value placeholder">Will be determined after initial consultation</span>
-              </div>
-              <div class="project-info-item">
-                <span class="project-label">Assigned Mentor</span>
-                <span class="project-value placeholder">TBD</span>
-              </div>
-              <div class="project-info-item">
-                <span class="project-label">First Mentor Meeting</span>
-                <span class="project-value placeholder">TBD</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="unlock-message" style="margin-top: 2rem;">
+<div class="modules-list">
+<div class="module-list-item locked">
+<div class="module-list-info">
+<h4>Module 1: Introduction to Biomedical Research</h4>
+<p class="module-list-desc">Unlock: Week 1 | Estimated Duration: 5 hours</p>
+</div>
+<div class="module-list-lock"><i class="mds-lu" data-lucide="lock"></i></div>
+</div>
+<div class="module-list-item locked">
+<div class="module-list-info">
+<h4>Module 2: Literature Review Methods</h4>
+<p class="module-list-desc">Unlock: Week 2 | Estimated Duration: 6 hours</p>
+</div>
+<div class="module-list-lock"><i class="mds-lu" data-lucide="lock"></i></div>
+</div>
+<div class="module-list-item locked">
+<div class="module-list-info">
+<h4>Module 3: Research Design &amp; Methodology</h4>
+<p class="module-list-desc">Unlock: Week 3 | Estimated Duration: 7 hours</p>
+</div>
+<div class="module-list-lock"><i class="mds-lu" data-lucide="lock"></i></div>
+</div>
+<div class="module-list-item locked">
+<div class="module-list-info">
+<h4>Module 4: Data Analysis &amp; Statistics</h4>
+<p class="module-list-desc">Unlock: Week 4 | Estimated Duration: 8 hours</p>
+</div>
+<div class="module-list-lock"><i class="mds-lu" data-lucide="lock"></i></div>
+</div>
+<div class="module-list-item locked">
+<div class="module-list-info">
+<h4>Module 5: Writing Research Abstracts</h4>
+<p class="module-list-desc">Unlock: Week 5 | Estimated Duration: 6 hours</p>
+</div>
+<div class="module-list-lock"><i class="mds-lu" data-lucide="lock"></i></div>
+</div>
+<div class="module-list-item locked">
+<div class="module-list-info">
+<h4>Module 6: Presentation Skills &amp; Conference Prep</h4>
+<p class="module-list-desc">Unlock: Week 6 | Estimated Duration: 7 hours</p>
+</div>
+<div class="module-list-lock"><i class="mds-lu" data-lucide="lock"></i></div>
+</div>
+</div>
+</div>
+<!-- ASSIGNMENTS TAB -->
+<div class="content-section" id="assignments">
+<h2 class="section-title">Assignments</h2>
+<div class="assignments-card">
+<div class="assignments-empty">
+<p>No assignments yet. They will appear here as your modules unlock.</p>
+</div>
+</div>
+</div>
+<!-- PROJECT TAB -->
+<div class="content-section" id="project">
+<h2 class="section-title">Research Project</h2>
+<div class="project-card">
+<h3>Your Research Project</h3>
+<div class="project-info">
+<div class="project-info-item">
+<span class="project-label">Project Title</span>
+<span class="project-value placeholder">TBD — Will be assigned by your mentor</span>
+</div>
+<div class="project-info-item">
+<span class="project-label">Research Focus</span>
+<span class="project-value placeholder">Will be determined after initial consultation</span>
+</div>
+<div class="project-info-item">
+<span class="project-label">Assigned Mentor</span>
+<span class="project-value placeholder">TBD</span>
+</div>
+<div class="project-info-item">
+<span class="project-label">First Mentor Meeting</span>
+<span class="project-value placeholder">TBD</span>
+</div>
+</div>
+</div>
+<div class="unlock-message" style="margin-top: 2rem;">
             Your research project details will be finalized after your cohort begins and you've had your initial consultation with your assigned mentor.
           </div>
-        </div>
-
-        <!-- MENTOR MEETINGS TAB -->
-        <div id="mentor" class="content-section">
-          <h2 class="section-title">Mentor Meetings</h2>
-          <div class="assignments-card">
-            <div class="assignments-empty">
-              <p>Mentor meeting schedule will appear here once your cohort begins.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- DISCUSSION TAB -->
-        <div id="discussion" class="content-section">
-          <h2 class="section-title">Discussion Forum</h2>
-          <div class="assignments-card">
-            <div class="assignments-empty">
-              <p>The cohort discussion forum will be available once your program starts.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- CERTIFICATES TAB -->
-        <div id="certificates" class="content-section">
-          <h2 class="section-title">Your Certificates</h2>
-          <div class="certificates-card">
-            <p style="margin-bottom: 2rem; color: #666;">No certificates earned yet. Complete all modules and your research project to earn your Research Completion Certificate.</p>
-            <div class="certificate-preview">
-              <h4>Research Completion Certificate</h4>
-              <p class="certificate-preview-text">Awarded upon successful completion of all program requirements</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
+</div>
+<!-- MENTOR MEETINGS TAB -->
+<div class="content-section" id="mentor">
+<h2 class="section-title">Mentor Meetings</h2>
+<div class="assignments-card">
+<div class="assignments-empty">
+<p>Mentor meeting schedule will appear here once your cohort begins.</p>
+</div>
+</div>
+</div>
+<!-- DISCUSSION TAB -->
+<div class="content-section" id="discussion">
+<h2 class="section-title">Discussion Forum</h2>
+<div class="assignments-card">
+<div class="assignments-empty">
+<p>The cohort discussion forum will be available once your program starts.</p>
+</div>
+</div>
+</div>
+<!-- CERTIFICATES TAB -->
+<div class="content-section" id="certificates">
+<h2 class="section-title">Your Certificates</h2>
+<div class="certificates-card">
+<p style="margin-bottom: 2rem; color: #666;">No certificates earned yet. Complete all modules and your research project to earn your Research Completion Certificate.</p>
+<div class="certificate-preview">
+<h4>Research Completion Certificate</h4>
+<p class="certificate-preview-text">Awarded upon successful completion of all program requirements</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
     function switchAccessTab(event, tabName) {
       event.preventDefault();
 
@@ -1063,5 +1038,15 @@
       event.target.classList.add('active');
     }
   </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script id="mds-lucide-init">
+(function(){
+  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  // Re-run after any late DOM updates (e.g., dynamic content)
+  window.mdsRefreshIcons = init;
+})();
+</script>
 </body>
 </html>
