@@ -8,11 +8,11 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>MD Scholars Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background-color: #f8f5ef; color: #333; }
-    h1,h2,h3,h4,h5,h6 { font-family: 'Playfair Display', serif; color: #001F3F; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8f5ef; color: #333; }
+    h1,h2,h3,h4,h5,h6 { font-family: 'Newsreader', serif; color: #001F3F; }
 
     /* LOGIN */
     .login-container {
@@ -34,7 +34,7 @@
     .form-group label { display: block; color: #001F3F; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
     .form-group input {
       width: 100%; padding: 0.85rem 1rem; border: 2px solid #e0dbd0;
-      border-radius: 6px; font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+      border-radius: 6px; font-size: 0.95rem; font-family: 'Inter', sans-serif;
       transition: all 0.3s ease; background-color: #f8f5ef;
     }
     .form-group input:focus {
@@ -44,7 +44,7 @@
     .login-button {
       background-color: #14b8a6; color: white; padding: 0.95rem;
       border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 600;
-      cursor: pointer; transition: all 0.3s ease; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem;
+      cursor: pointer; transition: all 0.3s ease; font-family: 'Inter', sans-serif; margin-top: 0.5rem;
     }
     .login-button:hover { background-color: #0d9488; }
     .login-card-notice { color: #999; font-size: 0.8rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e0dbd0; }
@@ -67,7 +67,7 @@
     .logout-button {
       background-color: rgba(255,255,255,0.1); color: #f8f5ef; padding: 0.6rem 1.2rem;
       border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; font-size: 0.85rem;
-      cursor: pointer; transition: all 0.3s ease; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; transition: all 0.3s ease; font-family: 'Inter', sans-serif;
     }
     .logout-button:hover { background-color: #14b8a6; color: #001F3F; border-color: #14b8a6; }
 
@@ -113,7 +113,7 @@
       padding: 1.5rem 1.75rem;
       box-shadow: 0 2px 8px rgba(0, 31, 63, 0.06);
     }
-    .card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #001F3F; margin: 0 0 0.5rem; }
+    .card h3 { font-family: 'Newsreader', serif; font-size: 1.1rem; color: #001F3F; margin: 0 0 0.5rem; }
     .card p { color: #475569; line-height: 1.55; }
     .card code {
       background: #f1f5f9;
@@ -130,30 +130,30 @@
     .filters { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
     .filter-select {
       padding: 0.6rem 1rem; border: 1px solid #e0dbd0; border-radius: 4px;
-      background-color: white; font-family: 'DM Sans', sans-serif; color: #333; font-size: 0.9rem; cursor: pointer;
+      background-color: white; font-family: 'Inter', sans-serif; color: #333; font-size: 0.9rem; cursor: pointer;
     }
     .search-input {
       padding: 0.6rem 1rem; border: 1px solid #e0dbd0; border-radius: 4px;
-      background-color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; width: 250px;
+      background-color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; width: 250px;
     }
     .search-input::placeholder { color: #999; }
     .button-group { display: flex; gap: 0.75rem; }
     .btn-secondary {
       padding: 0.6rem 1.2rem; border: 1px solid #e0dbd0; background-color: white;
       color: #333; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
-      font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif; transition: all 0.3s ease;
     }
     .btn-secondary:hover { border-color: #14b8a6; color: #14b8a6; }
     .btn-primary {
       padding: 0.6rem 1.2rem; background-color: #14b8a6; color: white; border: none;
       border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
-      font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif; transition: all 0.3s ease;
     }
     .btn-primary:hover { background-color: #0d9488; }
     .btn-danger {
       padding: 0.6rem 1.2rem; background-color: #dc2626; color: white; border: none;
       border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
-      font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif; transition: all 0.3s ease;
     }
     .btn-danger:hover { background-color: #b91c1c; }
 
@@ -183,7 +183,7 @@
     .btn-sm {
       padding: 0.4rem 0.75rem; background-color: transparent; color: #14b8a6;
       border: 1px solid #14b8a6; border-radius: 3px; cursor: pointer; font-size: 0.8rem;
-      font-weight: 600; font-family: 'DM Sans', sans-serif; transition: all 0.3s ease;
+      font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.3s ease;
     }
     .btn-sm:hover { background-color: #14b8a6; color: white; }
     .btn-sm.danger { color: #dc2626; border-color: #dc2626; }
@@ -620,7 +620,7 @@
             </div>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.25rem; margin-bottom:1.5rem;">
-              <h3 style="margin-bottom:0.85rem; font-family:'Playfair Display',serif; color:#001F3F;">Upload a course material</h3>
+              <h3 style="margin-bottom:0.85rem; font-family:'Newsreader',serif; color:#001F3F;">Upload a course material</h3>
               <p style="color:#555; font-size:0.92rem; margin-bottom:1rem;">Upload videos, slides, PDFs, datasets, or external links for any track and any week. Materials are visible immediately to students enrolled in that track unless you uncheck "Publish".</p>
               <form id="materialUploadForm" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; align-items:end;">
                 <div>
@@ -718,7 +718,7 @@
             </p>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Upload a new poster / photo / video</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Upload a new poster / photo / video</h3>
               <form id="posterForm" onsubmit="uploadPoster(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                 <div>
                   <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Title *</label>
@@ -778,7 +778,7 @@
             </p>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="webFormTitle">Add a new webinar</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="webFormTitle">Add a new webinar</h3>
               <form id="webForm" onsubmit="saveWebinar(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                 <input type="hidden" id="webId">
                 <div style="grid-column:1/-1;">
@@ -823,12 +823,12 @@
             </div>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">All webinars</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">All webinars</h3>
               <div id="webinarsList"><em style="color:#94a3b8;">Loading…</em></div>
             </div>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-top:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
               <div id="webRegList"><em style="color:#94a3b8;">Loading…</em></div>
             </div>
           </div>
@@ -841,7 +841,7 @@
             </p>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="annFormTitle">Add a new announcement</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="annFormTitle">Add a new announcement</h3>
               <form id="annForm" onsubmit="saveAnnouncement(event)" style="display:grid; grid-template-columns:1fr 2fr; gap:1rem;">
                 <input type="hidden" id="annId">
                 <div>
@@ -909,7 +909,7 @@
             </p>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Page text (saved to site_content)</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Page text (saved to site_content)</h3>
               <form id="instContentForm" onsubmit="saveInstitutionContent(event)" style="display:grid; gap:1rem;">
                 <div>
                   <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Hero headline</label>
@@ -939,7 +939,7 @@
             </div>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;">Partner logos</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Partner logos</h3>
               <form id="logoForm" onsubmit="uploadLogo(event)" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.25rem;">
                 <div>
                   <label style="display:block; font-size:0.85rem; color:#001F3F; font-weight:600; margin-bottom:0.35rem;">Institution name *</label>
@@ -971,7 +971,7 @@
             </p>
 
             <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-bottom:1.6rem;">
-              <h3 style="margin:0 0 1rem; font-family:'Playfair Display',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="saFormTitle">Add a new standalone course</h3>
+              <h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;" id="saFormTitle">Add a new standalone course</h3>
               <form id="saForm" onsubmit="saveStandaloneCourse(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
                 <input type="hidden" id="saId">
                 <div>
@@ -1633,7 +1633,7 @@
           thumb +
           '<div style="padding:0.8rem 1rem 1rem;">' +
             '<div style="margin-bottom:0.4rem;">'+badges+'</div>' +
-            '<h4 style="font-family:\'Playfair Display\',Georgia,serif; color:#001F3F; font-size:0.98rem; margin-bottom:0.4rem;">'+escHtml(c.title||'Untitled')+'</h4>' +
+            '<h4 style="font-family:\'Newsreader\',Georgia,serif; color:#001F3F; font-size:0.98rem; margin-bottom:0.4rem;">'+escHtml(c.title||'Untitled')+'</h4>' +
             (c.subtitle ? '<div style="font-size:0.78rem; color:#64748b; margin-bottom:0.55rem;">'+escHtml(c.subtitle)+'</div>' : '') +
             '<div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">' +
               '<div style="font-weight:700; color:#001F3F;">'+price+'</div>' +
@@ -1757,7 +1757,7 @@
           featBadge +
           mediaHtml +
           '<div style="padding:0.85rem;">' +
-            '<h4 style="font-family:\'Playfair Display\',Georgia,serif; color:#001F3F; font-size:1rem; margin:0 0 0.4rem; line-height:1.25;">' + escHtml(p.title || 'Untitled') + '</h4>' +
+            '<h4 style="font-family:\'Newsreader\',Georgia,serif; color:#001F3F; font-size:1rem; margin:0 0 0.4rem; line-height:1.25;">' + escHtml(p.title || 'Untitled') + '</h4>' +
             '<div style="font-size:0.78rem; color:#64748b; margin-bottom:0.65rem;">' + meta.join(' · ') + '</div>' +
             (p.description ? '<div style="font-size:0.85rem; color:#475569; margin-bottom:0.7rem; line-height:1.4;">' + escHtml((p.description||'').slice(0,140)) + ((p.description||'').length > 140 ? '…' : '') + '</div>' : '') +
             '<div style="display:flex; gap:0.4rem; flex-wrap:wrap;">' +
@@ -2583,7 +2583,7 @@
         html += '</div>';
 
         // Parental consent
-        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1rem 0 0.5rem;">Parental consent</h4>';
+        html += '<h4 style="font-family:\'Newsreader\',serif; color:#001F3F; margin:1rem 0 0.5rem;">Parental consent</h4>';
         if (consent && (consent.status==='signed' || consent.signed_at)) {
           html += '<div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:0.85rem; color:#065f46; font-size:0.92rem;">✓ Signed ' + (consent.signed_at ? new Date(consent.signed_at).toLocaleString() : '') + ' by ' + escHtml(consent.parent_name||'') + '</div>';
         } else {
@@ -2592,7 +2592,7 @@
         }
 
         // Certificates
-        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Certificates</h4>';
+        html += '<h4 style="font-family:\'Newsreader\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Certificates</h4>';
         if (certs.length) {
           html += '<div style="display:grid; gap:0.55rem;">';
           certs.forEach(function(c){
@@ -2604,7 +2604,7 @@
         }
 
         // Materials + submissions snapshot
-        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Course materials &amp; submissions</h4>';
+        html += '<h4 style="font-family:\'Newsreader\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Course materials &amp; submissions</h4>';
         if (mats.length) {
           html += '<div style="display:grid; gap:0.4rem; max-height:280px; overflow-y:auto;">';
           mats.forEach(function(m){
@@ -2618,7 +2618,7 @@
         }
 
         // Quick links
-        html += '<h4 style="font-family:\'Playfair Display\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Quick links (open in a new tab as anonymous viewer)</h4>';
+        html += '<h4 style="font-family:\'Newsreader\',serif; color:#001F3F; margin:1.25rem 0 0.5rem;">Quick links (open in a new tab as anonymous viewer)</h4>';
         html += '<div style="display:flex; gap:0.5rem; flex-wrap:wrap;">';
         html += '<a href="portal/login.html" target="_blank" class="btn-sm" style="background:#dbeafe; color:#1e40af; border-color:#93c5fd; text-decoration:none;">Portal login page</a>';
         var trackToPage = { 'future-physician':'portal/courses/future-physician.html', 'pre-med':'portal/courses/pre-med.html', 'med-accelerator':'portal/courses/med-accelerator.html', 'resident-accelerator':'portal/courses/resident-accelerator.html', '12month':'portal/courses/twelve-month.html' };
