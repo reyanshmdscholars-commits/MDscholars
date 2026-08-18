@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="noindex, nofollow" name="robots"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
 <title>Mentor Portal — MD Scholars</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --navy: #001F3F; --teal: #134E4A; --teal-bright: #0d9488; --teal-light: #14b8a6;
@@ -43,47 +44,48 @@
   .switch-link { text-align: center; font-size: 0.85rem; color: var(--gray-600); margin-top: 0.75rem; }
   .switch-link a { color: var(--teal-bright); text-decoration: none; font-weight: 600; }
 </style>
+  <style id="mds-lucide-style">
+.mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
+.mds-lu:last-child { margin-right: 0; }
+.feature-icon .mds-lu, .service-icon .mds-lu, .stat-icon .mds-lu,
+.card-icon .mds-lu, .program-icon .mds-lu, .step-icon .mds-lu,
+.trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu,
+.tab-icon .mds-lu, .nav-item-icon .mds-lu { width: 60%; height: 60%; margin: 0; stroke-width: 1.5; }
+</style>
 </head>
 <body>
-  <div class="login-card">
-    <div class="brand">
-      <div class="brand-icon">🩺</div>
-      <h1>MD Scholars</h1>
-      <div class="subtitle">Mentor Portal</div>
-    </div>
-
-    <h2>Sign in</h2>
-    <p class="hint">Faculty mentors only. Use the email Dr. Munigala invited.</p>
-
-    <div id="msg" class="msg"></div>
-
-    <form id="loginForm" autocomplete="on">
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" autocomplete="username" required placeholder="you@example.com">
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••">
-      </div>
-      <button type="submit" class="submit" id="submitBtn">Sign in →</button>
-    </form>
-
-    <div class="alt-actions">
-      <a href="#" id="forgotLink">Forgot password?</a>
-    </div>
-
-    <div class="switch-link">
+<div class="login-card">
+<div class="brand">
+<div class="brand-icon"><i class="mds-lu" data-lucide="stethoscope"></i></div>
+<h1>MD Scholars</h1>
+<div class="subtitle">Mentor Portal</div>
+</div>
+<h2>Sign in</h2>
+<p class="hint">Faculty mentors only. Use the email Dr. Munigala invited.</p>
+<div class="msg" id="msg"></div>
+<form autocomplete="on" id="loginForm">
+<div class="field">
+<label for="email">Email</label>
+<input autocomplete="username" id="email" name="email" placeholder="you@example.com" required="" type="email"/>
+</div>
+<div class="field">
+<label for="password">Password</label>
+<input autocomplete="current-password" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+<button class="submit" id="submitBtn" type="submit">Sign in →</button>
+</form>
+<div class="alt-actions">
+<a href="#" id="forgotLink">Forgot password?</a>
+</div>
+<div class="switch-link">
       Looking for the student portal? <a href="login.html">Student sign in →</a>
-    </div>
-
-    <div class="footer-link">
-      <a href="../index.html">← Back to mdscholars.com</a>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script>
+</div>
+<div class="footer-link">
+<a href="../index.html">← Back to mdscholars.com</a>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
     const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -152,5 +154,14 @@
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initListeners); else initListeners();
   </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script id="mds-lucide-init">
+(function(){
+  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.mdsRefreshIcons = init;
+})();
+</script>
 </body>
 </html>
