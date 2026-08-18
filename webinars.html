@@ -74,11 +74,13 @@
   /* INLINE REGISTRATION FORM (revealed on click) */
   .register-panel { display: none; margin-top: 1rem; padding: 1.25rem; background: var(--cream); border-radius: 12px; border: 1px dashed var(--gray-200); }
   .register-panel.open { display: block; }
-  .register-panel .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.75rem; align-items: end; }
+  .register-panel .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 1rem; align-items: end; }
+  .register-panel .form-row .full { grid-column: 1 / -1; }
+  .register-panel .form-actions { margin-top: 0.85rem; display: flex; justify-content: flex-end; }
   .register-panel label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
   .register-panel input, .register-panel select { width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--gray-200); border-radius: 6px; font-family: inherit; font-size: 0.95rem; background: #fff; }
   .register-panel .hint { font-size: 0.8rem; color: var(--gray-600); margin-top: 0.5rem; }
-  @media (max-width: 720px) { .register-panel .form-row { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .register-panel .form-row { grid-template-columns: 1fr; } .register-panel .form-actions { justify-content: stretch; } .register-panel .form-actions .btn-teal { width: 100%; justify-content: center; } }
 
   .empty-state { text-align: center; padding: 3rem 1rem; color: var(--gray-600); background: var(--cream); border-radius: 16px; }
   .empty-state h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.35rem; margin-bottom: 0.5rem; }
@@ -522,24 +524,27 @@
         <div id="reg-${w.id}" class="register-panel" data-join="${esc(w.join_url || '')}">
           <form onsubmit="return registerWebinar(event, '${w.id}')">
             <div class="form-row">
-              <div><label>Your name</label><input type="text" name="name" required autocomplete="name"></div>
-              <div><label>Grade / stage</label>
+              <div class="full"><label>Full name</label><input type="text" name="name" required autocomplete="name" placeholder="First and last name"></div>
+              <div><label>Email</label><input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></div>
+              <div><label>Phone number</label><input type="tel" name="phone" required autocomplete="tel" placeholder="e.g. (555) 123-4567" pattern="[0-9+()\\-\\s]{7,}"></div>
+              <div class="full"><label>Education level</label>
                 <select name="stage" required>
                   <option value="">Select…</option>
                   <option value="high-school">High school</option>
                   <option value="college">College / Pre-med</option>
                   <option value="med-student">Medical student</option>
                   <option value="resident">Resident / Fellow</option>
-                  <option value="img">IMG</option>
+                  <option value="img">IMG (International Medical Graduate)</option>
                   <option value="parent">Parent</option>
                   <option value="educator">Educator / Counselor</option>
                   <option value="other">Other</option>
                 </select>
               </div>
-              <div><label>Email</label><input type="email" name="email" required autocomplete="email"></div>
-              <div><button type="submit" class="btn-teal" style="padding:0.55rem 1.1rem;">Get Link →</button></div>
             </div>
-            <p class="hint">No confirmation email — the join link appears right here after you register.</p>
+            <div class="form-actions">
+              <button type="submit" class="btn-teal">Get Join Link →</button>
+            </div>
+            <p class="hint">No confirmation email — the join link appears right here after you register. Your info goes to <strong>contact@mdscholars.com</strong> so we can follow up.</p>
           </form>
           <div id="joinLink-${w.id}" style="display:none; margin-top:1rem; padding:1rem 1.25rem; background:#dcfce7; border-radius:8px; border-left:4px solid #059669;"></div>
         </div>
@@ -578,10 +583,13 @@
     const form = e.target;
     const name = form.name.value.trim();
     const email = form.email.value.trim().toLowerCase();
+    const phone = form.phone.value.trim();
     const stage = form.stage.value;
-    if (!name || !email || !stage) { toast('Please fill in all fields.', 'error'); return false; }
+    if (!name || !email || !phone || !stage) { toast('Please fill in all fields.', 'error'); return false; }
+    // Loose phone validation — 7+ digits after stripping non-numerics
+    if (phone.replace(/[^0-9]/g, '').length < 7) { toast('Please enter a valid phone number.', 'error'); return false; }
     try {
-      const res = await sb.from('webinar_registrations').insert([{ webinar_id: webinarId, name, email, stage }]);
+      const res = await sb.from('webinar_registrations').insert([{ webinar_id: webinarId, name, email, phone, stage }]);
       if (res.error && !res.error.message.includes('duplicate')) throw res.error;
       // Reveal the join link
       const panel = document.getElementById('reg-' + webinarId);
