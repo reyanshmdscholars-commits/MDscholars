@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="noindex, nofollow" name="robots"/>
 <title>Dashboard — MD Scholars</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --navy: #001F3F; --navy-mid: #002d5a; --teal: #134E4A; --teal-bright: #0d9488; --teal-light: #14b8a6;
@@ -77,112 +78,111 @@
   .loading .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid var(--gray-200); border-top-color: var(--teal-bright); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
+  <style id="mds-lucide-style">
+.mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
+.mds-lu:last-child { margin-right: 0; }
+.feature-icon .mds-lu, .service-icon .mds-lu, .stat-icon .mds-lu,
+.card-icon .mds-lu, .program-icon .mds-lu, .step-icon .mds-lu,
+.trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu,
+.tab-icon .mds-lu, .nav-item-icon .mds-lu { width: 60%; height: 60%; margin: 0; stroke-width: 1.5; }
+</style>
 </head>
 <body>
-  <div id="loading" class="loading"><div class="spinner"></div><p>Loading your dashboard…</p></div>
-  <div id="appWrapper" style="display:none;">
-    <div class="topbar">
-      <div class="brand">
-        <div class="brand-icon"><img src="../logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-        <div class="brand-text"><strong>MD Scholars</strong><br><span>Student Portal</span></div>
-      </div>
-      <div class="topbar-right">
-        <span class="greeting" id="greeting">Welcome</span>
-        <button id="logoutBtn">Sign out</button>
-      </div>
-    </div>
-
-    <div class="hero-strip">
-      <div class="hero-inner">
-        <div>
-          <div class="hero-h1" id="heroTitle">Welcome back</div>
-          <div class="hero-sub" id="heroSub">Your scholar dashboard</div>
-        </div>
-        <div class="countdown">
-          <div class="countdown-num" id="daysLeft">—</div>
-          <div class="countdown-label">days of access remaining</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="grid">
-        <!-- LEFT: track + content -->
-        <div>
-          <div class="card track-card">
-            <h2><span class="icon">📚</span> Your Program</h2>
-            <div class="track-name" id="trackName">—</div>
-            <div class="track-meta" id="trackMeta">—</div>
-            <a class="card-cta" id="trackLink" href="#" style="background: rgba(255,255,255,0.18); color: white;">Open course materials →</a>
-          </div>
-
-          <div class="card" style="margin-top:1.5rem;">
-            <h2><span class="icon">📊</span> Course Progress</h2>
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-            <div class="progress-text" id="progressText">Week 1 of 12</div>
-            <div class="stats">
-              <div class="stat"><div class="stat-num" id="statSubmitted">0</div><div class="stat-label">Submissions</div></div>
-              <div class="stat"><div class="stat-num" id="statQuestions">0</div><div class="stat-label">Questions Asked</div></div>
-              <div class="stat"><div class="stat-num" id="statWeeks">12</div><div class="stat-label">Total Weeks</div></div>
-            </div>
-          </div>
-
-          <div class="card" style="margin-top:1.5rem;">
-            <h2><span class="icon">🎬</span> Welcome Videos</h2>
-            <p style="color:var(--gray-600); font-size:0.95rem; margin-bottom:1rem;">Get oriented with the program. New cohort videos will appear here as they're released.</p>
-            <div style="position:relative; padding-bottom:56.25%; height:0; border-radius:12px; overflow:hidden; background:var(--gray-200); margin-bottom:0.75rem;">
-              <iframe id="founderVideo" src="" title="Founder Introduction" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>
-              <div id="founderPlaceholder" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gray-600); flex-direction:column; gap:0.5rem;">
-                <div style="font-size:2.5rem;">🎥</div>
-                <div style="font-size:0.95rem; font-weight:500;">Founder welcome video — coming soon</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: quick actions -->
-        <div>
-          <div class="card">
-            <h2><span class="icon">📝</span> Quick Actions</h2>
-            <a id="submitAssignmentLink" class="list-item" href="#" style="text-decoration:none; color:inherit;">
+<div class="loading" id="loading"><div class="spinner"></div><p>Loading your dashboard…</p></div>
+<div id="appWrapper" style="display:none;">
+<div class="topbar">
+<div class="brand">
+<div class="brand-icon"><img alt="MD Scholars logo" src="../logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="brand-text"><strong>MD Scholars</strong><br/><span>Student Portal</span></div>
+</div>
+<div class="topbar-right">
+<span class="greeting" id="greeting">Welcome</span>
+<button id="logoutBtn">Sign out</button>
+</div>
+</div>
+<div class="hero-strip">
+<div class="hero-inner">
+<div>
+<div class="hero-h1" id="heroTitle">Welcome back</div>
+<div class="hero-sub" id="heroSub">Your scholar dashboard</div>
+</div>
+<div class="countdown">
+<div class="countdown-num" id="daysLeft">—</div>
+<div class="countdown-label">days of access remaining</div>
+</div>
+</div>
+</div>
+<div class="container">
+<div class="grid">
+<!-- LEFT: track + content -->
+<div>
+<div class="card track-card">
+<h2><span class="icon"><i class="mds-lu" data-lucide="book-open"></i></span> Your Program</h2>
+<div class="track-name" id="trackName">—</div>
+<div class="track-meta" id="trackMeta">—</div>
+<a class="card-cta" href="#" id="trackLink" style="background: rgba(255,255,255,0.18); color: white;">Open course materials →</a>
+</div>
+<div class="card" style="margin-top:1.5rem;">
+<h2><span class="icon"><i class="mds-lu" data-lucide="bar-chart-3"></i></span> Course Progress</h2>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="progress-text" id="progressText">Week 1 of 12</div>
+<div class="stats">
+<div class="stat"><div class="stat-num" id="statSubmitted">0</div><div class="stat-label">Submissions</div></div>
+<div class="stat"><div class="stat-num" id="statQuestions">0</div><div class="stat-label">Questions Asked</div></div>
+<div class="stat"><div class="stat-num" id="statWeeks">12</div><div class="stat-label">Total Weeks</div></div>
+</div>
+</div>
+<div class="card" style="margin-top:1.5rem;">
+<h2><span class="icon"><i class="mds-lu" data-lucide="film"></i></span> Welcome Videos</h2>
+<p style="color:var(--gray-600); font-size:0.95rem; margin-bottom:1rem;">Get oriented with the program. New cohort videos will appear here as they're released.</p>
+<div style="position:relative; padding-bottom:56.25%; height:0; border-radius:12px; overflow:hidden; background:var(--gray-200); margin-bottom:0.75rem;">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" id="founderVideo" src="" style="position:absolute; top:0; left:0; width:100%; height:100%;" title="Founder Introduction"></iframe>
+<div id="founderPlaceholder" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--gray-600); flex-direction:column; gap:0.5rem;">
+<div style="font-size:2.5rem;"><i class="mds-lu" data-lucide="video"></i></div>
+<div style="font-size:0.95rem; font-weight:500;">Founder welcome video — coming soon</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT: quick actions -->
+<div>
+<div class="card">
+<h2><span class="icon"><i class="mds-lu" data-lucide="pencil-line"></i></span> Quick Actions</h2>
+<a class="list-item" href="#" id="submitAssignmentLink" style="text-decoration:none; color:inherit;">
               Submit an assignment <span class="badge info">Open →</span>
-            </a>
-            <a id="askQuestionLink" class="list-item" href="#" style="text-decoration:none; color:inherit;">
-              Ask a question <span id="newAnswersBadge" class="badge info">Open →</span>
-            </a>
-            <a class="list-item" href="mailto:support@mdscholars.com?subject=Education%20—%20" style="text-decoration:none; color:inherit;">
+</a>
+<a class="list-item" href="#" id="askQuestionLink" style="text-decoration:none; color:inherit;">
+              Ask a question <span class="badge info" id="newAnswersBadge">Open →</span>
+</a>
+<a class="list-item" href="mailto:support@mdscholars.com?subject=Education%20—%20" style="text-decoration:none; color:inherit;">
               Email support <span class="badge info">→</span>
-            </a>
-          </div>
-
-          <div class="card" style="margin-top:1.5rem;">
-            <h2><span class="icon">📜</span> Account</h2>
-            <div class="list-item">Student ID <strong id="acctStudentId" style="font-weight:700; font-family:monospace; font-size:0.85rem; color:var(--teal-bright);">—</strong></div>
-            <div class="list-item">Email <strong id="acctEmail" style="font-weight:600; font-size:0.85rem;">—</strong></div>
-            <div class="list-item">Track <strong id="acctTrack" style="font-weight:600; font-size:0.85rem;">—</strong></div>
-            <div class="list-item">Cohort started <strong id="acctStart" style="font-weight:600; font-size:0.85rem;">—</strong></div>
-            <div class="list-item">Access ends <strong id="acctEnd" style="font-weight:600; font-size:0.85rem;">—</strong></div>
-            <div class="list-item">Payment status <strong id="acctFee" style="font-weight:600;"><span class="badge warning">Unpaid</span></strong></div>
-          </div>
-
-          <div class="card" style="margin-top:1.5rem;">
-            <h2><span class="icon">💬</span> Need help?</h2>
-            <p style="color:var(--gray-600); font-size:0.92rem; line-height:1.6;">Email <a href="mailto:support@mdscholars.com" style="color:var(--teal-bright); text-decoration:none; font-weight:600;">support@mdscholars.com</a> with the subject <strong>"Billing"</strong> for payment or invoice questions, or <strong>"Education"</strong> for course content.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- MY Q&A -->
-      <div class="card" style="margin-top:2rem;">
-        <h2><span class="icon">💬</span> My Questions &amp; Answers</h2>
-        <p style="color:var(--gray-600); font-size:0.92rem; margin-bottom:1rem;">Everything you've asked and every answer you've received, in one place. Ask new questions from your <a id="askInThreadLink" href="#" style="color:var(--teal-bright); font-weight:600;">course page</a>.</p>
-        <div id="qaList" style="display:flex; flex-direction:column; gap:1rem;"><em style="color:var(--gray-600);">Loading…</em></div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script>
+</a>
+</div>
+<div class="card" style="margin-top:1.5rem;">
+<h2><span class="icon"><i class="mds-lu" data-lucide="scroll"></i></span> Account</h2>
+<div class="list-item">Student ID <strong id="acctStudentId" style="font-weight:700; font-family:monospace; font-size:0.85rem; color:var(--teal-bright);">—</strong></div>
+<div class="list-item">Email <strong id="acctEmail" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+<div class="list-item">Track <strong id="acctTrack" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+<div class="list-item">Cohort started <strong id="acctStart" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+<div class="list-item">Access ends <strong id="acctEnd" style="font-weight:600; font-size:0.85rem;">—</strong></div>
+<div class="list-item">Payment status <strong id="acctFee" style="font-weight:600;"><span class="badge warning">Unpaid</span></strong></div>
+</div>
+<div class="card" style="margin-top:1.5rem;">
+<h2><span class="icon"><i class="mds-lu" data-lucide="message-circle"></i></span> Need help?</h2>
+<p style="color:var(--gray-600); font-size:0.92rem; line-height:1.6;">Email <a href="mailto:support@mdscholars.com" style="color:var(--teal-bright); text-decoration:none; font-weight:600;">support@mdscholars.com</a> with the subject <strong>"Billing"</strong> for payment or invoice questions, or <strong>"Education"</strong> for course content.</p>
+</div>
+</div>
+</div>
+<!-- MY Q&A -->
+<div class="card" style="margin-top:2rem;">
+<h2><span class="icon"><i class="mds-lu" data-lucide="message-circle"></i></span> My Questions &amp; Answers</h2>
+<p style="color:var(--gray-600); font-size:0.92rem; margin-bottom:1rem;">Everything you've asked and every answer you've received, in one place. Ask new questions from your <a href="#" id="askInThreadLink" style="color:var(--teal-bright); font-weight:600;">course page</a>.</p>
+<div id="qaList" style="display:flex; flex-direction:column; gap:1rem;"><em style="color:var(--gray-600);">Loading…</em></div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
     const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -417,5 +417,14 @@
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadDashboard); else loadDashboard();
   </script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script id="mds-lucide-init">
+(function(){
+  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.mdsRefreshIcons = init;
+})();
+</script>
 </body>
 </html>
