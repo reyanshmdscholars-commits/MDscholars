@@ -119,6 +119,228 @@
     body > nav .nav-links > a:not(.nav-cta), body > nav .nav-dropdown { display: none !important; }
   }
 </style>
+<!-- ═══ MD Scholars canonical polish + motion — do not edit per-page ═══ -->
+<style id="mds-canonical-polish">
+  /* ── Palette tightening: 3 colors ── */
+  :root {
+    --mds-navy: #001F3F;
+    --mds-teal: #0d9488;
+    --mds-teal-dk: #134E4A;
+    --mds-cream: #f8f5ef;
+    --mds-gray-line: #e2e8f0;
+    --mds-gray-text: #475569;
+    --mds-gold-accent: #c9a84c;  /* used SPARINGLY only */
+  }
+
+  /* ── Kill button gradients sitewide — solid teal for primary, ghost for secondary ── */
+  body .btn-primary, body button.btn-primary, body a.btn-primary,
+  body .btn-teal, body button.btn-teal, body a.btn-teal,
+  body .submit-btn, body button.submit-btn,
+  body .btn-submit, body button.btn-submit,
+  body .verify-btn, body button.verify-btn {
+    background: var(--mds-teal) !important;
+    background-image: none !important;
+    color: #fff !important;
+    border: 1px solid var(--mds-teal) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    transition: background 0.18s ease, transform 0.12s ease !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+  body .btn-primary:hover, body button.btn-primary:hover, body a.btn-primary:hover,
+  body .btn-teal:hover, body button.btn-teal:hover, body a.btn-teal:hover,
+  body .submit-btn:hover, body button.submit-btn:hover,
+  body .btn-submit:hover, body button.btn-submit:hover,
+  body .verify-btn:hover, body button.verify-btn:hover {
+    background: var(--mds-teal-dk) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(13,148,136,0.18) !important;
+  }
+  body .btn-secondary, body a.btn-secondary, body button.btn-secondary,
+  body .btn-ghost, body a.btn-ghost, body button.btn-ghost {
+    background: transparent !important;
+    color: var(--mds-navy) !important;
+    border: 1px solid var(--mds-navy) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+    transition: background 0.18s ease !important;
+  }
+  body .btn-secondary:hover, body .btn-ghost:hover {
+    background: var(--mds-navy) !important;
+    color: #fff !important;
+  }
+
+  /* ── Section labels: replace pill with thin editorial treatment ── */
+  body .section-label {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 0 0.4rem 0 !important;
+    border-radius: 0 !important;
+    color: var(--mds-teal-dk) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.22em !important;
+    font-weight: 600 !important;
+    position: relative !important;
+    display: inline-block !important;
+  }
+  body .section-label::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: -2px !important;
+    width: 32px !important;
+    height: 2px !important;
+    background: var(--mds-gold-accent) !important;
+    transition: width 0.35s ease !important;
+  }
+  body .section-label:hover::after { width: 100% !important; }
+
+  /* ── Card border-radius: tighten to 8px uniformly ── */
+  body .program-card, body .service-card, body .partnership-card,
+  body .option-card, body .team-card, body .content-card, body .card,
+  body .info-card, body .feature-card, body .webinar-card, body .contact-card,
+  body .info-box, body .thank-you-container, body .testimonial-card,
+  body .inst-form-card, body .inst-feature {
+    border-radius: 8px !important;
+  }
+
+  /* ── Typography: bump hero size, tighten body ── */
+  body .hero h1 {
+    font-size: clamp(2.6rem, 5.5vw, 4.5rem) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.05 !important;
+  }
+  body .hero-sub, body .hero p {
+    font-size: 1.08rem !important;
+    line-height: 1.6 !important;
+    max-width: 620px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* ── Nav shrink on scroll ── */
+  body > nav.scrolled { height: 62px !important; }
+  body > nav.scrolled .nav-inner { height: 62px !important; }
+  body > nav.scrolled .nav-logo-icon { width: 44px !important; height: 44px !important; }
+  body > nav.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important; }
+  body > nav { transition: height 0.25s ease, box-shadow 0.25s ease !important; }
+  body > nav .nav-inner { transition: height 0.25s ease !important; }
+  body > nav .nav-logo-icon { transition: width 0.25s ease, height 0.25s ease !important; }
+
+  /* ── Card hover lift ── */
+  body .program-card, body .service-card, body .team-card, body .partnership-card,
+  body .webinar-card, body .content-card {
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
+  }
+  body .program-card:hover, body .service-card:hover, body .team-card:hover,
+  body .partnership-card:hover, body .webinar-card:hover, body .content-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 32px rgba(0,31,63,0.08) !important;
+  }
+
+  /* ── Scroll reveal ── */
+  .mds-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .mds-reveal.mds-in { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .mds-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    body > nav, body > nav.scrolled { transition: none !important; }
+  }
+
+  /* ── Marquee (for founder credentials / institutions strip) ── */
+  .mds-marquee { overflow: hidden; padding: 1rem 0; background: var(--mds-cream); border-top: 1px solid var(--mds-gray-line); border-bottom: 1px solid var(--mds-gray-line); }
+  .mds-marquee-inner { display: flex; gap: 3rem; animation: mds-marquee 32s linear infinite; white-space: nowrap; }
+  .mds-marquee span { font-family: 'Playfair Display', Georgia, serif; color: var(--mds-navy); font-size: 1.05rem; opacity: 0.8; }
+  @keyframes mds-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+
+<script id="mds-canonical-motion" defer>
+(function() {
+  function init() {
+    // Nav shrink on scroll
+    var nav = document.querySelector('body > nav');
+    if (nav) {
+      var onScroll = function() {
+        if (window.scrollY > 80) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    // Auto-tag common section elements for reveal
+    var revealSelectors = ['section > .container > *', '.section-title', '.section-sub', '.section-label', '.program-card', '.service-card', '.team-card', '.webinar-card', '.partnership-card', '.founder-content > *', '.hero-inner > *'];
+    var seen = new WeakSet();
+    revealSelectors.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el, idx) {
+        if (seen.has(el)) return;
+        seen.add(el);
+        el.classList.add('mds-reveal');
+        el.style.transitionDelay = Math.min(idx * 60, 400) + 'ms';
+      });
+    });
+
+    // Intersection observer for reveals
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('mds-in');
+            io.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.05 });
+      document.querySelectorAll('.mds-reveal').forEach(function(el) { io.observe(el); });
+    } else {
+      // Fallback: reveal all immediately
+      document.querySelectorAll('.mds-reveal').forEach(function(el) { el.classList.add('mds-in'); });
+    }
+
+    // Count-up for stats (any element with data-count-to="123" or matching pattern .f-stat .num, .num.stat)
+    var counters = document.querySelectorAll('[data-count-to], .f-stat .num, .stat-num, .hero-stat .num');
+    if ('IntersectionObserver' in window) {
+      var cio = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          var text = (el.textContent || '').trim();
+          var m = text.match(/^(\d+)(\D*)$/);
+          if (!m) { cio.unobserve(el); return; }
+          var target = parseInt(m[1], 10);
+          var suffix = m[2];
+          var dur = 1200;
+          var start = performance.now();
+          var step = function(now) {
+            var t = Math.min(1, (now - start) / dur);
+            var v = Math.round(t * target);
+            el.textContent = v + suffix;
+            if (t < 1) requestAnimationFrame(step);
+          };
+          el.textContent = '0' + suffix;
+          requestAnimationFrame(step);
+          cio.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(function(el) { cio.observe(el); });
+    }
+
+    // Very subtle hero parallax (translate y at 30% scroll speed)
+    var heroBg = document.querySelector('.hero .hero-bg');
+    if (heroBg) {
+      var onScrollHero = function() {
+        var y = Math.min(window.scrollY, 600);
+        heroBg.style.transform = 'translateY(' + (y * 0.3) + 'px)';
+      };
+      window.addEventListener('scroll', onScrollHero, { passive: true });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
 </head>
 <body>
 
@@ -136,14 +358,14 @@
       <div class="nav-dropdown">
         <a href="programs.html">Programs</a>
         <div class="dropdown-menu">
-          <a href="high-school.html"><span>🎓</span> High School</a>
-          <a href="college.html"><span>📚</span> College / Pre-Med</a>
-          <a href="medical-student.html"><span>🩺</span> Medical Student</a>
-          <a href="resident-fellow.html"><span>🔬</span> Resident & Fellow</a>
-      <a href="twelve-month.html"><span>📅</span> 12-Month Advanced Track</a>
+          <a href="high-school.html">High School</a>
+          <a href="college.html">College / Pre-Med</a>
+          <a href="medical-student.html">Medical Student</a>
+          <a href="resident-fellow.html">Resident & Fellow</a>
+      <a href="twelve-month.html">12-Month Advanced Track</a>
         </div>
       </div>
-      <a href="webinars.html">🎥 Free Webinar</a>
+      <a href="webinars.html">Free Webinar</a>
       <a href="about.html">About</a>
       <a href="testimonials.html">Testimonials</a>
       <a href="showcase.html">Showcase Your Research</a>
