@@ -1415,13 +1415,14 @@
         var rows = res.data || [];
         var el = document.getElementById('webRegList');
         if (!rows.length) { el.innerHTML = '<em style="color:#94a3b8;">No registrations yet.</em>'; return; }
-        el.innerHTML = '<table class="data-table" style="width:100%;"><thead><tr><th>When</th><th>Webinar</th><th>Name</th><th>Email</th><th>Stage</th></tr></thead><tbody>' +
+        el.innerHTML = '<table class="data-table" style="width:100%;"><thead><tr><th>When</th><th>Webinar</th><th>Name</th><th>Email</th><th>Phone</th><th>Education level</th></tr></thead><tbody>' +
           rows.map(function(r) {
             return '<tr>' +
               '<td style="font-size:0.85rem;">' + new Date(r.created_at).toLocaleString() + '</td>' +
               '<td>' + escHtml((r.webinar && r.webinar.title) || '—') + '</td>' +
               '<td>' + escHtml(r.name) + '</td>' +
-              '<td>' + escHtml(r.email) + '</td>' +
+              '<td><a href="mailto:' + escHtml(r.email) + '">' + escHtml(r.email) + '</a></td>' +
+              '<td>' + (r.phone ? '<a href="tel:' + escHtml(r.phone) + '">' + escHtml(r.phone) + '</a>' : '—') + '</td>' +
               '<td>' + escHtml(r.stage || '—') + '</td>' +
             '</tr>';
           }).join('') + '</tbody></table>';
