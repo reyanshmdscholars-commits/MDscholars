@@ -604,6 +604,19 @@
     background: var(--mds-navy) !important;
     color: #fff !important;
   }
+  /* Hero ghost buttons live on a dark navy background — navy-on-navy would be invisible. */
+  body .hero .btn-ghost, body .hero a.btn-ghost, body .hero button.btn-ghost,
+  body section.hero .btn-ghost, body header.hero .btn-ghost {
+    background: rgba(255,255,255,0.04) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255,255,255,0.55) !important;
+    backdrop-filter: blur(4px);
+  }
+  body .hero .btn-ghost:hover, body .hero a.btn-ghost:hover, body .hero button.btn-ghost:hover {
+    background: rgba(255,255,255,0.12) !important;
+    color: #ffffff !important;
+    border-color: rgba(255,255,255,0.85) !important;
+  }
 
   /* ── Section labels: replace pill with thin editorial treatment ── */
   body .section-label {
