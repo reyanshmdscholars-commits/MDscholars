@@ -290,85 +290,60 @@ body [class*="dark-bg"] .card {
     var r = +m[1], g = +m[2], b = +m[3];
     return (0.2126*r + 0.7152*g + 0.0722*b) / 255;
   }
+  function inlineDarkHit(inline){
+    return /#001F3F|#001A35|#002040|#002d5a|#0f172a|#134E4A|var\(--navy|var\(--dark|var\(--teal(?!-light)/i.test(inline);
+  }
   function ancestorBg(el){
     var node = el.parentElement;
     while (node && node !== document.body){
-      var bg = getComputedStyle(node).backgroundColor;
-      var m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d\.]+))?\)/);
+      var cs = getComputedStyle(node);
+      var m = cs.backgroundColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d\.]+))?\)/);
       if (m){
         var alpha = m[4] === undefined ? 1 : parseFloat(m[4]);
-        if (alpha > 0.15) return bg;
+        if (alpha > 0.15) return cs.backgroundColor;
       }
       var inline = (node.getAttribute && node.getAttribute("style")) || "";
-      if (/#001F3F|#001A35|#002040|#002d5a|#0f172a|var\(--navy|var\(--dark/i.test(inline)) return "rgb(0,31,63)";
-      // Check inline background-image (gradients) for dark colors
-      if (/linear-gradient[^;]*#001|linear-gradient[^;]*#002|linear-gradient[^;]*navy/i.test(inline)) return "rgb(0,31,63)";
+      if (inlineDarkHit(inline)) return "rgb(0,31,63)";
+      // Check background-image (gradients)
+      if (cs.backgroundImage && cs.backgroundImage !== "none" && inlineDarkHit(cs.backgroundImage)) return "rgb(0,31,63)";
       node = node.parentElement;
     }
     return getComputedStyle(document.body).backgroundColor || "rgb(255,255,255)";
   }
-  function setImp(el, prop, val){
-    try { el.style.setProperty(prop, val, "important"); } catch(e){}
-  }
-  function clrImp(el, prop){
-    try { el.style.removeProperty(prop); } catch(e){}
-  }
+  function setImp(el, prop, val){ try { el.style.setProperty(prop, val, "important"); } catch(e){} }
   function fixContrast(){
-    // 1. Icons
-    document.querySelectorAll(".mds-lu").forEach(function(icon){
-      var lum = luminance(ancestorBg(icon));
-      if (lum === null) return;
-      if (lum < 0.45){
-        setImp(icon, "color", "#ffffff");
-        setImp(icon, "stroke", "#ffffff");
-      } else {
-        clrImp(icon, "color");
-        clrImp(icon, "stroke");
+    // Walk every visible element under any dark ancestor and force readable colors
+    var all = document.querySelectorAll("body *");
+    all.forEach(function(el){
+      // Skip meta / script / style
+      var tag = el.tagName;
+      if (tag === "SCRIPT" || tag === "STYLE" || tag === "META" || tag === "LINK" || tag === "NOSCRIPT") return;
+      // Only look at elements that render text or icons
+      var isIcon = el.classList.contains("mds-lu") || el.hasAttribute("data-lucide") || (tag === "svg" && el.closest("[data-lucide], .mds-lu"));
+      var hasText = el.childNodes && Array.prototype.some.call(el.childNodes, function(n){ return n.nodeType === 3 && n.textContent.trim(); });
+      if (!isIcon && !hasText) return;
+      var bgLum = luminance(ancestorBg(el));
+      if (bgLum === null || bgLum >= 0.5) return;  // Only fix on dark bg
+      // Skip if element itself has its own light background (e.g. gold pill on dark card)
+      var ownBg = getComputedStyle(el).backgroundColor;
+      var ownM = ownBg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d\.]+))?\)/);
+      if (ownM){
+        var ownAlpha = ownM[4] === undefined ? 1 : parseFloat(ownM[4]);
+        if (ownAlpha > 0.3){
+          var ownLum = luminance(ownBg);
+          if (ownLum !== null && ownLum > 0.5) return;  // Has its own light bg; skip
+        }
       }
-    });
-    // 2. Section labels — light teal + gold underline on dark bgs
-    document.querySelectorAll(".section-label, .eyebrow, .kicker, .pretitle").forEach(function(el){
-      var lum = luminance(ancestorBg(el));
-      if (lum === null) return;
-      if (lum < 0.45){
-        setImp(el, "color", "#14b8a6");
-        setImp(el, "border-bottom-color", "#c9a84c");
-      }
-    });
-    // 3. Ghost / outline buttons on dark bgs — white text + white translucent border
-    document.querySelectorAll(".btn-ghost, .btn-outline, .btn-secondary, .learn-more").forEach(function(el){
-      var lum = luminance(ancestorBg(el));
-      if (lum === null) return;
-      if (lum < 0.45){
+      if (isIcon){
         setImp(el, "color", "#ffffff");
-        setImp(el, "border-color", "rgba(255,255,255,0.55)");
-        setImp(el, "background", "rgba(255,255,255,0.04)");
+        setImp(el, "stroke", "#ffffff");
+        return;
       }
-    });
-    // 4. Any inline text link with default dark inherited color — bump on dark bg
-    document.querySelectorAll(".card-link, .learn-link, a.arrow-link, .cta-link").forEach(function(el){
-      var lum = luminance(ancestorBg(el));
-      if (lum === null) return;
-      if (lum < 0.45) setImp(el, "color", "#ffffff");
-    });
-    // 5. Generic headings inside dark cards/sections that inherited dark navy color
-    document.querySelectorAll("h1, h2, h3, h4, .card-title, .section-title, .stat-num, .card-heading, .feature-title").forEach(function(el){
-      var lum = luminance(ancestorBg(el));
-      if (lum === null) return;
-      var elCol = getComputedStyle(el).color;
-      var elLum = luminance(elCol);
-      if (lum < 0.4 && elLum !== null && elLum < 0.5){
+      // Text element on dark bg: check computed color luminance
+      var textCol = getComputedStyle(el).color;
+      var textLum = luminance(textCol);
+      if (textLum !== null && textLum < 0.55){
         setImp(el, "color", "#ffffff");
-      }
-    });
-    // 6. Body-text paragraphs / spans on dark bg that still show as dark text
-    document.querySelectorAll("p, span, .card-desc, .feature-desc, .stat-lbl").forEach(function(el){
-      var lum = luminance(ancestorBg(el));
-      if (lum === null) return;
-      var elCol = getComputedStyle(el).color;
-      var elLum = luminance(elCol);
-      if (lum < 0.4 && elLum !== null && elLum < 0.5){
-        setImp(el, "color", "rgba(255,255,255,0.88)");
       }
     });
   }
@@ -379,7 +354,6 @@ body [class*="dark-bg"] .card {
       setTimeout(fixContrast, 250);
       setTimeout(fixContrast, 1200);
     } else {
-      // Lucide not yet loaded; retry
       setTimeout(init, 50);
     }
   }
