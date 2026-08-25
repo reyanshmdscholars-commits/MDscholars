@@ -113,6 +113,133 @@
 .trust-icon .mds-lu, .cta-icon .mds-lu, .icon-badge .mds-lu,
 .tab-icon .mds-lu, .nav-item-icon .mds-lu { width: 60%; height: 60%; margin: 0; stroke-width: 1.5; }
 </style>
+  <style id="mds-canonical-contrast">
+/* ═══ CONTRAST FIX — light icons/buttons on dark surfaces ═══ */
+
+/* Icons on dark surfaces (nav, footer, dark hero, CTA bands, dashboard sidebar) render white */
+body > nav .mds-lu,
+body > footer .mds-lu,
+body footer .mds-lu,
+body .hero .mds-lu,
+body .hero-section .mds-lu,
+body section.section-navy .mds-lu,
+body section.dark .mds-lu,
+body section[class*="cta"] .mds-lu,
+body [class*="dark-bg"] .mds-lu,
+body [class*="bg-navy"] .mds-lu,
+body [class*="bg-dark"] .mds-lu,
+body [style*="background:#001F3F" i] .mds-lu,
+body [style*="background: #001F3F" i] .mds-lu,
+body [style*="background-color:#001F3F" i] .mds-lu,
+body [style*="background:var(--navy)" i] .mds-lu,
+body [style*="background: var(--navy)" i] .mds-lu,
+body [style*="background:var(--navy-mid)" i] .mds-lu,
+body [style*="background:#0f172a" i] .mds-lu,
+body [style*="background: #0f172a" i] .mds-lu,
+body [style*="background:#001a35" i] .mds-lu,
+body [style*="background:#002d5a" i] .mds-lu,
+body .sidebar .mds-lu,
+body .dashboard-sidebar .mds-lu,
+body aside.dark .mds-lu {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Icon container circles on dark surfaces need light backgrounds */
+body > footer .feature-icon, body > footer .service-icon, body > footer .card-icon,
+body > footer .program-icon, body > footer .step-icon, body > footer .stat-icon,
+body > footer .trust-icon, body > footer .icon-badge, body > footer .cta-icon,
+body .hero .feature-icon, body .hero .service-icon, body .hero .card-icon,
+body .hero .program-icon, body .hero .step-icon, body .hero .stat-icon,
+body .hero .trust-icon, body .hero .icon-badge, body .hero .cta-icon,
+body section.section-navy .feature-icon, body section.dark .feature-icon,
+body section[class*="cta"] .feature-icon,
+body [class*="dark-bg"] .feature-icon, body [class*="dark-bg"] .stat-icon,
+body [class*="bg-navy"] .feature-icon, body [class*="bg-navy"] .stat-icon {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+body > footer .feature-icon .mds-lu,
+body > footer .service-icon .mds-lu,
+body .hero .feature-icon .mds-lu,
+body .hero .stat-icon .mds-lu,
+body section.section-navy .feature-icon .mds-lu,
+body [class*="dark-bg"] .feature-icon .mds-lu {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Buttons — ensure primary CTAs always readable */
+body .btn-primary, body a.btn-primary, body button.btn-primary,
+body .btn-teal, body a.btn-teal, body button.btn-teal,
+body .btn-cta, body a.btn-cta, body button.btn-cta,
+body .cta-button, body a.cta-button, body button.cta-button {
+  background: #0d9488 !important;
+  color: #ffffff !important;
+  border: 1px solid #0d9488 !important;
+}
+body .btn-primary .mds-lu, body .btn-teal .mds-lu, body .btn-cta .mds-lu {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Ghost / outline buttons on DARK surfaces — light border + light text */
+body > nav .btn-ghost, body > nav a.btn-ghost, body > nav button.btn-ghost,
+body > footer .btn-ghost, body > footer a.btn-ghost, body > footer button.btn-ghost,
+body .hero .btn-ghost, body .hero a.btn-ghost, body .hero button.btn-ghost,
+body section.section-navy .btn-ghost,
+body section[class*="cta"] .btn-ghost,
+body [class*="dark-bg"] .btn-ghost, body [class*="bg-navy"] .btn-ghost {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(4px);
+}
+body > nav .btn-ghost:hover, body > footer .btn-ghost:hover, body .hero .btn-ghost:hover,
+body section.section-navy .btn-ghost:hover, body [class*="dark-bg"] .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Nav links / footer links — text is already white but ensure inline icons are too */
+body > nav a .mds-lu, body > nav a i, body > footer a .mds-lu {
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Any text-in-hero elements that were dark by inheritance */
+body .hero h1, body .hero h2, body .hero p, body .hero .hero-sub,
+body section.section-navy h1, body section.section-navy h2, body section.section-navy p,
+body section.section-navy .section-title {
+  color: #ffffff !important;
+}
+body .hero .section-label, body section.section-navy .section-label {
+  color: #14b8a6 !important;
+  border-bottom-color: #c9a84c !important;
+}
+
+/* Trust pills / feature pills on dark backgrounds */
+body .hero .trust-pill, body .hero .feature-pill,
+body section.section-navy .trust-pill, body section.section-navy .feature-pill,
+body [class*="dark-bg"] .trust-pill {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+body .hero .trust-pill::before, body section.section-navy .trust-pill::before {
+  color: #14b8a6 !important;
+}
+
+/* Cards that sit on a dark section (uncommon but happens) */
+body section.section-navy .card, body section.section-navy .feature-card,
+body [class*="dark-bg"] .card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+</style>
 </head>
 <body>
 <div class="loading" id="loading"><div class="spinner"></div><p>Loading your course…</p></div>
