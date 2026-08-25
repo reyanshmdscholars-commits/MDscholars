@@ -68,20 +68,25 @@
   .section-sub { color: var(--gray-600); font-size: 1rem; line-height: 1.65; margin-bottom: 2.5rem; }
 
   /* WEBINAR CARD */
-  .webinar-list { display: flex; flex-direction: column; gap: 1.5rem; }
-  .webinar-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 16px; padding: 1.75rem 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: all 0.25s; }
-  .webinar-card:hover { border-color: rgba(13,148,136,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
-  .webinar-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
-  .webinar-title { font-family: 'Newsreader', serif; font-size: 1.4rem; font-weight: 700; color: var(--navy); }
-  .webinar-when { display: inline-flex; align-items: center; gap: 6px; padding: 0.35rem 0.85rem; border-radius: 100px; font-size: 0.85rem; font-weight: 600; }
-  .webinar-when.upcoming { background: #dcfce7; color: #065f46; border: 1px solid #86efac; }
+  .webinar-list { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 900px) { .webinar-list { grid-template-columns: 1fr 1fr; } .webinar-list .webinar-card.featured { grid-column: 1 / -1; } }
+  .webinar-card { background: #fff; border: 1px solid #e6e2d8; border-radius: 8px; padding: 0; overflow: hidden; box-shadow: 0 1px 2px rgba(15,23,42,0.03); transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease; display: flex; flex-direction: column; }
+  .webinar-card:hover { border-color: rgba(13,148,136,0.4); box-shadow: 0 8px 24px rgba(15,23,42,0.06); transform: translateY(-2px); }
+  .webinar-card-body { padding: 1.5rem 1.75rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; flex: 1; }
+  .webinar-when { display: inline-flex; align-items: center; gap: 6px; padding: 0.28rem 0.7rem; border-radius: 3px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; align-self: flex-start; font-family: 'Inter', sans-serif; }
+  .webinar-when.upcoming { background: rgba(13,148,136,0.10); color: #065f46; border: 1px solid rgba(13,148,136,0.25); }
   .webinar-when.past { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
   .webinar-when.live { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
-  .webinar-meta { color: var(--gray-600); font-size: 0.92rem; margin-bottom: 1rem; }
-  .webinar-meta strong { color: var(--navy); }
-  .webinar-desc { color: var(--gray-600); font-size: 1rem; line-height: 1.65; margin-bottom: 1.25rem; }
-  .webinar-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .webinar-title { font-family: 'Newsreader', serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); line-height: 1.22; letter-spacing: -0.005em; margin: 0; }
+  .webinar-meta-row { display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; align-items: center; }
+  .webinar-chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem; border-radius: 3px; background: var(--cream); border: 1px solid #e6e2d8; font-size: 0.83rem; color: #334155; font-weight: 500; }
+  .webinar-chip .mds-lu { width: 0.95em; height: 0.95em; margin: 0; opacity: 0.7; }
+  .webinar-chip strong { color: var(--navy); font-weight: 600; }
+  .webinar-desc { color: #475569; font-size: 0.96rem; line-height: 1.6; margin: 0; }
+  .webinar-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; padding-top: 0.25rem; }
+  .webinar-card.featured .webinar-title { font-size: 1.85rem; }
+  .webinar-card.featured .webinar-desc { font-size: 1rem; }
   .btn-teal { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--teal), var(--teal-bright)); color: #fff; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; font-family: inherit; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(13,148,136,0.35); transition: all 0.2s; }
   .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.45); }
   .btn-ghost { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: var(--teal-bright); padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid var(--teal-bright); font-family: inherit; font-size: 0.95rem; }
@@ -866,85 +871,98 @@ body [class*="dark-bg"] .card {
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function toast(msg, type) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast ' + (type||'success'); setTimeout(() => { t.className = 'toast'; }, 3500); }
 
-  function fmtDateTime(iso) {
-    if (!iso) return 'TBD';
+  function fmtDate(iso) {
+    if (!iso) return { date: 'TBD', time: '', tz: '' };
     const d = new Date(iso);
-    return d.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+    return {
+      date: d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }),
+      time: d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }),
+      tz: (d.toLocaleTimeString(undefined, { timeZoneName: 'short' }).match(/[A-Z]{2,5}$/) || [''])[0]
+    };
   }
 
   function renderUpcoming(rows) {
     const el = document.getElementById('upcomingList');
     if (!rows.length) {
-      el.innerHTML = '<div class="empty-state"><h3>No sessions scheduled yet</h3><p>Check back soon — we announce new webinars every few weeks. Email <a href="mailto:contact@mdscholars.com" style="color:var(--teal-bright); font-weight:600;">contact@mdscholars.com</a> if you\'d like to be notified.</p></div>';
+      el.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>No sessions scheduled yet</h3><p>Check back soon — we announce new webinars every few weeks. Email <a href="mailto:contact@mdscholars.com" style="color:var(--teal-bright); font-weight:600;">contact@mdscholars.com</a> if you\'d like to be notified.</p></div>';
       return;
     }
-    el.innerHTML = rows.map(w => {
-      const isLive = w.scheduled_at && Math.abs(new Date(w.scheduled_at) - new Date()) < 60*60*1000; // within 1hr
+    el.innerHTML = rows.map((w, idx) => {
+      const isLive = w.scheduled_at && Math.abs(new Date(w.scheduled_at) - new Date()) < 60*60*1000;
       const whenClass = isLive ? 'live' : 'upcoming';
       const whenLabel = isLive ? '● Live now' : 'Upcoming';
-      const dur = w.duration_minutes ? `${w.duration_minutes} min` : '60 min';
-      return `<div class="webinar-card">
-        <div class="webinar-head">
-          <div>
-            <div class="webinar-title">${esc(w.title)}</div>
-            <div class="webinar-meta"><strong>${fmtDateTime(w.scheduled_at)}</strong> · ${dur}${w.presenter ? ' · ' + esc(w.presenter) : ''}</div>
-          </div>
+      const dur = w.duration_minutes || 60;
+      const dt = fmtDate(w.scheduled_at);
+      const featured = idx === 0 ? ' featured' : '';
+      return `<article class="webinar-card${featured}">
+        <div class="webinar-card-body">
           <span class="webinar-when ${whenClass}">${whenLabel}</span>
-        </div>
-        ${w.description ? `<p class="webinar-desc">${esc(w.description)}</p>` : ''}
-        <div class="webinar-actions">
-          <button type="button" class="btn-teal" onclick="toggleRegister('${w.id}')">Register &amp; Get Join Link →</button>
-        </div>
-        <div id="reg-${w.id}" class="register-panel" data-join="${esc(w.join_url || '')}">
-          <form onsubmit="return registerWebinar(event, '${w.id}')">
-            <div class="form-row">
-              <div class="full"><label>Full name</label><input type="text" name="name" required autocomplete="name" placeholder="First and last name"></div>
-              <div><label>Email</label><input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></div>
-              <div><label>Phone number</label><input type="tel" name="phone" required autocomplete="tel" placeholder="e.g. (555) 123-4567" pattern="[0-9+()\\-\\s]{7,}"></div>
-              <div class="full"><label>Education level</label>
-                <select name="stage" required>
-                  <option value="">Select…</option>
-                  <option value="high-school">High school</option>
-                  <option value="college">College / Pre-med</option>
-                  <option value="med-student">Medical student</option>
-                  <option value="resident">Resident / Fellow</option>
-                  <option value="img">IMG (International Medical Graduate)</option>
-                  <option value="parent">Parent</option>
-                  <option value="educator">Educator / Counselor</option>
-                  <option value="other">Other</option>
-                </select>
+          <h3 class="webinar-title">${esc(w.title)}</h3>
+          <div class="webinar-meta-row">
+            <span class="webinar-chip"><i class="mds-lu" data-lucide="calendar"></i><strong>${dt.date}</strong></span>
+            ${dt.time ? `<span class="webinar-chip"><i class="mds-lu" data-lucide="clock"></i>${dt.time}${dt.tz ? ' ' + dt.tz : ''}</span>` : ''}
+            <span class="webinar-chip"><i class="mds-lu" data-lucide="timer"></i>${dur} min</span>
+            ${w.presenter ? `<span class="webinar-chip"><i class="mds-lu" data-lucide="user"></i>${esc(w.presenter)}</span>` : ''}
+          </div>
+          ${w.description ? `<p class="webinar-desc">${esc(w.description)}</p>` : ''}
+          <div class="webinar-actions">
+            <button type="button" class="btn-teal" onclick="toggleRegister('${w.id}')"><i class="mds-lu" data-lucide="ticket"></i>Register &amp; Get Join Link</button>
+          </div>
+          <div id="reg-${w.id}" class="register-panel" data-join="${esc(w.join_url || '')}" data-title="${esc(w.title)}" data-scheduled="${esc(w.scheduled_at || '')}" data-duration="${dur}" data-presenter="${esc(w.presenter || '')}">
+            <form onsubmit="return registerWebinar(event, '${w.id}')">
+              <div class="form-row">
+                <div class="full"><label>Full name</label><input type="text" name="name" required autocomplete="name" placeholder="First and last name"></div>
+                <div><label>Email</label><input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></div>
+                <div><label>Phone number</label><input type="tel" name="phone" required autocomplete="tel" placeholder="e.g. (555) 123-4567" pattern="[0-9+()\\-\\s]{7,}"></div>
+                <div class="full"><label>Education level</label>
+                  <select name="stage" required>
+                    <option value="">Select…</option>
+                    <option value="high-school">High school</option>
+                    <option value="college">College / Pre-med</option>
+                    <option value="med-student">Medical student</option>
+                    <option value="resident">Resident / Fellow</option>
+                    <option value="img">IMG (International Medical Graduate)</option>
+                    <option value="parent">Parent</option>
+                    <option value="educator">Educator / Counselor</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn-teal">Get Join Link →</button>
-            </div>
-            <p class="hint">No confirmation email — the join link appears right here after you register. Your info goes to <strong>contact@mdscholars.com</strong> so we can follow up.</p>
-          </form>
-          <div id="joinLink-${w.id}" style="display:none; margin-top:1rem; padding:1rem 1.25rem; background:#dcfce7; border-radius:8px; border-left:4px solid #059669;"></div>
+              <div class="form-actions">
+                <button type="submit" class="btn-teal">Get Join Link →</button>
+              </div>
+              <p class="hint">We'll email your join link to the address above so you can find it later. Free — no cost, no application.</p>
+            </form>
+            <div id="joinLink-${w.id}" style="display:none;"></div>
+          </div>
         </div>
-      </div>`;
+      </article>`;
     }).join('');
+    if (window.mdsRefreshIcons) window.mdsRefreshIcons();
   }
 
   function renderPast(rows) {
     const el = document.getElementById('pastList');
     if (!rows.length) {
-      el.innerHTML = '<div class="empty-state"><h3>No recordings posted yet</h3><p>Recordings from our first webinar cohort will be posted here.</p></div>';
+      el.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>No recordings posted yet</h3><p>Recordings from our first webinar cohort will be posted here.</p></div>';
       return;
     }
     el.innerHTML = rows.map(w => {
-      return `<div class="webinar-card">
-        <div class="webinar-head">
-          <div>
-            <div class="webinar-title">${esc(w.title)}</div>
-            <div class="webinar-meta"><strong>${fmtDateTime(w.scheduled_at)}</strong>${w.presenter ? ' · ' + esc(w.presenter) : ''}</div>
-          </div>
+      const dt = fmtDate(w.scheduled_at);
+      return `<article class="webinar-card">
+        <div class="webinar-card-body">
           <span class="webinar-when past">Recorded</span>
+          <h3 class="webinar-title">${esc(w.title)}</h3>
+          <div class="webinar-meta-row">
+            <span class="webinar-chip"><i class="mds-lu" data-lucide="calendar"></i>${dt.date}</span>
+            ${w.presenter ? `<span class="webinar-chip"><i class="mds-lu" data-lucide="user"></i>${esc(w.presenter)}</span>` : ''}
+          </div>
+          ${w.description ? `<p class="webinar-desc">${esc(w.description)}</p>` : ''}
+          ${w.recording_url ? `<div class="webinar-actions"><a href="${esc(w.recording_url)}" target="_blank" rel="noopener" class="btn-teal"><i class="mds-lu" data-lucide="play-circle"></i>Watch Recording</a></div>` : '<p class="webinar-desc" style="opacity:0.7;">Recording processing — check back soon.</p>'}
         </div>
-        ${w.description ? `<p class="webinar-desc">${esc(w.description)}</p>` : ''}
-        ${w.recording_url ? `<div class="webinar-actions"><a href="${esc(w.recording_url)}" target="_blank" rel="noopener" class="btn-teal">▶ Watch Recording</a></div>` : '<p class="webinar-meta">Recording processing — check back soon.</p>'}
-      </div>`;
+      </article>`;
     }).join('');
+    if (window.mdsRefreshIcons) window.mdsRefreshIcons();
   }
 
   function toggleRegister(id) {
@@ -960,25 +978,51 @@ body [class*="dark-bg"] .card {
     const phone = form.phone.value.trim();
     const stage = form.stage.value;
     if (!name || !email || !phone || !stage) { toast('Please fill in all fields.', 'error'); return false; }
-    // Loose phone validation — 7+ digits after stripping non-numerics
     if (phone.replace(/[^0-9]/g, '').length < 7) { toast('Please enter a valid phone number.', 'error'); return false; }
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const origLabel = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = 'Registering…'; }
     try {
       const res = await sb.from('webinar_registrations').insert([{ webinar_id: webinarId, name, email, phone, stage }]);
       if (res.error && !res.error.message.includes('duplicate')) throw res.error;
-      // Reveal the join link
+
       const panel = document.getElementById('reg-' + webinarId);
       const joinUrl = panel.dataset.join;
+      const title = panel.dataset.title;
+      const scheduled = panel.dataset.scheduled;
+      const duration = panel.dataset.duration;
+      const presenter = panel.dataset.presenter;
       const linkEl = document.getElementById('joinLink-' + webinarId);
+
+      // Trigger confirmation email (non-blocking — user still gets the inline link)
+      fetch(SUPABASE_URL + '/functions/v1/send-webinar-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+        body: JSON.stringify({ name, email, phone, stage, webinarId, title, scheduled, duration, presenter, joinUrl })
+      }).catch(err => console.warn('Confirmation email failed:', err));
+
+      // Build in-page confirmation
+      const dt = fmtDate(scheduled);
+      let html = '<div style="margin-top:1rem; padding:1.25rem 1.5rem; background:#ecfdf5; border:1px solid #86efac; border-left:4px solid #059669; border-radius:6px;">' +
+        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#065f46; font-weight:700; font-size:1rem;"><i class="mds-lu" data-lucide="check-circle-2" style="color:#059669;"></i> You\'re registered</div>' +
+        '<p style="color:#065f46; font-size:0.9rem; margin-bottom:0.75rem; line-height:1.5;">A confirmation email with the join link is on its way to <strong>' + esc(email) + '</strong>. Check spam if you don\'t see it in a few minutes.</p>';
       if (joinUrl) {
-        linkEl.innerHTML = '<strong style="color:#065f46;">You\'re registered ✓</strong><br><span style="color:#065f46;">Click to join the session:</span><br><a href="' + esc(joinUrl) + '" target="_blank" rel="noopener" style="display:inline-block; margin-top:0.5rem; color:#065f46; font-weight:700; word-break:break-all;">' + esc(joinUrl) + '</a>';
+        html += '<div style="margin-top:0.85rem; padding:0.85rem 1rem; background:#fff; border-radius:4px; border:1px solid #d1fae5;">' +
+          '<div style="font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:#059669; font-weight:600; margin-bottom:0.35rem;">Join Link</div>' +
+          '<a href="' + esc(joinUrl) + '" target="_blank" rel="noopener" style="color:#0d9488; font-weight:600; word-break:break-all; text-decoration:none;">' + esc(joinUrl) + ' →</a>' +
+          '</div>';
       } else {
-        linkEl.innerHTML = '<strong style="color:#065f46;">You\'re registered ✓</strong><br><span style="color:#065f46;">The join link will be shared here as we get closer to the date. Bookmark this page.</span>';
+        html += '<p style="color:#065f46; font-size:0.9rem;">The join link will be emailed as soon as it\'s ready.</p>';
       }
+      html += '</div>';
+      linkEl.innerHTML = html;
       linkEl.style.display = 'block';
       form.style.display = 'none';
-      toast('Registered — see the join link below!', 'success');
+      if (window.mdsRefreshIcons) window.mdsRefreshIcons();
+      toast('Registered! Check your email for the join link.', 'success');
     } catch (err) {
       toast('Could not register: ' + err.message, 'error');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = origLabel; }
     }
     return false;
   }
