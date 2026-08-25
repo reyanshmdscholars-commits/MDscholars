@@ -1199,38 +1199,95 @@ body [class*="dark-bg"] .card {
         var alpha = m[4] === undefined ? 1 : parseFloat(m[4]);
         if (alpha > 0.15) return bg;
       }
-      var inline = node.getAttribute && node.getAttribute("style") || "";
-      if (/#001F3F|#001A35|#002040|#002d5a|var\(--navy/i.test(inline)) return "rgb(0,31,63)";
+      var inline = (node.getAttribute && node.getAttribute("style")) || "";
+      if (/#001F3F|#001A35|#002040|#002d5a|#0f172a|var\(--navy|var\(--dark/i.test(inline)) return "rgb(0,31,63)";
+      // Check inline background-image (gradients) for dark colors
+      if (/linear-gradient[^;]*#001|linear-gradient[^;]*#002|linear-gradient[^;]*navy/i.test(inline)) return "rgb(0,31,63)";
       node = node.parentElement;
     }
     return getComputedStyle(document.body).backgroundColor || "rgb(255,255,255)";
   }
-  function fixIconContrast(){
-    var icons = document.querySelectorAll(".mds-lu");
-    icons.forEach(function(icon){
+  function setImp(el, prop, val){
+    try { el.style.setProperty(prop, val, "important"); } catch(e){}
+  }
+  function clrImp(el, prop){
+    try { el.style.removeProperty(prop); } catch(e){}
+  }
+  function fixContrast(){
+    // 1. Icons
+    document.querySelectorAll(".mds-lu").forEach(function(icon){
       var lum = luminance(ancestorBg(icon));
       if (lum === null) return;
       if (lum < 0.45){
-        icon.style.color = "#ffffff";
-        icon.style.stroke = "#ffffff";
+        setImp(icon, "color", "#ffffff");
+        setImp(icon, "stroke", "#ffffff");
       } else {
-        icon.style.removeProperty("color");
-        icon.style.removeProperty("stroke");
+        clrImp(icon, "color");
+        clrImp(icon, "stroke");
+      }
+    });
+    // 2. Section labels — light teal + gold underline on dark bgs
+    document.querySelectorAll(".section-label, .eyebrow, .kicker, .pretitle").forEach(function(el){
+      var lum = luminance(ancestorBg(el));
+      if (lum === null) return;
+      if (lum < 0.45){
+        setImp(el, "color", "#14b8a6");
+        setImp(el, "border-bottom-color", "#c9a84c");
+      }
+    });
+    // 3. Ghost / outline buttons on dark bgs — white text + white translucent border
+    document.querySelectorAll(".btn-ghost, .btn-outline, .btn-secondary, .learn-more").forEach(function(el){
+      var lum = luminance(ancestorBg(el));
+      if (lum === null) return;
+      if (lum < 0.45){
+        setImp(el, "color", "#ffffff");
+        setImp(el, "border-color", "rgba(255,255,255,0.55)");
+        setImp(el, "background", "rgba(255,255,255,0.04)");
+      }
+    });
+    // 4. Any inline text link with default dark inherited color — bump on dark bg
+    document.querySelectorAll(".card-link, .learn-link, a.arrow-link, .cta-link").forEach(function(el){
+      var lum = luminance(ancestorBg(el));
+      if (lum === null) return;
+      if (lum < 0.45) setImp(el, "color", "#ffffff");
+    });
+    // 5. Generic headings inside dark cards/sections that inherited dark navy color
+    document.querySelectorAll("h1, h2, h3, h4, .card-title, .section-title, .stat-num, .card-heading, .feature-title").forEach(function(el){
+      var lum = luminance(ancestorBg(el));
+      if (lum === null) return;
+      var elCol = getComputedStyle(el).color;
+      var elLum = luminance(elCol);
+      if (lum < 0.4 && elLum !== null && elLum < 0.5){
+        setImp(el, "color", "#ffffff");
+      }
+    });
+    // 6. Body-text paragraphs / spans on dark bg that still show as dark text
+    document.querySelectorAll("p, span, .card-desc, .feature-desc, .stat-lbl").forEach(function(el){
+      var lum = luminance(ancestorBg(el));
+      if (lum === null) return;
+      var elCol = getComputedStyle(el).color;
+      var elLum = luminance(elCol);
+      if (lum < 0.4 && elLum !== null && elLum < 0.5){
+        setImp(el, "color", "rgba(255,255,255,0.88)");
       }
     });
   }
   function init(){
     if (window.lucide && window.lucide.createIcons){
       window.lucide.createIcons();
-      requestAnimationFrame(fixIconContrast);
-      setTimeout(fixIconContrast, 200);
+      requestAnimationFrame(fixContrast);
+      setTimeout(fixContrast, 250);
+      setTimeout(fixContrast, 1200);
+    } else {
+      // Lucide not yet loaded; retry
+      setTimeout(init, 50);
     }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
   window.mdsRefreshIcons = init;
-  window.mdsFixIconContrast = fixIconContrast;
-  window.addEventListener("load", fixIconContrast);
+  window.mdsFixIconContrast = fixContrast;
+  window.addEventListener("load", fixContrast);
 })();
 </script>
 </body>
