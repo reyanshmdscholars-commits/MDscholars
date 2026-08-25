@@ -5,21 +5,21 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MD Scholars — Research Mentorship for Future Physicians</title>
-  <link rel="icon" type="image/png" href="/logo.png">
-  <link rel="apple-touch-icon" href="/logo.png">
-  <meta name="theme-color" content="#001F3F">
-  <meta name="description" content="Research mentorship led by practicing physicians. Since 2019, our students have published papers in PubMed and matched into top medical programs.">
-  <link rel="canonical" href="https://mdscholars.com/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="MD Scholars — Physician-led research mentorship">
-  <meta property="og:description" content="Research mentorship led by practicing physicians. Since 2019, our students have published papers in PubMed and matched into top medical programs.">
-  <meta property="og:url" content="https://mdscholars.com/">
-  <meta property="og:image" content="https://mdscholars.com/logo.png">
-  <meta property="og:site_name" content="MD Scholars">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MD Scholars — Physician-led research mentorship">
-  <meta name="twitter:description" content="Research mentorship led by practicing physicians. Since 2019, our students have published papers in PubMed and matched into top medical programs.">
-  <meta name="twitter:image" content="https://mdscholars.com/logo.png">
+<link href="/logo.png" rel="icon" type="image/png"/>
+<link href="/logo.png" rel="apple-touch-icon"/>
+<meta content="#001F3F" name="theme-color"/>
+<meta content="Research mentorship led by practicing physicians. Since 2019, our students have published papers in PubMed and matched into top medical programs." name="description"/>
+<link href="https://mdscholars.com/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="MD Scholars — Physician-led research mentorship" property="og:title"/>
+<meta content="Research mentorship led by practicing physicians. Since 2019, our students have published papers in PubMed and matched into top medical programs." property="og:description"/>
+<meta content="https://mdscholars.com/" property="og:url"/>
+<meta content="https://mdscholars.com/logo.png" property="og:image"/>
+<meta content="MD Scholars" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="MD Scholars — Physician-led research mentorship" name="twitter:title"/>
+<meta content="Research mentorship led by practicing physicians. Since 2019, our students have published papers in PubMed and matched into top medical programs." name="twitter:description"/>
+<meta content="https://mdscholars.com/logo.png" name="twitter:image"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -801,7 +801,7 @@
   else init();
 })();
 </script>
-  <style id="mds-lucide-style">
+<style id="mds-lucide-style">
 /* Lucide icon defaults — sized to text, aligned to baseline */
 .mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
 .mds-lu:last-child { margin-right: 0; }
@@ -812,7 +812,7 @@
   width: 60%; height: 60%; margin: 0; stroke-width: 1.5;
 }
 </style>
-  <style id="mds-canonical-restraint">
+<style id="mds-canonical-restraint">
 /* ═══ COLOR RESTRAINT — retire gold, cap teal to one accent per fold ═══ */
 /* Retire gold from large surfaces — keep only as a hairline detail */
 body [style*="background:#c9a84c" i],
@@ -908,7 +908,7 @@ body .btn-primary:hover, body .btn-teal:hover {
   transform: translateY(-1px);
 }
 </style>
-  <style id="mds-canonical-motif">
+<style id="mds-canonical-motif">
 /* ═══ SIGNATURE MOTIF — duotone imagery + pull-quote treatment ═══ */
 
 /* Duotone photo treatment via SVG filter for all mentor/team/hero portrait images */
@@ -1015,7 +1015,7 @@ body .footnote-marker::before {
   vertical-align: 0.1em;
 }
 </style>
-  <style id="mds-canonical-contrast">
+<style id="mds-canonical-contrast">
 /* ═══ CONTRAST FIX — light icons/buttons on dark surfaces ═══ */
 
 /* Icons on dark surfaces (nav, footer, dark hero, CTA bands, dashboard sidebar) render white */
@@ -1142,13 +1142,57 @@ body [class*="dark-bg"] .card {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 </style>
+<style id="mds-dark-forcelight">
+/* ═══ DARK-SURFACE CONTRAST FORCELIGHT ═══ */
+/* Every element inside a .mds-dark-bg gets light colors unless it has its own light bg */
+.mds-dark-bg, .mds-dark-bg * { color: #ffffff !important; }
+.mds-dark-bg p, .mds-dark-bg span, .mds-dark-bg li,
+.mds-dark-bg .subtitle, .mds-dark-bg .desc, .mds-dark-bg .caption {
+  color: rgba(255,255,255,0.85) !important;
+}
+.mds-dark-bg h1, .mds-dark-bg h2, .mds-dark-bg h3, .mds-dark-bg h4,
+.mds-dark-bg .title, .mds-dark-bg .headline { color: #ffffff !important; }
+/* SVG icons */
+.mds-dark-bg svg, .mds-dark-bg .mds-lu, .mds-dark-bg i[data-lucide],
+.mds-dark-bg [class*="icon"] { color: #ffffff !important; stroke: #ffffff !important; }
+.mds-dark-bg svg * { stroke: #ffffff !important; }
+/* Section labels & ghost buttons get context-appropriate treatment */
+.mds-dark-bg .section-label, .mds-dark-bg .eyebrow {
+  color: #14b8a6 !important;
+  border-bottom-color: #c9a84c !important;
+  background: transparent !important;
+}
+.mds-dark-bg .btn-ghost, .mds-dark-bg .btn-outline, .mds-dark-bg .learn-more,
+.mds-dark-bg a[class*="learn"], .mds-dark-bg a[class*="cta-secondary"] {
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+/* PRESERVE elements that carry their OWN light-ish background (e.g. gold FLAGSHIP pill) */
+.mds-dark-bg .mds-keep-color,
+.mds-dark-bg [style*="background:#c9a84c" i],
+.mds-dark-bg [style*="background: #c9a84c" i],
+.mds-dark-bg [style*="background:#f8f5ef" i],
+.mds-dark-bg [style*="background: #f8f5ef" i],
+.mds-dark-bg [style*="background:#fff" i],
+.mds-dark-bg [style*="background: #fff" i],
+.mds-dark-bg [style*="background:#ffffff" i],
+.mds-dark-bg [style*="background: rgb(255" i] {
+  color: unset !important;
+}
+/* Text inside kept-color pills should not be forced white */
+.mds-dark-bg [style*="background:#c9a84c" i] *,
+.mds-dark-bg [style*="background: #c9a84c" i] * {
+  color: inherit !important;
+}
+</style>
 </head>
 <body>
 <!-- NAVIGATION -->
 <nav id="main-nav">
 <div class="nav-inner">
 <a class="nav-logo" href="index.html">
-<div class="nav-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="nav-logo-icon mds-dark-bg"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
 <div class="nav-logo-text">
 <strong>MD Scholars</strong>
 <span>Research Mentorship</span>
@@ -1172,15 +1216,15 @@ body [class*="dark-bg"] .card {
 <a href="showcase.html">Showcase Your Research</a>
 <a href="additional-services.html">Services</a>
 <a href="faqs.html">FAQs</a>
-<a class="nav-cta" href="apply.html">Apply Now →</a>
+<a class="nav-cta mds-dark-bg" href="apply.html">Apply Now →</a>
 </div>
 </div>
 </nav>
 <!-- HOME PAGE -->
 <div id="home-page">
 <!-- HERO -->
-<section class="hero" id="home">
-<div class="hero-bg"></div>
+<section class="hero mds-dark-bg" id="home">
+<div class="hero-bg mds-dark-bg"></div>
 <div class="hero-grid"></div>
 <div class="hero-orb hero-orb-1"></div>
 <div class="hero-orb hero-orb-2"></div>
@@ -1196,7 +1240,7 @@ body [class*="dark-bg"] .card {
 <div class="trust-pill">Real publications</div>
 </div>
 <div class="hero-buttons">
-<a class="btn-primary" href="apply.html">Apply Now →</a>
+<a class="btn-primary mds-dark-bg" href="apply.html">Apply Now →</a>
 <a class="btn-ghost" href="#programs">Explore Programs</a>
 </div>
 </div>
@@ -1268,7 +1312,7 @@ body [class*="dark-bg"] .card {
 <section class="mission" id="mission">
 <div class="container">
 <div class="mission-inner">
-<div class="mission-visual">
+<div class="mission-visual mds-dark-bg">
 <div class="mission-visual-bg"></div>
 <p class="mission-quote">The future of medicine belongs to physicians who can both deliver care and generate knowledge.</p>
 <p class="mission-attr">— MD Scholars Foundation Principle</p>
@@ -1326,7 +1370,7 @@ body [class*="dark-bg"] .card {
 </ul>
 <div class="program-card-footer">
 <span class="program-duration"><i class="mds-lu" data-lucide="clock"></i> 12-week cohort</span>
-<a class="btn-sm" href="high-school.html">Learn More →</a>
+<a class="btn-sm mds-dark-bg" href="high-school.html">Learn More →</a>
 </div>
 </div>
 <!-- College -->
@@ -1342,7 +1386,7 @@ body [class*="dark-bg"] .card {
 </ul>
 <div class="program-card-footer">
 <span class="program-duration"><i class="mds-lu" data-lucide="clock"></i> 12-week cohort</span>
-<a class="btn-sm" href="college.html">Learn More →</a>
+<a class="btn-sm mds-dark-bg" href="college.html">Learn More →</a>
 </div>
 </div>
 <!-- Med Student -->
@@ -1358,7 +1402,7 @@ body [class*="dark-bg"] .card {
 </ul>
 <div class="program-card-footer">
 <span class="program-duration"><i class="mds-lu" data-lucide="clock"></i> 12-week intensive</span>
-<a class="btn-sm" href="medical-student.html">Learn More →</a>
+<a class="btn-sm mds-dark-bg" href="medical-student.html">Learn More →</a>
 </div>
 </div>
 <!-- Resident/Fellow -->
@@ -1374,12 +1418,12 @@ body [class*="dark-bg"] .card {
 </ul>
 <div class="program-card-footer">
 <span class="program-duration"><i class="mds-lu" data-lucide="clock"></i> Ongoing enrollment</span>
-<a class="btn-sm" href="resident-fellow.html">Learn More →</a>
+<a class="btn-sm mds-dark-bg" href="resident-fellow.html">Learn More →</a>
 </div>
 </div>
 </div>
 <!-- 12-Month Advanced Track Highlight -->
-<div onclick="window.location='twelve-month.html'" style="margin-top:2.5rem; background:linear-gradient(135deg, #001F3F 0%, #134E4A 100%); border-radius:20px; padding:3rem 2.5rem; color:white; position:relative; overflow:hidden; cursor:pointer;">
+<div class="mds-dark-bg" onclick="window.location='twelve-month.html'" style="margin-top:2.5rem; background:linear-gradient(135deg, #001F3F 0%, #134E4A 100%); border-radius:20px; padding:3rem 2.5rem; color:white; position:relative; overflow:hidden; cursor:pointer;">
 <div style="position:absolute; top:1.25rem; right:1.5rem; background:#c9a84c; color:#001F3F; font-size:0.7rem; padding:0.35rem 0.85rem; border-radius:99px; font-weight:700; letter-spacing:0.06em;">FLAGSHIP PROGRAM</div>
 <div style="display:grid; grid-template-columns:auto 1fr auto; gap:2rem; align-items:center;">
 <div style="font-size:3.5rem;"><i class="mds-lu" data-lucide="calendar"></i></div>
@@ -1393,7 +1437,7 @@ body [class*="dark-bg"] .card {
 </div>
 </section>
 <!-- OUTCOMES STRIP -->
-<div class="outcomes-strip">
+<div class="outcomes-strip mds-dark-bg">
 <div class="container">
 <div class="outcomes-inner">
 <div class="outcome-item">
@@ -1428,7 +1472,7 @@ body [class*="dark-bg"] .card {
 <section class="founder" id="founder">
 <div class="container">
 <div class="founder-inner">
-<div class="founder-portrait">
+<div class="founder-portrait mds-dark-bg">
 <img alt="Dr. Satish Munigala" src="faculty/munigala.jpg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:20px;"/>
 <div class="founder-tag" style="z-index:2;">
 <strong>Dr. Satish Munigala</strong>
@@ -1467,34 +1511,34 @@ body [class*="dark-bg"] .card {
 <p class="section-sub">Partner with us to deliver cohort-based research curriculum, faculty development workshops, and structured scholarly programming for your students or trainees.</p>
 <div class="inst-features">
 <div class="inst-feature">
-<div class="inst-feature-icon"><i class="mds-lu" data-lucide="hospital"></i></div>
+<div class="inst-feature-icon mds-dark-bg"><i class="mds-lu" data-lucide="hospital"></i></div>
 <div>
 <h4>Hospital &amp; GME Programs</h4>
 <p>ACGME-aligned scholarly activity support designed to integrate with your residency curriculum requirements.</p>
 </div>
 </div>
 <div class="inst-feature">
-<div class="inst-feature-icon"><i class="mds-lu" data-lucide="graduation-cap"></i></div>
+<div class="inst-feature-icon mds-dark-bg"><i class="mds-lu" data-lucide="graduation-cap"></i></div>
 <div>
 <h4>Pre-Med Programs &amp; Universities</h4>
 <p>Cohort-based research workshops and mentorship tracks tailored for undergraduate pre-health programs.</p>
 </div>
 </div>
 <div class="inst-feature">
-<div class="inst-feature-icon"><i class="mds-lu" data-lucide="clipboard-list"></i></div>
+<div class="inst-feature-icon mds-dark-bg"><i class="mds-lu" data-lucide="clipboard-list"></i></div>
 <div>
 <h4>Medical Schools</h4>
 <p>Supplemental research mentorship for MS1-MS4 students looking to build competitive residency applications.</p>
 </div>
 </div>
 </div>
-<a class="btn-primary" href="for-institutions.html" style="display:inline-flex;">Request a Proposal →</a>
+<a class="btn-primary mds-dark-bg" href="for-institutions.html" style="display:inline-flex;">Request a Proposal →</a>
 </div>
 <div>
 <div class="inst-form-card">
 <h3>Ready to Partner?</h3>
 <p>Fill out our full inquiry form and we'll be in touch within 2 business days to discuss how MD Scholars can support your program.</p>
-<a class="btn-primary" href="for-institutions.html" style="display:inline-flex;width:100%;justify-content:center;text-decoration:none;margin-top:1rem;">Submit an Inquiry →</a>
+<a class="btn-primary mds-dark-bg" href="for-institutions.html" style="display:inline-flex;width:100%;justify-content:center;text-decoration:none;margin-top:1rem;">Submit an Inquiry →</a>
 </div>
 </div>
 </div>
@@ -1503,7 +1547,7 @@ body [class*="dark-bg"] .card {
 </div> <!-- end #home-page -->
 <!-- PROGRAM DETAIL PAGE -->
 <div id="program-detail">
-<div class="detail-hero">
+<div class="detail-hero mds-dark-bg">
 <div class="detail-hero-bg"></div>
 <div class="container detail-hero-inner">
 <div class="detail-breadcrumb">
@@ -1552,7 +1596,7 @@ body [class*="dark-bg"] .card {
 <span class="sidebar-feature-icon"><i class="mds-lu" data-lucide="award"></i></span>
 <p><strong>Certificate:</strong> Verifiable Research Completion Certificate upon program completion</p>
 </div>
-<a class="btn-primary" href="apply.html" style="width:100%;justify-content:center;margin-top:1.25rem;">Apply to This Track →</a>
+<a class="btn-primary mds-dark-bg" href="apply.html" style="width:100%;justify-content:center;margin-top:1.25rem;">Apply to This Track →</a>
 </div>
 </div>
 </div>
@@ -1582,7 +1626,7 @@ body [class*="dark-bg"] .card {
   @media (max-width: 960px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr 1fr; gap:2rem; } }
   @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
 </style>
-<footer class="rich-ft">
+<footer class="rich-ft mds-dark-bg">
 <div class="ft-container">
 <div class="ft-grid">
 <div class="ft-brand">
@@ -1744,7 +1788,7 @@ function showPage(page) {
 }
 </script>
 <script defer="" src="chatbot-widget.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script defer="" src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script id="mds-lucide-init">
 (function(){
   function luminance(rgbStr){
