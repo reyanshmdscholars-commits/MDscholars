@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Standalone Courses — MD Scholars</title>
-<meta name="description" content="Individual MD Scholars courses you can take à la carte — modules on IRB submission, statistics, manuscript writing, and more.">
-<link rel="icon" href="logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta content="Individual MD Scholars courses you can take à la carte — modules on IRB submission, statistics, manuscript writing, and more." name="description"/>
+<link href="logo.png" rel="icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --navy: #001F3F;
@@ -256,8 +257,7 @@
   .mds-marquee span { font-family: 'Newsreader', Georgia, serif; color: var(--mds-navy); font-size: 1.05rem; opacity: 0.8; }
   @keyframes mds-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 </style>
-
-<script id="mds-canonical-motion" defer>
+<script defer="" id="mds-canonical-motion">
 (function() {
   function init() {
     // Nav shrink on scroll
@@ -341,7 +341,7 @@
   else init();
 })();
 </script>
-  <style id="mds-canonical-restraint">
+<style id="mds-canonical-restraint">
 /* ═══ COLOR RESTRAINT — retire gold, cap teal to one accent per fold ═══ */
 /* Retire gold from large surfaces — keep only as a hairline detail */
 body [style*="background:#c9a84c" i],
@@ -353,11 +353,6 @@ body [style*="background-color: #c9a84c" i] {
   border-bottom: 2px solid #c9a84c !important;
   padding-bottom: 2px !important;
 }
-/* Retire gold gradient blobs */
-body [style*="linear-gradient" i][style*="c9a84c" i] {
-  background: rgba(201, 168, 76, 0.06) !important;
-}
-
 /* Softer teal usage — reduce decorative teal backgrounds to near-transparent */
 body .card, body .feature-card, body .service-card, body .program-card,
 body .info-card, body .stat-card {
@@ -442,7 +437,7 @@ body .btn-primary:hover, body .btn-teal:hover {
   transform: translateY(-1px);
 }
 </style>
-  <style id="mds-canonical-motif">
+<style id="mds-canonical-motif">
 /* ═══ SIGNATURE MOTIF — duotone imagery + pull-quote treatment ═══ */
 
 /* Duotone photo treatment via SVG filter for all mentor/team/hero portrait images */
@@ -549,7 +544,7 @@ body .footnote-marker::before {
   vertical-align: 0.1em;
 }
 </style>
-  <style id="mds-canonical-contrast">
+<style id="mds-canonical-contrast">
 /* ═══ CONTRAST FIX — light icons/buttons on dark surfaces ═══ */
 
 /* Icons on dark surfaces (nav, footer, dark hero, CTA bands, dashboard sidebar) render white */
@@ -676,66 +671,96 @@ body [class*="dark-bg"] .card {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 </style>
+<style id="mds-dark-forcelight">
+/* ═══ DARK-SURFACE CONTRAST FORCELIGHT ═══ */
+.mds-dark-bg, .mds-dark-bg * { color: #ffffff !important; }
+.mds-dark-bg p, .mds-dark-bg span, .mds-dark-bg li,
+.mds-dark-bg .subtitle, .mds-dark-bg .desc, .mds-dark-bg .caption,
+.mds-dark-bg .hero-sub { color: rgba(255,255,255,0.85) !important; }
+.mds-dark-bg h1, .mds-dark-bg h2, .mds-dark-bg h3, .mds-dark-bg h4,
+.mds-dark-bg .title, .mds-dark-bg .headline { color: #ffffff !important; }
+.mds-dark-bg svg, .mds-dark-bg .mds-lu, .mds-dark-bg i[data-lucide],
+.mds-dark-bg [class*="icon"] { color: #ffffff !important; stroke: #ffffff !important; }
+.mds-dark-bg svg * { stroke: #ffffff !important; }
+.mds-dark-bg .section-label, .mds-dark-bg .eyebrow {
+  color: #14b8a6 !important; border-bottom-color: #c9a84c !important; background: transparent !important;
+}
+.mds-dark-bg .btn-ghost, .mds-dark-bg .btn-outline, .mds-dark-bg .learn-more,
+.mds-dark-bg a[class*="learn"] {
+  color: #ffffff !important; border-color: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+/* Preserve gold pills sitting on dark backgrounds */
+.mds-dark-bg [style*="background:#c9a84c" i],
+.mds-dark-bg [style*="background: #c9a84c" i] {
+  color: #001F3F !important; background-color: #c9a84c !important;
+}
+.mds-dark-bg [style*="background:#c9a84c" i] *,
+.mds-dark-bg [style*="background: #c9a84c" i] * { color: #001F3F !important; }
+/* Preserve any child with its own explicit light background */
+.mds-dark-bg [style*="background:#fff" i],
+.mds-dark-bg [style*="background: #fff" i],
+.mds-dark-bg [style*="background:#f8f5ef" i],
+.mds-dark-bg [style*="background: #f8f5ef" i] { color: #001F3F !important; }
+.mds-dark-bg [style*="background:#fff" i] *,
+.mds-dark-bg [style*="background: #fff" i] *,
+.mds-dark-bg [style*="background:#f8f5ef" i] *,
+.mds-dark-bg [style*="background: #f8f5ef" i] * { color: inherit !important; }
+</style>
 </head>
 <body>
-
 <nav id="main-nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <div class="nav-logo-icon"><img src="logo.png" alt="MD Scholars logo" style="width:100%;height:100%;object-fit:contain;display:block;"></div>
-      <div class="nav-logo-text">
-        <strong>MD Scholars</strong>
-        <span>Research Mentorship</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <div class="nav-dropdown">
-        <a href="programs.html">Programs</a>
-        <div class="dropdown-menu">
-          <a href="high-school.html">High School</a>
-          <a href="college.html">College / Pre-Med</a>
-          <a href="medical-student.html">Medical Student</a>
-          <a href="resident-fellow.html">Resident & Fellow</a>
-      <a href="twelve-month.html">12-Month Advanced Track</a>
-        </div>
-      </div>
-      <a href="webinars.html">Free Webinar</a>
-      <a href="about.html">About</a>
-      <a href="testimonials.html">Testimonials</a>
-      <a href="showcase.html">Showcase Your Research</a>
-      <a href="additional-services.html">Services</a>
-      <a href="faqs.html">FAQs</a>
-      <a href="apply.html" class="nav-cta">Apply Now →</a>
-    </div>
-  </div>
+<div class="nav-inner">
+<a class="nav-logo" href="index.html">
+<div class="nav-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="nav-logo-text">
+<strong>MD Scholars</strong>
+<span>Research Mentorship</span>
+</div>
+</a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<div class="nav-dropdown">
+<a href="programs.html">Programs</a>
+<div class="dropdown-menu mds-dark-bg">
+<a href="high-school.html">High School</a>
+<a href="college.html">College / Pre-Med</a>
+<a href="medical-student.html">Medical Student</a>
+<a href="resident-fellow.html">Resident &amp; Fellow</a>
+<a href="twelve-month.html">12-Month Advanced Track</a>
+</div>
+</div>
+<a href="webinars.html">Free Webinar</a>
+<a href="about.html">About</a>
+<a href="testimonials.html">Testimonials</a>
+<a href="showcase.html">Showcase Your Research</a>
+<a href="additional-services.html">Services</a>
+<a href="faqs.html">FAQs</a>
+<a class="nav-cta mds-dark-bg" href="apply.html">Apply Now →</a>
+</div>
+</div>
 </nav>
-
-<section class="hero">
-  <h1>Standalone <span class="accent">Courses</span></h1>
-  <p>Take individual MD Scholars modules à la carte. Focused, practical, and built from the same curriculum our full-track scholars use.</p>
+<section class="hero mds-dark-bg">
+<h1>Standalone <span class="accent">Courses</span></h1>
+<p>Take individual MD Scholars modules à la carte. Focused, practical, and built from the same curriculum our full-track scholars use.</p>
 </section>
-
 <div class="intro">
-  <div class="intro-card">
-    <h2>Why standalone courses?</h2>
-    <p>Not every student needs a full 12-week mentorship arc. Standalone courses let physicians, residents, medical students, and pre-meds learn a single high-leverage skill — IRB submission, statistics in R, manuscript writing — and apply it the same week. Buy what you need. Most modules are 1-3 hours and come with downloadable templates.</p>
-  </div>
+<div class="intro-card">
+<h2>Why standalone courses?</h2>
+<p>Not every student needs a full 12-week mentorship arc. Standalone courses let physicians, residents, medical students, and pre-meds learn a single high-leverage skill — IRB submission, statistics in R, manuscript writing — and apply it the same week. Buy what you need. Most modules are 1-3 hours and come with downloadable templates.</p>
 </div>
-
-<div class="filterbar" id="filterbar">
-  <button class="active" data-filter="all">All</button>
-  <button data-filter="IRB">IRB</button>
-  <button data-filter="Statistics">Statistics</button>
-  <button data-filter="Writing">Writing</button>
-  <button data-filter="Study Design">Study Design</button>
-  <button data-filter="Career">Career</button>
 </div>
-
+<div class="filterbar mds-dark-bg" id="filterbar">
+<button class="active mds-dark-bg" data-filter="all">All</button>
+<button data-filter="IRB">IRB</button>
+<button data-filter="Statistics">Statistics</button>
+<button data-filter="Writing">Writing</button>
+<button data-filter="Study Design">Study Design</button>
+<button data-filter="Career">Career</button>
+</div>
 <div class="grid" id="grid">
-  <div class="empty">Loading courses…</div>
+<div class="empty">Loading courses…</div>
 </div>
-
 <style>
   footer.rich-ft { background:#001F3F; color:rgba(255,255,255,0.75); padding:3.5rem 1.5rem 1.5rem; margin-top:4rem; font-family:'Inter','Inter',-apple-system,Segoe UI,Arial,sans-serif; }
   footer.rich-ft .ft-container { max-width:1200px; margin:0 auto; }
@@ -759,63 +784,62 @@ body [class*="dark-bg"] .card {
   @media (max-width: 960px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr 1fr; gap:2rem; } }
   @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
 </style>
-<footer class="rich-ft">
-  <div class="ft-container">
-    <div class="ft-grid">
-      <div class="ft-brand">
-        <div class="ft-logo">
-          <div class="ft-logo-icon"><img src="logo.png" alt="MD Scholars logo"></div>
-          <div><strong>MD Scholars</strong><span>Research Mentorship</span></div>
-        </div>
-        <p>Physician-led research mentorship for every stage of the medical pathway &mdash; from high school to fellowship.</p>
-        <p class="ft-loc">MD Scholars LLC &middot; St. Louis, MO</p>
-      </div>
-      <div>
-        <h4>Programs</h4>
-        <a href="high-school.html">High School</a>
-        <a href="college.html">College / Pre-Med</a>
-        <a href="medical-student.html">Medical Student</a>
-        <a href="resident-fellow.html">Resident &amp; Fellow</a>
-        <a href="twelve-month.html">12-Month Advanced</a>
-        <a href="standalone-courses.html">Standalone Courses</a>
-        <a href="webinars.html">Webinars</a>
-        <a href="for-institutions.html">For Institutions</a>
-      </div>
-      <div>
-        <h4>About</h4>
-        <a href="about.html">Our Team</a>
-        <a href="testimonials.html">Testimonials</a>
-        <a href="showcase.html">Showcase Your Research</a>
-        <a href="additional-services.html">Additional Services</a>
-        <a href="faqs.html">FAQs</a>
-      </div>
-      <div>
-        <h4>Student</h4>
-        <a href="apply.html">Apply Now</a>
-        <a href="enroll.html">Enroll &amp; Tuition</a>
-        <a href="portal/login.html">Student Portal Login</a>
-        <a href="verify.html">Verify Certificate</a>
-        <a href="contact.html">Contact Us</a>
-      </div>
-      <div class="ft-contact">
-        <h4>Get in Touch</h4>
-        <a href="mailto:contact@mdscholars.com">contact@mdscholars.com<small>General inquiries</small></a>
-        <a href="mailto:team@mdscholars.com">team@mdscholars.com<small>Partnerships &amp; outreach</small></a>
-        <a href="mailto:support@mdscholars.com">support@mdscholars.com<small>Enrolled student support</small></a>
-      </div>
-    </div>
-    <div class="ft-bottom">
-      <p>&copy; 2026 MD Scholars LLC. All rights reserved. Physician-led &middot; Small cohorts &middot; Ethical authorship.</p>
-      <div class="ft-legal">
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-        <a href="authorship.html">Authorship</a>
-        <a href="faqs.html">FAQs</a>
-      </div>
-    </div>
-  </div>
+<footer class="rich-ft mds-dark-bg">
+<div class="ft-container">
+<div class="ft-grid">
+<div class="ft-brand">
+<div class="ft-logo">
+<div class="ft-logo-icon"><img alt="MD Scholars logo" src="logo.png"/></div>
+<div><strong>MD Scholars</strong><span>Research Mentorship</span></div>
+</div>
+<p>Physician-led research mentorship for every stage of the medical pathway — from high school to fellowship.</p>
+<p class="ft-loc">MD Scholars LLC · St. Louis, MO</p>
+</div>
+<div>
+<h4>Programs</h4>
+<a href="high-school.html">High School</a>
+<a href="college.html">College / Pre-Med</a>
+<a href="medical-student.html">Medical Student</a>
+<a href="resident-fellow.html">Resident &amp; Fellow</a>
+<a href="twelve-month.html">12-Month Advanced</a>
+<a href="standalone-courses.html">Standalone Courses</a>
+<a href="webinars.html">Webinars</a>
+<a href="for-institutions.html">For Institutions</a>
+</div>
+<div>
+<h4>About</h4>
+<a href="about.html">Our Team</a>
+<a href="testimonials.html">Testimonials</a>
+<a href="showcase.html">Showcase Your Research</a>
+<a href="additional-services.html">Additional Services</a>
+<a href="faqs.html">FAQs</a>
+</div>
+<div>
+<h4>Student</h4>
+<a href="apply.html">Apply Now</a>
+<a href="enroll.html">Enroll &amp; Tuition</a>
+<a href="portal/login.html">Student Portal Login</a>
+<a href="verify.html">Verify Certificate</a>
+<a href="contact.html">Contact Us</a>
+</div>
+<div class="ft-contact">
+<h4>Get in Touch</h4>
+<a href="mailto:contact@mdscholars.com">contact@mdscholars.com<small>General inquiries</small></a>
+<a href="mailto:team@mdscholars.com">team@mdscholars.com<small>Partnerships &amp; outreach</small></a>
+<a href="mailto:support@mdscholars.com">support@mdscholars.com<small>Enrolled student support</small></a>
+</div>
+</div>
+<div class="ft-bottom">
+<p>© 2026 MD Scholars LLC. All rights reserved. Physician-led · Small cohorts · Ethical authorship.</p>
+<div class="ft-legal">
+<a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+<a href="authorship.html">Authorship</a>
+<a href="faqs.html">FAQs</a>
+</div>
+</div>
+</div>
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
   const SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
@@ -894,6 +918,6 @@ body [class*="dark-bg"] .card {
 
   load();
 </script>
-<script src="chatbot-widget.js" defer></script>
+<script defer="" src="chatbot-widget.js"></script>
 </body>
 </html>
