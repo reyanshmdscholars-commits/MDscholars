@@ -5,21 +5,21 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Enroll in MD Scholars</title>
-  <link rel="icon" type="image/png" href="/logo.png">
-  <link rel="apple-touch-icon" href="/logo.png">
-  <meta name="theme-color" content="#001F3F">
-  <meta name="description" content="Complete your enrollment in an MD Scholars mentorship track.">
-  <link rel="canonical" href="https://mdscholars.com/enroll.html">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Enroll — MD Scholars">
-  <meta property="og:description" content="Complete your enrollment in an MD Scholars mentorship track.">
-  <meta property="og:url" content="https://mdscholars.com/enroll.html">
-  <meta property="og:image" content="https://mdscholars.com/logo.png">
-  <meta property="og:site_name" content="MD Scholars">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Enroll — MD Scholars">
-  <meta name="twitter:description" content="Complete your enrollment in an MD Scholars mentorship track.">
-  <meta name="twitter:image" content="https://mdscholars.com/logo.png">
+<link href="/logo.png" rel="icon" type="image/png"/>
+<link href="/logo.png" rel="apple-touch-icon"/>
+<meta content="#001F3F" name="theme-color"/>
+<meta content="Complete your enrollment in an MD Scholars mentorship track." name="description"/>
+<link href="https://mdscholars.com/enroll.html" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Enroll — MD Scholars" property="og:title"/>
+<meta content="Complete your enrollment in an MD Scholars mentorship track." property="og:description"/>
+<meta content="https://mdscholars.com/enroll.html" property="og:url"/>
+<meta content="https://mdscholars.com/logo.png" property="og:image"/>
+<meta content="MD Scholars" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Enroll — MD Scholars" name="twitter:title"/>
+<meta content="Complete your enrollment in an MD Scholars mentorship track." name="twitter:description"/>
+<meta content="https://mdscholars.com/logo.png" name="twitter:image"/>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
     * {
@@ -873,7 +873,7 @@
   width: 60%; height: 60%; margin: 0; stroke-width: 1.5;
 }
 </style>
-  <style id="mds-canonical-restraint">
+<style id="mds-canonical-restraint">
 /* ═══ COLOR RESTRAINT — retire gold, cap teal to one accent per fold ═══ */
 /* Retire gold from large surfaces — keep only as a hairline detail */
 body [style*="background:#c9a84c" i],
@@ -969,7 +969,7 @@ body .btn-primary:hover, body .btn-teal:hover {
   transform: translateY(-1px);
 }
 </style>
-  <style id="mds-canonical-motif">
+<style id="mds-canonical-motif">
 /* ═══ SIGNATURE MOTIF — duotone imagery + pull-quote treatment ═══ */
 
 /* Duotone photo treatment via SVG filter for all mentor/team/hero portrait images */
@@ -1076,7 +1076,7 @@ body .footnote-marker::before {
   vertical-align: 0.1em;
 }
 </style>
-  <style id="mds-canonical-contrast">
+<style id="mds-canonical-contrast">
 /* ═══ CONTRAST FIX — light icons/buttons on dark surfaces ═══ */
 
 /* Icons on dark surfaces (nav, footer, dark hero, CTA bands, dashboard sidebar) render white */
@@ -1203,6 +1203,42 @@ body [class*="dark-bg"] .card {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 </style>
+<style id="mds-dark-forcelight">
+/* ═══ DARK-SURFACE CONTRAST FORCELIGHT ═══ */
+.mds-dark-bg, .mds-dark-bg * { color: #ffffff !important; }
+.mds-dark-bg p, .mds-dark-bg span, .mds-dark-bg li,
+.mds-dark-bg .subtitle, .mds-dark-bg .desc, .mds-dark-bg .caption,
+.mds-dark-bg .hero-sub { color: rgba(255,255,255,0.85) !important; }
+.mds-dark-bg h1, .mds-dark-bg h2, .mds-dark-bg h3, .mds-dark-bg h4,
+.mds-dark-bg .title, .mds-dark-bg .headline { color: #ffffff !important; }
+.mds-dark-bg svg, .mds-dark-bg .mds-lu, .mds-dark-bg i[data-lucide],
+.mds-dark-bg [class*="icon"] { color: #ffffff !important; stroke: #ffffff !important; }
+.mds-dark-bg svg * { stroke: #ffffff !important; }
+.mds-dark-bg .section-label, .mds-dark-bg .eyebrow {
+  color: #14b8a6 !important; border-bottom-color: #c9a84c !important; background: transparent !important;
+}
+.mds-dark-bg .btn-ghost, .mds-dark-bg .btn-outline, .mds-dark-bg .learn-more,
+.mds-dark-bg a[class*="learn"] {
+  color: #ffffff !important; border-color: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+/* Preserve gold pills sitting on dark backgrounds */
+.mds-dark-bg [style*="background:#c9a84c" i],
+.mds-dark-bg [style*="background: #c9a84c" i] {
+  color: #001F3F !important; background-color: #c9a84c !important;
+}
+.mds-dark-bg [style*="background:#c9a84c" i] *,
+.mds-dark-bg [style*="background: #c9a84c" i] * { color: #001F3F !important; }
+/* Preserve any child with its own explicit light background */
+.mds-dark-bg [style*="background:#fff" i],
+.mds-dark-bg [style*="background: #fff" i],
+.mds-dark-bg [style*="background:#f8f5ef" i],
+.mds-dark-bg [style*="background: #f8f5ef" i] { color: #001F3F !important; }
+.mds-dark-bg [style*="background:#fff" i] *,
+.mds-dark-bg [style*="background: #fff" i] *,
+.mds-dark-bg [style*="background:#f8f5ef" i] *,
+.mds-dark-bg [style*="background: #f8f5ef" i] * { color: inherit !important; }
+</style>
 </head>
 <body>
 <!-- Navigation -->
@@ -1233,12 +1269,12 @@ body [class*="dark-bg"] .card {
 <a href="showcase.html">Showcase Your Research</a>
 <a href="additional-services.html">Services</a>
 <a href="faqs.html">FAQs</a>
-<a class="nav-cta" href="apply.html">Apply Now →</a>
+<a class="nav-cta mds-dark-bg" href="apply.html">Apply Now →</a>
 </div>
 </div>
 </nav>
 <!-- Hero Section -->
-<section class="hero">
+<section class="hero mds-dark-bg">
 <div class="hero-inner">
 <h1>Enroll in MD Scholars</h1>
 <p>Choose your program and secure your seat in the next cohort.</p>
@@ -1499,7 +1535,7 @@ body [class*="dark-bg"] .card {
 </div>
 </section>
 <!-- Bottom CTA -->
-<section class="bottom-cta">
+<section class="bottom-cta mds-dark-bg">
 <p><strong>Have questions? Contact us directly.</strong></p>
 <p>Email: <a href="mailto:contact@mdscholars.com">contact@mdscholars.com</a></p>
 <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.95;">Or apply first — pricing details are sent upon acceptance.</p>
@@ -1529,7 +1565,7 @@ body [class*="dark-bg"] .card {
   @media (max-width: 960px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr 1fr; gap:2rem; } }
   @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
 </style>
-<footer class="rich-ft">
+<footer class="rich-ft mds-dark-bg">
 <div class="ft-container">
 <div class="ft-grid">
 <div class="ft-brand">
@@ -1586,7 +1622,7 @@ body [class*="dark-bg"] .card {
 </div>
 </footer>
 <script defer="" src="chatbot-widget.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script defer="" src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script id="mds-lucide-init">
 (function(){
   function luminance(rgbStr){
