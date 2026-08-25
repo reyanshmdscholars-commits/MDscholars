@@ -5,21 +5,21 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Services — MD Scholars</title>
-  <link rel="icon" type="image/png" href="/logo.png">
-  <link rel="apple-touch-icon" href="/logo.png">
-  <meta name="theme-color" content="#001F3F">
-  <meta name="description" content="Statistical analysis, manuscript editing, conference abstract review, and other research support services.">
-  <link rel="canonical" href="https://mdscholars.com/additional-services.html">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Additional Services — MD Scholars">
-  <meta property="og:description" content="Statistical analysis, manuscript editing, conference abstract review, and other research support services.">
-  <meta property="og:url" content="https://mdscholars.com/additional-services.html">
-  <meta property="og:image" content="https://mdscholars.com/logo.png">
-  <meta property="og:site_name" content="MD Scholars">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Additional Services — MD Scholars">
-  <meta name="twitter:description" content="Statistical analysis, manuscript editing, conference abstract review, and other research support services.">
-  <meta name="twitter:image" content="https://mdscholars.com/logo.png">
+<link href="/logo.png" rel="icon" type="image/png"/>
+<link href="/logo.png" rel="apple-touch-icon"/>
+<meta content="#001F3F" name="theme-color"/>
+<meta content="Statistical analysis, manuscript editing, conference abstract review, and other research support services." name="description"/>
+<link href="https://mdscholars.com/additional-services.html" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Additional Services — MD Scholars" property="og:title"/>
+<meta content="Statistical analysis, manuscript editing, conference abstract review, and other research support services." property="og:description"/>
+<meta content="https://mdscholars.com/additional-services.html" property="og:url"/>
+<meta content="https://mdscholars.com/logo.png" property="og:image"/>
+<meta content="MD Scholars" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Additional Services — MD Scholars" name="twitter:title"/>
+<meta content="Statistical analysis, manuscript editing, conference abstract review, and other research support services." name="twitter:description"/>
+<meta content="https://mdscholars.com/logo.png" name="twitter:image"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -626,7 +626,7 @@
   else init();
 })();
 </script>
-  <style id="mds-lucide-style">
+<style id="mds-lucide-style">
 /* Lucide icon defaults — sized to text, aligned to baseline */
 .mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
 .mds-lu:last-child { margin-right: 0; }
@@ -637,7 +637,7 @@
   width: 60%; height: 60%; margin: 0; stroke-width: 1.5;
 }
 </style>
-  <style id="mds-canonical-restraint">
+<style id="mds-canonical-restraint">
 /* ═══ COLOR RESTRAINT — retire gold, cap teal to one accent per fold ═══ */
 /* Retire gold from large surfaces — keep only as a hairline detail */
 body [style*="background:#c9a84c" i],
@@ -733,7 +733,7 @@ body .btn-primary:hover, body .btn-teal:hover {
   transform: translateY(-1px);
 }
 </style>
-  <style id="mds-canonical-motif">
+<style id="mds-canonical-motif">
 /* ═══ SIGNATURE MOTIF — duotone imagery + pull-quote treatment ═══ */
 
 /* Duotone photo treatment via SVG filter for all mentor/team/hero portrait images */
@@ -840,7 +840,7 @@ body .footnote-marker::before {
   vertical-align: 0.1em;
 }
 </style>
-  <style id="mds-canonical-contrast">
+<style id="mds-canonical-contrast">
 /* ═══ CONTRAST FIX — light icons/buttons on dark surfaces ═══ */
 
 /* Icons on dark surfaces (nav, footer, dark hero, CTA bands, dashboard sidebar) render white */
@@ -967,13 +967,49 @@ body [class*="dark-bg"] .card {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 </style>
+<style id="mds-dark-forcelight">
+/* ═══ DARK-SURFACE CONTRAST FORCELIGHT ═══ */
+.mds-dark-bg, .mds-dark-bg * { color: #ffffff !important; }
+.mds-dark-bg p, .mds-dark-bg span, .mds-dark-bg li,
+.mds-dark-bg .subtitle, .mds-dark-bg .desc, .mds-dark-bg .caption,
+.mds-dark-bg .hero-sub { color: rgba(255,255,255,0.85) !important; }
+.mds-dark-bg h1, .mds-dark-bg h2, .mds-dark-bg h3, .mds-dark-bg h4,
+.mds-dark-bg .title, .mds-dark-bg .headline { color: #ffffff !important; }
+.mds-dark-bg svg, .mds-dark-bg .mds-lu, .mds-dark-bg i[data-lucide],
+.mds-dark-bg [class*="icon"] { color: #ffffff !important; stroke: #ffffff !important; }
+.mds-dark-bg svg * { stroke: #ffffff !important; }
+.mds-dark-bg .section-label, .mds-dark-bg .eyebrow {
+  color: #14b8a6 !important; border-bottom-color: #c9a84c !important; background: transparent !important;
+}
+.mds-dark-bg .btn-ghost, .mds-dark-bg .btn-outline, .mds-dark-bg .learn-more,
+.mds-dark-bg a[class*="learn"] {
+  color: #ffffff !important; border-color: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+/* Preserve gold pills sitting on dark backgrounds */
+.mds-dark-bg [style*="background:#c9a84c" i],
+.mds-dark-bg [style*="background: #c9a84c" i] {
+  color: #001F3F !important; background-color: #c9a84c !important;
+}
+.mds-dark-bg [style*="background:#c9a84c" i] *,
+.mds-dark-bg [style*="background: #c9a84c" i] * { color: #001F3F !important; }
+/* Preserve any child with its own explicit light background */
+.mds-dark-bg [style*="background:#fff" i],
+.mds-dark-bg [style*="background: #fff" i],
+.mds-dark-bg [style*="background:#f8f5ef" i],
+.mds-dark-bg [style*="background: #f8f5ef" i] { color: #001F3F !important; }
+.mds-dark-bg [style*="background:#fff" i] *,
+.mds-dark-bg [style*="background: #fff" i] *,
+.mds-dark-bg [style*="background:#f8f5ef" i] *,
+.mds-dark-bg [style*="background: #f8f5ef" i] * { color: inherit !important; }
+</style>
 </head>
 <body>
 <!-- NAV -->
 <nav id="main-nav">
 <div class="nav-inner">
 <a class="nav-logo" href="index.html">
-<div class="nav-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="nav-logo-icon mds-dark-bg"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
 <div class="nav-logo-text">
 <strong>MD Scholars</strong>
 <span>Research Mentorship</span>
@@ -997,13 +1033,13 @@ body [class*="dark-bg"] .card {
 <a href="showcase.html">Showcase Your Research</a>
 <a href="additional-services.html">Services</a>
 <a href="faqs.html">FAQs</a>
-<a class="nav-cta" href="apply.html">Apply Now →</a>
+<a class="nav-cta mds-dark-bg" href="apply.html">Apply Now →</a>
 </div>
 </div>
 </nav>
 <!-- HERO -->
-<section class="hero">
-<div class="hero-bg"></div>
+<section class="hero mds-dark-bg">
+<div class="hero-bg mds-dark-bg"></div>
 <div class="hero-grid"></div>
 <div class="hero-inner">
 <h1>Beyond the Program — Additional Expert Services</h1>
@@ -1067,7 +1103,7 @@ body [class*="dark-bg"] .card {
 <p>Master the core statistical concepts used in medical research. From descriptive statistics to hypothesis testing, build confidence in interpreting and presenting data.</p>
 <div class="course-footer">
 <a href="twelve-month.html">12-Month Track</a>
-<a class="btn-primary" href="enroll.html">Enroll →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html">Enroll →</a>
 </div>
 </div>
 <!-- COURSE 2 -->
@@ -1077,7 +1113,7 @@ body [class*="dark-bg"] .card {
 <p class="course-level">Statistical Analysis &amp; Inferential Modelling</p>
 <p>Move beyond basics to advanced analytical techniques. Learn regression, survival analysis, and multivariate methods with real datasets and clinical applications.</p>
 <div class="course-footer">
-<a class="btn-primary" href="enroll.html">Enroll →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html">Enroll →</a>
 </div>
 </div>
 <!-- COURSE 3 -->
@@ -1087,7 +1123,7 @@ body [class*="dark-bg"] .card {
 <p class="course-level">Research Methodology</p>
 <p>Learn to design valid, reliable surveys and questionnaires. Understand psychometric properties, validation, and best practices for health and medical research.</p>
 <div class="course-footer">
-<a class="btn-primary" href="enroll.html">Enroll →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html">Enroll →</a>
 </div>
 </div>
 <!-- COURSE 4 -->
@@ -1097,7 +1133,7 @@ body [class*="dark-bg"] .card {
 <p class="course-level">Communication Skills</p>
 <p>Write compelling research manuscripts, abstracts, and grant proposals. Learn structure, clarity, and persuasive communication for publication success.</p>
 <div class="course-footer">
-<a class="btn-primary" href="enroll.html">Enroll →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html">Enroll →</a>
 </div>
 </div>
 <!-- COURSE 5 -->
@@ -1107,7 +1143,7 @@ body [class*="dark-bg"] .card {
 <p class="course-level">Professional Standards</p>
 <p>Explore ethical frameworks, IRB fundamentals, informed consent, and responsible conduct in research. Essential for all researchers and clinicians.</p>
 <div class="course-footer">
-<a class="btn-primary" href="enroll.html">Enroll →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html">Enroll →</a>
 </div>
 </div>
 <!-- COURSE 6 -->
@@ -1117,7 +1153,7 @@ body [class*="dark-bg"] .card {
 <p class="course-level">Emerging Technology</p>
 <p>Understand machine learning, AI applications, and modern data analytics in clinical practice and research. Practical hands-on experience with real datasets.</p>
 <div class="course-footer">
-<a class="btn-primary" href="enroll.html">Enroll →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html">Enroll →</a>
 </div>
 </div>
 </div>
@@ -1138,7 +1174,7 @@ body [class*="dark-bg"] .card {
 <li>Preferential pricing for returning scholars</li>
 <li>Access to existing research networks</li>
 </ul>
-<a class="btn-primary" href="enroll.html" style="width: auto; margin-top: 1.5rem;">Enroll in Additional Project →</a>
+<a class="btn-primary mds-dark-bg" href="enroll.html" style="width: auto; margin-top: 1.5rem;">Enroll in Additional Project →</a>
 </div>
 </div>
 </section>
@@ -1179,7 +1215,7 @@ body [class*="dark-bg"] .card {
   @media (max-width: 960px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr 1fr; gap:2rem; } }
   @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
 </style>
-<footer class="rich-ft">
+<footer class="rich-ft mds-dark-bg">
 <div class="ft-container">
 <div class="ft-grid">
 <div class="ft-brand">
@@ -1236,7 +1272,7 @@ body [class*="dark-bg"] .card {
 </div>
 </footer>
 <script defer="" src="chatbot-widget.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script defer="" src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script id="mds-lucide-init">
 (function(){
   function luminance(rgbStr){
