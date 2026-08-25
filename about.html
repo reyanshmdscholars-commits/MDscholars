@@ -5,21 +5,21 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>About Us — MD Scholars</title>
-  <link rel="icon" type="image/png" href="/logo.png">
-  <link rel="apple-touch-icon" href="/logo.png">
-  <meta name="theme-color" content="#001F3F">
-  <meta name="description" content="Founded by Dr. Satish Munigala, MD Scholars connects students at every stage — high school to residency — with practicing physician mentors.">
-  <link rel="canonical" href="https://mdscholars.com/about.html">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="About — MD Scholars">
-  <meta property="og:description" content="Founded by Dr. Satish Munigala, MD Scholars connects students at every stage — high school to residency — with practicing physician mentors.">
-  <meta property="og:url" content="https://mdscholars.com/about.html">
-  <meta property="og:image" content="https://mdscholars.com/logo.png">
-  <meta property="og:site_name" content="MD Scholars">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About — MD Scholars">
-  <meta name="twitter:description" content="Founded by Dr. Satish Munigala, MD Scholars connects students at every stage — high school to residency — with practicing physician mentors.">
-  <meta name="twitter:image" content="https://mdscholars.com/logo.png">
+<link href="/logo.png" rel="icon" type="image/png"/>
+<link href="/logo.png" rel="apple-touch-icon"/>
+<meta content="#001F3F" name="theme-color"/>
+<meta content="Founded by Dr. Satish Munigala, MD Scholars connects students at every stage — high school to residency — with practicing physician mentors." name="description"/>
+<link href="https://mdscholars.com/about.html" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="About — MD Scholars" property="og:title"/>
+<meta content="Founded by Dr. Satish Munigala, MD Scholars connects students at every stage — high school to residency — with practicing physician mentors." property="og:description"/>
+<meta content="https://mdscholars.com/about.html" property="og:url"/>
+<meta content="https://mdscholars.com/logo.png" property="og:image"/>
+<meta content="MD Scholars" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="About — MD Scholars" name="twitter:title"/>
+<meta content="Founded by Dr. Satish Munigala, MD Scholars connects students at every stage — high school to residency — with practicing physician mentors." name="twitter:description"/>
+<meta content="https://mdscholars.com/logo.png" name="twitter:image"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -454,7 +454,7 @@
   else init();
 })();
 </script>
-  <style id="mds-lucide-style">
+<style id="mds-lucide-style">
 /* Lucide icon defaults — sized to text, aligned to baseline */
 .mds-lu { display: inline-block; width: 1.05em; height: 1.05em; stroke-width: 1.75; vertical-align: -0.18em; margin-right: 0.4em; color: currentColor; flex-shrink: 0; }
 .mds-lu:last-child { margin-right: 0; }
@@ -465,7 +465,7 @@
   width: 60%; height: 60%; margin: 0; stroke-width: 1.5;
 }
 </style>
-  <style id="mds-canonical-restraint">
+<style id="mds-canonical-restraint">
 /* ═══ COLOR RESTRAINT — retire gold, cap teal to one accent per fold ═══ */
 /* Retire gold from large surfaces — keep only as a hairline detail */
 body [style*="background:#c9a84c" i],
@@ -561,7 +561,7 @@ body .btn-primary:hover, body .btn-teal:hover {
   transform: translateY(-1px);
 }
 </style>
-  <style id="mds-canonical-motif">
+<style id="mds-canonical-motif">
 /* ═══ SIGNATURE MOTIF — duotone imagery + pull-quote treatment ═══ */
 
 /* Duotone photo treatment via SVG filter for all mentor/team/hero portrait images */
@@ -668,7 +668,7 @@ body .footnote-marker::before {
   vertical-align: 0.1em;
 }
 </style>
-  <style id="mds-canonical-contrast">
+<style id="mds-canonical-contrast">
 /* ═══ CONTRAST FIX — light icons/buttons on dark surfaces ═══ */
 
 /* Icons on dark surfaces (nav, footer, dark hero, CTA bands, dashboard sidebar) render white */
@@ -795,12 +795,48 @@ body [class*="dark-bg"] .card {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 </style>
+<style id="mds-dark-forcelight">
+/* ═══ DARK-SURFACE CONTRAST FORCELIGHT ═══ */
+.mds-dark-bg, .mds-dark-bg * { color: #ffffff !important; }
+.mds-dark-bg p, .mds-dark-bg span, .mds-dark-bg li,
+.mds-dark-bg .subtitle, .mds-dark-bg .desc, .mds-dark-bg .caption,
+.mds-dark-bg .hero-sub { color: rgba(255,255,255,0.85) !important; }
+.mds-dark-bg h1, .mds-dark-bg h2, .mds-dark-bg h3, .mds-dark-bg h4,
+.mds-dark-bg .title, .mds-dark-bg .headline { color: #ffffff !important; }
+.mds-dark-bg svg, .mds-dark-bg .mds-lu, .mds-dark-bg i[data-lucide],
+.mds-dark-bg [class*="icon"] { color: #ffffff !important; stroke: #ffffff !important; }
+.mds-dark-bg svg * { stroke: #ffffff !important; }
+.mds-dark-bg .section-label, .mds-dark-bg .eyebrow {
+  color: #14b8a6 !important; border-bottom-color: #c9a84c !important; background: transparent !important;
+}
+.mds-dark-bg .btn-ghost, .mds-dark-bg .btn-outline, .mds-dark-bg .learn-more,
+.mds-dark-bg a[class*="learn"] {
+  color: #ffffff !important; border-color: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.06) !important;
+}
+/* Preserve gold pills sitting on dark backgrounds */
+.mds-dark-bg [style*="background:#c9a84c" i],
+.mds-dark-bg [style*="background: #c9a84c" i] {
+  color: #001F3F !important; background-color: #c9a84c !important;
+}
+.mds-dark-bg [style*="background:#c9a84c" i] *,
+.mds-dark-bg [style*="background: #c9a84c" i] * { color: #001F3F !important; }
+/* Preserve any child with its own explicit light background */
+.mds-dark-bg [style*="background:#fff" i],
+.mds-dark-bg [style*="background: #fff" i],
+.mds-dark-bg [style*="background:#f8f5ef" i],
+.mds-dark-bg [style*="background: #f8f5ef" i] { color: #001F3F !important; }
+.mds-dark-bg [style*="background:#fff" i] *,
+.mds-dark-bg [style*="background: #fff" i] *,
+.mds-dark-bg [style*="background:#f8f5ef" i] *,
+.mds-dark-bg [style*="background: #f8f5ef" i] * { color: inherit !important; }
+</style>
 </head>
 <body>
 <nav id="main-nav">
 <div class="nav-inner">
 <a class="nav-logo" href="index.html">
-<div class="nav-logo-icon"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
+<div class="nav-logo-icon mds-dark-bg"><img alt="MD Scholars logo" src="logo.png" style="width:100%;height:100%;object-fit:contain;display:block;"/></div>
 <div class="nav-logo-text">
 <strong>MD Scholars</strong>
 <span>Research Mentorship</span>
@@ -824,12 +860,12 @@ body [class*="dark-bg"] .card {
 <a href="showcase.html">Showcase Your Research</a>
 <a href="additional-services.html">Services</a>
 <a href="faqs.html">FAQs</a>
-<a class="nav-cta" href="apply.html">Apply Now →</a>
+<a class="nav-cta mds-dark-bg" href="apply.html">Apply Now →</a>
 </div>
 </div>
 </nav>
 <!-- HERO -->
-<div class="page-hero">
+<div class="page-hero mds-dark-bg">
 <div class="page-hero-bg"></div>
 <div class="container page-hero-inner">
 <div class="section-label">About MD Scholars</div>
@@ -841,7 +877,7 @@ body [class*="dark-bg"] .card {
 <section class="mission-block">
 <div class="container">
 <div class="mission-grid">
-<div class="mission-card">
+<div class="mission-card mds-dark-bg">
 <blockquote>This program is not about checking boxes. It is about helping you develop the way future physicians think.</blockquote>
 <cite>— Dr. Satish Munigala, Founder</cite>
 </div>
@@ -864,7 +900,7 @@ body [class*="dark-bg"] .card {
 <section class="founder-section">
 <div class="container">
 <div class="founder-grid">
-<div class="founder-portrait">
+<div class="founder-portrait mds-dark-bg">
 <img alt="Dr. Satish Munigala" src="faculty/munigala.jpg" style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0; border-radius:20px;"/>
 <div class="founder-tag" style="z-index:2;">
 <strong>Dr. Satish Munigala</strong>
@@ -902,7 +938,7 @@ body [class*="dark-bg"] .card {
 <!-- FEATURED: Founder intro -->
 <div class="videos-featured">
 <div class="video-card">
-<div class="video-thumb" data-video-id="founder">
+<div class="video-thumb mds-dark-bg" data-video-id="founder">
 <!-- Replace this placeholder with a YouTube/Vimeo embed once the video is recorded.
                Example: <iframe src="https://www.youtube.com/embed/XXXX" title="Founder Welcome" allowfullscreen></iframe>
                Or a self-hosted video: <video controls poster="/portal/posters/founder.jpg" src="/portal/videos/founder-welcome.mp4"></video> -->
@@ -928,7 +964,7 @@ body [class*="dark-bg"] .card {
 <h3 class="team-subhead" style="margin-top:1rem;">Faculty &amp; Instructor Voices</h3>
 <div class="videos-grid">
 <div class="video-card">
-<div class="video-thumb" data-video-id="faculty-1">
+<div class="video-thumb mds-dark-bg" data-video-id="faculty-1">
 <div class="video-thumb-placeholder">
 <div class="play-circle">▶</div>
 <strong style="font-size:0.95rem;">Faculty Mentor</strong>
@@ -942,7 +978,7 @@ body [class*="dark-bg"] .card {
 </div>
 </div>
 <div class="video-card">
-<div class="video-thumb" data-video-id="faculty-2">
+<div class="video-thumb mds-dark-bg" data-video-id="faculty-2">
 <div class="video-thumb-placeholder">
 <div class="play-circle">▶</div>
 <strong style="font-size:0.95rem;">Faculty Mentor</strong>
@@ -956,7 +992,7 @@ body [class*="dark-bg"] .card {
 </div>
 </div>
 <div class="video-card">
-<div class="video-thumb" data-video-id="faculty-3">
+<div class="video-thumb mds-dark-bg" data-video-id="faculty-3">
 <div class="video-thumb-placeholder">
 <div class="play-circle">▶</div>
 <strong style="font-size:0.95rem;">Research Advisor</strong>
@@ -973,7 +1009,7 @@ body [class*="dark-bg"] .card {
 <h3 class="team-subhead">Parents, Ambassadors &amp; Alumni</h3>
 <div class="videos-grid">
 <div class="video-card">
-<div class="video-thumb" data-video-id="parent-1">
+<div class="video-thumb mds-dark-bg" data-video-id="parent-1">
 <div class="video-thumb-placeholder">
 <div class="play-circle">▶</div>
 <strong style="font-size:0.95rem;">Parent</strong>
@@ -987,7 +1023,7 @@ body [class*="dark-bg"] .card {
 </div>
 </div>
 <div class="video-card">
-<div class="video-thumb" data-video-id="ambassador-1">
+<div class="video-thumb mds-dark-bg" data-video-id="ambassador-1">
 <div class="video-thumb-placeholder">
 <div class="play-circle">▶</div>
 <strong style="font-size:0.95rem;">Student Ambassador</strong>
@@ -1001,7 +1037,7 @@ body [class*="dark-bg"] .card {
 </div>
 </div>
 <div class="video-card">
-<div class="video-thumb" data-video-id="alumni-1">
+<div class="video-thumb mds-dark-bg" data-video-id="alumni-1">
 <div class="video-thumb-placeholder">
 <div class="play-circle">▶</div>
 <strong style="font-size:0.95rem;">Program Alum</strong>
@@ -1026,9 +1062,9 @@ body [class*="dark-bg"] .card {
 <p class="section-sub">Our team of distinguished physicians and scholars are pioneers in their fields, with vast experience in didactic and scholarly activities — including mentoring the next generation of researchers.</p>
 <h3 class="team-subhead">Faculty Mentors</h3>
 <div class="team-grid">
-<div class="team-card"><div class="team-avatar">AG</div><h4>Dr. Ashutosh Gupta, MD</h4><div class="role">Faculty Mentor · Gastroenterology</div><p>Medical City Healthcare · Plano, Texas</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">AG</div><h4>Dr. Ashutosh Gupta, MD</h4><div class="role">Faculty Mentor · Gastroenterology</div><p>Medical City Healthcare · Plano, Texas</p></div>
 <div class="team-card">
-<div class="team-avatar"><img alt="Dr. Veeraindar Goli" src="faculty/goli.jpg"/></div>
+<div class="team-avatar mds-dark-bg"><img alt="Dr. Veeraindar Goli" src="faculty/goli.jpg"/></div>
 <h4>Dr. Veeraindar Goli, MD</h4>
 <div class="role">Faculty Mentor · Psychiatry &amp; Behavioral Sciences</div>
 <p>Professor Emeritus<br/>Duke University School of Medicine</p>
@@ -1039,12 +1075,12 @@ body [class*="dark-bg"] .card {
 <p><a href="https://psychiatry.duke.edu/profile/veeraindar-goli" rel="noopener" target="_blank">Duke faculty profile →</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Veeraindar+Goli" rel="noopener" target="_blank">PubMed publications →</a></p>
 </details>
 </div>
-<div class="team-card"><div class="team-avatar">KK</div><h4>Dr. Krishna Chaitanya Kottapalli, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>Fort Memorial Hospital · Fort Atkinson, Wisconsin</p></div>
-<div class="team-card"><div class="team-avatar">CR</div><h4>Dr. Chaitanya Reddy, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>University of Colorado Health · Aurora, Colorado</p></div>
-<div class="team-card"><div class="team-avatar">DB</div><h4>Dr. Dinesh Belani, MD</h4><div class="role">Faculty Mentor · Critical Care, Sleep &amp; Pulmonary Medicine</div><p>Aurora Healthcare · Milwaukee, Wisconsin</p></div>
-<div class="team-card"><div class="team-avatar">JP</div><h4>Dr. Jose Antony Paul, MD</h4><div class="role">Faculty Mentor · Critical Care, Pulmonary &amp; Interventional Pulmonary Medicine</div><p>Northside Hospital · Canton, GA</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">KK</div><h4>Dr. Krishna Chaitanya Kottapalli, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>Fort Memorial Hospital · Fort Atkinson, Wisconsin</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">CR</div><h4>Dr. Chaitanya Reddy, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>University of Colorado Health · Aurora, Colorado</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">DB</div><h4>Dr. Dinesh Belani, MD</h4><div class="role">Faculty Mentor · Critical Care, Sleep &amp; Pulmonary Medicine</div><p>Aurora Healthcare · Milwaukee, Wisconsin</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">JP</div><h4>Dr. Jose Antony Paul, MD</h4><div class="role">Faculty Mentor · Critical Care, Pulmonary &amp; Interventional Pulmonary Medicine</div><p>Northside Hospital · Canton, GA</p></div>
 <div class="team-card">
-<div class="team-avatar"><img alt="Dr. Raman Anam" src="faculty/anam.jpg"/></div>
+<div class="team-avatar mds-dark-bg"><img alt="Dr. Raman Anam" src="faculty/anam.jpg"/></div>
 <h4>Dr. Raman Anam, MD</h4>
 <div class="role">Faculty Mentor · Nephrology &amp; Internal Medicine</div>
 <p>Assistant Professor of Clinical Internal Medicine<br/>Ochsner LSU Health · Shreveport, Louisiana</p>
@@ -1056,7 +1092,7 @@ body [class*="dark-bg"] .card {
 </details>
 </div>
 <div class="team-card">
-<div class="team-avatar"><img alt="Dr. Sandeep R. Sasidharan" src="faculty/sasidharan.jpg"/></div>
+<div class="team-avatar mds-dark-bg"><img alt="Dr. Sandeep R. Sasidharan" src="faculty/sasidharan.jpg"/></div>
 <h4>Dr. Sandeep R. Sasidharan, MD</h4>
 <div class="role">Faculty Mentor · Nephrology, Critical Care &amp; Internal Medicine</div>
 <p>Clinical Assistant Professor<br/>University of Florida · Jacksonville, FL</p>
@@ -1068,14 +1104,14 @@ body [class*="dark-bg"] .card {
 <p><a href="https://ufhealthjax.org/doctors/sandeep-r-sasidharan/bio" rel="noopener" target="_blank">UF Health Jacksonville profile →</a></p>
 </details>
 </div>
-<div class="team-card"><div class="team-avatar">NS</div><h4>Dr. Nauman Siddique, MD, MPH</h4><div class="role">Faculty Mentor · Hematology &amp; Oncology Medicine</div><p>University of Florida · Jacksonville, FL</p></div>
-<div class="team-card"><div class="team-avatar">NK</div><h4>Dr. Naveen Krishna, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>Qualis Hospitalist Group · Saint Louis, Missouri</p></div>
-<div class="team-card"><div class="team-avatar">SH</div><h4>Dr. Susheela Hadigal, MD</h4><div class="role">Faculty Mentor · Critical Care, Sleep &amp; Pulmonary Medicine</div><p>University of Florida · Gainesville, FL</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">NS</div><h4>Dr. Nauman Siddique, MD, MPH</h4><div class="role">Faculty Mentor · Hematology &amp; Oncology Medicine</div><p>University of Florida · Jacksonville, FL</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">NK</div><h4>Dr. Naveen Krishna, MD</h4><div class="role">Faculty Mentor · Hospital Medicine</div><p>Qualis Hospitalist Group · Saint Louis, Missouri</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">SH</div><h4>Dr. Susheela Hadigal, MD</h4><div class="role">Faculty Mentor · Critical Care, Sleep &amp; Pulmonary Medicine</div><p>University of Florida · Gainesville, FL</p></div>
 </div>
 <h3 class="team-subhead">Research Advisors</h3>
 <div class="team-grid">
 <div class="team-card">
-<div class="team-avatar">DvS</div>
+<div class="team-avatar mds-dark-bg">DvS</div>
 <h4>Dr. Divya Subramaniam, PhD, MPH</h4>
 <div class="role">Director of Scientific Communication &amp; Publications</div>
 <p>Patient-centered outcomes research · qualitative methodology · scientific communications</p>
@@ -1088,7 +1124,7 @@ body [class*="dark-bg"] .card {
 </details>
 </div>
 <div class="team-card">
-<div class="team-avatar"><img alt="Dr. Dipti P. Subramaniam" src="faculty/dipti.jpg"/></div>
+<div class="team-avatar mds-dark-bg"><img alt="Dr. Dipti P. Subramaniam" src="faculty/dipti.jpg"/></div>
 <h4>Dr. Dipti P. Subramaniam, PhD, MPH</h4>
 <div class="role">Scientific Research Advisor</div>
 <p>Associate Medical Director, IntegrityCE · HEOR/RWE · scientific publications</p>
@@ -1102,9 +1138,9 @@ body [class*="dark-bg"] .card {
 </div>
 <h3 class="team-subhead">Student Ambassadors</h3>
 <div class="team-grid">
-<div class="team-card"><div class="team-avatar">RG</div><h4>Reyansh Gupta</h4><div class="role">Student Ambassador</div><p>Outreach &amp; cohort support</p></div>
+<div class="team-card"><div class="team-avatar mds-dark-bg">RG</div><h4>Reyansh Gupta</h4><div class="role">Student Ambassador</div><p>Outreach &amp; cohort support</p></div>
 <div class="team-card">
-<div class="team-avatar">AG</div>
+<div class="team-avatar mds-dark-bg">AG</div>
 <h4>Arna Gowda</h4>
 <div class="role">Student Ambassador</div>
 <p>Georgetown University · Neurobiology, Pre-Med</p>
@@ -1117,7 +1153,7 @@ body [class*="dark-bg"] .card {
 </div>
 </section>
 <!-- ABOUT YOU -->
-<div class="about-you">
+<div class="about-you mds-dark-bg">
 <div class="container">
 <div>
 <div class="section-label">Our Philosophy</div>
@@ -1139,7 +1175,7 @@ body [class*="dark-bg"] .card {
 <h2>Start Your Academic Research Journey</h2>
 <p>Join a cohort of driven students and physicians who are building real scholarly credentials at every stage of their medical journey.</p>
 <div class="btn-row">
-<a class="btn-primary" href="apply.html">Apply Now →</a>
+<a class="btn-primary mds-dark-bg" href="apply.html">Apply Now →</a>
 <a class="btn-ghost" href="programs.html">Explore Programs</a>
 </div>
 </div>
@@ -1168,7 +1204,7 @@ body [class*="dark-bg"] .card {
   @media (max-width: 960px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr 1fr; gap:2rem; } }
   @media (max-width: 560px) { footer.rich-ft .ft-grid { grid-template-columns: 1fr; } }
 </style>
-<footer class="rich-ft">
+<footer class="rich-ft mds-dark-bg">
 <div class="ft-container">
 <div class="ft-grid">
 <div class="ft-brand">
@@ -1225,7 +1261,7 @@ body [class*="dark-bg"] .card {
 </div>
 </footer>
 <script defer="" src="chatbot-widget.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script defer="" src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script id="mds-lucide-init">
 (function(){
   function luminance(rgbStr){
