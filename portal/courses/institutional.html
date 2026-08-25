@@ -685,10 +685,53 @@ body [class*="dark-bg"] .card {
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
 <script id="mds-lucide-init">
 (function(){
-  function init(){ if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  function luminance(rgbStr){
+    var m = rgbStr && rgbStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!m) return null;
+    var r = +m[1], g = +m[2], b = +m[3];
+    return (0.2126*r + 0.7152*g + 0.0722*b) / 255;
+  }
+  function ancestorBg(el){
+    var node = el.parentElement;
+    while (node && node !== document.body){
+      var bg = getComputedStyle(node).backgroundColor;
+      var m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d\.]+))?\)/);
+      if (m){
+        var alpha = m[4] === undefined ? 1 : parseFloat(m[4]);
+        if (alpha > 0.15) return bg;
+      }
+      var inline = node.getAttribute && node.getAttribute("style") || "";
+      if (/#001F3F|#001A35|#002040|#002d5a|var\(--navy/i.test(inline)) return "rgb(0,31,63)";
+      node = node.parentElement;
+    }
+    return getComputedStyle(document.body).backgroundColor || "rgb(255,255,255)";
+  }
+  function fixIconContrast(){
+    var icons = document.querySelectorAll(".mds-lu");
+    icons.forEach(function(icon){
+      var lum = luminance(ancestorBg(icon));
+      if (lum === null) return;
+      if (lum < 0.45){
+        icon.style.color = "#ffffff";
+        icon.style.stroke = "#ffffff";
+      } else {
+        icon.style.removeProperty("color");
+        icon.style.removeProperty("stroke");
+      }
+    });
+  }
+  function init(){
+    if (window.lucide && window.lucide.createIcons){
+      window.lucide.createIcons();
+      requestAnimationFrame(fixIconContrast);
+      setTimeout(fixIconContrast, 200);
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
   window.mdsRefreshIcons = init;
+  window.mdsFixIconContrast = fixIconContrast;
+  window.addEventListener("load", fixIconContrast);
 })();
 </script>
 </body>
