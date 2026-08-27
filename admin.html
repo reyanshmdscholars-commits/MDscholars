@@ -2334,7 +2334,9 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
                        '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="updateAppStatus(\'' + app.id + '\',\'deferred\')">Defer</button>' +
                        '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
         } else if (app.status === 'accepted') {
-          actionBtns = '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="updateAppStatus(\'' + app.id + '\',\'deferred\')">Defer to next semester</button>' +
+          var isUnpaid = !app.payment_status || app.payment_status === 'unpaid' || app.payment_status === 'pending';
+          actionBtns = (isUnpaid ? '<button class="btn-sm" style="background:#fef3c7;color:#78350f;border-color:#f59e0b;" onclick="sendReminderEmail(\'' + app.id + '\')">Send reminder</button>' : '') +
+                       '<button class="btn-sm" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;" onclick="updateAppStatus(\'' + app.id + '\',\'deferred\')">Defer to next semester</button>' +
                        '<button class="btn-sm warning" onclick="updateAppStatus(\'' + app.id + '\',\'waitlisted\')">Waitlist</button>' +
                        '<button class="btn-sm danger"  onclick="updateAppStatus(\'' + app.id + '\',\'rejected\')">Reject</button>';
         } else if (app.status === 'deferred') {
@@ -2359,6 +2361,7 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
 
     async function updateAppStatus(appId, newStatus) {
       try {
+        var app = allApplications.find(function(a){ return a.id === appId; });
         var res = await getDB().from('applications').update({ status: newStatus }).eq('id', appId);
         if (res.error) throw res.error;
         allApplications = allApplications.map(function(a) {
@@ -2367,11 +2370,54 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
         renderApplicationsTable();
         renderStudentsTable();
         updateDashboardStats();
-        showToast('Status updated to ' + newStatus, 'success');
+
+        // Fire status email (best-effort — don't block UI)
+        var kindMap = { 'accepted': 'accepted', 'deferred': 'deferred', 'rejected': 'rejected', 'waitlisted': 'deferred' };
+        var kind = kindMap[newStatus];
+        if (kind && app && app.email) {
+          var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+          fetch(SUPABASE_URL + '/functions/v1/send-application-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              kind: kind,
+              email: app.email,
+              first_name: app.first_name,
+              last_name: app.last_name,
+              program_track: app.program_track,
+              session_label: app.session_label || null
+            })
+          }).catch(function(e){ console.warn('Status email failed:', e); });
+        }
+        showToast('Status updated to ' + newStatus + (kind ? ' — email sent' : ''), 'success');
       } catch(err) {
         console.error(err);
         showToast('Error updating status', 'error');
       }
+    }
+
+    // Manual reminder email trigger for accepted-but-unpaid applicants
+    async function sendReminderEmail(appId) {
+      var app = allApplications.find(function(a){ return a.id === appId; });
+      if (!app || !app.email) { showToast('Missing applicant info', 'error'); return; }
+      try {
+        var SUPABASE_URL = 'https://nygeinaoevzyptkgchqb.supabase.co';
+        var resp = await fetch(SUPABASE_URL + '/functions/v1/send-application-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kind: 'reminder',
+            email: app.email,
+            first_name: app.first_name,
+            last_name: app.last_name,
+            program_track: app.program_track,
+            session_label: app.session_label || null
+          })
+        });
+        var body = await resp.json();
+        if (body && body.ok) showToast('Reminder email sent to ' + app.email, 'success');
+        else showToast('Reminder queued (check email function logs)', 'success');
+      } catch(err) { showToast('Reminder email failed', 'error'); }
     }
 
     function viewApplication(appId) {
