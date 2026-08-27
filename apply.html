@@ -2262,29 +2262,36 @@ body [class*="dark-bg"] .card {
       }
 
       if (cycleSelect) {
-        // Populate dropdown from public sessions table
+        // Fixed hardcoded session catalog — Spring/Summer/Fall × 2026/2027
+        // (DB sessions table is still consulted to resolve to real session_id when available)
+        const HARDCODED_SESSIONS = [
+          { key: 'spring-2026', term: 'Spring', year: 2026, label: 'Spring 2026' },
+          { key: 'summer-2026', term: 'Summer', year: 2026, label: 'Summer 2026' },
+          { key: 'fall-2026',   term: 'Fall',   year: 2026, label: 'Fall 2026' },
+          { key: 'spring-2027', term: 'Spring', year: 2027, label: 'Spring 2027' },
+          { key: 'summer-2027', term: 'Summer', year: 2027, label: 'Summer 2027' },
+          { key: 'fall-2027',   term: 'Fall',   year: 2027, label: 'Fall 2027' }
+        ];
         (async () => {
+          // Try to resolve each hardcoded session to a real DB session_id (if it exists)
+          let dbSessions = [];
           try {
-            const { data: sessions } = await sb.from('sessions')
-              .select('id, name, term, year, status')
-              .in('status', ['active', 'upcoming'])
-              .order('year', { ascending: true })
-              .order('term');
-            const opts = ['<option value="">Select a session</option>'];
-            (sessions || []).forEach(s => {
-              const tag = s.status === 'active' ? ' (open now)' : '';
-              opts.push('<option value="' + s.id + '" data-year="' + s.year + '">' + s.name + tag + '</option>');
-            });
-            cycleSelect.innerHTML = opts.join('');
-            // If only one active session, preselect it
-            const active = (sessions || []).find(s => s.status === 'active');
-            if (active && !cycleSelect.value) {
-              cycleSelect.value = active.id;
-              document.getElementById('year').value = active.year;
-            }
-          } catch (e) {
-            console.warn('Sessions load failed', e);
-            cycleSelect.innerHTML = '<option value="">No sessions available</option>';
+            const { data } = await sb.from('sessions').select('id, term, year, status');
+            dbSessions = data || [];
+          } catch (e) { /* graceful degradation */ }
+          const opts = ['<option value="">Select a session</option>'];
+          HARDCODED_SESSIONS.forEach(function(s) {
+            var match = dbSessions.find(function(d){ return (d.term||'').toLowerCase() === s.term.toLowerCase() && d.year === s.year; });
+            var value = match ? match.id : s.key;              // DB UUID if present, else the string key
+            var tag = match && match.status === 'active' ? ' (open now)' : '';
+            opts.push('<option value="' + value + '" data-year="' + s.year + '" data-label="' + s.label + '">' + s.label + tag + '</option>');
+          });
+          cycleSelect.innerHTML = opts.join('');
+          // Preselect the first active DB session if there is one
+          const active = dbSessions.find(function(s){ return s.status === 'active'; });
+          if (active) {
+            var matchingOpt = Array.from(cycleSelect.options).find(function(o){ return o.value === active.id; });
+            if (matchingOpt) { cycleSelect.value = active.id; document.getElementById('year').value = active.year; }
           }
         })();
         cycleSelect.addEventListener('change', function() {
@@ -2327,7 +2334,17 @@ body [class*="dark-bg"] .card {
             how_heard: (document.getElementById('heardAbout') && document.getElementById('heardAbout').value) || null,
             status: 'pending',
             payment_status: 'unpaid',
-            session_id: document.getElementById('cycle').value || null,
+            session_id: (function(){
+              var v = document.getElementById('cycle').value || null;
+              // Only send when it looks like a UUID — otherwise let the DB stay null and rely on session_label
+              if (v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)) return v;
+              return null;
+            })(),
+            session_label: (function(){
+              var sel = document.getElementById('cycle');
+              var opt = sel.options[sel.selectedIndex];
+              return (opt && opt.dataset.label) || null;
+            })(),
             applicant_role: (function() {
               var track = document.getElementById('programTrack').value;
               var edu = (document.getElementById('educationLevel') && document.getElementById('educationLevel').value) || '';
@@ -2351,6 +2368,20 @@ body [class*="dark-bg"] .card {
             .insert([applicationData]);
 
           if (error) throw error;
+
+          // Send "application received" confirmation email (best-effort — non-blocking)
+          fetch(SUPABASE_URL + '/functions/v1/send-application-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+            body: JSON.stringify({
+              kind: 'received',
+              email: applicationData.email,
+              first_name: applicationData.first_name,
+              last_name: applicationData.last_name,
+              program_track: applicationData.program_track,
+              session_label: applicationData.session_label || null
+            })
+          }).catch(err => console.warn('Received-email failed:', err));
 
           // Show success message
           const form = this;
