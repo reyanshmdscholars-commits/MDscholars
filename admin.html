@@ -1197,27 +1197,25 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
 <h2><i class="mds-lu" data-lucide="lock"></i> Manage Admins <span style="font-size:0.7em; color:#94a3b8; font-weight:400;">Anyone in this list can sign in to admin.html</span></h2>
 </div>
 <p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
-              Add or remove admin users. To promote someone to admin, they first need a Supabase Auth account — apply through the site, sign up for the portal,
-              or use the "Invite a new admin" flow below to send them a Supabase magic-link signup. Their email then gets added to the <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">admin_users</code> allowlist.
+              Add or remove admin users. The <strong>primary flow is Invite</strong> — send a branded invitation email to anyone, whether or not they have an account. They land on a signup page that collects their name, phone, role, and password, and are automatically added to the <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">admin_users</code> allowlist on completion. Use <em>Promote</em> only if you want to add an existing user directly without them going through the signup page.
             </p>
-<!-- Add admin -->
+<!-- Invite / Add admin -->
 <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
-<h3 style="margin-top:0;">Add / promote an admin</h3>
+<h3 style="margin-top:0;">Invite a new admin</h3>
 <p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">
-                Enter an email that already has a Supabase Auth account (any student, mentor, or new signup). We look up the auth user and add them to <code>admin_users</code>.
-                If the email has no account yet, click <strong>Invite</strong> — we send them a magic-link signup, then you can promote them once they've signed up.
+                Enter an email address — no prior account required. We create a placeholder auth user, email a branded invitation, and route them to a signup page where they set a password and provide their name, phone, and role. They're granted admin access on completion.
               </p>
 <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:end;">
 <div style="flex:1; min-width:260px;">
-<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Email</label>
-<input id="newAdminEmail" placeholder="jane@mdscholars.com" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="email"/>
+<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Email <span style="color:#dc2626;">*</span></label>
+<input id="newAdminEmail" placeholder="jane@mdscholars.com" style="width:100%; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem;" type="email" required maxlength="120"/>
 </div>
 <div>
-<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Display name (optional)</label>
-<input id="newAdminName" placeholder="Jane Smith" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:180px;" type="text"/>
+<label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.35rem; font-weight:600;">Name for greeting (optional)</label>
+<input id="newAdminName" placeholder="Jane Smith" style="padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:0.95rem; min-width:180px;" type="text" maxlength="120"/>
 </div>
-<button class="btn-primary" onclick="promoteAdmin()">Promote to Admin</button>
-<button class="btn-secondary" onclick="inviteAdmin()">Invite (magic link)</button>
+<button class="btn-primary" onclick="inviteAdmin()" style="background:#0d9488;">Send invitation →</button>
+<button class="btn-secondary" onclick="promoteAdmin()" title="Only for existing auth users — bypasses the signup page">Promote existing user</button>
 </div>
 <div id="addAdminStatus" style="font-size:0.9rem; color:#475569; margin-top:0.75rem;"></div>
 </div>
@@ -3345,7 +3343,7 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
       if (!el) return;
       el.innerHTML = 'Loading…';
       try {
-        var res = await getDB().from('admin_users').select('email, name, created_at').order('created_at', { ascending: true });
+        var res = await getDB().from('admin_users').select('email, name, phone, role_title, created_at').order('created_at', { ascending: true });
         if (res.error) throw res.error;
         var rows = res.data || [];
         if (rows.length === 0) {
@@ -3356,6 +3354,8 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
           '<thead><tr style="background:#f8fafc; text-align:left;">' +
             '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Email</th>' +
             '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Name</th>' +
+            '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Role</th>' +
+            '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Phone</th>' +
             '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;">Added</th>' +
             '<th style="padding:0.6rem 0.8rem; border-bottom:1px solid #e2e8f0; font-size:0.85rem; color:#475569;"></th>' +
           '</tr></thead><tbody>';
@@ -3364,6 +3364,8 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
           html += '<tr>' +
             '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9;"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">' + escHtml(r.email) + '</code></td>' +
             '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9;">' + escHtml(r.name || '—') + '</td>' +
+            '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9; color:#475569; font-size:0.9rem;">' + escHtml(r.role_title || '—') + '</td>' +
+            '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9; color:#475569; font-size:0.9rem;">' + (r.phone ? '<a href="tel:' + escHtml(r.phone) + '" style="color:#0d9488; text-decoration:none;">' + escHtml(r.phone) + '</a>' : '—') + '</td>' +
             '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9; color:#94a3b8; font-size:0.9rem;">' + when + '</td>' +
             '<td style="padding:0.75rem 0.8rem; border-bottom:1px solid #f1f5f9; text-align:right;"><button class="btn-sm danger" onclick="removeAdmin(\'' + encodeURIComponent(r.email) + '\')" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca; padding:0.35rem 0.7rem; border-radius:4px; cursor:pointer; font-size:0.85rem;">Remove</button></td>' +
           '</tr>';
