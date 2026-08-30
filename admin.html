@@ -3279,7 +3279,9 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
       { key:'resident-accelerator', email:'test-resident@mdscholars.com',   name:'Test Student — Resident',          studentId:'MDS-TEST-2026-RES-01' },
       { key:'12month',              email:'test-12month@mdscholars.com',    name:'Test Student — 12-Month Advanced', studentId:'MDS-TEST-2026-12MO-01' }
     ];
-    var TEST_STUDENT_PASSWORD = 'MDScholarsTest2026!';
+    // TEST_STUDENT_PASSWORD was removed for security. Test-student sign-in now goes
+    // through the manage-admin edge function's "test-student-magiclink" action, which
+    // verifies the caller is an admin and returns a one-time magic link.
 
     async function loadTestStudentStatus() {
       var el = document.getElementById('tsProvisionStatus');
@@ -3328,13 +3330,32 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
       }
     }
 
-    function enterTestStudentView() {
+    async function enterTestStudentView() {
       var trackKey = document.getElementById('tsTrackPick').value;
       var t = TEST_STUDENT_TRACKS.find(function(x){ return x.key === trackKey; });
       if (!t) { showToast('Pick a track first', 'error'); return; }
-      // Open a new tab that will auto-login as this test student and land on dashboard.
-      var url = 'portal/login.html?testmode=1&e=' + encodeURIComponent(t.email);
-      window.open(url, '_blank');
+      // Request a one-time magic link from the manage-admin edge function.
+      // Requires the caller to already be an authenticated admin.
+      try {
+        var sess = (await getDB().auth.getSession()).data.session;
+        if (!sess) { showToast('Not signed in', 'error'); return; }
+        showToast('Generating secure sign-in link…', 'info');
+        var resp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/manage-admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess.access_token,
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+          },
+          body: JSON.stringify({ action: 'test-student-magiclink', email: t.email })
+        });
+        var body = await resp.json();
+        if (!resp.ok || !body.link) throw new Error(body.error || 'Could not generate link');
+        // Open the magic link in a new tab; Supabase auth session lands us on portal/dashboard.
+        window.open(body.link, '_blank');
+      } catch (err) {
+        showToast('Test student view failed: ' + (err.message || err), 'error');
+      }
     }
 
     /* ─── Manage Admins ─── */
