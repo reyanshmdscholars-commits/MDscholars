@@ -1199,6 +1199,33 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
 <p style="color:#475569; margin-bottom:2rem; max-width:800px; line-height:1.6;">
               Add or remove admin users. The <strong>primary flow is Invite</strong> — send a branded invitation email to anyone, whether or not they have an account. They land on a signup page that collects their name, phone, role, and password, and are automatically added to the <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">admin_users</code> allowlist on completion. Use <em>Promote</em> only if you want to add an existing user directly without them going through the signup page.
             </p>
+<!-- Your Security (MFA) -->
+<div class="card" style="margin-bottom:1.5rem; border-left:4px solid #d97706;">
+<h3 style="margin-top:0;"><i class="mds-lu" data-lucide="shield-check"></i> Your account security (MFA)</h3>
+<p style="color:#64748b; font-size:0.92rem; margin-bottom:1rem;">
+  Two-factor authentication (TOTP) protects your admin account with a rotating 6-digit code from an authenticator app (Google Authenticator, Authy, 1Password, etc.). Highly recommended — a leaked password alone won't grant access.
+</p>
+<div id="mfaStatus" style="font-size:0.9rem; color:#475569; margin-bottom:1rem;">Checking…</div>
+<div id="mfaEnrollWrap" style="display:none;">
+  <button class="btn-primary" onclick="startMfaEnroll()" style="background:#d97706;">Enable two-factor authentication</button>
+</div>
+<div id="mfaVerifyWrap" style="display:none; margin-top:1rem;">
+  <div style="text-align:center; padding:1.25rem; background:#f8f5ef; border-radius:8px; margin-bottom:1rem;">
+    <img id="mfaQr" style="max-width:200px; margin:0 auto 0.5rem; display:block;" alt="Scan this QR in your authenticator">
+    <p style="font-size:0.82rem; color:#64748b; margin-bottom:0.3rem;">Scan with your authenticator app, or copy the secret:</p>
+    <code id="mfaSecret" style="font-family:'SF Mono',Menlo,monospace; font-size:0.9rem; background:#fff; padding:0.4rem 0.75rem; border-radius:4px; border:1px solid #e2e8f0; word-break:break-all;"></code>
+  </div>
+  <label style="display:block; font-size:0.85rem; color:#475569; margin-bottom:0.4rem; font-weight:600;">6-digit code from your app</label>
+  <input id="mfaCode" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="123456" style="width:180px; padding:0.6rem 0.8rem; border:1px solid #cbd5e1; border-radius:6px; font-family:inherit; font-size:1.05rem; letter-spacing:0.15em; text-align:center;">
+  <button class="btn-primary" onclick="verifyMfaEnroll()" style="margin-left:0.75rem;">Verify &amp; enable</button>
+  <button class="btn-secondary" onclick="cancelMfaEnroll()" style="margin-left:0.5rem;">Cancel</button>
+</div>
+<div id="mfaEnabledWrap" style="display:none; margin-top:1rem;">
+  <button class="btn-secondary" style="background:#fee2e2; color:#991b1b; border-color:#fecaca;" onclick="disableMfa()">Disable MFA (not recommended)</button>
+</div>
+<div id="mfaMsg" style="font-size:0.9rem; margin-top:0.75rem;"></div>
+</div>
+
 <!-- Invite / Add admin -->
 <div class="card" style="margin-bottom:1.5rem; border-left:4px solid #0d9488;">
 <h3 style="margin-top:0;">Invite a new admin</h3>
@@ -1311,6 +1338,20 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
           var db = getDB();
           var res = await db.auth.signInWithPassword({ email: email, password: password });
           if (res.error) throw res.error;
+          // ── MFA step-up: if this account has TOTP enrolled, require 6-digit code ──
+          var aalRes = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+          if (aalRes.data && aalRes.data.nextLevel === 'aal2' && aalRes.data.currentLevel === 'aal1') {
+            var factorsRes = await db.auth.mfa.listFactors();
+            var totp = (factorsRes.data && factorsRes.data.totp || []).find(function(f){ return f.status === 'verified'; });
+            if (totp) {
+              var code = prompt('Enter the 6-digit code from your authenticator app:');
+              if (!code) { await db.auth.signOut(); showToast('MFA required — sign-in cancelled.', 'error'); return; }
+              var ch = await db.auth.mfa.challenge({ factorId: totp.id });
+              if (ch.error) throw ch.error;
+              var vr = await db.auth.mfa.verify({ factorId: totp.id, challengeId: ch.data.id, code: code.trim() });
+              if (vr.error) { await db.auth.signOut(); showToast('Invalid MFA code — sign-in cancelled.', 'error'); return; }
+            }
+          }
           // Gate: must be in admin_users allowlist
           var admin = await checkIsAdmin();
           if (!admin) {
@@ -1395,7 +1436,7 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
       else if (tabName === 'institutions-content') { loadInstitutionContent(); loadLogos(); }
       else if (tabName === 'standalone') { loadStandaloneCourses(); }
       else if (tabName === 'test-view') { loadTestStudentStatus(); }
-      else if (tabName === 'manage-admins') { loadAdmins(); }
+      else if (tabName === 'manage-admins') { loadAdmins(); loadMfaStatus(); }
     }
 
     /* ─── Announcements ─── */
@@ -3355,6 +3396,101 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
         window.open(body.link, '_blank');
       } catch (err) {
         showToast('Test student view failed: ' + (err.message || err), 'error');
+      }
+    }
+
+    /* ─── MFA Enrollment (TOTP) ─── */
+    var __mfaFactorId = null;
+    async function loadMfaStatus() {
+      var el = document.getElementById('mfaStatus');
+      var enroll = document.getElementById('mfaEnrollWrap');
+      var enabled = document.getElementById('mfaEnabledWrap');
+      var verify = document.getElementById('mfaVerifyWrap');
+      if (!el) return;
+      try {
+        var db = getDB();
+        var res = await db.auth.mfa.listFactors();
+        if (res.error) throw res.error;
+        var totp = (res.data && res.data.totp) || [];
+        var verified = totp.find(function(f){ return f.status === 'verified'; });
+        if (verified) {
+          el.innerHTML = '<span style="color:#059669;"><strong>✓ MFA is ON.</strong> Your account requires a 6-digit code on every sign-in.</span>';
+          enroll.style.display = 'none'; verify.style.display = 'none'; enabled.style.display = 'block';
+        } else {
+          el.innerHTML = '<span style="color:#b45309;"><strong>⚠️ MFA is OFF.</strong> Your account is protected by password only.</span>';
+          enroll.style.display = 'block'; verify.style.display = 'none'; enabled.style.display = 'none';
+        }
+      } catch (err) {
+        el.innerHTML = '<span style="color:#b91c1c;">Could not check MFA status: ' + (err.message || err) + '</span>';
+      }
+    }
+    async function startMfaEnroll() {
+      var msg = document.getElementById('mfaMsg'); msg.textContent = '';
+      try {
+        var db = getDB();
+        // First, clean up any unverified factors from prior attempts (avoids "already exists" errors)
+        var listRes = await db.auth.mfa.listFactors();
+        if (listRes.data) {
+          var stale = (listRes.data.totp || []).filter(function(f){ return f.status !== 'verified'; });
+          for (var i = 0; i < stale.length; i++) {
+            try { await db.auth.mfa.unenroll({ factorId: stale[i].id }); } catch(e) {}
+          }
+        }
+        var res = await db.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'MD Scholars Admin' });
+        if (res.error) throw res.error;
+        __mfaFactorId = res.data.id;
+        var qrSvg = res.data.totp.qr_code;
+        var secret = res.data.totp.secret;
+        // qr_code is a data-URL of an SVG
+        document.getElementById('mfaQr').src = qrSvg;
+        document.getElementById('mfaSecret').textContent = secret;
+        document.getElementById('mfaEnrollWrap').style.display = 'none';
+        document.getElementById('mfaVerifyWrap').style.display = 'block';
+      } catch (err) {
+        msg.innerHTML = '<span style="color:#b91c1c;">Enrol failed: ' + (err.message || err) + '</span>';
+      }
+    }
+    async function verifyMfaEnroll() {
+      var msg = document.getElementById('mfaMsg'); msg.textContent = '';
+      var code = (document.getElementById('mfaCode').value || '').trim();
+      if (!code || !__mfaFactorId) { msg.innerHTML = '<span style="color:#b91c1c;">Enter a 6-digit code.</span>'; return; }
+      try {
+        var db = getDB();
+        var ch = await db.auth.mfa.challenge({ factorId: __mfaFactorId });
+        if (ch.error) throw ch.error;
+        var vr = await db.auth.mfa.verify({ factorId: __mfaFactorId, challengeId: ch.data.id, code: code });
+        if (vr.error) throw vr.error;
+        msg.innerHTML = '<span style="color:#059669;">✓ MFA is now enabled on your account.</span>';
+        __mfaFactorId = null;
+        document.getElementById('mfaCode').value = '';
+        setTimeout(loadMfaStatus, 500);
+      } catch (err) {
+        msg.innerHTML = '<span style="color:#b91c1c;">Verification failed: ' + (err.message || err) + '</span>';
+      }
+    }
+    async function cancelMfaEnroll() {
+      var db = getDB();
+      if (__mfaFactorId) {
+        try { await db.auth.mfa.unenroll({ factorId: __mfaFactorId }); } catch(e){}
+        __mfaFactorId = null;
+      }
+      document.getElementById('mfaVerifyWrap').style.display = 'none';
+      document.getElementById('mfaEnrollWrap').style.display = 'block';
+      document.getElementById('mfaMsg').textContent = '';
+    }
+    async function disableMfa() {
+      if (!confirm('Disable two-factor authentication? Your account will only be protected by password. Continue?')) return;
+      try {
+        var db = getDB();
+        var res = await db.auth.mfa.listFactors();
+        var totp = (res.data && res.data.totp || []).find(function(f){ return f.status === 'verified'; });
+        if (totp) {
+          var un = await db.auth.mfa.unenroll({ factorId: totp.id });
+          if (un.error) throw un.error;
+        }
+        loadMfaStatus();
+      } catch (err) {
+        document.getElementById('mfaMsg').innerHTML = '<span style="color:#b91c1c;">Could not disable: ' + (err.message || err) + '</span>';
       }
     }
 
