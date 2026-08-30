@@ -83,7 +83,46 @@
   .webinar-chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem; border-radius: 3px; background: var(--cream); border: 1px solid #e6e2d8; font-size: 0.83rem; color: #334155; font-weight: 500; }
   .webinar-chip .mds-lu { width: 0.95em; height: 0.95em; margin: 0; opacity: 0.7; }
   .webinar-chip strong { color: var(--navy); font-weight: 600; }
-  .webinar-desc { color: #475569; font-size: 0.96rem; line-height: 1.6; margin: 0; }
+  .webinar-desc { color: #475569; font-size: 0.96rem; line-height: 1.6; margin: 0 0 0.5rem; }
+  .webinar-desc + .webinar-desc { margin-top: 0.35rem; }
+  .webinar-section-h {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #0d9488;
+    font-weight: 600;
+    margin: 1.1rem 0 0.55rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgba(13,148,136,0.2);
+  }
+  .webinar-section-h:first-child { margin-top: 0.25rem; }
+  .webinar-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.35rem 1rem;
+  }
+  @media (min-width: 720px) { .webinar-bullets { grid-template-columns: 1fr 1fr; } }
+  .webinar-bullets li {
+    color: #334155;
+    font-size: 0.93rem;
+    line-height: 1.5;
+    padding-left: 1.05rem;
+    position: relative;
+  }
+  .webinar-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #0d9488;
+  }
   .webinar-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; padding-top: 0.25rem; }
   .webinar-card.featured .webinar-title { font-size: 1.85rem; }
   .webinar-card.featured .webinar-desc { font-size: 1rem; }
@@ -871,6 +910,44 @@ body [class*="dark-bg"] .card {
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function toast(msg, type) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast ' + (type||'success'); setTimeout(() => { t.className = 'toast'; }, 3500); }
 
+  // Parse a raw webinar description (typically a wall of text with • bullets and section headers)
+  // into structured HTML — intro paragraph, bullet lists, section headers.
+  function formatWebinarDescription(raw) {
+    if (!raw) return '';
+    let text = String(raw).trim();
+    // 1. Strip trailing meta/contact block (starts at first emoji like 📅📆💻🌐📧📱☎️📞)
+    text = text.replace(/[\u{1F300}-\u{1FAFF}☀-➿][\s\S]*$/u, '').trim();
+    // 2. Strip trailing tagline lines like "Built Around Your..." or "Driven By..."
+    text = text.replace(/\b(Built Around Your|Driven By Your|Learn more at|Visit us at|Contact us at)[\s\S]*$/i, '').trim();
+    // 3. Split into sections by recognized section headers
+    const sectionHeaders = ['Who Should Attend\\??', 'About MD Scholars', 'What You\'ll Learn', 'Agenda', 'Speaker(s)?', 'Prerequisites'];
+    const splitRegex = new RegExp('(?=\\b(?:' + sectionHeaders.join('|') + ')\\b)', 'gi');
+    const parts = text.split(splitRegex).map(s => s.trim()).filter(Boolean);
+    return parts.map(part => {
+      // Detect if section starts with a known header
+      const headerRegex = new RegExp('^(' + sectionHeaders.join('|') + ')\\s*[:\\-—]?\\s*', 'i');
+      const headerMatch = part.match(headerRegex);
+      let header = '', body = part;
+      if (headerMatch) {
+        header = headerMatch[1];
+        body = part.slice(headerMatch[0].length).trim();
+      }
+      // Now split body into intro (before first bullet) and bullets
+      const bulletMatch = body.match(/^([\s\S]*?)([\s ]*•[\s\S]+)$/);
+      let intro = '', bulletsRaw = '';
+      if (bulletMatch) { intro = bulletMatch[1].trim(); bulletsRaw = bulletMatch[2].trim(); }
+      else { intro = body; }
+      // Clean trailing colon on intro
+      intro = intro.replace(/[:：]$/, '').trim();
+      const bullets = bulletsRaw ? bulletsRaw.split(/\s*•\s*/).map(b => b.trim()).filter(Boolean) : [];
+      let html = '';
+      if (header) html += '<h4 class="webinar-section-h">' + esc(header) + '</h4>';
+      if (intro) html += '<p class="webinar-desc">' + esc(intro) + (intro.endsWith('.') || intro.endsWith('!') || intro.endsWith('?') ? '' : ':') + '</p>';
+      if (bullets.length) html += '<ul class="webinar-bullets">' + bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul>';
+      return html;
+    }).join('');
+  }
+
   function fmtDate(iso) {
     if (!iso) return { date: 'TBD', time: '', tz: '' };
     const d = new Date(iso);
@@ -904,7 +981,7 @@ body [class*="dark-bg"] .card {
             <span class="webinar-chip"><i class="mds-lu" data-lucide="timer"></i>${dur} min</span>
             ${w.presenter ? `<span class="webinar-chip"><i class="mds-lu" data-lucide="user"></i>${esc(w.presenter)}</span>` : ''}
           </div>
-          ${w.description ? `<p class="webinar-desc">${esc(w.description)}</p>` : ''}
+          ${w.description ? formatWebinarDescription(w.description) : ''}
           <div class="webinar-actions">
             <button type="button" class="btn-teal" onclick="toggleRegister('${w.id}')"><i class="mds-lu" data-lucide="ticket"></i>Register &amp; Get Join Link</button>
           </div>
@@ -957,7 +1034,7 @@ body [class*="dark-bg"] .card {
             <span class="webinar-chip"><i class="mds-lu" data-lucide="calendar"></i>${dt.date}</span>
             ${w.presenter ? `<span class="webinar-chip"><i class="mds-lu" data-lucide="user"></i>${esc(w.presenter)}</span>` : ''}
           </div>
-          ${w.description ? `<p class="webinar-desc">${esc(w.description)}</p>` : ''}
+          ${w.description ? formatWebinarDescription(w.description) : ''}
           ${w.recording_url ? `<div class="webinar-actions"><a href="${esc(w.recording_url)}" target="_blank" rel="noopener" class="btn-teal"><i class="mds-lu" data-lucide="play-circle"></i>Watch Recording</a></div>` : '<p class="webinar-desc" style="opacity:0.7;">Recording processing — check back soon.</p>'}
         </div>
       </article>`;
