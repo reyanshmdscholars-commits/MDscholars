@@ -914,22 +914,23 @@ body [class*="dark-bg"] .card {
   // into structured HTML — intro paragraph, bullet lists, section headers.
   function formatWebinarDescription(raw) {
     if (!raw) return '';
+    try {
     let text = String(raw).trim();
     // 1. Strip trailing meta/contact block (starts at first emoji like 📅📆💻🌐📧📱☎️📞)
     text = text.replace(/[\u{1F300}-\u{1FAFF}☀-➿][\s\S]*$/u, '').trim();
     // 2. Strip trailing tagline lines like "Built Around Your..." or "Driven By..."
     text = text.replace(/\b(Built Around Your|Driven By Your|Learn more at|Visit us at|Contact us at)[\s\S]*$/i, '').trim();
     // 3. Split into sections by recognized section headers
-    const sectionHeaders = ['Who Should Attend\\??', 'About MD Scholars', 'What You\'ll Learn', 'Agenda', 'Speaker(s)?', 'Prerequisites'];
+    const sectionHeaders = ['Who Should Attend\\??', 'About MD Scholars', "What You'll Learn", 'Agenda', 'Speakers?', 'Prerequisites'];
     const splitRegex = new RegExp('(?=\\b(?:' + sectionHeaders.join('|') + ')\\b)', 'gi');
-    const parts = text.split(splitRegex).map(s => s.trim()).filter(Boolean);
+    const parts = text.split(splitRegex).filter(function(s){return s!=null;}).map(function(s){return String(s).trim();}).filter(Boolean);
     return parts.map(part => {
       // Detect if section starts with a known header
-      const headerRegex = new RegExp('^(' + sectionHeaders.join('|') + ')\\s*[:\\-—]?\\s*', 'i');
+      const headerRegex = new RegExp('^(?:' + sectionHeaders.join('|') + ')\\s*[:\\-—]?\\s*', 'i');
       const headerMatch = part.match(headerRegex);
       let header = '', body = part;
       if (headerMatch) {
-        header = headerMatch[1];
+        header = headerMatch[0].replace(/\s*[:\-—]?\s*$/, '').trim();
         body = part.slice(headerMatch[0].length).trim();
       }
       // Now split body into intro (before first bullet) and bullets
@@ -946,6 +947,7 @@ body [class*="dark-bg"] .card {
       if (bullets.length) html += '<ul class="webinar-bullets">' + bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul>';
       return html;
     }).join('');
+    } catch (err) { console.warn('formatWebinarDescription failed, using fallback:', err); return '<p class="webinar-desc">' + esc(String(raw)) + '</p>'; }
   }
 
   function fmtDate(iso) {
