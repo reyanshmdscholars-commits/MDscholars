@@ -1185,7 +1185,7 @@ body [class*="dark-bg"] .card {
 <!-- Contact Form Column -->
 <div class="contact-form-col">
 <h2>Send us a Message</h2>
-<form>
+<form class="mds-captcha" id="contactForm">
 <div class="form-group">
 <label for="full-name">Full Name</label>
 <input id="full-name" name="full-name" placeholder="Your full name" required="" type="text"/>
@@ -1455,5 +1455,6 @@ body [class*="dark-bg"] .card {
   window.addEventListener("load", fixContrast);
 })();
 </script>
+  <script src="mds-captcha.js" defer></script>
 </body>
 </html>
