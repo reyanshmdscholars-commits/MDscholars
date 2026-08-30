@@ -190,6 +190,24 @@ async function actDemote(req: Request, body: any) {
   return json(200, { ok: true, demoted: email });
 }
 
+async function actTestStudentMagiclink(req: Request, body: any) {
+  const caller = await callerIsAdmin(req);
+  if (!caller.ok) return json(403, { error: caller.error || "Not authorized" });
+  const email = String(body.email || "").trim().toLowerCase();
+  if (!email.startsWith("test-") || !email.endsWith("@mdscholars.com")) {
+    return json(400, { error: "test-student email required (test-*@mdscholars.com)" });
+  }
+  const { data, error } = await admin().auth.admin.generateLink({
+    type: "magiclink",
+    email,
+    options: { redirectTo: `${SITE_URL}/portal/dashboard.html` },
+  });
+  if (error || !data) return json(500, { error: error?.message || "Could not generate link" });
+  const link = (data as any).properties?.action_link || (data as any).action_link;
+  if (!link) return json(500, { error: "No link returned by Supabase" });
+  return json(200, { ok: true, email, link });
+}
+
 async function actCompleteSignup(req: Request, body: any) {
   // Caller must be authenticated (via invite link) but not yet in admin_users
   const email = await sessionEmail(req);
@@ -217,10 +235,11 @@ serve(async (req) => {
     const body = await req.json();
     const action = body?.action;
     switch (action) {
-      case "invite":          return await actInvite(req, body);
-      case "promote":         return await actPromote(req, body);
-      case "demote":          return await actDemote(req, body);
-      case "complete-signup": return await actCompleteSignup(req, body);
+      case "invite":                  return await actInvite(req, body);
+      case "promote":                 return await actPromote(req, body);
+      case "demote":                  return await actDemote(req, body);
+      case "complete-signup":         return await actCompleteSignup(req, body);
+      case "test-student-magiclink":  return await actTestStudentMagiclink(req, body);
       default: return json(400, { error: `unknown action: ${action}` });
     }
   } catch (err) {
