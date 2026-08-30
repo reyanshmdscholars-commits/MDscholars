@@ -2363,11 +2363,23 @@ body [class*="dark-bg"] .card {
             })()
           };
 
-          const { error } = await sb
+          const { data: insertedRows, error } = await sb
             .from('applications')
-            .insert([applicationData]);
+            .insert([applicationData])
+            .select('id');
 
           if (error) throw error;
+
+          const newAppId = insertedRows && insertedRows[0] && insertedRows[0].id;
+
+          // If this is a minor, trigger parental consent token generation (emails parent)
+          if (newAppId && applicationData.parent_email) {
+            fetch(SUPABASE_URL + '/functions/v1/parental-consent-token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+              body: JSON.stringify({ action: 'generate', application_id: newAppId, parent_email: applicationData.parent_email })
+            }).catch(err => console.warn('Parental consent token failed:', err));
+          }
 
           // Send "application received" confirmation email (best-effort — non-blocking)
           fetch(SUPABASE_URL + '/functions/v1/send-application-status', {
