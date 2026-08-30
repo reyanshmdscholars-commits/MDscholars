@@ -1213,7 +1213,7 @@ body [class*="dark-bg"] .card {
 <strong>Example:</strong> <code style="background:#f4f6f8; padding:0.15rem 0.5rem; border-radius:4px; font-family:monospace;">MDS-FA-2026-HS-0001</code> = the first High School Track graduate from Fall 2026.
                 </div>
 </div>
-<form id="verifyForm">
+<form class="mds-captcha" id="verifyForm">
 <div class="form-group">
 <label for="cert-id">Certificate ID</label>
 <div class="input-wrapper">
@@ -1562,5 +1562,6 @@ body [class*="dark-bg"] .card {
   window.addEventListener("load", fixContrast);
 })();
 </script>
+  <script src="mds-captcha.js" defer></script>
 </body>
 </html>
