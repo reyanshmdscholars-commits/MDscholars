@@ -5,13 +5,22 @@
 // gracefully if RESEND_API_KEY isn't set.
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGINS = ["https://mdscholars.com", "https://www.mdscholars.com"];
 
+function corsHeaders(origin: string | null) {
+  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
+
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
 const FROM = "MD Scholars <contact@mdscholars.com>";
 const BCC = "contact@mdscholars.com";
@@ -33,16 +42,40 @@ function fmtDate(iso: string) {
 }
 
 serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const CORS = corsHeaders(origin);
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...CORS, "Content-Type": "application/json" } });
   }
 
+  // ── SECURITY: only accept requests from our own origins ────────────
+  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+    return new Response(JSON.stringify({ error: "Forbidden: bad origin" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+  }
+  // ── SECURITY: recipient must exist as a registration for this webinar ────
   try {
     const body = await req.json();
-    const { name, email, phone, stage, title, scheduled, duration, presenter, joinUrl } = body ?? {};
+    const { name, email, phone, stage, webinarId, title, scheduled, duration, presenter, joinUrl } = body ?? {};
     if (!email || !title) {
       return new Response(JSON.stringify({ error: "email and title required" }), { status: 400, headers: { ...CORS, "Content-Type": "application/json" } });
+    }
+    // Verify the recipient email actually has a webinar_registrations row.
+    // This prevents attackers from sending arbitrary emails to arbitrary addresses.
+    const svc = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
+    const { data: reg, error: regErr } = await svc.from("webinar_registrations")
+      .select("email, webinar_id, created_at")
+      .eq("email", String(email).toLowerCase().trim())
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (regErr || !reg) {
+      return new Response(JSON.stringify({ error: "No matching registration for that email" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+    }
+    // Only send if the registration was created in the last 5 minutes (prevents replay/spam)
+    const ageMs = Date.now() - new Date(reg.created_at).getTime();
+    if (ageMs > 5 * 60 * 1000) {
+      return new Response(JSON.stringify({ error: "Registration too old for confirmation email" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
     }
     if (!RESEND_API_KEY) {
       return new Response(JSON.stringify({ ok: false, reason: "RESEND_API_KEY not configured" }), { status: 200, headers: { ...CORS, "Content-Type": "application/json" } });
