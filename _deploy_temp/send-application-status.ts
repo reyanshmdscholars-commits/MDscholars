@@ -7,14 +7,34 @@
 // Trigger from admin.html status changes AND from apply.html after insert.
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGINS = ["https://mdscholars.com", "https://www.mdscholars.com"];
+function corsHeaders(origin: string | null) {
+  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
 
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
+
+async function callerIsAdmin(req: Request): Promise<boolean> {
+  const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  if (!token) return false;
+  const client = createClient(SUPABASE_URL, ANON_KEY, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false } });
+  const { data: { user } } = await client.auth.getUser();
+  if (!user?.email) return false;
+  const svc = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
+  const { data } = await svc.from("admin_users").select("email").eq("email", user.email).maybeSingle();
+  return !!data;
+}
 const FROM = "MD Scholars <team@mdscholars.com>";
 const REPLY_TO = "contact@mdscholars.com";
 const BCC_TEAM = "team@mdscholars.com";
@@ -167,8 +187,15 @@ function render(kind: string, payload: any) {
 }
 
 serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const CORS = corsHeaders(origin);
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...CORS, "Content-Type": "application/json" } });
+
+  // ── SECURITY: origin whitelist ────────────────────────────
+  if (!origin || !ALLOWED_ORIGINS.includes(origin)) {
+    return new Response(JSON.stringify({ error: "Forbidden: bad origin" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+  }
 
   try {
     const body = await req.json();
@@ -176,6 +203,31 @@ serve(async (req) => {
     if (!kind || !email) {
       return new Response(JSON.stringify({ error: "kind and email required" }), { status: 400, headers: { ...CORS, "Content-Type": "application/json" } });
     }
+
+    // ── SECURITY: per-kind authorization ──────────────────────
+    if (kind === "received") {
+      // Public: fired from apply.html on submission. Verify a matching application row was just created.
+      const svc = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
+      const { data: app } = await svc.from("applications")
+        .select("email, created_at")
+        .eq("email", String(email).toLowerCase().trim())
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!app) {
+        return new Response(JSON.stringify({ error: "No matching application" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+      }
+      const ageMs = Date.now() - new Date(app.created_at).getTime();
+      if (ageMs > 5 * 60 * 1000) {
+        return new Response(JSON.stringify({ error: "Application too old for confirmation email" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+      }
+    } else {
+      // accepted / deferred / rejected / reminder — admin only
+      if (!(await callerIsAdmin(req))) {
+        return new Response(JSON.stringify({ error: "Forbidden: admin required for " + kind }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+      }
+    }
+
     const rendered = render(kind, { email, first_name, last_name, program_track, session_label });
     if (!rendered) {
       return new Response(JSON.stringify({ error: `unknown kind: ${kind}` }), { status: 400, headers: { ...CORS, "Content-Type": "application/json" } });
