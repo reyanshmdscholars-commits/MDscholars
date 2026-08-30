@@ -209,7 +209,7 @@ body [class*="dark-bg"] .card {
 <div class="container">
 <div id="formWrapper">
 <div class="msg" id="msg"></div>
-<form autocomplete="on" id="consentForm">
+<form class="mds-captcha" autocomplete="on" id="consentForm">
 <!-- Parent info -->
 <div class="card">
 <h2>Parent / Guardian Information</h2>
@@ -517,5 +517,6 @@ body [class*="dark-bg"] .card {
   window.addEventListener("load", fixContrast);
 })();
 </script>
+  <script src="../mds-captcha.js" defer></script>
 </body>
 </html>
