@@ -314,6 +314,31 @@ body [class*="dark-bg"] .card {
         document.getElementById('relationshipOtherWrap').style.display = e.target.value === 'other' ? 'block' : 'none';
       });
 
+      // ── Signed-token verification (from parental-consent-token edge fn) ──
+      const consentToken = new URLSearchParams(location.search).get('token');
+      let __tokenVerified = null; // will hold {application_id, parent_email, child_first, ...} once verified
+      if (consentToken) {
+        (async () => {
+          try {
+            const r = await fetch(SUPABASE_URL + '/functions/v1/parental-consent-token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+              body: JSON.stringify({ action: 'verify', token: consentToken })
+            });
+            const body = await r.json();
+            if (!r.ok || !body.ok) throw new Error(body.error || 'Invalid consent link');
+            __tokenVerified = body;
+            // Prefill child info (parents can't tamper with these — they're locked to the token)
+            if (body.parent_email) { const el = document.getElementById('parentEmail'); if (el) { el.value = body.parent_email; el.readOnly = true; } }
+            if (body.child_first)  { const el = document.getElementById('childFirst'); if (el) { el.value = body.child_first; el.readOnly = true; } }
+            if (body.child_last)   { const el = document.getElementById('childLast');  if (el) { el.value = body.child_last;  el.readOnly = true; } }
+            if (body.child_dob)    { const el = document.getElementById('childDob');   if (el) { el.value = body.child_dob;   el.readOnly = true; } }
+          } catch (err) {
+            document.getElementById('formWrapper').innerHTML = '<div style="padding:2rem; background:#fee2e2; border-radius:8px; border-left:4px solid #dc2626; color:#991b1b;"><strong>Consent link problem:</strong><br>' + (err.message || err) + '<br><br>Please email <a href="mailto:contact@mdscholars.com" style="color:#0d9488;">contact@mdscholars.com</a> to request a fresh consent link.</div>';
+          }
+        })();
+      }
+
       document.getElementById('consentForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
@@ -408,6 +433,34 @@ body [class*="dark-bg"] .card {
           }
         } catch (dedupeErr) { /* non-fatal — proceed to insert */ }
 
+        // ── PREFERRED PATH: submit via signed-token edge function ──
+        if (consentToken && __tokenVerified) {
+          try {
+            const r = await fetch(SUPABASE_URL + '/functions/v1/parental-consent-token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+              body: JSON.stringify({
+                action: 'submit',
+                token: consentToken,
+                parent_name, parent_phone, relationship, signature: signature_typed
+              })
+            });
+            const body = await r.json();
+            if (!r.ok || !body.ok) throw new Error(body.error || 'Submission rejected');
+            document.getElementById('formWrapper').style.display = 'none';
+            document.getElementById('successPanel').classList.add('show');
+            document.getElementById('successChildName').textContent = child_first_name + ' ' + child_last_name;
+            document.getElementById('successEmail').textContent = parent_email;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+          } catch (err) {
+            showMsg('error', 'Could not submit: ' + (err.message || err));
+            btn.disabled = false; btn.textContent = 'Submit signed consent →';
+            return;
+          }
+        }
+
+        // ── LEGACY PATH: direct insert (kept for backward compat with admin-shared URLs) ──
         const insertRow = {
           parent_name, parent_email, parent_phone, relationship,
           child_first_name, child_last_name, child_dob,
