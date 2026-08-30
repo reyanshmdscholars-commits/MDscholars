@@ -5,14 +5,34 @@
 // and course goals/expectations.
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGINS = ["https://mdscholars.com", "https://www.mdscholars.com"];
+function corsHeaders(origin: string | null) {
+  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Vary": "Origin",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
 
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") ?? "";
+
+async function callerIsAdmin(req: Request): Promise<boolean> {
+  const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  if (!token) return false;
+  const client = createClient(SUPABASE_URL, ANON_KEY, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false } });
+  const { data: { user } } = await client.auth.getUser();
+  if (!user?.email) return false;
+  const svc = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
+  const { data } = await svc.from("admin_users").select("email").eq("email", user.email).maybeSingle();
+  return !!data;
+}
 const FROM = "MD Scholars <billing@mdscholars.com>";
 const REPLY_TO = "billing@mdscholars.com";
 const BCC_TEAM = "team@mdscholars.com";
@@ -108,8 +128,16 @@ const TRACK_META: Record<string, { label: string; syllabusUrl: string; goals: st
 };
 
 serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const CORS = corsHeaders(origin);
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: { ...CORS, "Content-Type": "application/json" } });
+
+  // ── SECURITY: admin-only. Payment confirmations only fire from admin.html
+  // or from bank-deposit-webhook (which passes a service-role token).
+  if (!(await callerIsAdmin(req))) {
+    return new Response(JSON.stringify({ error: "Forbidden: admin required" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
+  }
 
   try {
     const body = await req.json();
