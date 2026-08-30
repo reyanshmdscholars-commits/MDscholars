@@ -988,7 +988,7 @@ body [class*="dark-bg"] .card {
             <button type="button" class="btn-teal" onclick="toggleRegister('${w.id}')"><i class="mds-lu" data-lucide="ticket"></i>Register &amp; Get Join Link</button>
           </div>
           <div id="reg-${w.id}" class="register-panel" data-join="${esc(w.join_url || '')}" data-title="${esc(w.title)}" data-scheduled="${esc(w.scheduled_at || '')}" data-duration="${dur}" data-presenter="${esc(w.presenter || '')}">
-            <form onsubmit="return registerWebinar(event, '${w.id}')">
+            <form class="mds-captcha" id="regForm-${w.id}" onsubmit="return registerWebinar(event, '${w.id}')">
               <div class="form-row">
                 <div class="full"><label>Full name</label><input type="text" name="name" required autocomplete="name" placeholder="First and last name"></div>
                 <div><label>Email</label><input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></div>
@@ -1018,6 +1018,7 @@ body [class*="dark-bg"] .card {
       </article>`;
     }).join('');
     if (window.mdsRefreshIcons) window.mdsRefreshIcons();
+    if (window.mdsCaptchaRefresh) setTimeout(window.mdsCaptchaRefresh, 400);
   }
 
   function renderPast(rows) {
@@ -1042,6 +1043,7 @@ body [class*="dark-bg"] .card {
       </article>`;
     }).join('');
     if (window.mdsRefreshIcons) window.mdsRefreshIcons();
+    if (window.mdsCaptchaRefresh) setTimeout(window.mdsCaptchaRefresh, 400);
   }
 
   function toggleRegister(id) {
@@ -1098,6 +1100,7 @@ body [class*="dark-bg"] .card {
       linkEl.style.display = 'block';
       form.style.display = 'none';
       if (window.mdsRefreshIcons) window.mdsRefreshIcons();
+    if (window.mdsCaptchaRefresh) setTimeout(window.mdsCaptchaRefresh, 400);
       toast('Registered! Check your email for the join link.', 'success');
     } catch (err) {
       toast('Could not register: ' + err.message, 'error');
@@ -1122,5 +1125,6 @@ body [class*="dark-bg"] .card {
     }
   })();
 </script>
+  <script src="mds-captcha.js" defer></script>
 </body>
 </html>
