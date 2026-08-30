@@ -1178,7 +1178,7 @@ body [class*="dark-bg"] .card {
 <div class="inst-form-card">
 <h3>Request a Proposal</h3>
 <p>Tell us about your institution and we'll develop a customized partnership proposal.</p>
-<form id="institutionForm">
+<form class="mds-captcha" id="institutionForm">
 <div class="form-group">
 <label for="inst-name">Institution Name</label>
 <input id="inst-name" placeholder="Johns Hopkins School of Medicine" required="" type="text"/>
@@ -1529,5 +1529,6 @@ body [class*="dark-bg"] .card {
   window.addEventListener("load", fixContrast);
 })();
 </script>
+  <script src="mds-captcha.js" defer></script>
 </body>
 </html>
