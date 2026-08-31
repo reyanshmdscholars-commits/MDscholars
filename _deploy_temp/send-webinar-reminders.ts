@@ -70,9 +70,9 @@ function reminderEmailHtml(name: string, w: any) {
         <p style="margin:4px 0 0;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#14b8a6;">Research Mentorship</p>
       </td></tr>
       <tr><td style="padding:32px;">
-        <p style="margin:0 0 12px;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:#d97706;font-weight:600;">[!] Starting Soon</p>
+        <p style="margin:0 0 12px;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:#d97706;font-weight:600;">[!] Starting NOW</p>
         <h2 style="margin:0 0 8px;font-family:Georgia,serif;font-size:22px;color:#001F3F;line-height:1.25;">${esc(w.title)}</h2>
-        <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.6;">Hi ${esc(name || "there")}, your MD Scholars webinar starts in about <strong>1 hour</strong>. Here's your reminder + join link.</p>
+        <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.6;">Hi ${esc(name || "there")}, your MD Scholars webinar is starting <strong>right now</strong>. Click the button below to join immediately.</p>
         <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:16px 0;border-collapse:collapse;">
           <tr><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#64748b;font-size:13px;width:120px;">Date</td>
               <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;color:#0f172a;font-size:15px;font-weight:500;">${esc(dt.date)}</td></tr>
@@ -102,7 +102,7 @@ async function sendReminder(reg: any, w: any) {
     body: JSON.stringify({
       from: FROM,
       to: [reg.email],
-      subject: `Starting in 1 hour -- ${w.title}`,
+      subject: `Starting NOW -- ${w.title}`,
       html,
       reply_to: "contact@mdscholars.com",
     }),
