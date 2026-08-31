@@ -174,9 +174,13 @@ async function actPromote(req: Request, body: any) {
   const email = String(body.email || "").trim().toLowerCase();
   const name = String(body.name || "").trim() || null;
   if (!email) return json(400, { error: "email required" });
-  const { error } = await admin().from("admin_users").upsert({ email, name }, { onConflict: "email" });
+  // Look up the auth user's ID so is_admin() can match by user_id
+  const { data: usersList } = await admin().auth.admin.listUsers();
+  const matchingUser = usersList?.users?.find((u: any) => (u.email || "").toLowerCase() === email);
+  const userId = matchingUser?.id ?? null;
+  const { error } = await admin().from("admin_users").upsert({ email, name, user_id: userId }, { onConflict: "email" });
   if (error) return json(500, { error: error.message });
-  return json(200, { ok: true, promoted: email });
+  return json(200, { ok: true, promoted: email, user_id_set: !!userId });
 }
 
 async function actDemote(req: Request, body: any) {
@@ -210,8 +214,14 @@ async function actTestStudentMagiclink(req: Request, body: any) {
 
 async function actCompleteSignup(req: Request, body: any) {
   // Caller must be authenticated (via invite link) but not yet in admin_users
-  const email = await sessionEmail(req);
-  if (!email) return json(401, { error: "No valid session — invite link may have expired" });
+  const authHeader = req.headers.get("authorization") || "";
+  const token = authHeader.replace(/^Bearer\s+/i, "");
+  if (!token) return json(401, { error: "No valid session — invite link may have expired" });
+  const client = createClient(SUPABASE_URL, ANON_KEY, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false } });
+  const { data: { user } } = await client.auth.getUser();
+  if (!user?.email) return json(401, { error: "No valid session — invite link may have expired" });
+  const email = user.email;
+  const userId = user.id;
   const fullName = String(body.full_name || "").trim();
   const phone = String(body.phone || "").trim();
   const roleTitle = String(body.role_title || "").trim();
@@ -219,6 +229,7 @@ async function actCompleteSignup(req: Request, body: any) {
 
   const { error } = await admin().from("admin_users").upsert({
     email,
+    user_id: userId,
     name: fullName,
     phone,
     role_title: roleTitle,
