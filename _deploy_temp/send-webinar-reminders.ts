@@ -36,12 +36,15 @@ function json(status: number, body: any, CORS: Record<string,string>) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
 }
 
+// Render date/time in Central Time (MD Scholars operates from St. Louis).
+// Deno edge runtime defaults to UTC so we MUST pass the timezone explicitly.
 function fmtDate(iso: string) {
   if (!iso) return { date: "TBD", time: "" };
   const d = new Date(iso);
+  const TZ = "America/Chicago";
   return {
-    date: d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" }),
-    time: d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+    date: d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: TZ }),
+    time: d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZoneName: "short", timeZone: TZ }),
   };
 }
 
