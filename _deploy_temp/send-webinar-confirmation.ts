@@ -31,12 +31,14 @@ function esc(s: string) {
   ));
 }
 
+// Central Time — Deno edge runtime defaults to UTC so we MUST pass timezone explicitly.
 function fmtDate(iso: string) {
   if (!iso) return { date: "TBD", time: "", tz: "" };
   const d = new Date(iso);
+  const TZ = "America/Chicago";
   return {
-    date: d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" }),
-    time: d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZoneName: "short" }),
+    date: d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: TZ }),
+    time: d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZoneName: "short", timeZone: TZ }),
     tz: "",
   };
 }
