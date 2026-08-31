@@ -941,7 +941,14 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
 <div id="webinarsList"><em style="color:#94a3b8;">Loading…</em></div>
 </div>
 <div style="background:#fff; border:1px solid #e0dbd0; border-radius:10px; padding:1.4rem; margin-top:1.6rem;">
-<h3 style="margin:0 0 1rem; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; gap:1rem; flex-wrap:wrap;">
+  <h3 style="margin:0; font-family:'Newsreader',Georgia,serif; color:#001F3F; font-size:1.15rem;">Recent Registrations</h3>
+  <div style="display:flex; gap:0.5rem;">
+    <select id="reminderWebinarPick" style="padding:0.4rem 0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.88rem;"><option value="">(pick a webinar…)</option></select>
+    <button class="btn-sm" onclick="sendWebinarRemindersNow(false)" style="background:#fef3c7; color:#78350f; border-color:#f59e0b;" title="Sends reminder only to registrants who haven't received one yet">Send reminders now</button>
+    <button class="btn-sm" onclick="sendWebinarRemindersNow(true)" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;" title="Force-resend to EVERY registrant, including those already reminded">Force resend all</button>
+  </div>
+</div>
 <div id="webRegList"><em style="color:#94a3b8;">Loading…</em></div>
 </div>
 </div>
@@ -1539,7 +1546,58 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
       } catch(err) { showToast('Error: ' + (err.message||err), 'error'); }
     }
 
+    async function sendWebinarRemindersNow(force) {
+      var picker = document.getElementById('reminderWebinarPick');
+      var webinarId = picker ? picker.value : '';
+      if (!webinarId) { showToast('Pick a webinar from the dropdown first.', 'error'); return; }
+      var confirmMsg = force
+        ? 'Force resend the reminder to EVERY registrant of this webinar, including those already reminded? Continue?'
+        : 'Send the reminder email to all registrants of this webinar who haven\'t received one yet?';
+      if (!confirm(confirmMsg)) return;
+      try {
+        var sess = (await getDB().auth.getSession()).data.session;
+        if (!sess) { showToast('Not signed in', 'error'); return; }
+        showToast('Sending reminders…', 'info');
+        var resp = await fetch('https://nygeinaoevzyptkgchqb.supabase.co/functions/v1/send-webinar-reminders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess.access_token,
+            'apikey': 'sb_publishable_cLhwAVFe-oh-9r80fDvZmw_LVC5SKKR'
+          },
+          body: JSON.stringify({ webinar_id: webinarId, force: !!force })
+        });
+        var body = await resp.json();
+        if (!resp.ok || body.error) throw new Error(body.error || 'Server error');
+        var totalSent = (body.results || []).reduce(function(s, r){ return s + (r.sent || 0); }, 0);
+        var totalFailed = (body.results || []).reduce(function(s, r){ return s + (r.failed || 0); }, 0);
+        showToast('Reminders sent to ' + totalSent + ' registrants' + (totalFailed ? ' (' + totalFailed + ' failed)' : ''), 'success');
+        loadWebRegistrations();
+      } catch (err) {
+        showToast('Failed: ' + (err.message || err), 'error');
+      }
+    }
+
     async function loadWebRegistrations() {
+      // Populate the reminder-webinar picker with all webinars in the near future
+      try {
+        var db = getDB();
+        var wRes = await db.from('webinars').select('id, title, scheduled_at').order('scheduled_at', { ascending: true });
+        var picker = document.getElementById('reminderWebinarPick');
+        if (picker && wRes.data) {
+          var opts = ['<option value="">(pick a webinar to send reminders…)</option>'];
+          wRes.data.forEach(function(w) {
+            var when = w.scheduled_at ? new Date(w.scheduled_at).toLocaleString() : 'TBD';
+            opts.push('<option value="' + w.id + '">' + escHtml(w.title) + ' — ' + escHtml(when) + '</option>');
+          });
+          picker.innerHTML = opts.join('');
+        }
+      } catch(e) { /* non-fatal */ }
+      // then keep going with the original registrations table load...
+      __loadWebRegistrationsImpl();
+    }
+
+    async function __loadWebRegistrationsImpl() {
       try {
         var res = await getDB().from('webinar_registrations').select('*, webinar:webinars(title)').order('created_at', { ascending: false }).limit(50);
         if (res.error) throw res.error;
