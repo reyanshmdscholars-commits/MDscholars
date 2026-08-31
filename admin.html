@@ -3713,7 +3713,9 @@ Memo: Tuition — Jane Smith" style="width:100%;min-height:110px;padding:0.7rem 
     return (0.2126*r + 0.7152*g + 0.0722*b) / 255;
   }
   function inlineDarkHit(inline){
-    return /#001F3F|#001A35|#002040|#002d5a|#0f172a|#134E4A|var\(--navy|var\(--dark|var\(--teal(?!-light)/i.test(inline);
+    // Only match dark-color occurrences inside a background property, NOT color/border/etc.
+    // Otherwise we misread e.g. "color:#001F3F" as a dark background.
+    return /(?:background|background-color|background-image)\s*:[^;]*(?:#001F3F|#001A35|#002040|#002d5a|#0f172a|#134E4A|var\(--navy|var\(--dark|var\(--teal(?!-light))/i.test(inline);
   }
   function ancestorBg(el){
     var node = el.parentElement;
